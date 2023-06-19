@@ -7,6 +7,7 @@ export default {
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+        './resources/js/**/*.tsx',
     ],
 
     theme: {
@@ -15,13 +16,8 @@ export default {
                 sans: ['Futura', ...defaultTheme.fontFamily.sans],
             },
             colors: {
-                'green': '#34E179'
-            },
-            aspectRatio: {
-                'portrait': '3 / 4',
-                'landscape': '4 / 3',
-            },
-
+                green: '#34E179',
+            }
         },
     },
 

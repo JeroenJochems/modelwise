@@ -3,7 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Providers\RouteServiceProvider;
-use Domain\Models\Data\ModelData;
+use Domain\Models\Data\RegisterModelData;
 use Domain\Models\Models\Model;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -15,7 +15,7 @@ class Register extends Component
     public function submit()
     {
 
-        $data = ModelData::fromLivewire($this->model);
+        $data = RegisterModelData::fromLivewire($this->model);
 
         $model = new Model();
         $model->email = $data->email;
