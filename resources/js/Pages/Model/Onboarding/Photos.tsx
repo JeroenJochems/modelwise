@@ -5,36 +5,29 @@ import {Step} from "@/Components/Onboarding/Step";
 import PrimaryButton from "@/Components/PrimaryButton";
 import {useForm} from "@inertiajs/react";
 import {FormEvent, FormEventHandler, useState} from "react";
-import {InertiaFormProps} from "@inertiajs/react/types";
+
+type FormInterface = {
+    photo: File|null
+}
 
 export type FileEventTarget = EventTarget & { files: FileList|null };
 
-interface FormInterface {
-    profile_picture: string
-}
+export default function Photos({modelPhotos}: {modelPhotos: string[] }) {
 
-export default function Photos() {
-
-    const [file, setFile] = useState('/img/headshot-placeholder.png');
-
-    const {data, setData, post, processing, errors, progress, reset}: InertiaFormProps<FormInterface> = useForm({
-        profile_picture: null,
+    const {data, setData, post, processing, errors, progress, reset} = useForm<FormInterface>({
+        photo: null
     });
 
     function handleChange(e: FormEvent<HTMLInputElement> & { target: FileEventTarget }) {
 
         if (e.target.files===null) return;
 
-        setFile(URL.createObjectURL(e.target.files[0]));
-        setData('profile_picture', e.target.files[0])
+        setData('photo', e.target.files[0]);
+
+        post(route('onboarding.photos'));
     }
 
-
-    const submit: FormEventHandler = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        post(route('onboarding.profile-picture'));
-    };
+    const modelPhotoCount = modelPhotos.length
 
     return (
         <CleanLayout>
@@ -46,78 +39,28 @@ export default function Photos() {
                 <P>Upload a variety of 6 portfolio photos and add the brand name and year of the shoot.</P>
                 <P>We use these photos to review your experience.</P>
 
-                <form onSubmit={submit} className={"grid gap-4"}>
+                <form>
+                    <label htmlFor="photo" className={"grid grid-cols-3 gap-4 cursor-pointer"}>
+                        { modelPhotos.map((item, i) =>
+                            <img key={i}  src={item} alt="" className={"object-cover w-full h-full rounded-md"}/>
+                        )}
 
-                    <div className={"grid grid-cols-3 gap-4"}>
-
-                        <label htmlFor={"profile_picture"} className={"cursor-pointer"}>
-                            <input type="file" className="hidden" id={"profile_picture"}
-                                   name={"profile_picture"}
-                                   onChange={handleChange}/>
-
-                            <div className={"flex text-gray-500 text-2xl justify-center items-center aspect-[1/1] bg-gray-200 border border-gray-500 rounded-md"}>
-                                +
+                        { [...Array(6 - modelPhotoCount)].map((item, i) =>
+                            <div key={i} className={"flex text-gray-500 text-2xl justify-center items-center aspect-[1/1] bg-gray-200 border border-gray-500 rounded-md"}>
+                                {i}
                             </div>
-                        </label>
+                        )}
+                    </label>
 
-                        <label htmlFor={"profile_picture"} className={"cursor-pointer"}>
-                            <input type="file" className="hidden" id={"profile_picture"}
-                                   name={"profile_picture"}
-                                   onChange={handleChange}/>
-
-                            <div className={"flex text-gray-500 text-2xl justify-center items-center aspect-[1/1] bg-gray-200 border border-gray-500 rounded-md"}>
-                                +
-                            </div>
-                        </label>
-
-                        <label htmlFor={"profile_picture"} className={"cursor-pointer"}>
-                            <input type="file" className="hidden" id={"profile_picture"}
-                                   name={"profile_picture"}
-                                   onChange={handleChange}/>
-
-                            <div className={"flex text-gray-500 text-2xl justify-center items-center aspect-[1/1] bg-gray-200 border border-gray-500 rounded-md"}>
-                                +
-                            </div>
-                        </label>
-
-                        <label htmlFor={"profile_picture"} className={"cursor-pointer"}>
-                            <input type="file" className="hidden" id={"profile_picture"}
-                                   name={"profile_picture"}
-                                   onChange={handleChange}/>
-
-                            <div className={"flex text-gray-500 text-2xl justify-center items-center aspect-[1/1] bg-gray-200 border border-gray-500 rounded-md"}>
-                                +
-                            </div>
-                        </label>
-
-                        <label htmlFor={"profile_picture"} className={"cursor-pointer"}>
-                            <input type="file" className="hidden" id={"profile_picture"}
-                                   name={"profile_picture"}
-                                   onChange={handleChange}/>
-
-                            <div className={"flex text-gray-500 text-2xl justify-center items-center aspect-[1/1] bg-gray-200 border border-gray-500 rounded-md"}>
-                                +
-                            </div>
-                        </label>
-
-                        <label htmlFor={"profile_picture"} className={"cursor-pointer"}>
-                            <input type="file" className="hidden" id={"profile_picture"}
-                                   name={"profile_picture"}
-                                   onChange={handleChange}/>
-
-                            <div className={"flex text-gray-500 text-2xl justify-center items-center aspect-[1/1] bg-gray-200 border border-gray-500 rounded-md"}>
-                                +
-                            </div>
-                        </label>
-
-
-                    </div>
-
-
-                    <PrimaryButton type="submit" className="w-full">
-                        Continue
-                    </PrimaryButton>
+                    <input type="file" className="hidden" id="photo"
+                           name="photo"
+                           onChange={handleChange}/>
                 </form>
+
+
+                <PrimaryButton type="submit" className="w-full">
+                    Continue
+                </PrimaryButton>
             </div>
         </CleanLayout>
     )

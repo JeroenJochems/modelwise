@@ -1,10 +1,13 @@
+import {ChangeEvent, FormEvent, FormEventHandler} from "react";
 import CleanLayout from "@/Layouts/CleanLayout";
 import {Step} from "@/Components/Onboarding/Step";
 import {H1} from "@/Components/Typography/H1";
-import {FormEvent, FormEventHandler } from "react";
 import InputGroupText from "@/Components/Forms/InputGroupText";
-import {useForm} from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
+import { useForm } from '@inertiajs/react';
+import InputLabel from "@/Components/InputLabel";
+import TextInput from "@/Components/TextInput";
+import InputError from "@/Components/InputError";
 
 type ModelDataType = {
     first_name: string
@@ -13,16 +16,15 @@ type ModelDataType = {
     location: string
 }
 
-export default function PersonalDetails({modelData}: { modelData: ModelDataType }) {
+type Props = {
+    modelData: ModelDataType
+}
 
-    const {data, setData, post, processing, errors, reset} = useForm({
-        first_name: modelData.first_name,
-        last_name: modelData.last_name,
-        phone_number: modelData.phone_number,
-        location: modelData.location
-    });
+export default function PersonalDetails({modelData}: Props) {
 
-    const submit: FormEventHandler = (e: FormEvent<HTMLFormElement>) => {
+    const {data, setData, post, errors } = useForm(modelData);
+
+    const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
         post(route('onboarding.personal-details'));
@@ -39,36 +41,37 @@ export default function PersonalDetails({modelData}: { modelData: ModelDataType 
             <form onSubmit={submit} className="grid gap-4">
 
                 <InputGroupText
-                    name="first_name"
                     title="First name"
                     value={data.first_name}
                     error={errors.first_name}
-                    onChange={(e) =>  setData('first_name', e.target.value) }
+                    autoComplete="first_name"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setData('first_name', e.target.value)}
                 />
 
                 <InputGroupText
-                    name="last_name"
                     title="Last name"
                     value={data.last_name}
                     error={errors.last_name}
-                    onChange={(e) => setData('last_name', e.target.value)}
+                    autoComplete="last_name"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setData('last_name', e.target.value)}
                 />
 
                 <InputGroupText
-                    name="phone_number"
                     title="Phone number"
                     value={data.phone_number}
                     error={errors.phone_number}
-                    onChange={(e) => setData('phone_number', e.target.value)}
+                    autoComplete="phone_number"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setData('phone_number', e.target.value)}
                 />
 
                 <InputGroupText
-                    name="location"
                     title="Location"
                     value={data.location}
                     error={errors.location}
-                    onChange={(e) => setData('location', e.target.value)}
+                    autoComplete="location"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setData('location', e.target.value)}
                 />
+
 
                 <PrimaryButton type="submit" className="w-full">
                     Continue

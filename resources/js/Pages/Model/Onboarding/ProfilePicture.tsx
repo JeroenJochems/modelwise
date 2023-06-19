@@ -3,20 +3,26 @@ import {H1} from "@/Components/Typography/H1";
 import {P} from "@/Components/Typography/p";
 import {Step} from "@/Components/Onboarding/Step";
 import PrimaryButton from "@/Components/PrimaryButton";
-import {useForm} from "@inertiajs/react";
+import {router, useForm} from "@inertiajs/react";
 import {FormEvent, FormEventHandler, useState} from "react";
 
 export type FileEventTarget = EventTarget & { files: FileList|null };
 
-interface FormInterface {
+type FormInterface = {
+    profile_picture: File|null
+}
+
+type Data = {
     profile_picture: string|null
 }
 
-export default function ProfilePicture() {
 
-    const [file, setFile] = useState('/img/headshot-placeholder.png');
 
-    const {data, setData, post, processing, errors, progress, reset} = useForm({
+export default function ProfilePicture({ profile_picture }: Data) {
+
+    const [file, setFile] = useState(profile_picture ?? '/img/headshot-placeholder.png');
+
+    const {data, setData, post, processing, errors, progress, reset} = useForm<FormInterface>({
         profile_picture: null,
     });
 
@@ -30,6 +36,10 @@ export default function ProfilePicture() {
 
     const submit: FormEventHandler = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        if (profile_picture && !data.profile_picture) {
+            return router.visit(route('onboarding.photos'));
+        }
 
         post(route('onboarding.profile-picture'));
     };
