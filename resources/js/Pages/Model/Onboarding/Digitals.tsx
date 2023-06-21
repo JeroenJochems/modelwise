@@ -6,49 +6,44 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import {router, useForm} from "@inertiajs/react";
 import {FormEvent, FormEventHandler, useState} from "react";
 import Vapor from "laravel-vapor";
-import {transcode} from "buffer";
 
 export type FileEventTarget = EventTarget & { files: FileList|null };
 
-export default function Photos({modelPhotos}: {modelPhotos: string[] }) {
+export default function Digitals({modelPhotos}: {modelPhotos: string[] }) {
 
-    const [isLoading, setIsLoading] = useState(false);
-    const {transform, post} = useForm({
-        path: ''
+    const {data, setData, post, processing, errors, progress, reset} = useForm({
+        path: '',
     });
 
     function handleChange(e: FormEvent<HTMLInputElement> & { target: FileEventTarget }) {
 
         if (e.target.files===null) return;
 
-        setIsLoading(true);
+        Vapor.store(e.target.files[0]).then(response => {
+            setData('path', response.key)
+            console.log(response);
+        })
 
-        Vapor.store(e.target.files[0])
-            .then(response => {
-                router.post(route('onboarding.photos'), { path:  response.key })
-                setIsLoading(false);
-            })
+
+        post(route('onboarding.digitals'));
     }
 
     const modelPhotoCount = modelPhotos.length
 
     return (
         <CleanLayout>
-            <div className={`grid gap-4 ${isLoading ? "cursor-wait" : ""}`}>
-
+            <div className={"grid gap-4"}>
 
                 <Step step={4} totalSteps={6} />
 
-                <H1>Work experience</H1>
-                <P>Upload a variety of 6 portfolio photos. We use these photos to review your experience.</P>
+                <H1>Digitals (optional)</H1>
+                <P>Upload your digitals according to the specs below.</P>
 
                 <form>
                     <label htmlFor="photo" className={"grid grid-cols-3 gap-4 cursor-pointer"}>
                         { modelPhotos.map((item, i) =>
                             <img key={i}  src={item} alt="" className={"object-cover w-full h-full rounded-md"}/>
                         )}
-
-
 
                         { [...Array(6 - modelPhotoCount)].map((item, i) =>
                             <div key={i} className={"flex text-gray-500 text-2xl justify-center items-center aspect-[1/1] bg-gray-200 border border-gray-500 rounded-md"}>
@@ -64,7 +59,7 @@ export default function Photos({modelPhotos}: {modelPhotos: string[] }) {
 
 
                 {modelPhotoCount >= 3 &&
-                    <PrimaryButton onClick={() => router.visit(route("onboarding.socials"))} type="submit">
+                    <PrimaryButton onClick={() => router.visit(route("onboarding.digitals"))} type="submit" className="w-full">
                         Continue
                     </PrimaryButton>
                 }

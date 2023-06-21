@@ -14,4 +14,9 @@ class Photo extends Model implements Sortable
     {
         return $this->belongsTo(Model::class);
     }
+
+    public function getCdnPathAttribute()
+    {
+        return env("CDN_URL").$this->path;
+    }
 }

@@ -8,12 +8,16 @@ import { useForm } from '@inertiajs/react';
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
+import {P} from "@/Components/Typography/p";
 
 type ModelDataType = {
     first_name: string
     last_name: string
     phone_number: string
-    location: string
+    city: string
+    country: string
+    gender: string
+    date_of_birth: string
 }
 
 type Props = {
@@ -22,13 +26,28 @@ type Props = {
 
 export default function PersonalDetails({modelData}: Props) {
 
-    const {data, setData, post, errors } = useForm(modelData);
+    const {data, setData, post, errors } = useForm({
+        ...modelData,
+        date_of_birth: modelData.date_of_birth ? modelData.date_of_birth.split(' ')[0] : "",
+    });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
         post(route('onboarding.personal-details'));
     };
+
+    let genderOptions = [
+        'Male',
+        'Female',
+        'Non-binary',
+    ]
+
+    if (!modelData.gender) {
+        genderOptions = ['', ...genderOptions];
+    }
+
+
 
     return (
         <CleanLayout>
@@ -44,32 +63,65 @@ export default function PersonalDetails({modelData}: Props) {
                     title="First name"
                     value={data.first_name}
                     error={errors.first_name}
-                    autoComplete="first_name"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setData('first_name', e.target.value)}
+                    onChange={(value: string) => setData('first_name', value)}
                 />
 
                 <InputGroupText
                     title="Last name"
                     value={data.last_name}
                     error={errors.last_name}
-                    autoComplete="last_name"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setData('last_name', e.target.value)}
+                    onChange={(value: string) => setData('last_name', value)}
                 />
 
                 <InputGroupText
                     title="Phone number"
                     value={data.phone_number}
                     error={errors.phone_number}
-                    autoComplete="phone_number"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setData('phone_number', e.target.value)}
+                    onChange={(value: string) => setData('phone_number', value)}
                 />
 
                 <InputGroupText
-                    title="Location"
-                    value={data.location}
-                    error={errors.location}
-                    autoComplete="location"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setData('location', e.target.value)}
+                    title="City"
+                    value={data.city}
+                    error={errors.city}
+                    onChange={(value: string) => setData('city', value)}
+                />
+
+                <InputGroupText
+                    title="Birth date"
+                    type={"date"}
+                    value={data.date_of_birth}
+                    error={errors.date_of_birth}
+                    onChange={(value: string) => setData('date_of_birth', value)}
+                />
+
+
+                <InputGroupText
+                    title="Country"
+                    value={data.country}
+                    options={[
+                        'Netherlands',
+                        'Belgium',
+                        'Brazil',
+                        'Germany',
+                        'France',
+                        'Mexico',
+                        'Norway',
+                        'Portugal',
+                        'Spain',
+                        'Sweden',
+                        'South Africa',
+                        'United Kingdom',
+                    ]}
+                    error={errors.country}
+                    onChange={(value: string) => setData('country', value)}
+                />
+                <InputGroupText
+                    title="Gender"
+                    value={data.gender}
+                    options={genderOptions}
+                    error={errors.gender}
+                    onChange={(value: string) => setData('gender', value)}
                 />
 
 

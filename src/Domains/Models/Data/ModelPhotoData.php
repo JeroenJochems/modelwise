@@ -8,7 +8,7 @@ use Spatie\LaravelData\Data;
 class ModelPhotoData extends Data
 {
     public function __construct(
-        public UploadedFile $photo
+        public string $path
 
     ) {
     }

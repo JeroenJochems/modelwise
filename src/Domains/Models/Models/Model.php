@@ -16,6 +16,7 @@ class Model extends Authenticatable
     use HasFactory;
     use Notifiable;
 
+
     /**
      * The attributes that are mass assignable.
      *
@@ -25,7 +26,13 @@ class Model extends Authenticatable
         'first_name',
         'last_name',
         'phone_number',
-        'location',
+        'gender',
+        'date_of_birth',
+        'city',
+        'country',
+        'tiktok',
+        'instagram',
+        'website',
     ];
 
     /**
@@ -46,11 +53,25 @@ class Model extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_subscribed_to_newsletter' => 'boolean',
+        'has_completed_onboarding' => 'boolean',
+        'is_accepted' => 'boolean',
+        'date_of_birth' => 'date',
     ];
+
+    public function getProfilePictureCdnAttribute()
+    {
+        return $this->profile_picture ? env("CDN_URL").$this->profile_picture : null;
+    }
 
     public function photos(): HasMany
     {
         return $this->hasMany(Photo::class);
+    }
+
+    public function getUserName()
+    {
+        return $this->first_name." ".$this->last_name;
     }
 
     public function password(): Attribute

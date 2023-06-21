@@ -23,7 +23,9 @@ console_command = "php /var/www/html/artisan tinker"
   DB_PORT = 3306
   DB_DATABASE = "modelwise"
   MYSQL_ATTR_SSL_CA = "/etc/ssl/certs/ca-certificates.crt"
-
+[mounts]
+  source="modelwise_storage"
+  destination="/data"
 [http_service]
   internal_port = 8080
   force_https = true

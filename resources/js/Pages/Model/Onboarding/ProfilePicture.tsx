@@ -5,6 +5,7 @@ import {Step} from "@/Components/Onboarding/Step";
 import PrimaryButton from "@/Components/PrimaryButton";
 import {router, useForm} from "@inertiajs/react";
 import {FormEvent, FormEventHandler, useState} from "react";
+import Vapor from "laravel-vapor";
 
 export type FileEventTarget = EventTarget & { files: FileList|null };
 
@@ -20,7 +21,7 @@ type Data = {
 
 export default function ProfilePicture({ profile_picture }: Data) {
 
-    const [file, setFile] = useState(profile_picture ?? '/img/headshot-placeholder.png');
+    const [file, setFile] = useState(profile_picture ?? Vapor.asset('img/headshot-placeholder.png'));
 
     const {data, setData, post, processing, errors, progress, reset} = useForm<FormInterface>({
         profile_picture: null,
@@ -31,7 +32,10 @@ export default function ProfilePicture({ profile_picture }: Data) {
         if (e.target.files===null) return;
 
         setFile(URL.createObjectURL(e.target.files[0]));
-        setData('profile_picture', e.target.files[0])
+
+        Vapor.store(e.target.files[0]).then(response => {
+            setData('profile_picture', response.key)
+        })
     }
 
     const submit: FormEventHandler = (e: FormEvent<HTMLFormElement>) => {
@@ -60,7 +64,7 @@ export default function ProfilePicture({ profile_picture }: Data) {
 
 
                     <label htmlFor={"profile_picture"} className={"cursor-pointer"}>
-                        <img src={file} alt="Profile picture" className={"mx-auto"} style={{width: 200 }}/>
+                        <img src={file} alt="Profile picture" className={"mx-auto"} style={{width: 200}}/>
                     </label>
 
                     {progress && (
