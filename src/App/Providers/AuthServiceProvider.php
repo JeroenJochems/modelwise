@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use Domain\Jobs\Models\Client;
+use Domain\Jobs\Models\Job;
+use Domain\Jobs\Policies\ClientPolicy;
+use Domain\Jobs\Policies\JobPolicy;
 use Domain\Models\Models\Model;
 use Domain\Models\Policies\ModelPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -15,6 +19,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Model::class => ModelPolicy::class,
+        Job::class => JobPolicy::class,
+        Client::class => ClientPolicy::class,
     ];
 
     /**

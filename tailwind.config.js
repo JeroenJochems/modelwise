@@ -17,7 +17,9 @@ export default {
             },
             colors: {
                 green: '#34E179',
-            }
+                teal: '#0D4F5E',
+                'teal-light': '#0F5767',
+            },
         },
     },
 

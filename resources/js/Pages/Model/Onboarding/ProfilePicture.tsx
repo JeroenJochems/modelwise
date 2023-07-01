@@ -6,6 +6,7 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import {router, useForm} from "@inertiajs/react";
 import {FormEvent, FormEventHandler, useState} from "react";
 import Vapor from "laravel-vapor";
+import {Submit} from "@/Components/Forms/Submit";
 
 export type FileEventTarget = EventTarget & { files: FileList|null };
 
@@ -13,13 +14,18 @@ type FormInterface = {
     profile_picture: File|null
 }
 
-type Data = {
+type ModelDataType = {
     profile_picture: string|null
 }
 
+type Props = {
+    modelData: ModelDataType
+}
 
 
-export default function ProfilePicture({ profile_picture }: Data) {
+export default function ProfilePicture({ modelData }: Props) {
+
+    const {profile_picture} = modelData;
 
     const [file, setFile] = useState(profile_picture ?? Vapor.asset('img/headshot-placeholder.png'));
 
@@ -52,7 +58,7 @@ export default function ProfilePicture({ profile_picture }: Data) {
         <CleanLayout>
             <div className={"grid gap-4"}>
 
-                <Step step={3} totalSteps={6} />
+                <Step step={3} totalSteps={6} backLink={route("onboarding.personal-details")} />
 
                 <H1>Profile picture</H1>
                 <P>Upload a colour headshot in portrait format. This will be your primary portfolio photo.</P>
@@ -73,9 +79,9 @@ export default function ProfilePicture({ profile_picture }: Data) {
                         </progress>
                     )}
 
-                    <PrimaryButton type="submit" className="w-full">
+                    <Submit>
                         Continue
-                    </PrimaryButton>
+                    </Submit>
                 </form>
             </div>
         </CleanLayout>

@@ -7,6 +7,8 @@ import {H1} from "@/Components/Typography/H1";
 import CleanLayout from "@/Layouts/CleanLayout";
 import {Step} from "@/Components/Onboarding/Step";
 import PrimaryButton from "@/Components/PrimaryButton";
+import SecondaryButton from "@/Components/SecondaryButton";
+import {Submit} from "@/Components/Forms/Submit";
 
 export default function Register() {
     const {data, setData, post, processing, errors, reset} = useForm({
@@ -67,9 +69,9 @@ export default function Register() {
                     </div>
 
 
-                    <PrimaryButton type="submit" className="w-full">
+                    <Submit>
                         Register
-                    </PrimaryButton>
+                    </Submit>
 
                     <Link href={route('login')} className={"text-center text-sm"}>
                         Already registered?

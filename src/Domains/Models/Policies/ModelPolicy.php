@@ -8,6 +8,21 @@ use Illuminate\Contracts\Auth\Authenticatable;
 
 class ModelPolicy
 {
+    public function view(Authenticatable $authenticatable, Model $model)
+    {
+        return true;
+    }
+
+    public function update(Authenticatable $authenticatable, Model $model)
+    {
+        return true;
+    }
+
+    public function addPhotos(Authenticatable $authenticatable, Model $model)
+    {
+        return true;
+    }
+
     public function viewAny(Authenticatable $authenticatable)
     {
         return true;

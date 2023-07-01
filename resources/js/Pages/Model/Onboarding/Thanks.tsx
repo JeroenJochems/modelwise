@@ -4,6 +4,7 @@ import {H1} from "@/Components/Typography/H1";
 import PrimaryButton from "@/Components/PrimaryButton";
 import {Link, useForm} from '@inertiajs/react';
 import {P} from "@/Components/Typography/p";
+import {Submit} from "@/Components/Forms/Submit";
 
 
 export default function Thanks({ is_subscribed}: {is_subscribed: boolean}) {
@@ -27,9 +28,9 @@ export default function Thanks({ is_subscribed}: {is_subscribed: boolean}) {
 
             { !is_subscribed && (
                 <form onSubmit={submit} className={"grid gap-4"}>
-                    <PrimaryButton type="submit" className="w-full">
+                    <Submit>
                         Sign up for newsletter
-                    </PrimaryButton>
+                    </Submit>
                     <Link href={route('dashboard')} className={"text-center text-sm"}>
                         Skip
                     </Link>

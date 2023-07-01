@@ -8,13 +8,11 @@ use Spatie\LaravelData\Data;
 class ModelSocialsData extends Data
 {
     public function __construct(
-        #[Rule(['required_without:tiktok', 'min:2'])]
+        #[Rule(['required_without:tiktok'])]
         public ?string $instagram,
-
-        #[Rule(['required_without:instagram', 'min:2'])]
+        #[Rule(['required_without:instagram'])]
         public ?string $tiktok,
 
-        #[Rule(['min:10', 'url'])]
         public ?string $website,
     ) {
     }

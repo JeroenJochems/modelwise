@@ -9,8 +9,8 @@ use Spatie\LaravelData\DataCollection;
 class ModelPhotosCollection extends Data
 {
     public function __construct(
-        #[DataCollectionOf(ModelPhotoData::class)]
-        public DataCollection $photos
+        #[DataCollectionOf(ModelDigitalData::class)]
+        public DataCollection $digitals
     ) {
     }
 }

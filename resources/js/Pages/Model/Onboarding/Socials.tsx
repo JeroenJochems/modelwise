@@ -9,6 +9,7 @@ import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 import {P} from "@/Components/Typography/p";
+import {Submit} from "@/Components/Forms/Submit";
 
 type ModelDataType = {
     instagram: string
@@ -23,9 +24,9 @@ type Props = {
 export default function Socials({modelData}: Props) {
 
     const {data, setData, post, errors } = useForm({
-        instagram: modelData.instagram,
-        tiktok: modelData.tiktok,
-        website: modelData.website,
+        instagram: modelData.instagram ?? "",
+        tiktok: modelData.tiktok ?? "",
+        website: modelData.website ?? "http://",
     });
 
     const submit: FormEventHandler = (e) => {
@@ -36,7 +37,7 @@ export default function Socials({modelData}: Props) {
 
     return (
         <CleanLayout>
-            <Step step={6} totalSteps={6} />
+            <Step step={6} totalSteps={6} backLink={route("onboarding.digitals")} />
 
             <div className="grid grid-cols-1 gap-4 mb-8 mt-8">
                 <H1>Socials</H1>
@@ -71,9 +72,9 @@ export default function Socials({modelData}: Props) {
                 />
 
 
-                <PrimaryButton type="submit" className="w-full">
+                <Submit>
                     Continue
-                </PrimaryButton>
+                </Submit>
             </form>
         </CleanLayout>
     )

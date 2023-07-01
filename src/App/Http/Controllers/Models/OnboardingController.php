@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Models;
 
 use App\Http\Controllers\Controller;
+use Domain\Models\Data\ModelDigitalData;
 use Domain\Models\Data\ModelPersonalDetailsData;
 use Domain\Models\Data\ModelPhotoData;
 use Domain\Models\Data\ModelProfilePictureData;
 use Domain\Models\Data\ModelSocialsData;
 use Domain\Models\Models\Model;
+use Domain\Models\Models\Digital;
 use Domain\Models\Models\Photo;
+use Domain\Models\Repositories\PhotoRepository;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -17,9 +20,7 @@ class OnboardingController extends Controller
     public function personalDetails()
     {
         return Inertia::render("Model/Onboarding/PersonalDetails")
-            ->with([
-                'modelData' => ModelPersonalDetailsData::from(auth()->user())->toArray()
-            ]);
+            ->with(['modelData' => ModelPersonalDetailsData::from(auth()->user())]);
     }
 
     public function storePersonalDetails(ModelPersonalDetailsData $data)
@@ -36,7 +37,7 @@ class OnboardingController extends Controller
     public function profilePicture()
     {
         return Inertia::render("Model/Onboarding/ProfilePicture")
-            ->with(['profile_picture' => auth()->user()->profile_picture_cdn]);
+            ->with(['modelData' => ModelProfilePictureData::from(auth()->user())]);
     }
 
     public function storeProfilePicture(ModelProfilePictureData $data)
@@ -52,29 +53,39 @@ class OnboardingController extends Controller
         return redirect()->route('onboarding.photos');
     }
 
-    public function photos()
+    public function photos(PhotoRepository $photos)
     {
-        $modelPhotos = auth()->user()->photos->map(function (Photo $photo) {
-            return $photo->cdnPath;
-        });
-
         return Inertia::render("Model/Onboarding/Photos")->with([
-            'modelPhotos' => $modelPhotos
+            'modelPhotos' => $photos->getPhotos(auth()->user(), Photo::FOLDER_WORK_EXPERIENCE)
         ]);
     }
 
-    public function storePhotos(ModelPhotoData $data)
+    public function deleteDigital(Digital $digital)
     {
-        $photo = new Photo;
-        $photo->model_id = auth()->id();
-        $photo->path = str_replace("tmp/", "photos/", $data->path);
-
-        Storage::copy($data->path, $photo->path );
-
-        $photo->save();
-
-        return redirect()->route('onboarding.photos');
+        $digital->delete();
+        redirect(back());
     }
+
+    public function digitals(PhotoRepository $photoRepository)
+    {
+        return Inertia::render("Model/Onboarding/Digitals")->with([
+            'modelDigitals' => $photoRepository->getPhotos(auth()->user(), Photo::FOLDER_DIGITALS)
+        ]);
+    }
+
+    public function storeDigitals(ModelDigitalData $data)
+    {
+        $digital = new Digital;
+        $digital->model_id = auth()->id();
+        $digital->path = str_replace("tmp/", "digitals/", $data->path);
+
+        Storage::copy($data->path, $digital->path );
+
+        $digital->save();
+
+        return redirect()->route('onboarding.digitals');
+    }
+
 
     public function socials()
     {
@@ -88,6 +99,8 @@ class OnboardingController extends Controller
     {
         $model = auth()->user();
         $model->update($data->toArray());
+
+        if ($data->website == "http://") $model->website = null;
 
         $model->has_completed_onboarding = true;
         $model->save();

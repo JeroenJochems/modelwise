@@ -15,7 +15,7 @@ use App\Application;
 
 $app = (new Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
-))->useAppPath('src/app');
+))->useAppPath($_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)."/src/App");
 
 /*
 |--------------------------------------------------------------------------

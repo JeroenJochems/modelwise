@@ -10,9 +10,17 @@ class Photo extends Model implements Sortable
 {
     use SortableTrait;
 
+    const FOLDER_WORK_EXPERIENCE = 'Work experience';
+    const FOLDER_DIGITALS = 'Digitals';
+
     public function model(): BelongsTo
     {
         return $this->belongsTo(Model::class);
+    }
+
+    public function buildSortQuery()
+    {
+        return static::query()->where('model_id', $this->model_id)->where('folder', $this->folder);
     }
 
     public function getCdnPathAttribute()

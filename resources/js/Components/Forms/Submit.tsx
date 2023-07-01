@@ -2,7 +2,7 @@ import {ButtonHTMLAttributes} from "react";
 
 export const Submit = (props: ButtonHTMLAttributes<HTMLButtonElement>) => {
     return (
-        <button {...props} type="submit" className={`block w-full items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 ` + props.className}>
+        <button {...props} type="submit" className={`p-4 bg-teal hover:bg-teal-light border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest focus:bg-teal-light active:bg-teal-light focus:outline-none transition ease-in-out duration-150 ` + props.className}>
             {props.children}
         </button>
     );

@@ -1,12 +1,21 @@
 id: 48620
 name: modelwise
 environments:
-  production:
-    storage: modelwise-production
-    memory: 1024
-    cli-memory: 512
-    runtime: 'php-8.2:al2'
-    build:
-      - 'composer install --no-dev'
-      - 'php artisan event:cache'
-      - 'npm ci && npm run build && rm -rf node_modules'
+    production:
+        storage: modelwise-production
+        memory: 1024
+        cli-memory: 512
+        runtime: 'php-8.2:al2'
+        build:
+            - 'composer install --no-dev'
+            - 'php artisan event:cache'
+            - 'npm ci && npm run build && rm -rf node_modules'
+    staging:
+        storage: modelwise-staging
+        memory: 1024
+        cli-memory: 512
+        runtime: 'php-8.2:al2'
+        build:
+            - 'COMPOSER_MIRROR_PATH_REPOS=1 composer install --no-dev'
+            - 'php artisan event:cache'
+            - 'npm run build && rm -rf node_modules'
