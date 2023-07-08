@@ -11,7 +11,7 @@ class RegisterModel
     public function __invoke(RegisterModelData $data)
     {
         $model = new Model();
-        $model->password = $data->password;
+        $model->password = Hash::make($data->password);
         $model->email = $data->email;
         $model->save();
 

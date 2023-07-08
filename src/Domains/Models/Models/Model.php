@@ -2,7 +2,14 @@
 
 namespace Domain\Models\Models;
 
+use Domain\Jobs\Models\ExclusiveCountry;
+use Domain\Jobs\Models\LonglistedModel;
+use Domain\Models\Actions\SendMail;
+use Domain\Models\Data\Mail\MailData;
+use Domain\Models\Data\Mail\ResetPasswordMailData;
+use Domain\Models\Data\Templates;
 use Domain\Models\Enums\Ethnicity;
+use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -90,9 +97,24 @@ class Model extends Authenticatable
         'date_of_birth' => 'date',
     ];
 
+    public function longlistedJobs()
+    {
+        return $this->hasMany(LonglistedModel::class);
+    }
+
     public function getProfilePictureCdnAttribute()
     {
         return $this->profile_picture ? env("CDN_URL").$this->profile_picture : null;
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->first_name." ".$this->last_name;
+    }
+
+    public function exclusiveCountries()
+    {
+        return $this->hasMany(ExclusiveCountry::class);
     }
 
     public function photos(): HasMany
@@ -112,10 +134,16 @@ class Model extends Authenticatable
         return $this->first_name." ".$this->last_name;
     }
 
-    public function password(): Attribute
+    public function sendPasswordResetNotification($token)
     {
-        return Attribute::make(
-            set: fn (string $value) => Hash::make($value),
+        app(SendMail::class)(
+            new MailData(
+                $this,
+                Templates::passwordReset,
+                new ResetPasswordMailData(
+                    reset_password_url: route("password.reset", ['token' => $token])
+                ),
+            )
         );
     }
 }

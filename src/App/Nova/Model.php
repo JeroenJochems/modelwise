@@ -4,11 +4,14 @@ namespace App\Nova;
 
 use Datomatic\Nova\Fields\Enum\Enum;
 use Domain\Models\Enums\Ethnicity;
+use Domain\Models\Enums\EyeColor;
+use Domain\Models\Enums\HairColor;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\HasManyThrough;
 use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
@@ -37,7 +40,7 @@ class Model extends Resource
             Avatar::make('Profile picture', 'profile_picture_cdn')
                 ->thumbnail(function ($value, $disk) {
                     // @phpstan-ignore-next-line
-                    return $value ? $this->profile_picture_cdn : null;
+                    return $value ? $this->profile_picture_cdn."?w=720&h=720&fit=crop&crop=faces" : null;
                 })
                 ->path("profile_pictures")
                 ->preview(function ($value, $disk) {
@@ -66,9 +69,9 @@ class Model extends Resource
                 ->disableDownload(),
             Text::make('Photos', function() {
                 return '<div style="display: flex; width: 600px; overflow-x: scroll">
-                        <img src="'.$this->profile_picture_cdn.'" width="120" height="120" />
+                        <img src="'.$this->profile_picture_cdn.'?w=720&h=960&fit=crop&fm=auto&crop=faces" width="90" height="120" />
                         ' .implode("", $this->photos->map(function ($photo) {
-                        return '<img src="'.$photo->cdn_path.'" width="120" height="120" />';
+                        return '<img src="'.$photo->cdn_path.'?w=720&h=960&fit=crop&fm=auto&crop=faces" width="90" height="120" />';
                     })->toArray())
                      . '</div>';
             })->asHtml()->onlyOnIndex(),
@@ -76,6 +79,8 @@ class Model extends Resource
             Text::make('Tiktok')->rules('required', 'max:255')->hideFromIndex(),
             Text::make('Website')->rules('required', 'max:255')->hideFromIndex(),
             new Panel('Body Characteristics', $this->bodyFields()),
+            HasMany::make("Longlisted jobs")->showOnIndex(false),
+            HasMany::make("Exclusive countries")->showOnIndex(false),
             HasMany::make("Photos", "photos", Photo::class)->showOnIndex(true),
         ];
     }
@@ -84,6 +89,8 @@ class Model extends Resource
     {
         return [
             Enum::make('Ethnicity')->attach(Ethnicity::class)->hideFromIndex(),
+            Enum::make('Eye color')->attach(EyeColor::class)->hideFromIndex(),
+            Enum::make('Hair color')->attach(HairColor::class)->hideFromIndex(),
             Text::make("Shoe size")->help("EU format")->hideFromIndex(),
             Text::make("Chest")->help("in cm")->hideFromIndex(),
             Text::make("Waist")->help("in cm")->hideFromIndex(),

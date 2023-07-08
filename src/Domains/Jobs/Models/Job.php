@@ -19,13 +19,18 @@ class Job extends Model
         'status' => 'boolean',
     ];
 
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
     public function client()
     {
         return $this->belongsTo(Client::class);
     }
 
-    public function shortlisted_models()
+    public function longlistedModels()
     {
-        return $this->belongsToMany(\Domain\Models\Models\Model::class, 'shortlisted_models');
+        return $this->hasMany(LonglistedModel::class);
     }
 }

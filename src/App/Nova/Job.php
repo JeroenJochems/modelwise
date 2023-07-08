@@ -3,7 +3,7 @@
 namespace App\Nova;
 
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -25,7 +25,7 @@ class Job extends Resource
             BelongsTo::make("Client"),
             Text::make("Title"),
             Textarea::make("Description")->alwaysShow(),
-            BelongsToMany::make("Shortlisted", "shortlisted_models", Model::class)->searchable(true),
+            HasMany::make("Longlisted models"),
         ];
     }
 

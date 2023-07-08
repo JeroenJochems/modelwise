@@ -11,6 +11,6 @@ class MailData extends Data
     public function __construct(
         public Model $model,
         public Templates $template,
-        public ?MailableData $props = null,
+        public $props = null,
     ) {}
 }

@@ -13,6 +13,11 @@ class ModelPolicy
         return true;
     }
 
+    public function delete(Authenticatable $authenticatable, Model $model)
+    {
+        return !$model->has_completed_onboarding;
+    }
+
     public function update(Authenticatable $authenticatable, Model $model)
     {
         return true;

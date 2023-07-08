@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\Models\OnboardingController;
 use App\Http\Controllers\Models\PhotosController;
 use App\Http\Controllers\ProfileController;
@@ -27,8 +29,13 @@ Route::get('/', function () {
     ]);
 });
 
+Route::resource('jobs', JobController::class);
+Route::post('jobs/{job}/applications', [ApplicationController::class, "store"])->name('jobs.apply.store');
+
 
 Route::middleware(['auth'])->group(callback: function () {
+
+    Route::get('jobs/{job}/applications/create', [ApplicationController::class, "create"])->name('jobs.apply');
 
     Route::middleware("onboarding")->group(function() {
         Route::get('/model/dashboard', \App\Http\Controllers\Models\DashboardController::class)->name("dashboard");

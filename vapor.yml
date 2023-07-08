@@ -4,10 +4,12 @@ environments:
     production:
         storage: modelwise-production
         memory: 1024
+        domain:
+            - modelwise.agency
         cli-memory: 512
         runtime: 'php-8.2:al2'
         build:
-            - 'composer install --no-dev'
+            - 'COMPOSER_MIRROR_PATH_REPOS=1 composer install --no-dev'
             - 'php artisan event:cache'
             - 'npm ci && npm run build && rm -rf node_modules'
     staging:

@@ -23,9 +23,9 @@ class SendMail
                 ],
                 "content" => json_encode([
                     "fromName" => "Modelwise",
-                    "fromAddress" => "bas@modelwise.agency",
+                    "fromAddress" => "hello@6fipo.via.sidemail.net",
                     "toAddress" => $data->model->email,
-                    "templateName" => "Registration completed",
+                    "templateName" => $data->template,
                     "templateProps" => [
                         ...$props,
                         'first_name' => $data->model->first_name,
@@ -42,6 +42,7 @@ class SendMail
         }
 
         $response = json_decode(stream_get_contents($fp));
+
         fclose($fp);
 
         return $response;
