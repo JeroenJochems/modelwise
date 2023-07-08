@@ -26,15 +26,9 @@ class OnboardingMiddleware
             }
         }
 
-        if ($model->has_completed_onboarding && is_null($model->is_accepted)) {
+        if ($model->has_completed_onboarding && !$model->is_accepted) {
             if ($request->route()->getName() !== "onboarding.thanks") {
                 return redirect(route("onboarding.thanks"));
-            }
-        }
-
-        if ($model->has_completed_onboarding && $model->is_accepted===false) {
-            if ($request->route()->getName() !== "onboarding.not_accepted") {
-                return redirect(route("onboarding.not_accepted"));
             }
         }
 
