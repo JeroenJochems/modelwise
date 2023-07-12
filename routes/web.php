@@ -45,6 +45,7 @@ Route::post('jobs/{job}/applications', [ApplicationController::class, "store"])-
 
 Route::middleware(['auth'])->group(callback: function () {
 
+    Route::get('/dashboard', \App\Http\Controllers\DashboardController::class)->name("dashboard");
     Route::middleware("onboarding")->group(function() {
         Route::get('account', [ModelController::class, "index"])->name("account.index");
     });
