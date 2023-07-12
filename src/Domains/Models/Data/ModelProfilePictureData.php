@@ -10,7 +10,6 @@ use Spatie\LaravelData\Data;
 class ModelProfilePictureData extends Data
 {
     public function __construct(
-        #[Rule(['required'])]
         #[WithTransformer(CdnPathTransformer::class)]
         public ?string $profile_picture
     ) {

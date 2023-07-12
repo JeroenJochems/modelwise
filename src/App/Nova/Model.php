@@ -6,19 +6,19 @@ use Datomatic\Nova\Fields\Enum\Enum;
 use Domain\Models\Enums\Ethnicity;
 use Domain\Models\Enums\EyeColor;
 use Domain\Models\Enums\HairColor;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\HasManyThrough;
 use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\VaporImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Domain\Models\Models\Model as ModelClass;
 use Laravel\Nova\Panel;
+use Spatie\TagsField\Tags;
 
 class Model extends Resource
 {
@@ -58,6 +58,10 @@ class Model extends Resource
             Boolean::make('Completed onboarding', 'has_completed_onboarding')->readonly(),
             Boolean::make('Newsletter', 'is_subscribed_to_newsletter')->hideFromIndex(),
             Boolean::make('Is accepted'),
+            Textarea::make("Bio")->alwaysShow()->hideFromIndex(),
+            Textarea::make("Admin notes")->alwaysShow()->hideFromIndex(),
+            Tags::make('Sports')->type("Sports")->withLinkToTagResource()->hideFromIndex(),
+            Tags::make('Creativity')->type("Creativity")->withLinkToTagResource()->hideFromIndex(),
             VaporImage::make("Profile picture", "profile_picture")
                 ->path("profile_pictures")
                 ->preview(function ($value, $disk) {

@@ -19,8 +19,16 @@
         "laravel/vapor-ui": "^1.7",
         "league/flysystem-aws-s3-v3": "^3.15",
         "livewire/livewire": "^2.12",
+        "prinsfrank/standards": "^2.1",
         "spatie/eloquent-sortable": "^4.0",
+        "spatie/enum": "^3.13",
         "spatie/laravel-data": "^3.6",
+        "spatie/laravel-onboard": "^2.4",
+        "spatie/laravel-tags": "^4.4",
+        "spatie/laravel-typescript-transformer": "^2.3",
+        "spatie/laravel-view-models": "^1.5",
+        "spatie/nova-tags-field": "^4.0",
+        "spatie/typescript-transformer": "^2.2",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {

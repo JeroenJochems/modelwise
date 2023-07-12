@@ -1,29 +1,50 @@
 import CleanLayout from "@/Layouts/CleanLayout";
 import {H1} from "@/Components/Typography/H1";
-import {Step} from "@/Components/Onboarding/Step";
-import { router } from "@inertiajs/react";
+import {Header} from "@/Components/Onboarding/Header";
+import { useForm, usePage} from "@inertiajs/react";
 import {Submit} from "@/Components/Forms/Submit";
-import {PhotoUploader} from "@/Components/PhotoUploader";
+import {InlinePhotoUploader, Photo} from "@/Components/InlinePhotoUploader";
+import {PageProps} from "@/types";
 
-type Digital = {
-    id: number
-    path: string
-}
 
-export default function Photos({modelDigitals}: {modelDigitals: Digital[] }) {
+export default function Photos({modelDigitals}: {modelDigitals: Photo[] }) {
 
+    const isOnboarding = usePage<PageProps>().props.ziggy.location.includes("onboarding")
+
+    const { post, data, setData } = useForm({
+        photos: modelDigitals
+    });
+
+    function submit() {
+        post(route("account.digitals.store"))
+    }
 
     return (
         <CleanLayout>
             <div className="grid gap-4">
 
-                <Step step={5} totalSteps={6} backLink={route("onboarding.photos")} />
+                <Header step={5} isOnboarding={isOnboarding} />
 
                 <H1>Digitals (optional)</H1>
 
-                <PhotoUploader folder={"Digitals"} photos={modelDigitals} />
+                <InlinePhotoUploader
+                    cols={3}
+                    photos={data.photos}
+                    onAddPhoto={(id, tmpFile, localUrl) => (
+                        setData(data => ({...data, photos: [...data.photos, { id, tmpFile,filtered: false, path: localUrl}]}))
+                    )}
+                    onUpdateSorting={(photos) => setData(data => (
+                        {...data, photos: photos}
+                    ))}
+                    onDeletePhoto={(id) => setData(data => (
+                        {
+                            ...data,
+                            photos: data.photos.map(photo => photo.id === id ? {...photo, deleted: true} : photo)
+                        }
+                    ))}
+                />
 
-                <Submit onClick={() => router.visit(route("onboarding.socials"))}>
+                <Submit onClick={submit}>
                     Continue
                 </Submit>
             </div>

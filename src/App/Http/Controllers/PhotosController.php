@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Models;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Domain\Models\Data\ModelPhotoData;
 use Domain\Models\Models\Photo;
 use Illuminate\Support\Facades\Storage;

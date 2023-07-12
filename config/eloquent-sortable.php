@@ -4,7 +4,7 @@ return [
     /*
      * Which column will be used as the order column.
      */
-    'order_column_name' => 'sortable_order',
+    'order_column_name' => 'order_column',
 
     /*
      * Define if the models should sort when creating.

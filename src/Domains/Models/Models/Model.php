@@ -9,41 +9,26 @@ use Domain\Models\Data\Mail\MailData;
 use Domain\Models\Data\Mail\ResetPasswordMailData;
 use Domain\Models\Data\Templates;
 use Domain\Models\Enums\Ethnicity;
-use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Scout\Searchable;
+use Spatie\Onboard\Concerns\GetsOnboarded;
+use Spatie\Onboard\Concerns\Onboardable;
+use Spatie\Tags\HasTags;
 
-class Model extends Authenticatable
+class Model extends Authenticatable implements Onboardable
 {
     use HasApiTokens;
     use HasFactory;
     use Notifiable;
     use Searchable;
+    use HasTags;
+    use GetsOnboarded;
 
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'first_name',
-        'last_name',
-        'phone_number',
-        'gender',
-        'date_of_birth',
-        'city',
-        'country',
-        'tiktok',
-        'instagram',
-        'website',
-    ];
+    protected $guarded = ['password'];
 
     public function searchableAs(): string
     {
@@ -58,7 +43,8 @@ class Model extends Authenticatable
     {
         $array = $this->toArray();
 
-        $array['test'] = 'superman';
+        $array['tags'] = $this->tags->pluck('name')->toArray();
+
         return $array;
     }
 

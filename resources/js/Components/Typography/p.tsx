@@ -1,10 +1,8 @@
-type Props = {
-    children: React.ReactNode
-}
+import { HTMLAttributes,} from "react";
 
-export function P({children}: Props) {
+export function P({children, className = '' }: HTMLAttributes<HTMLParagraphElement>) {
     return (
-        <p className="text-gray-600 text-sm">
+        <p className={`text-gray-600 text-sm ` + className}>
             {children}
         </p>
     )

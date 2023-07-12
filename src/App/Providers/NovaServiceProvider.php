@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Nova\Client;
 use App\Nova\Job;
 use App\Nova\Model;
+use App\Nova\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
@@ -28,6 +29,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             return [
                 MenuSection::make('Models', [
                     MenuItem::resource(Model::class),
+                    MenuItem::resource(Tag::class),
                 ])->icon('user')->collapsable(),
 
                 MenuSection::make('Work', [

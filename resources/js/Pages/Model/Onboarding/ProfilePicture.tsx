@@ -1,12 +1,13 @@
 import CleanLayout from "@/Layouts/CleanLayout";
 import {H1} from "@/Components/Typography/H1";
 import {P} from "@/Components/Typography/p";
-import {Step} from "@/Components/Onboarding/Step";
+import {Header} from "@/Components/Onboarding/Header";
 import PrimaryButton from "@/Components/PrimaryButton";
-import {router, useForm} from "@inertiajs/react";
+import {router, useForm, usePage} from "@inertiajs/react";
 import {FormEvent, FormEventHandler, useState} from "react";
 import Vapor from "laravel-vapor";
 import {Submit} from "@/Components/Forms/Submit";
+import {PageProps} from "@/types";
 
 export type FileEventTarget = EventTarget & { files: FileList|null };
 
@@ -25,9 +26,12 @@ type Props = {
 
 export default function ProfilePicture({ modelData }: Props) {
 
+    const { ziggy } = usePage<PageProps>().props
+
     const {profile_picture} = modelData;
 
-    const [file, setFile] = useState(profile_picture ?? Vapor.asset('img/headshot-placeholder.png'));
+    const [file, setFile] = useState(profile_picture);
+    const [hasEdited, setHasEdited] = useState(false);
 
     const {data, setData, post, processing, errors, progress, reset} = useForm<FormInterface>({
         profile_picture: null,
@@ -38,6 +42,7 @@ export default function ProfilePicture({ modelData }: Props) {
         if (e.target.files===null) return;
 
         setFile(URL.createObjectURL(e.target.files[0]));
+        setHasEdited(true);
 
         Vapor.store(e.target.files[0]).then(response => {
             setData('profile_picture', response.key)
@@ -47,18 +52,16 @@ export default function ProfilePicture({ modelData }: Props) {
     const submit: FormEventHandler = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (profile_picture && !data.profile_picture) {
-            return router.visit(route('onboarding.photos'));
-        }
-
-        post(route('onboarding.profile-picture'));
+        post(route('account.profile-picture.store'));
     };
+
+    const isOnboarding = ziggy.location.includes("onboarding");
 
     return (
         <CleanLayout>
             <div className={"grid gap-4"}>
 
-                <Step step={3} totalSteps={6} backLink={route("onboarding.personal-details")} />
+                <Header step={3} isOnboarding={isOnboarding} />
 
                 <H1>Profile picture</H1>
                 <P>Upload a colour headshot in portrait format. This will be your primary portfolio photo.</P>
@@ -70,7 +73,8 @@ export default function ProfilePicture({ modelData }: Props) {
 
 
                     <label htmlFor={"profile_picture"} className={"cursor-pointer"}>
-                        <img src={file} alt="Profile picture" className={"mx-auto"} style={{width: 200}}/>
+                        <img src={file ?? Vapor.asset('img/headshot-placeholder.png')} alt="Profile picture" className={"mx-auto"} style={{width: 200}}/>
+                        {!hasEdited && <div className={"text-center"}>edit</div> }
                     </label>
 
                     {progress && (
@@ -80,7 +84,7 @@ export default function ProfilePicture({ modelData }: Props) {
                     )}
 
                     <Submit>
-                        Continue
+                        { isOnboarding ? "Continue" : "Save" }
                     </Submit>
                 </form>
             </div>

@@ -5,9 +5,7 @@ import TextInput from '@/Components/TextInput';
 import {Head, Link, useForm} from '@inertiajs/react';
 import {H1} from "@/Components/Typography/H1";
 import CleanLayout from "@/Layouts/CleanLayout";
-import {Step} from "@/Components/Onboarding/Step";
-import PrimaryButton from "@/Components/PrimaryButton";
-import SecondaryButton from "@/Components/SecondaryButton";
+import {Header} from "@/Components/Onboarding/Header";
 import {Submit} from "@/Components/Forms/Submit";
 
 export default function Register() {
@@ -35,7 +33,7 @@ export default function Register() {
                 <title>Register</title>
             </Head>
 
-            <Step step={1} totalSteps={6}/>
+            <Header step={1} />
 
             <div className="grid grid-cols-1 gap-4 mt-8">
                 <H1>Create your account</H1>

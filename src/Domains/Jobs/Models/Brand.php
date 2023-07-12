@@ -2,10 +2,16 @@
 
 namespace Domain\Jobs\Models;
 
-use Domain\Models\Models\Model;
+
+use Illuminate\Database\Eloquent\Model;
 
 class Brand extends Model
 {
+    public function getScoutKey(): mixed
+    {
+        return $this->id;
+    }
+
     public function jobs()
     {
         return $this->hasMany(Job::class);

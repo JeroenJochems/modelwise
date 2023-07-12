@@ -1,15 +1,6 @@
-import {ChangeEvent, FormEvent, FormEventHandler} from "react";
 import CleanLayout from "@/Layouts/CleanLayout";
-import {Step} from "@/Components/Onboarding/Step";
 import {H1} from "@/Components/Typography/H1";
-import InputGroupText from "@/Components/Forms/InputGroupText";
-import PrimaryButton from "@/Components/PrimaryButton";
-import {Link, router, useForm} from '@inertiajs/react';
-import InputLabel from "@/Components/InputLabel";
-import TextInput from "@/Components/TextInput";
-import InputError from "@/Components/InputError";
 import {P} from "@/Components/Typography/p";
-import SecondaryButton from "@/Components/SecondaryButton";
 
 
 export default function Thanks() {

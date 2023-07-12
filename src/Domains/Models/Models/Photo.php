@@ -10,6 +10,16 @@ class Photo extends Model implements Sortable
 {
     use SortableTrait;
 
+    public $sortable = [
+        'order_column_name' => 'sortable_order',
+        'sort_when_creating' => true,
+    ];
+
+    public function getScoutKey(): mixed
+    {
+        return $this->id;
+    }
+
     const FOLDER_WORK_EXPERIENCE = 'Work experience';
     const FOLDER_DIGITALS = 'Digitals';
 

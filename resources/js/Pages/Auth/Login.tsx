@@ -4,10 +4,10 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import { Head, Link, useForm } from '@inertiajs/react';
+import {Head, Link, router, useForm} from '@inertiajs/react';
 import CleanLayout from "@/Layouts/CleanLayout";
 import {H1} from "@/Components/Typography/H1";
-import {Submit} from "@/Components/Forms/Submit";
+import {asset} from "laravel-vapor";
 
 export default function Login({ status, canResetPassword }: { status?: string, canResetPassword: boolean }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -32,7 +32,7 @@ export default function Login({ status, canResetPassword }: { status?: string, c
         <CleanLayout>
             <Head title="Log in" />
 
-            <img src={"/img/logo-black.svg"} className={"mb-4 w-1/2 mx-auto"} />
+            <img src={asset("img/logo-black.svg")} className={"mb-4 w-1/2 mx-auto"} />
 
             <div className={"grid gap-4"}>
 
@@ -85,19 +85,26 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                         </label>
                     </div>
 
-                    <div className="flex items-center justify-end mt-4">
-                        {canResetPassword && (
-                            <Link
-                                href={route('password.request')}
-                                className="hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            >
-                                Forgot your password?
-                            </Link>
-                        )}
+                    <div className="flex flex-col justify-between mt-4">
 
-                        <PrimaryButton className="ml-4" disabled={processing}>
+
+                        <PrimaryButton disabled={processing}>
                             Log in
                         </PrimaryButton>
+
+                        <div className={"flex mt-4 justify-between"}>
+                            {canResetPassword && (
+                                <Link
+                                    href={route('password.request')}
+                                    className="hover:text-gray-900 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                >
+                                    Forgot your password?
+                                </Link>
+                            )}
+                            <Link className={"text-center"} href={route("register")}>
+                                Don't have an account? Register
+                            </Link>
+                        </div>
                     </div>
                 </form>
             </div>

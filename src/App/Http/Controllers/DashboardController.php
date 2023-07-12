@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Models;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 
 class DashboardController extends Controller

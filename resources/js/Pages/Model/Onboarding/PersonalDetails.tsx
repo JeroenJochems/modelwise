@@ -1,16 +1,11 @@
-import {ChangeEvent, FormEvent, FormEventHandler} from "react";
+import {FormEventHandler} from "react";
 import CleanLayout from "@/Layouts/CleanLayout";
-import {Step} from "@/Components/Onboarding/Step";
+import {Header} from "@/Components/Onboarding/Header";
 import {H1} from "@/Components/Typography/H1";
 import InputGroupText from "@/Components/Forms/InputGroupText";
-import PrimaryButton from "@/Components/PrimaryButton";
-import { useForm } from '@inertiajs/react';
-import InputLabel from "@/Components/InputLabel";
-import TextInput from "@/Components/TextInput";
-import InputError from "@/Components/InputError";
-import {P} from "@/Components/Typography/p";
-import {asset} from "laravel-vapor";
+import {useForm, usePage} from '@inertiajs/react';
 import {Submit} from "@/Components/Forms/Submit";
+import {PageProps} from "@/types";
 
 type ModelDataType = {
     first_name: string
@@ -27,6 +22,7 @@ type Props = {
 }
 
 export default function PersonalDetails({modelData}: Props) {
+    const { ziggy } = usePage<PageProps>().props
 
     const {data, setData, post, clearErrors, errors } = useForm({
         ...modelData,
@@ -38,7 +34,7 @@ export default function PersonalDetails({modelData}: Props) {
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('onboarding.personal-details'));
+        post(route('account.personal-details.store'));
     };
 
     let genderOptions = [
@@ -80,20 +76,20 @@ export default function PersonalDetails({modelData}: Props) {
         }
     }
 
+    const isOnboarding = ziggy.location.includes("onboarding");
+
     return (
         <CleanLayout>
 
-            <Step step={2} totalSteps={6} />
+            <Header step={2} isOnboarding={isOnboarding} />
 
-            <div className="grid grid-cols-1 gap-4 mt-8">
-                <H1>Personal details</H1>
-            </div>
+            <H1>Personal details</H1>
 
-            <form onSubmit={submit} className="grid gap-4">
+            <form onSubmit={submit} className="grid mt-8 gap-4">
 
                 <InputGroupText
                     title="First name"
-                    value={data.first_name}
+                    value={data.first_name ?? ""}
                     error={errors.first_name}
                     autoComplete={"given-name"}
                     onChange={(value: string) => { clearErrors('first_name'); setData('first_name', value) }}
@@ -148,7 +144,7 @@ export default function PersonalDetails({modelData}: Props) {
 
 
                 <Submit>
-                    Continue
+                    {isOnboarding ? "Continue" : "Save" }
                 </Submit>
             </form>
         </CleanLayout>

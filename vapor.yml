@@ -5,7 +5,7 @@ environments:
         storage: modelwise-production
         memory: 1024
         domain:
-            - modelwise.agency
+            - test.modelwise.agency
         cli-memory: 512
         runtime: 'php-8.2:al2'
         build:

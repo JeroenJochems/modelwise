@@ -1,13 +1,18 @@
 <?php
 
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\Auth\RegisterModelController;
 use App\Http\Controllers\JobController;
-use App\Http\Controllers\Models\OnboardingController;
-use App\Http\Controllers\Models\PhotosController;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\Model\CharacteristicsController;
+use App\Http\Controllers\Model\DigitalsController;
+use App\Http\Controllers\Model\ExclusiveCountriesController;
+use App\Http\Controllers\Model\PersonalDetailsController;
+use App\Http\Controllers\Model\PortfolioController;
+use App\Http\Controllers\Model\ProfilePictureController;
+use App\Http\Controllers\Model\SocialsController;
+use App\Http\Controllers\ModelController;
+use App\Http\Controllers\PhotosController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,44 +25,56 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+if (!function_exists("onboardingRoutes")) {
+    function onboardingRoutes()
+    {
+        Route::get('personal-details', [PersonalDetailsController::class, "index"])->name("personal-details");
+        Route::get('profile-picture', [ProfilePictureController::class, "index"])->name("profile-picture");
+        Route::get('portfolio', [PortfolioController::class, "index"])->name("portfolio");
+        Route::get('digitals', [DigitalsController::class, "index"])->name("digitals");
+        Route::get('socials', [SocialsController::class, "index"])->name("socials");
+        Route::get('characteristics', [CharacteristicsController::class, "index"])->name("characteristics");
+        Route::get('exclusive-countries', [ExclusiveCountriesController::class, "index"])->name("exclusive-countries");
+    }
+}
 
-Route::resource('jobs', JobController::class);
+Route::get('/', RegisterModelController::class);
+
+Route::get('jobs', [JobController::class, "index"])->name("jobs");
 Route::post('jobs/{job}/applications', [ApplicationController::class, "store"])->name('jobs.apply.store');
-
 
 Route::middleware(['auth'])->group(callback: function () {
 
-    Route::get('jobs/{job}/applications/create', [ApplicationController::class, "create"])->name('jobs.apply');
-
     Route::middleware("onboarding")->group(function() {
-        Route::get('/model/dashboard', \App\Http\Controllers\Models\DashboardController::class)->name("dashboard");
+        Route::get('account', [ModelController::class, "index"])->name("account.index");
     });
 
-    Route::get('/model/onboarding/personal-details', [OnboardingController::class, "personalDetails"])->name("onboarding.personal-details");
-    Route::post('/model/onboarding/personal-details', [OnboardingController::class, 'storePersonalDetails']);
-    Route::get('/model/onboarding/profile-picture', [OnboardingController::class, "profilePicture"])->name("onboarding.profile-picture");
-    Route::post('/model/onboarding/profile-picture', [OnboardingController::class, 'storeProfilePicture']);
-    Route::delete('/model/onboarding/digitals/{digital}/delete', [OnboardingController::class, "deleteDigital"])->name("onboarding.digitals.delete");
-    Route::get('/model/onboarding/photos', [OnboardingController::class, "photos"])->name("onboarding.photos");
-    Route::get('/model/onboarding/digitals', [OnboardingController::class, "digitals"])->name("onboarding.digitals");
-    Route::post('/model/onboarding/digitals', [OnboardingController::class, 'storeDigitals']);
-    Route::get('/model/onboarding/socials', [OnboardingController::class, "socials"])->name("onboarding.socials");
-    Route::post('/model/onboarding/socials', [OnboardingController::class, 'storeSocials']);
-    Route::get('/model/onboarding/thanks', [OnboardingController::class, "thanks"])->name("onboarding.thanks");
-    Route::get('/model/onboarding/not-accepted', [OnboardingController::class, "notAccepted"])->name("onboarding.not-accepted");
-    Route::post('/model/onboarding/subscribe', [OnboardingController::class, "subscribe"])->name("onboarding.subscribe");
 
-    Route::post('/model/photos', [PhotosController::class, 'store'])->name("model.photos.store");
-    Route::post('/model/photos/sort', [PhotosController::class, 'sort'])->name("model.photos.sort");
-    Route::delete('/model/photos/{photo}/delete', [PhotosController::class, "delete"])->name("model.photos.delete");
+    Route::name("account.")->prefix("account")->group(function() {
+        onboardingRoutes();
+
+        Route::post('personal-details', [PersonalDetailsController::class, 'store'])->name("personal-details.store");
+        Route::post('profile-picture', [ProfilePictureController::class, 'store'])->name("profile-picture.store");
+        Route::post('portfolio', [PortfolioController::class, 'store'])->name("portfolio.store");
+        Route::post('digitals', [DigitalsController::class, 'store'])->name("digitals.store");
+        Route::post('socials', [SocialsController::class, 'store'])->name("socials.store");
+        Route::post('exclusive-countries', [ExclusiveCountriesController::class, "store"])->name("exclusive-countries.store");
+        Route::delete('exclusive-countries/{country}/delete', [ExclusiveCountriesController::class, "delete"])->name("exclusive-countries.delete");
+        Route::post('characteristics', [CharacteristicsController::class, "store"])->name("characteristics.store");
+        Route::post('photos/sort', [PhotosController::class, 'sort'])->name("photos.sort");
+        Route::delete('photos/{photo}/delete', [PhotosController::class, "delete"])->name("photos.delete");
+    });
+
+    Route::name("onboarding.")->prefix("onboarding")->group(function() {
+        onboardingRoutes();
+
+        Route::get('thanks', [ModelController::class, "thanks"])->name("thanks");
+        Route::get('not-accepted', [ModelController::class, "notAccepted"])->name("not-accepted");
+        Route::post('subscribe', [ModelController::class, "subscribe"])->name("subscribe");
+    });
+
+
+    Route::get('jobs/{job}/applications/create', [ApplicationController::class, "create"])->name('jobs.apply');
 });
 
 require __DIR__.'/auth.php';

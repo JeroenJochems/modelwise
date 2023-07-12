@@ -2,6 +2,7 @@
 
 namespace Domain\Models\Enums;
 
+/** @typescript */
 enum HairColor: string
 {
     // make cases for these colors:
@@ -14,4 +15,5 @@ enum HairColor: string
     case Red = 'Red';
     case Colored = 'Colored';
     case None = 'None';
+    case Other = 'Other';
 }
