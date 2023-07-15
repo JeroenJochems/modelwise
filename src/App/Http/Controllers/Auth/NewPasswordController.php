@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Domain\Models\Models\Model;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ class NewPasswordController extends Controller
     public function create(Request $request): Response
     {
         return Inertia::render('Auth/ResetPassword', [
-            'email' => $request->email,
+            'email' => urldecode($request->email),
             'token' => $request->route('token'),
         ]);
     }
@@ -55,10 +56,16 @@ class NewPasswordController extends Controller
             }
         );
 
+
+
         // If the password was successfully reset, we will redirect the user back to
         // the application's home authenticated view. If there is an error we can
         // redirect them back to where they came from with their error message.
         if ($status == Password::PASSWORD_RESET) {
+            auth()->login(
+                Model::where("email", $request->email)->first()
+            );
+
             return redirect()->route('login')->with('status', __($status));
         }
 

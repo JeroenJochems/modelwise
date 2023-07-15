@@ -2,7 +2,12 @@
 
 namespace App\Providers;
 
+use Domain\Jobs\Models\Job;
+use Domain\Jobs\Models\LonglistedModel;
+use Domain\Jobs\Models\Role;
 use Domain\Models\Models\Model;
+use Domain\Models\Models\Photo;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Onboard\Facades\Onboard;
 
@@ -21,6 +26,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+        Relation::enforceMorphMap([
+            'model' => Model::class,
+            'job' => Job::class,
+            'photo' => Photo::class,
+            'role' => Role::class,
+            'longlist-model' => LonglistedModel::class,
+        ]);
+
         Onboard::addStep('Personal details')
             ->link("onboarding/personal-details")
             ->completeIf(function (Model $model) {

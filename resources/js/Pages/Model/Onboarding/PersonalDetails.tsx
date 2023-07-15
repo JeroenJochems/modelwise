@@ -64,6 +64,7 @@ export default function PersonalDetails({modelData}: Props) {
 
 
     function setCountry(country: string) {
+
         setData('country', country);
 
         if (data.phone_number.length < 6) {
@@ -71,7 +72,11 @@ export default function PersonalDetails({modelData}: Props) {
             const countryObj = countryCodes.find(c => c.name === country);
 
             if (countryObj) {
-                setData('phone_number', `${countryObj.code} `);
+                setData({
+                    ...data,
+                    country,
+                    phone_number: `${countryObj.code} `
+                });
             }
         }
     }

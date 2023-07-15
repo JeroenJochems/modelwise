@@ -12,10 +12,11 @@ type Country = {
 
 type Props = {
     viewModel: App.ViewModels.ModelExclusiveCountriesViewModel
+    modelingCountries: Country[]
     allCountries: Country[]
 }
 
-export default function ExclusiveCountries({viewModel, allCountries}: Props) {
+export default function ExclusiveCountries({viewModel, modelingCountries, allCountries}: Props) {
 
     const { data, setData } = useForm({
         country: '',
@@ -23,7 +24,7 @@ export default function ExclusiveCountries({viewModel, allCountries}: Props) {
 
     function addSelectedCountry(country: string) {
         router.post(
-            route('onboarding.exclusive-countries.store'),
+            route('account.exclusive-countries.store'),
             { country },
             {
                 preserveState: false,
@@ -57,7 +58,7 @@ export default function ExclusiveCountries({viewModel, allCountries}: Props) {
                         onChange={(e) => addSelectedCountry(e.target.value)}
                         className={"border-gray-300 focus:border-green focus:ring-green rounded-sm shadow-sm block mr-4 w-full"}>
                     <option value={""}>Select a country...</option>
-                    { allCountries.map(({ code, name} ) => (
+                    { modelingCountries.map(({ code, name} ) => (
                         <option key={code} value={code} >{name}</option>
                     ))}
                 </select>
@@ -73,9 +74,7 @@ export default function ExclusiveCountries({viewModel, allCountries}: Props) {
                     ))}
                 </div>
 
-
-
-                <PrimaryButton>
+                <PrimaryButton onClick={() => router.visit(route("account/index"))}>
                     Continue
                 </PrimaryButton>
             </div>

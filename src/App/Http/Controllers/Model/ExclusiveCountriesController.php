@@ -8,6 +8,7 @@ use App\ViewModels\ModelExclusiveCountriesViewModel;
 use Domain\Models\Models\Model;
 use Inertia\Inertia;
 use PrinsFrank\Standards\Country\CountryAlpha2;
+use Support\Enums\ModelCountries;
 
 class ExclusiveCountriesController extends Controller
 {
@@ -18,6 +19,7 @@ class ExclusiveCountriesController extends Controller
         return Inertia::render("Model/Onboarding/ExclusiveCountries")
             ->with([
                 'viewModel' => $vm,
+                'modelingCountries' => EnumArray::transform(ModelCountries::cases()),
                 'allCountries' => EnumArray::transform(CountryAlpha2::cases())
             ]);
     }

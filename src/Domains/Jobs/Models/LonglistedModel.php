@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class LonglistedModel extends Model
 {
     protected $fillable = [
-        'job_id',
+        'role_id',
         'model_id',
     ];
 
@@ -27,19 +27,19 @@ class LonglistedModel extends Model
                     $longlistedModel->model,
                     Templates::shortlisted,
                     new ShortlistedMailData(
-                        $longlistedModel->job->client->name,
-                        $longlistedModel->job->title,
-                        $longlistedModel->job->url || "http://google.nl",
-                        $longlistedModel->job->created_at->format('d-m-Y')
+                        $longlistedModel->role->job->client->name,
+                        $longlistedModel->role->job->title,
+                        $longlistedModel->role->job->url || "http://google.nl",
+                        $longlistedModel->role->start_date->format('d-m-Y')
                     )
                 )
             );
         });
     }
 
-    public function job()
+    public function role()
     {
-        return $this->belongsTo(Job::class);
+        return $this->belongsTo(Role::class);
     }
 
     public function model()

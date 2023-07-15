@@ -6,6 +6,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, useForm } from '@inertiajs/react';
 import CleanLayout from "@/Layouts/CleanLayout";
+import {asset} from "laravel-vapor";
 
 export default function ResetPassword({ token, email }: { token: string, email: string }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -30,6 +31,8 @@ export default function ResetPassword({ token, email }: { token: string, email: 
     return (
         <CleanLayout>
             <Head title="Reset Password" />
+
+            <img src={asset("img/logo-black.svg")} className={"mb-4 w-1/2 mx-auto"} />
 
             <form onSubmit={submit}>
                 <div>
@@ -80,8 +83,8 @@ export default function ResetPassword({ token, email }: { token: string, email: 
                     <InputError message={errors.password_confirmation} className="mt-2" />
                 </div>
 
-                <div className="flex items-center justify-end mt-4">
-                    <PrimaryButton className="ml-4" disabled={processing}>
+                <div className="flex items-center mt-4">
+                    <PrimaryButton className="w-full" disabled={processing}>
                         Reset Password
                     </PrimaryButton>
                 </div>

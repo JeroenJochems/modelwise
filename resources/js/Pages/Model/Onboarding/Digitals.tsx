@@ -5,18 +5,29 @@ import { useForm, usePage} from "@inertiajs/react";
 import {Submit} from "@/Components/Forms/Submit";
 import {InlinePhotoUploader, Photo} from "@/Components/InlinePhotoUploader";
 import {PageProps} from "@/types";
+import {useState} from "react";
+import PrimaryButton from "@/Components/PrimaryButton";
 
 
 export default function Photos({modelDigitals}: {modelDigitals: Photo[] }) {
 
     const isOnboarding = usePage<PageProps>().props.ziggy.location.includes("onboarding")
 
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const [isUploading, setIsUploading] = useState<boolean>(false);
+
     const { post, data, setData } = useForm({
         photos: modelDigitals
     });
 
+
     function submit() {
-        post(route("account.digitals.store"))
+        setIsSubmitting(true);
+        post(route('account.digitals.store'), {
+            onFinish: () => {
+                setIsSubmitting(false);
+            }
+        });
     }
 
     return (
@@ -30,6 +41,8 @@ export default function Photos({modelDigitals}: {modelDigitals: Photo[] }) {
                 <InlinePhotoUploader
                     cols={3}
                     photos={data.photos}
+                    onStart={() => setIsUploading(true)}
+                    onFinished={() => setIsUploading(false)}
                     onAddPhoto={(id, tmpFile, localUrl) => (
                         setData(data => ({...data, photos: [...data.photos, { id, tmpFile,filtered: false, path: localUrl}]}))
                     )}
@@ -44,9 +57,9 @@ export default function Photos({modelDigitals}: {modelDigitals: Photo[] }) {
                     ))}
                 />
 
-                <Submit onClick={submit}>
-                    Continue
-                </Submit>
+                <PrimaryButton onClick={submit} disabled={isSubmitting || isUploading}>
+                    { isSubmitting ? 'Saving...' : 'Continue' }
+                </PrimaryButton>
             </div>
         </CleanLayout>
     )

@@ -6,6 +6,7 @@ import {router, useForm, usePage} from "@inertiajs/react";
 import {InlinePhotoUploader, Photo} from "@/Components/InlinePhotoUploader";
 import PrimaryButton from "@/Components/PrimaryButton";
 import {PageProps} from "@/types";
+import {useState} from "react";
 
 
 export type FileEventTarget = EventTarget & { files: FileList|null };
@@ -13,15 +14,23 @@ export type FileEventTarget = EventTarget & { files: FileList|null };
 export default function Portfolio({modelPhotos}: {modelPhotos: Photo[] }) {
 
     const { props } = usePage<PageProps>()
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     const isOnboarding = props.ziggy.location.includes("onboarding");
 
-    const { post, data, setData } = useForm({
+    const [isUploading, setIsUploading] = useState<boolean>(false);
+
+    const { post, data, progress, setData } = useForm({
         photos: modelPhotos
     });
 
     function submit() {
-        post(route('account.portfolio.store'))
+        setIsSubmitting(true);
+        post(route('account.portfolio.store'), {
+            onFinish: () => {
+                setIsSubmitting(false);
+            }
+        });
     }
 
     return (
@@ -37,8 +46,10 @@ export default function Portfolio({modelPhotos}: {modelPhotos: Photo[] }) {
                     <InlinePhotoUploader
                         cols={3}
                         photos={data.photos}
+                        onStart={() => setIsUploading(true)}
+                        onFinished={() => setIsUploading(false)}
                         onAddPhoto={(id, tmpFile, localUrl) => (
-                            setData(data => ({...data, photos: [...data.photos, { id, tmpFile,filtered: false, path: localUrl}]}))
+                            setData(data => ({...data, photos: [...data.photos, { id, tmpFile, filtered: false, path: localUrl}]}))
                         )}
                         onUpdateSorting={(photos) => setData(data => (
                             {...data, photos: photos}
@@ -52,11 +63,9 @@ export default function Portfolio({modelPhotos}: {modelPhotos: Photo[] }) {
                     />
                 </div>
 
-                {( !isOnboarding || data.photos.length > 3) &&
-                    <PrimaryButton onClick={submit}>
-                        { isOnboarding ? 'Continue' : 'Save'}
-                    </PrimaryButton>
-                }
+                <PrimaryButton onClick={submit} disabled={isSubmitting || isUploading || ( isOnboarding && data.photos.length < 3)}>
+                    { isSubmitting ? `Please wait...` : isOnboarding ? 'Continue' : 'Save' }
+                </PrimaryButton>
             </div>
         </CleanLayout>
     )

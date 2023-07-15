@@ -13,6 +13,7 @@ import {InlinePhotoUploader, Photo} from "@/Components/InlinePhotoUploader";
 import {P} from "@/Components/Typography/p";
 import {Header} from "@/Components/Onboarding/Header";
 import {PageProps} from "@/types";
+import PrimaryButton from "@/Components/PrimaryButton";
 
 type ModelDataType = {
     gender?: string
@@ -43,17 +44,22 @@ export default function Characteristics({modelData, tattooPhotos, hairColors, ey
     const { ziggy } = usePage<PageProps>().props
 
     const isOnboarding = ziggy.location.includes("onboarding");
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const [isUploading, setIsUploading] = useState<boolean>(false);
 
     const {data, setData, post, errors } = useForm({
         ...modelData,
         tattoo_photos: tattooPhotos ?? []
     });
 
-    const submit: FormEventHandler = (e) => {
-        e.preventDefault();
-
-        post(route('account.characteristics.store'));
-    };
+    function submit() {
+        setIsSubmitting(true);
+        post(route('account.characteristics.store'), {
+            onFinish: () => {
+                setIsSubmitting(false);
+            }
+        });
+    }
 
     return (
         <CleanLayout>
@@ -64,7 +70,7 @@ export default function Characteristics({modelData, tattooPhotos, hairColors, ey
                 <H1>Body characteristics</H1>
             </div>
 
-            <form onSubmit={submit} className="grid gap-4">
+            <div className="grid gap-4">
 
                 <div>
                     <InputLabel htmlFor="hair_color" value="Hair color" />
@@ -166,6 +172,8 @@ export default function Characteristics({modelData, tattooPhotos, hairColors, ey
 
                             <InlinePhotoUploader
                                 photos={data.tattoo_photos}
+                                onStart={() => setIsUploading(true)}
+                                onFinished={() => setIsUploading(false)}
                                 onAddPhoto={(id, tmpFile, localUrl) => (
                                     setData(data => ({...data, tattoo_photos: [...data.tattoo_photos, { id, tmpFile,filtered: false, path: localUrl}]}))
                                 )}
@@ -191,10 +199,10 @@ export default function Characteristics({modelData, tattooPhotos, hairColors, ey
                     onChange={value => setData('piercings', value==="Yes")}
                 />
 
-                <Submit>
-                    Continue
-                </Submit>
-            </form>
+                <PrimaryButton onClick={submit} disabled={ isUploading || isSubmitting }>
+                    { isSubmitting ? "Please wait..." : "Continue" }
+                </PrimaryButton>
+            </div>
         </CleanLayout>
     )
 }

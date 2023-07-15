@@ -18,7 +18,7 @@ class PhotoRepository
             ->map(function (Photo $photo) {
                 return [
                     "id" => $photo->id,
-                    "path" => $photo->cdnPath,
+                    "path" => $photo->cdnPath."?w=600&h=600&fit=crop&crop=faces",
                     "deleteRoute" => route('account.photos.delete', $photo),
                 ];
             });

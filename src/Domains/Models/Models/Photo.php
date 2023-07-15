@@ -22,15 +22,20 @@ class Photo extends Model implements Sortable
 
     const FOLDER_WORK_EXPERIENCE = 'Work experience';
     const FOLDER_DIGITALS = 'Digitals';
+    const FOLDER_TATTOOS = 'Tattoos';
+    const FOLDER_JOB_IMAGE = 'Look & Feel';
 
-    public function model(): BelongsTo
+    public function photoable(): BelongsTo
     {
-        return $this->belongsTo(Model::class);
+        return $this->morphTo();
     }
 
     public function buildSortQuery()
     {
-        return static::query()->where('model_id', $this->model_id)->where('folder', $this->folder);
+        return static::query()
+            ->where('photoable_id', $this->photoable_id)
+            ->where('photoable_type', $this->photoable_type)
+            ->where('folder', $this->folder);
     }
 
     public function getCdnPathAttribute()

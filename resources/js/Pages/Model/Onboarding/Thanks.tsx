@@ -35,15 +35,14 @@ export default function Thanks({ is_subscribed}: {is_subscribed: boolean}) {
                     <Submit>
                         Sign up for newsletter
                     </Submit>
-                    <Link href={route('dashboard')} className={"text-center text-sm"}>
-                        Skip
-                    </Link>
                 </form>
             )}
 
-            <Link href={route('dashboard')} className={"text-center text-sm"}>
-                Continue to dashboard
-            </Link>
+            <div className={"flex"}>
+                <Link href={route('dashboard')} className={"block w-full p-4 mt-4 text-center text-sm"}>
+                    Go to dashboard
+                </Link>
+            </div>
 
         </CleanLayout>
     )

@@ -3,9 +3,10 @@ import CleanLayout from "@/Layouts/CleanLayout";
 import {Header} from "@/Components/Onboarding/Header";
 import {H1} from "@/Components/Typography/H1";
 import InputGroupText from "@/Components/Forms/InputGroupText";
-import {useForm} from '@inertiajs/react';
+import {useForm, usePage} from '@inertiajs/react';
 import {P} from "@/Components/Typography/p";
 import {Submit} from "@/Components/Forms/Submit";
+import {PageProps} from "@/types";
 
 type ModelDataType = {
     instagram: string
@@ -18,6 +19,9 @@ type Props = {
 }
 
 export default function Socials({modelData}: Props) {
+
+    const { ziggy } = usePage<PageProps>().props;
+    const isOnboarding = ziggy.location.includes("onboarding");
 
     const {data, setData, post, errors} = useForm({
         instagram: modelData.instagram ?? "",
@@ -33,7 +37,7 @@ export default function Socials({modelData}: Props) {
 
     return (
         <CleanLayout>
-            <Header step={6}/>
+            <Header step={6} isOnboarding={isOnboarding} />
 
             <div className="grid grid-cols-1 gap-4 mb-8 mt-8">
                 <H1>Socials</H1>

@@ -5,6 +5,7 @@ import TextInput from '@/Components/TextInput';
 import {Head, useForm} from '@inertiajs/react';
 import {FormEventHandler} from 'react';
 import CleanLayout from "@/Layouts/CleanLayout";
+import {asset} from "laravel-vapor";
 
 export default function ForgotPassword({status}: { status?: string }) {
     const {data, setData, post, processing, errors} = useForm({
@@ -24,7 +25,7 @@ export default function ForgotPassword({status}: { status?: string }) {
 
 
             <div className="grid gap-4 mb-4 text-sm text-gray-600">
-                <img src={"/img/logo-black.svg"} className={"mb-4 w-1/2 mx-auto"} />
+                <img src={asset("img/logo-black.svg")} className={"mb-4 w-1/2 mx-auto"} />
 
                 Forgot your password? No problem. Just let us know your email address and we will email you a password
                 reset link that will allow you to choose a new one.

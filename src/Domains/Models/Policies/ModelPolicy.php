@@ -3,6 +3,7 @@
 namespace Domain\Models\Policies;
 
 
+use Domain\Jobs\Models\Job;
 use Domain\Models\Models\Model;
 use Illuminate\Contracts\Auth\Authenticatable;
 
@@ -24,6 +25,11 @@ class ModelPolicy
     }
 
     public function addPhotos(Authenticatable $authenticatable, Model $model)
+    {
+        return true;
+    }
+
+    public function addPhoto(Authenticatable $authenticatable, Model $model)
     {
         return true;
     }

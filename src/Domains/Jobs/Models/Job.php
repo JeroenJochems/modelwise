@@ -3,8 +3,10 @@
 namespace Domain\Jobs\Models;
 
 
+use Domain\Models\Models\Photo;
 use Illuminate\Database\Eloquent\Model;
 
+/** @typescript */
 class Job extends Model
 {
     protected $fillable = [
@@ -19,6 +21,11 @@ class Job extends Model
         'status' => 'boolean',
     ];
 
+    public function photos()
+    {
+        return $this->morphMany(Photo::class, "photoable")->orderBy("sortable_order");
+    }
+
     public function brand()
     {
         return $this->belongsTo(Brand::class);
@@ -29,8 +36,8 @@ class Job extends Model
         return $this->belongsTo(Client::class);
     }
 
-    public function longlistedModels()
+    public function roles()
     {
-        return $this->hasMany(LonglistedModel::class);
+        return $this->hasMany(Role::class);
     }
 }

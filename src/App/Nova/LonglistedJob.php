@@ -18,13 +18,13 @@ class LonglistedJob extends Resource
 
     public function title()
     {
-        return $this->model->first_name.' '.$this->model->last_name. ' at '.$this->job->title.' ('.$this->job->client->name.')';
+        return $this->model->first_name.' '.$this->model->last_name. ' at '.$this->role->job->title.' ('.$this->role->job->client->name.')';
     }
 
     public function fields(NovaRequest $request)
     {
         return [
-            BelongsTo::make('Job')->sortable()->searchable(),
+            BelongsTo::make('Role')->sortable()->searchable(),
         ];
     }
 

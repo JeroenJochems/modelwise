@@ -11,6 +11,7 @@ use Domain\Models\Data\Templates;
 use Domain\Models\Enums\Ethnicity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -103,17 +104,13 @@ class Model extends Authenticatable implements Onboardable
         return $this->hasMany(ExclusiveCountry::class);
     }
 
-    public function photos(): HasMany
+    public function photos(): MorphMany
     {
-        return $this->hasMany(Photo::class)
+        return $this->morphMany(Photo::class, 'photoable')
             ->orderBy("folder")
             ->orderBy("sortable_order");
     }
 
-    public function digitals(): HasMany
-    {
-        return $this->hasMany(Digital::class);
-    }
 
     public function getUserName()
     {
@@ -127,7 +124,7 @@ class Model extends Authenticatable implements Onboardable
                 $this,
                 Templates::passwordReset,
                 new ResetPasswordMailData(
-                    reset_password_url: route("password.reset", ['token' => $token])
+                    reset_password_url: route("password.reset", ['email' => urlencode($this->email), 'token' => $token])
                 ),
             )
         );

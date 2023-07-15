@@ -16,7 +16,6 @@ export default function Dashboard({ auth }: PageProps) {
         <CleanLayout>
             <Head title="Dashboard" />
 
-
             <h1 className={"text-4xl mb-4"}>Dashboard</h1>
 
             { link(route('account.index'), "My profile")}

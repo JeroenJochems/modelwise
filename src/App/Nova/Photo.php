@@ -2,27 +2,37 @@
 
 namespace App\Nova;
 
-use Illuminate\Http\Request;
-use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Image;
-use Laravel\Nova\Fields\Text;
+use Domain\Models\Models\Photo as Model;
+use Laravel\Nova\Fields\MorphTo;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\VaporImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Photo extends Resource
 {
-    public static $model = \Domain\Models\Models\Photo::class;
-
-    public static $title = 'id';
-
+    public static $model = Model::class;
+    public static $title = 'folder';
     public static $globallySearchable = false;
-
     public static $perPageViaRelationship = 10;
+
+    public static function authorizable()
+    {
+        return false;
+    }
 
     public function fields(NovaRequest $request)
     {
+        $options = $this->photoable_type === "job" || $request->viaResource === "jobs"
+            ? [Model::FOLDER_JOB_IMAGE => Model::FOLDER_JOB_IMAGE]
+            : [Model::FOLDER_WORK_EXPERIENCE, Model::FOLDER_DIGITALS, Model::FOLDER_TATTOOS];
+
+        $options = collect($options)->mapWithKeys(function ($item) {
+            return [$item => $item];
+        })->toArray();
+
         return [
-            Text::make("Folder"),
+            MorphTo::make("Photoable")->onlyOnDetail(),
+            Select::make("Folder")->options($options),
             VaporImage::make('Photo', 'path')
                 ->path("photos")
                 ->indexWidth(200)

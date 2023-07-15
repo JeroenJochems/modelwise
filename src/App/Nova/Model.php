@@ -11,6 +11,7 @@ use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Line;
+use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
@@ -40,7 +41,7 @@ class Model extends Resource
             Avatar::make('Profile picture', 'profile_picture_cdn')
                 ->thumbnail(function ($value, $disk) {
                     // @phpstan-ignore-next-line
-                    return $value ? $this->profile_picture_cdn."?w=720&h=720&fit=crop&crop=faces" : null;
+                    return $value ? $this->profile_picture_cdn."?w=600&h=600&fit=crop&crop=faces" : null;
                 })
                 ->path("profile_pictures")
                 ->preview(function ($value, $disk) {
@@ -60,6 +61,7 @@ class Model extends Resource
             Boolean::make('Is accepted'),
             Textarea::make("Bio")->alwaysShow()->hideFromIndex(),
             Textarea::make("Admin notes")->alwaysShow()->hideFromIndex(),
+            Tags::make('Modeling experience')->type("Modeling experience")->withLinkToTagResource()->hideFromIndex(),
             Tags::make('Sports')->type("Sports")->withLinkToTagResource()->hideFromIndex(),
             Tags::make('Creativity')->type("Creativity")->withLinkToTagResource()->hideFromIndex(),
             VaporImage::make("Profile picture", "profile_picture")
@@ -72,7 +74,7 @@ class Model extends Resource
                 ->detailWidth(300)
                 ->disableDownload(),
             Text::make('Photos', function() {
-                return '<div style="display: flex; width: 600px; overflow-x: scroll">
+                return '<div style="display: flex; width: 600px; height: 120px; overflow-x: scroll; overflow-y: hidden">
                         <img src="'.$this->profile_picture_cdn.'?w=720&h=960&fit=crop&fm=auto&crop=faces" width="90" height="120" />
                         ' .implode("", $this->photos->map(function ($photo) {
                         return '<img src="'.$photo->cdn_path.'?w=720&h=960&fit=crop&fm=auto&crop=faces" width="90" height="120" />';
@@ -85,7 +87,7 @@ class Model extends Resource
             new Panel('Body Characteristics', $this->bodyFields()),
             HasMany::make("Longlisted jobs")->showOnIndex(false),
             HasMany::make("Exclusive countries")->showOnIndex(false),
-            HasMany::make("Photos", "photos", Photo::class)->showOnIndex(true),
+            MorphMany::make("Photos", "photos", Photo::class)->showOnIndex(true),
         ];
     }
 

@@ -29,7 +29,8 @@
         "spatie/laravel-view-models": "^1.5",
         "spatie/nova-tags-field": "^4.0",
         "spatie/typescript-transformer": "^2.2",
-        "tightenco/ziggy": "^1.0"
+        "tightenco/ziggy": "^1.0",
+        "vyuldashev/nova-money-field": "^2.0"
     },
     "require-dev": {
         "doctrine/dbal": "^3.6",

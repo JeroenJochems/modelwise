@@ -8,12 +8,10 @@ import {FormEvent, FormEventHandler, useState} from "react";
 import Vapor from "laravel-vapor";
 import {Submit} from "@/Components/Forms/Submit";
 import {PageProps} from "@/types";
+import SecondaryButton from "@/Components/SecondaryButton";
+import SmallButton from "@/Components/SmallButton";
 
 export type FileEventTarget = EventTarget & { files: FileList|null };
-
-type FormInterface = {
-    profile_picture: File|null
-}
 
 type ModelDataType = {
     profile_picture: string|null
@@ -26,22 +24,18 @@ type Props = {
 
 export default function ProfilePicture({ modelData }: Props) {
 
-    const { ziggy } = usePage<PageProps>().props
+    const { ziggy, cdn_url } = usePage<PageProps>().props
 
-    const {profile_picture} = modelData;
-
-    const [file, setFile] = useState(profile_picture);
     const [hasEdited, setHasEdited] = useState(false);
 
-    const {data, setData, post, processing, errors, progress, reset} = useForm<FormInterface>({
-        profile_picture: null,
+    const { data, setData, post, progress } = useForm<ModelDataType>({
+        profile_picture: null
     });
 
     function handleChange(e: FormEvent<HTMLInputElement> & { target: FileEventTarget }) {
 
         if (e.target.files===null) return;
 
-        setFile(URL.createObjectURL(e.target.files[0]));
         setHasEdited(true);
 
         Vapor.store(e.target.files[0]).then(response => {
@@ -56,6 +50,12 @@ export default function ProfilePicture({ modelData }: Props) {
     };
 
     const isOnboarding = ziggy.location.includes("onboarding");
+
+    const path = data.profile_picture
+        ? cdn_url + data.profile_picture
+        : modelData.profile_picture
+            ? modelData.profile_picture
+            : Vapor.asset('img/headshot-placeholder.png')
 
     return (
         <CleanLayout>
@@ -72,9 +72,12 @@ export default function ProfilePicture({ modelData }: Props) {
                            onChange={handleChange}/>
 
 
-                    <label htmlFor={"profile_picture"} className={"cursor-pointer"}>
-                        <img src={file ?? Vapor.asset('img/headshot-placeholder.png')} alt="Profile picture" className={"mx-auto"} style={{width: 200}}/>
-                        {!hasEdited && <div className={"text-center"}>edit</div> }
+                    <label htmlFor={"profile_picture"} className={"grid gap-4 items-center flex-col cursor-pointer"}>
+                        <img src={path} alt="Profile picture" className={"mx-auto"} style={{width: 200}}/>
+                        <span
+                            className={"mx-auto items-center py-1 px-4 bg-white border border-gray-300 rounded-md text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50"}>
+                            Upload a photo
+                        </span>
                     </label>
 
                     {progress && (
