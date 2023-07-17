@@ -28,6 +28,14 @@ class Job extends Model
         return $this->morphMany(Photo::class, "photoable")->orderBy("sortable_order");
     }
 
+    public function look_and_feel_photos()
+    {
+        return $this
+            ->morphMany(Photo::class, "photoable")
+            ->where('folder', Photo::FOLDER_JOB_IMAGE)
+            ->orderBy("sortable_order");
+    }
+
     public function brand()
     {
         return $this->belongsTo(Brand::class);

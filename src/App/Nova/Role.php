@@ -5,6 +5,7 @@ namespace App\Nova;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -46,10 +47,21 @@ class Role extends Resource
                     })->toArray())
                     . '</div>';
             })->asHtml()->onlyOnIndex(),
+            Text::make('Photos (private)', function() {
+
+                $privatePhotos = $this->photos()->where("folder", \Domain\Jobs\Models\Role::PHOTO_FOLDER_PRIVATE)->get();
+
+                return '<div style="display: flex; width: 300px; height: 120px; overflow-x: scroll; overflow-y: hidden">
+                        ' .implode("", $privatePhotos->map(function ($photo) {
+                            return '<img src="'.$photo->cdn_path.'?w=720&h=960&fit=crop&fm=auto&crop=faces" width="90" height="120" />';
+                    })->toArray())
+                    . '</div>';
+            })->asHtml()->onlyOnIndex(),
             HasMany::make("Longlisted models"),
             Text::make('Public URL', function() {
                 return '<a href="'.route("roles.show", $this->id).'" target="_blank">'.route("roles.show", $this->id).'</a>';
             })->asHtml()->onlyOnDetail(),
+            MorphMany::make("Photos", "photos", Photo::class)->showOnIndex(true),
         ];
     }
 

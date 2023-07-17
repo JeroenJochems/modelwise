@@ -4,10 +4,12 @@ namespace Domain\Models\Data;
 
 use DateTime;
 use Domain\Jobs\Data\JobData;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Attributes\WithTransformer;
 use Spatie\LaravelData\Casts\DateTimeInterfaceCast;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Transformers\DateTimeInterfaceTransformer;
 
 /** @typescript */
@@ -27,10 +29,17 @@ class RoleData extends Data
         public ?DateTime $end_date,
 
         public int $fee,
-        public ?string $fee_note,
         public int $buyout,
         public ?string $buyout_note,
         public ?string $travel_reimbursement_note,
+
+        #[DataCollectionOf(PhotoData::class)]
+        /** @var PhotoData[] */
+        public DataCollection $photos,
+
+        #[DataCollectionOf(PhotoData::class)]
+        /** @var PhotoData[] */
+        public DataCollection $public_photos,
 
         public JobData $job,
     ) { }

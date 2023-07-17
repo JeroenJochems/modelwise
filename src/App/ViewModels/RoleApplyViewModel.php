@@ -14,7 +14,7 @@ class RoleApplyViewModel extends ViewModel
     public function __construct(Role $role)
     {
         $this->role = RoleData::from(
-            $role->load('job', 'job.brand', 'job.client'),
+            $role->load('job', 'job.look_and_feel_photos', 'photos', 'public_photos', 'job.brand', 'job.client'),
         );
     }
 }

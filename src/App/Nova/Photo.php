@@ -2,7 +2,8 @@
 
 namespace App\Nova;
 
-use Domain\Models\Models\Photo as Model;
+use Domain\Jobs\Models\Role as RoleModel;
+use Domain\Models\Models\Photo as PhotoModel;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\VaporImage;
@@ -10,7 +11,7 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Photo extends Resource
 {
-    public static $model = Model::class;
+    public static $model = PhotoModel::class;
     public static $title = 'folder';
     public static $globallySearchable = false;
     public static $perPageViaRelationship = 10;
@@ -22,15 +23,13 @@ class Photo extends Resource
 
     public function fields(NovaRequest $request)
     {
-        $resource = $this->photoable_type ?? $request->viaResource;
+        $resource = $this->photoable_type ?? substr($request->viaResource,0, -1);
 
         $options = match($resource) {
-            "job" => [Model::FOLDER_JOB_IMAGE => Model::FOLDER_JOB_IMAGE],
-            "jobs" => [Model::FOLDER_JOB_IMAGE => Model::FOLDER_JOB_IMAGE],
-            "brand" => [Model::FOLDER_BRAND_LOGO],
-            "brands" => [Model::FOLDER_BRAND_LOGO],
-            "model" => [Model::FOLDER_WORK_EXPERIENCE, Model::FOLDER_DIGITALS, Model::FOLDER_TATTOOS],
-            "models" => [Model::FOLDER_WORK_EXPERIENCE, Model::FOLDER_DIGITALS, Model::FOLDER_TATTOOS],
+            "job" => [PhotoModel::FOLDER_JOB_IMAGE => PhotoModel::FOLDER_JOB_IMAGE],
+            "brand" => [PhotoModel::FOLDER_BRAND_LOGO],
+            "role" => [RoleModel::PHOTO_FOLDER_PRIVATE, RoleModel::PHOTO_FOLDER_PUBLIC],
+            "model" => [PhotoModel::FOLDER_WORK_EXPERIENCE, PhotoModel::FOLDER_DIGITALS, PhotoModel::FOLDER_TATTOOS],
             null => []
         };
 

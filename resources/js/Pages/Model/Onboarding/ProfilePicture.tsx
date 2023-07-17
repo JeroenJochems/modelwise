@@ -46,6 +46,7 @@ export default function ProfilePicture({ modelData }: Props) {
         const file = e.target.files[0]
 
         Vapor.store(file, {
+            // @ts-ignore
             signedStorageUrl: '/photos/signed-url',
             progress: progress => {
                 setUploadProgress(Math.round(progress * 100));
