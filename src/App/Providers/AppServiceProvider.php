@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Domain\Jobs\Models\Brand;
 use Domain\Jobs\Models\Job;
 use Domain\Jobs\Models\LonglistedModel;
 use Domain\Jobs\Models\Role;
@@ -32,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
             'job' => Job::class,
             'photo' => Photo::class,
             'role' => Role::class,
+            'brand' => Brand::class,
             'longlist-model' => LonglistedModel::class,
         ]);
 

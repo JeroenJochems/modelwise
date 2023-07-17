@@ -21,14 +21,19 @@ type Props = {
     modelData: ModelDataType
 }
 
+type UploadProgress = {
+    id: string
+    progress: number
+}
 
 export default function ProfilePicture({ modelData }: Props) {
 
     const { ziggy, cdn_url } = usePage<PageProps>().props
+    const [uploadProgress, setUploadProgress] = useState<number>(0);
 
     const [hasEdited, setHasEdited] = useState(false);
 
-    const { data, setData, post, progress } = useForm<ModelDataType>({
+    const { data, setData, post } = useForm<ModelDataType>({
         profile_picture: null
     });
 
@@ -38,7 +43,14 @@ export default function ProfilePicture({ modelData }: Props) {
 
         setHasEdited(true);
 
-        Vapor.store(e.target.files[0]).then(response => {
+        const file = e.target.files[0]
+
+        Vapor.store(file, {
+            signedStorageUrl: '/photos/signed-url',
+            progress: progress => {
+                setUploadProgress(Math.round(progress * 100));
+            }
+        }).then(response => {
             setData('profile_picture', response.key)
         })
     }
@@ -52,9 +64,9 @@ export default function ProfilePicture({ modelData }: Props) {
     const isOnboarding = ziggy.location.includes("onboarding");
 
     const path = data.profile_picture
-        ? cdn_url + data.profile_picture
+        ? cdn_url + data.profile_picture + "?w=400&h=600&fit=crop&crop=faces"
         : modelData.profile_picture
-            ? modelData.profile_picture
+            ? modelData.profile_picture + "?w=400&h=600&fit=crop&crop=faces"
             : Vapor.asset('img/headshot-placeholder.png')
 
     return (
@@ -80,13 +92,19 @@ export default function ProfilePicture({ modelData }: Props) {
                         </span>
                     </label>
 
-                    {progress && (
-                        <progress className={"bg-green"} value={progress.percentage} max="100">
-                            {progress.percentage}%
-                        </progress>
+                    { !!uploadProgress && (
+                        <div className={"h-2 mt-2"}>
+                            { uploadProgress && uploadProgress < 100 ? (
+                                <div className="w-full bg-gray-100 h-2 rounded-full">
+                                    <div style={{ width: uploadProgress + '%'}}  className="bg-green h-2 rounded-full"></div>
+                                </div>
+                            ) : (
+                                <div className={"w-full h-2"}></div>
+                            ) }
+                        </div>
                     )}
 
-                    <Submit>
+                    <Submit disabled={uploadProgress>0 && uploadProgress<100}>
                         { isOnboarding ? "Continue" : "Save" }
                     </Submit>
                 </form>

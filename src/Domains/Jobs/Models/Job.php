@@ -5,10 +5,12 @@ namespace Domain\Jobs\Models;
 
 use Domain\Models\Models\Photo;
 use Illuminate\Database\Eloquent\Model;
+use Kra8\Snowflake\HasShortflakePrimary;
 
-/** @typescript */
 class Job extends Model
 {
+    use HasShortflakePrimary;
+
     protected $fillable = [
         'title',
         'description',

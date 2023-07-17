@@ -3,9 +3,12 @@
 namespace Domain\Jobs\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Kra8\Snowflake\HasShortflakePrimary;
 
 class Role extends Model
 {
+    use HasShortflakePrimary;
+
     protected $casts = [
         "start_date" => "date",
         "end_date" => "date",

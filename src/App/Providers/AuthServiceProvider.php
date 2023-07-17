@@ -9,6 +9,9 @@ use Domain\Jobs\Policies\JobPolicy;
 use Domain\Models\Models\Model;
 use Domain\Models\Policies\ModelPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
+use Support\Policies\UserPolicy;
+use Support\User;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -18,6 +21,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
+        User::class => UserPolicy::class,
         Model::class => ModelPolicy::class,
         Job::class => JobPolicy::class,
         Client::class => ClientPolicy::class,
@@ -28,6 +32,5 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
     }
 }

@@ -3,9 +3,12 @@
 namespace Domain\Jobs\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Kra8\Snowflake\HasShortflakePrimary;
 
 class Client extends Model
 {
+    use HasShortflakePrimary;
+
     protected $fillable = [
         'title',
         'description',

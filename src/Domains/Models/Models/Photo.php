@@ -3,12 +3,14 @@
 namespace Domain\Models\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Kra8\Snowflake\HasShortflakePrimary;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
 class Photo extends Model implements Sortable
 {
     use SortableTrait;
+    use HasShortflakePrimary;
 
     public $sortable = [
         'order_column_name' => 'sortable_order',
@@ -24,6 +26,7 @@ class Photo extends Model implements Sortable
     const FOLDER_DIGITALS = 'Digitals';
     const FOLDER_TATTOOS = 'Tattoos';
     const FOLDER_JOB_IMAGE = 'Look & Feel';
+    const FOLDER_BRAND_LOGO = 'Brand logo';
 
     public function photoable(): BelongsTo
     {

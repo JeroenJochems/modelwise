@@ -7,10 +7,8 @@ use Spatie\LaravelData\Attributes\Validation\Rule;
 use Spatie\LaravelData\Concerns\WireableData;
 use Spatie\LaravelData\Data;
 
-class RegisterModelData extends Data implements Wireable
+class RegisterModelData extends Data
 {
-    use WireableData;
-
     public function __construct(
         #[Rule(['email', 'unique:models,email'])]
         public string $email,

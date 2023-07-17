@@ -10,6 +10,7 @@
         "datomatic/nova-enum-field": "^1.6",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.3",
+        "kra8/laravel-snowflake": "^2.2",
         "laravel/framework": "^10.10",
         "laravel/nova": "^4.0",
         "laravel/sanctum": "^3.2",

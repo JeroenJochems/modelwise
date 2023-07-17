@@ -47,8 +47,9 @@ class Role extends Resource
                     . '</div>';
             })->asHtml()->onlyOnIndex(),
             HasMany::make("Longlisted models"),
-
-
+            Text::make('Public URL', function() {
+                return '<a href="'.route("roles.show", $this->id).'" target="_blank">'.route("roles.show", $this->id).'</a>';
+            })->asHtml()->onlyOnDetail(),
         ];
     }
 

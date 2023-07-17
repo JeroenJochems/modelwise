@@ -70,6 +70,7 @@ export function InlinePhotoUploader({photos, onAddPhoto, onDeletePhoto, onStart,
             });
 
             Vapor.store(file, {
+                signedStorageUrl: '/photos/signed-url',
                 progress: progress => {
                     setUploadProgress((progres) => {
                         return progres.map((item) => {

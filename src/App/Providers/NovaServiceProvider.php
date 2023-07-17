@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Nova\Brand;
 use App\Nova\Client;
 use App\Nova\Job;
 use App\Nova\Model;
@@ -35,6 +36,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 MenuSection::make('Work', [
                     MenuItem::resource(Client::class),
                     MenuItem::resource(Job::class),
+                    MenuItem::resource(Brand::class),
                 ])->icon('document-text')->collapsable(),
             ];
         });

@@ -2,9 +2,8 @@
 
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\RegisterModelController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\JobController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Model\CharacteristicsController;
 use App\Http\Controllers\Model\DigitalsController;
 use App\Http\Controllers\Model\ExclusiveCountriesController;
@@ -15,6 +14,7 @@ use App\Http\Controllers\Model\ProfilePictureController;
 use App\Http\Controllers\Model\SocialsController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\PhotosController;
+use App\Http\Controllers\VaporSignedStorageUrl;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,10 +44,11 @@ if (!function_exists("onboardingRoutes")) {
 
 Route::get('/', [AuthenticatedSessionController::class, "create"] );
 
-Route::resource('jobs/{job}/applications', ApplicationController::class, ["create", "store"])
-    ->name("index", "jobs.applications")
-    ->name("create", "jobs.apply");
-Route::resource('jobs', JobController::class, ["index", "view"])->name("index", "jobs");
+Route::resource('roles/{role}/applications', ApplicationController::class, ["create", "store"])
+    ->name("index", "roles.applications")
+    ->name("create", "roles.apply");
+
+Route::resource('roles', RoleController::class, ["index", "view"])->name("index", "jobs");
 
 Route::middleware(['auth'])->group(callback: function () {
 
@@ -55,6 +56,9 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::get('dashboard', DashboardController::class)->name("dashboard");
         Route::get('account', [ModelController::class, "index"])->name("account.index");
     });
+
+    Route::post('photos/signed-url', VaporSignedStorageUrl::class.'@store');
+
 
     Route::name("account.")->prefix("account")->group(function() {
         onboardingRoutes();

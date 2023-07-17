@@ -22,9 +22,17 @@ class Photo extends Resource
 
     public function fields(NovaRequest $request)
     {
-        $options = $this->photoable_type === "job" || $request->viaResource === "jobs"
-            ? [Model::FOLDER_JOB_IMAGE => Model::FOLDER_JOB_IMAGE]
-            : [Model::FOLDER_WORK_EXPERIENCE, Model::FOLDER_DIGITALS, Model::FOLDER_TATTOOS];
+        $resource = $this->photoable_type ?? $request->viaResource;
+
+        $options = match($resource) {
+            "job" => [Model::FOLDER_JOB_IMAGE => Model::FOLDER_JOB_IMAGE],
+            "jobs" => [Model::FOLDER_JOB_IMAGE => Model::FOLDER_JOB_IMAGE],
+            "brand" => [Model::FOLDER_BRAND_LOGO],
+            "brands" => [Model::FOLDER_BRAND_LOGO],
+            "model" => [Model::FOLDER_WORK_EXPERIENCE, Model::FOLDER_DIGITALS, Model::FOLDER_TATTOOS],
+            "models" => [Model::FOLDER_WORK_EXPERIENCE, Model::FOLDER_DIGITALS, Model::FOLDER_TATTOOS],
+            null => []
+        };
 
         $options = collect($options)->mapWithKeys(function ($item) {
             return [$item => $item];

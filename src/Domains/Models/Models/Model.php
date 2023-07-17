@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Notifications\Notifiable;
+use Kra8\Snowflake\HasShortflakePrimary;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Scout\Searchable;
@@ -28,6 +29,7 @@ class Model extends Authenticatable implements Onboardable
     use Searchable;
     use HasTags;
     use GetsOnboarded;
+    use HasShortflakePrimary;
 
     protected $guarded = ['password'];
 
