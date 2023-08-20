@@ -1,5 +1,7 @@
 import {H2} from "@/Components/Typography/H2";
 import {Link} from "@inertiajs/react";
+import {ArrowBack} from "@/Components/ArrowBack";
+import {BackLink} from "@/Components/BackLink";
 
 type Props = {
     step: number;
@@ -23,24 +25,15 @@ export const Header = ({step, totalSteps=8, children, isOnboarding }: Props) => 
 
     const backLink = onboardingPages.find(page => page.step === step - 1)?.route
 
-
     if (!isOnboarding) {
-        return (
-            <Link href={route("account.index")} className={"w-16 mb-2"}>
-                &lt; Back
-            </Link>
-        );
+        return <BackLink href={route("account.index")} />;
     }
 
     return (
         <div className={"mb-8"}>
             <div className="flex items-center justify-between mb-2">
                 <div className={"w-16"}>
-                    { !!backLink && (
-                        <Link href={backLink} className={"w-16"}>
-                            &lt; Back
-                        </Link>
-                    )}
+                    { !!backLink && <BackLink href={backLink} /> }
                 </div>
                 <H2 className={"text-center"}>
                     Step {step} of {totalSteps}

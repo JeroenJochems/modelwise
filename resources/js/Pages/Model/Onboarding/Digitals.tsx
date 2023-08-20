@@ -2,7 +2,6 @@ import CleanLayout from "@/Layouts/CleanLayout";
 import {H1} from "@/Components/Typography/H1";
 import {Header} from "@/Components/Onboarding/Header";
 import { useForm, usePage} from "@inertiajs/react";
-import {Submit} from "@/Components/Forms/Submit";
 import {InlinePhotoUploader, Photo} from "@/Components/InlinePhotoUploader";
 import {PageProps} from "@/types";
 import {useState} from "react";
@@ -31,7 +30,7 @@ export default function Photos({modelDigitals}: {modelDigitals: Photo[] }) {
     }
 
     return (
-        <CleanLayout>
+        <CleanLayout photo={"photos/d3f0b9b3-c079-41bc-b403-5ddc78d2dddd"}>
             <div className="grid gap-4">
 
                 <Header step={5} isOnboarding={isOnboarding} />
@@ -41,20 +40,9 @@ export default function Photos({modelDigitals}: {modelDigitals: Photo[] }) {
                 <InlinePhotoUploader
                     cols={3}
                     photos={data.photos}
-                    onStart={() => setIsUploading(true)}
-                    onFinished={() => setIsUploading(false)}
-                    onAddPhoto={(id, tmpFile, localUrl) => (
-                        setData(data => ({...data, photos: [...data.photos, { id, tmpFile,filtered: false, path: localUrl}]}))
-                    )}
-                    onUpdateSorting={(photos) => setData(data => (
-                        {...data, photos: photos}
-                    ))}
-                    onDeletePhoto={(id) => setData(data => (
-                        {
-                            ...data,
-                            photos: data.photos.map(photo => photo.id === id ? {...photo, deleted: true} : photo)
-                        }
-                    ))}
+                    onToggleUploading={setIsUploading}
+                    onAdd={(photo) => setData(data => ({...data, photos: [...data.photos, photo]}))}
+                    onUpdate={(photos) => setData(data => ({...data, photos}))}
                 />
 
                 <PrimaryButton onClick={submit} disabled={isSubmitting || isUploading}>

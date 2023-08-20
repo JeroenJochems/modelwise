@@ -20,6 +20,7 @@
         "laravel/vapor-ui": "^1.7",
         "league/flysystem-aws-s3-v3": "^3.15",
         "livewire/livewire": "^2.12",
+        "outl1ne/nova-sortable": "^3.4",
         "prinsfrank/standards": "^2.1",
         "spatie/eloquent-sortable": "^4.0",
         "spatie/enum": "^3.13",

@@ -84,13 +84,13 @@ export default function PersonalDetails({modelData}: Props) {
     const isOnboarding = ziggy.location.includes("onboarding");
 
     return (
-        <CleanLayout>
+        <CleanLayout photo={"assets/18.jpeg"}>
 
             <Header step={2} isOnboarding={isOnboarding} />
 
             <H1>Personal details</H1>
 
-            <form onSubmit={submit} className="grid mt-8 gap-4">
+            <form onSubmit={submit} className="grid gap-4">
 
                 <InputGroupText
                     title="First name"
@@ -109,7 +109,7 @@ export default function PersonalDetails({modelData}: Props) {
                 />
 
                 <InputGroupText
-                    title="Birth date"
+                    title="Date of birth"
                     type={"date"}
                     value={data.date_of_birth}
                     error={errors.date_of_birth}

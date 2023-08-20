@@ -9,7 +9,7 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class LonglistedJob extends Resource
 {
-    public static $model = \Domain\Jobs\Models\LonglistedModel::class;
+    public static $model = \Domain\Jobs\Models\Invite::class;
     public static $title = 'id';
     public static $displayInNavigation = false;
     public static $search = [

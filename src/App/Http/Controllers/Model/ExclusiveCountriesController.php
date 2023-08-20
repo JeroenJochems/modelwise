@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Model;
 use App\Http\Controllers\Controller;
 use App\Transformers\EnumArray;
 use App\ViewModels\ModelExclusiveCountriesViewModel;
-use Domain\Models\Models\Model;
+use Domain\Profiles\Models\Model;
 use Inertia\Inertia;
 use PrinsFrank\Standards\Country\CountryAlpha2;
 use Support\Enums\ModelCountries;

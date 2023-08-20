@@ -62,13 +62,11 @@ export default function Characteristics({modelData, tattooPhotos, hairColors, ey
     }
 
     return (
-        <CleanLayout>
+        <CleanLayout photo={"assets/4.png"}>
 
             <Header step={7} isOnboarding={isOnboarding} />
 
-            <div className="grid grid-cols-1 gap-4 mb-8 mt-8">
-                <H1>Body characteristics</H1>
-            </div>
+            <H1>Body characteristics</H1>
 
             <div className="grid gap-4">
 
@@ -172,20 +170,9 @@ export default function Characteristics({modelData, tattooPhotos, hairColors, ey
 
                             <InlinePhotoUploader
                                 photos={data.tattoo_photos}
-                                onStart={() => setIsUploading(true)}
-                                onFinished={() => setIsUploading(false)}
-                                onAddPhoto={(id, tmpFile, localUrl) => (
-                                    setData(data => ({...data, tattoo_photos: [...data.tattoo_photos, { id, tmpFile,filtered: false, path: localUrl}]}))
-                                )}
-                                onUpdateSorting={(photos) => setData(data => (
-                                    {...data, tattoo_photos: photos}
-                                ))}
-                                onDeletePhoto={(id) => setData(data => (
-                                    {
-                                        ...data,
-                                        tattoo_photos: data.tattoo_photos.map(photo => photo.id === id ? {...photo, deleted: true} : photo)
-                                    }
-                                ))}
+                                onUpdate={photos => setData('tattoo_photos', photos)}
+                                onAdd={(photo) => setData(data => ({...data, tattoo_photos: [...data.tattoo_photos, photo]}))}
+                                onToggleUploading={setIsUploading}
                             />
                         </div>
                     )}

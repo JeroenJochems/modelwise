@@ -1,5 +1,8 @@
 import CleanLayout from "@/Layouts/CleanLayout";
 import {Link} from "@inertiajs/react";
+import {H1} from "@/Components/Typography/H1";
+import {ArrowBack} from "@/Components/ArrowBack";
+import {BackLink} from "@/Components/BackLink";
 
 export function link(route: string, title: string, as: string = "a", method: "get"|"post" = "get") {
     return (
@@ -13,21 +16,16 @@ export function link(route: string, title: string, as: string = "a", method: "ge
 export default function Index() {
     return (
         <CleanLayout>
-            <div className={"grid grid-cols-1 gap-4"}>
+            <BackLink href={route("dashboard")} />
 
-                <Link href={route("dashboard")} className={"w-16"}>
-                    &lt; Back
-                </Link>
-
-                <h1 className={"text-4xl"}>My account</h1>
-                { link(route('account.personal-details'), 'Personal Details') }
-                { link(route('account.profile-picture'), 'Profile picture') }
-                { link(route('account.portfolio'), 'Portfolio') }
-                { link(route('account.digitals'), 'Digitals') }
-                { link(route('account.socials'), 'Socials') }
-                { link(route('account.characteristics'), 'Characteristics') }
-                { link(route('account.exclusive-countries'), 'Exclusive countries') }
-            </div>
+            <H1>My profile</H1>
+            { link(route('account.personal-details'), 'Personal Details') }
+            { link(route('account.profile-picture'), 'Profile picture') }
+            { link(route('account.portfolio'), 'Portfolio') }
+            { link(route('account.digitals'), 'Digitals') }
+            { link(route('account.socials'), 'Socials') }
+            { link(route('account.characteristics'), 'Characteristics') }
+            { link(route('account.exclusive-countries'), 'Exclusive countries') }
         </CleanLayout>
     );
 }

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Model;
 
 use App\Http\Controllers\Controller;
-use Domain\Models\Models\Photo;
-use Domain\Models\Repositories\PhotoRepository;
+use Domain\Profiles\Models\Photo;
+use Domain\Profiles\Repositories\PhotoRepository;
 use Inertia\Inertia;
 
 class PortfolioController extends Controller

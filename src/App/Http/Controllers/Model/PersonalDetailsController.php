@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Model;
 
-use Domain\Models\Data\ModelPersonalDetailsData;
+use Domain\Profiles\Data\ModelPersonalDetailsData;
 use Inertia\Inertia;
 
 class PersonalDetailsController

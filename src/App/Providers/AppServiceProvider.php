@@ -2,12 +2,13 @@
 
 namespace App\Providers;
 
+use Domain\Jobs\Models\Application;
 use Domain\Jobs\Models\Brand;
 use Domain\Jobs\Models\Job;
-use Domain\Jobs\Models\LonglistedModel;
+use Domain\Jobs\Models\Invite;
 use Domain\Jobs\Models\Role;
-use Domain\Models\Models\Model;
-use Domain\Models\Models\Photo;
+use Domain\Profiles\Models\Model;
+use Domain\Profiles\Models\Photo;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Onboard\Facades\Onboard;
@@ -34,7 +35,8 @@ class AppServiceProvider extends ServiceProvider
             'photo' => Photo::class,
             'role' => Role::class,
             'brand' => Brand::class,
-            'longlist-model' => LonglistedModel::class,
+            'application' => Application::class,
+            'longlist-model' => Invite::class,
         ]);
 
         Onboard::addStep('Personal details')

@@ -1,6 +1,7 @@
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
+import TextArea from "@/Components/TextArea";
 
 type Props =
     {
@@ -13,6 +14,7 @@ type Props =
         onChange: (value: string) => void,
         error?: string
         placeholder?: string
+        multiline: boolean
     }
 
 
@@ -28,7 +30,9 @@ export default function InputGroupText(props: Props) {
         <div>
             <InputLabel htmlFor={name} value={props.title}/>
 
-            {shouldShowSelect && !!props.options &&
+            { props.multiline && <TextArea defaultValue={value} onChange={(e) => props.onChange(e.target.value)} />}
+
+            {!props.multiline && shouldShowSelect && !!props.options &&
                 <select id={name}
                              className="border-gray-300 focus:border-green focus:ring-green rounded-sm shadow-sm block mt-1 w-full"
                              value={value}
@@ -39,7 +43,7 @@ export default function InputGroupText(props: Props) {
                 </select>
             }
 
-            {!shouldShowSelect &&
+            {!props.multiline && !shouldShowSelect &&
                 <TextInput id={name} className="block mt-1 w-full" type={type} value={value}
                            onChange={(e) => props.onChange(e.target.value)}
                            autoComplete={props.autoComplete ?? name}/>

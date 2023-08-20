@@ -2,15 +2,20 @@
 
 namespace App\Nova;
 
+use Domain\Jobs\Models\Application as ApplicationModel;
 use Domain\Jobs\Models\Role as RoleModel;
-use Domain\Models\Models\Photo as PhotoModel;
+use Domain\Profiles\Models\Photo as PhotoModel;
 use Laravel\Nova\Fields\MorphTo;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\VaporImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Outl1ne\NovaSortable\Traits\HasSortableRows;
 
 class Photo extends Resource
 {
+    use HasSortableRows;
+
     public static $model = PhotoModel::class;
     public static $title = 'folder';
     public static $globallySearchable = false;
@@ -23,10 +28,12 @@ class Photo extends Resource
 
     public function fields(NovaRequest $request)
     {
+
         $resource = $this->photoable_type ?? substr($request->viaResource,0, -1);
 
         $options = match($resource) {
             "job" => [PhotoModel::FOLDER_JOB_IMAGE => PhotoModel::FOLDER_JOB_IMAGE],
+            "application" => [ApplicationModel::PHOTO_FOLDER => ApplicationModel::PHOTO_FOLDER],
             "brand" => [PhotoModel::FOLDER_BRAND_LOGO],
             "role" => [RoleModel::PHOTO_FOLDER_PRIVATE, RoleModel::PHOTO_FOLDER_PUBLIC],
             "model" => [PhotoModel::FOLDER_WORK_EXPERIENCE, PhotoModel::FOLDER_DIGITALS, PhotoModel::FOLDER_TATTOOS],
@@ -47,8 +54,8 @@ class Photo extends Resource
                 ->preview(function ($value, $disk) {
                     // @phpstan-ignore-next-line
                     return $value ? $this->cdn_path : null;
-                })
-,
+                }),
+            Number::make("Order", "sortable_order")->hideWhenCreating(),
         ];
     }
 

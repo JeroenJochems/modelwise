@@ -71,7 +71,7 @@ export default function ProfilePicture({ modelData }: Props) {
             : Vapor.asset('img/headshot-placeholder.png')
 
     return (
-        <CleanLayout>
+        <CleanLayout photo={"photos/f52a5068-0423-4eed-9507-c535ee69a347"}>
             <div className={"grid gap-4"}>
 
                 <Header step={3} isOnboarding={isOnboarding} />

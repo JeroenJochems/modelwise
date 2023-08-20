@@ -34,34 +34,21 @@ export default function Portfolio({modelPhotos}: {modelPhotos: Photo[] }) {
     }
 
     return (
-        <CleanLayout>
+        <CleanLayout photo={"photos/8c895ed3-1ad7-4df4-8e56-2b3cb0fe3235"}>
             <div className={`grid gap-4`}>
 
                 <Header step={4} isOnboarding={isOnboarding} />
 
                 <H1>Work experience</H1>
-                <P>Upload a variety of 6 portfolio photos. We use these photos to review your experience.</P>
+                <P>Upload a variety of 6 portfolio photos. You can update these photos at any time.</P>
 
-                <div>
-                    <InlinePhotoUploader
-                        cols={3}
-                        photos={data.photos}
-                        onStart={() => setIsUploading(true)}
-                        onFinished={() => setIsUploading(false)}
-                        onAddPhoto={(id, tmpFile, localUrl) => (
-                            setData(data => ({...data, photos: [...data.photos, { id, tmpFile, filtered: false, path: localUrl}]}))
-                        )}
-                        onUpdateSorting={(photos) => setData(data => (
-                            {...data, photos: photos}
-                        ))}
-                        onDeletePhoto={(id) => setData(data => (
-                            {
-                                ...data,
-                                photos: data.photos.map(photo => photo.id === id ? {...photo, deleted: true} : photo)
-                            }
-                        ))}
-                    />
-                </div>
+                <InlinePhotoUploader
+                    cols={3}
+                    photos={data.photos}
+                    onToggleUploading={setIsUploading}
+                    onAdd={(photo) => setData(data => ({...data, photos: [...data.photos, photo]}))}
+                    onUpdate={(photos) => { setData(data => ({...data, photos})) }}
+                />
 
                 <PrimaryButton onClick={submit} disabled={isSubmitting || isUploading || ( isOnboarding && data.photos.length < 3)}>
                     { isSubmitting ? `Please wait...` : isOnboarding ? 'Continue' : 'Save' }

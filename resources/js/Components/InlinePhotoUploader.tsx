@@ -1,35 +1,28 @@
-import {FormEvent, useEffect, useState} from "react";
+import {FormEvent, useEffect, useRef, useState} from "react";
 import Vapor from "laravel-vapor";
 import {ReactSortable} from "react-sortablejs";
 import {FileEventTarget} from "@/Pages/Model/Onboarding/Portfolio";
-import {usePage} from "@inertiajs/react";
+import {Link, usePage} from "@inertiajs/react";
 import {PageProps} from "@/types";
+import ModelPhotoData = Domain.Models.Data.ModelPhotoData;
+import PrimaryButton from "@/Components/PrimaryButton";
+import SmallButton from "@/Components/SmallButton";
+import InputGroupText from "@/Components/Forms/InputGroupText";
 
-export type ExistingPhoto = {
-    id: number
-    path: string
-    deleted?: boolean
-    filtered?: boolean
-}
-
-export type NewPhoto = {
+export type Photo = {
     id: string
     path: string
-    tmpFile: string
+    tmpFile?: string
+    folder?: string
     deleted?: boolean
     filtered?: boolean
 }
 
-export type Photo = ExistingPhoto | NewPhoto;
-
-
 type Props = {
-    photos: Photo[]
-    onAddPhoto: (id: string, tmpFile: string, url: string) => void
-    onStart?: () => void
-    onFinished?: () => void
-    onDeletePhoto: (id: string | number) => void
-    onUpdateSorting: (photos: Photo[]) => void
+    photos: Array<Photo>
+    onUpdate: (photos: Photo[]) => void
+    onAdd: (photo: Photo) => void
+    onToggleUploading?: (state: boolean) => void
     slots?: number
     cols?: number
 }
@@ -39,8 +32,14 @@ type UploadProgress = {
     progress: number
 }
 
-export function InlinePhotoUploader({photos, onAddPhoto, onDeletePhoto, onStart, onFinished, onUpdateSorting, slots = 6, cols = 6}: Props) {
+type ResponseType = {
+    uuid: string
+    key: string
+}
 
+export function InlinePhotoUploader({photos, onAdd, onUpdate, onToggleUploading, slots = 6, cols = 6}: Props) {
+
+    const ref = useRef<HTMLInputElement | null>(null)
     const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
     const {cdn_url} = usePage<PageProps>().props;
 
@@ -50,11 +49,11 @@ export function InlinePhotoUploader({photos, onAddPhoto, onDeletePhoto, onStart,
 
     useEffect(() => {
         if (progress===0) {
-            onStart ? onStart() : null;
+            onToggleUploading ? onToggleUploading(true) : null;
+        } else {
+            onToggleUploading ? onToggleUploading(false) : null;
         }
-        if (progress===100) {
-            onFinished ? onFinished() : null;
-        }
+
     }, [progress]);
 
     function handleChange(e: FormEvent<HTMLInputElement> & { target: FileEventTarget }) {
@@ -84,59 +83,61 @@ export function InlinePhotoUploader({photos, onAddPhoto, onDeletePhoto, onStart,
 
                 }
             })
-                .then(response => {
-                    onAddPhoto(response.uuid, response.key, `${cdn_url}/${response.key}?w=600&h=600&fm=auto&fit=crop&crop=faces`);
+                .then((response: ResponseType) => {
+
+                    onAdd({
+                        id: response.uuid,
+                        tmpFile: response.key,
+                        path: `${cdn_url}/${response.key}?w=600&h=600&fm=auto&fit=crop&crop=faces`
+                    });
                 });
         });
     }
 
-
-    function handleDelete(photo: Photo) {
-        onDeletePhoto(photo.id);
+    function handleDelete({ id }: Photo) {
+        onUpdate(photos.map((photo) => {
+            if (photo.id === id) {
+                photo.deleted = true;
+            }
+            return photo;
+        }));
     }
 
 
     return (
         <div>
-            <ReactSortable tag={"div"} list={photos} setList={onUpdateSorting}
-                           className={`grid grid-cols-${cols} gap-2`}>
+            <ReactSortable tag={"div"} list={photos} setList={onUpdate} className={`grid grid-cols-${cols} gap-2`}>
                 {photos.filter(photo => !photo.deleted).map((photo: Photo) =>
-                    <div key={photo.id}
-                         className={'cursor-pointer w-full h-full aspect-[1/1] border rounded-md overflow-hidden relative'}>
-                        <div onClick={() => {
-                            handleDelete(photo)
-                        }}
-                             className={'absolute top-0 right-0 p-1 bg-white bg-opacity-50 hover:bg-opacity-100 transition duration-200'}>
+                    <div key={photo.id} className={'cursor-pointer w-full h-full aspect-[1/1] border rounded-md overflow-hidden relative'}>
+                        <div onClick={() => {handleDelete(photo) }} className={'absolute top-0 right-0 p-1 bg-white bg-opacity-50 hover:bg-opacity-100 transition duration-200'}>
                             x
                         </div>
-                        <img src={photo.path} key={photo.id}
-                             className={"rounded-sm aspect-square object-cover w-full h-full aspect-[1/1] overflow-hidden"}/>
+                        <img src={photo.path} key={photo.id} className={"rounded-sm aspect-square object-cover w-full h-full aspect-[1/1] overflow-hidden"} />
                     </div>
                 )}
 
                 {[...Array(Math.max(0, slots - photos.filter(photo => !photo.deleted).length))].map((item, i) => (
-                    <label key={i} htmlFor="photo"
-                           className={"flex text-gray-500 text-2xl cursor-pointer justify-center items-center aspect-[1/1] bg-gray-200 border border-gray-400 rounded-sm"}>
+                    <label key={i} onClick={() => !!ref.current && ref.current.click() } className={"flex text-gray-500 text-2xl cursor-pointer justify-center items-center aspect-[1/1] bg-gray-200 border border-gray-400 rounded-sm"}>
                         +
                     </label>
                 ))}
             </ReactSortable>
 
-            <div className={"h-2 mt-2"}>
-                { progress && progress < 100 ? (
+            { photos.length >= slots && (
+                <div className={"flex items-center mt-4"}>
+                    <SmallButton onClick={() => !!ref.current && ref.current.click()} className={"mx-auto"}>+ Add more photos</SmallButton>
+                </div>
+            )}
+
+            <div className={"h-2 mt-2 w-full h-2"}>
+                { !!progress && progress < 100 && (
                     <div className="w-full bg-gray-100 h-2 rounded-full">
                         <div style={{ width: progress + '%'}}  className="bg-green h-2 rounded-full"></div>
                     </div>
-                    ) : (
-                    <div className={"w-full h-2"}></div>
-                ) }
+                )}
             </div>
 
-            <input type="file" id="photo" className={"hidden"}
-                   name="photo"
-                   multiple={true}
-                   onChange={handleChange}/>
-
+            <input type="file" ref={ref} className={"hidden"} name="photo" multiple={true} onChange={handleChange}/>
         </div>
     )
 }

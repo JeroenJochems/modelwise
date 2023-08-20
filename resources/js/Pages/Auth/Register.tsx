@@ -28,12 +28,12 @@ export default function Register() {
     };
 
     return (
-        <CleanLayout>
+        <CleanLayout photo={"assets/7.png"}>
             <Head>
                 <title>Register</title>
             </Head>
 
-            <Header step={1} />
+            <Header step={1} isOnboarding={true} />
 
             <div className="grid grid-cols-1 gap-4 mt-8">
                 <H1>Create your account</H1>

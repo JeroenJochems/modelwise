@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Model;
 
 use App\Http\Controllers\Controller;
-use Domain\Models\Data\ModelSocialsData;
+use Domain\Profiles\Data\ModelSocialsData;
 use Inertia\Inertia;
 
 class SocialsController extends Controller

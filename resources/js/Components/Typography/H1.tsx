@@ -1,10 +1,6 @@
-type Props = {
-    children: React.ReactNode;
-}
-
-export const H1 = (props: Props) => {
+export const H1 = (props: React.HTMLProps<Text>) => {
     return (
-        <h1 className="text-2xl font-bold">
+        <h1 className={`font-bold text-xl sm:text-3xl ` + props.className}>
             {props.children}
         </h1>
     );

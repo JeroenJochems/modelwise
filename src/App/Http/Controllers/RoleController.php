@@ -11,9 +11,7 @@ class RoleController extends Controller
 {
     public function show(Role $role)
     {
-        $vm = new RoleApplyViewModel($role);
-
         return Inertia::render('Roles/Show')
-            ->with("viewModel", $vm);
+            ->with("viewModel", new RoleApplyViewModel($role));
     }
 }

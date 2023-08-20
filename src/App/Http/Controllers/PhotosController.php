@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Domain\Models\Data\ModelPhotoData;
-use Domain\Models\Models\Photo;
+use Domain\Profiles\Data\ModelPhotoData;
+use Domain\Profiles\Models\Photo;
 use Illuminate\Support\Facades\Storage;
 
 class PhotosController extends Controller

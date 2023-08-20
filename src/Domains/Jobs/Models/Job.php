@@ -3,13 +3,15 @@
 namespace Domain\Jobs\Models;
 
 
-use Domain\Models\Models\Photo;
+use Domain\Profiles\Models\Photo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kra8\Snowflake\HasShortflakePrimary;
 
 class Job extends Model
 {
     use HasShortflakePrimary;
+    use HasFactory;
 
     protected $fillable = [
         'title',

@@ -4,10 +4,8 @@ namespace Domain\Jobs\Policies;
 
 
 use Domain\Jobs\Models\Job;
-use Domain\Models\Models\Model;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Facades\Auth;
 
 class JobPolicy
 {

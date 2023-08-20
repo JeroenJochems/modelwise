@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Model\OnboardingController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Model\CharacteristicsController;
 use App\Http\Controllers\Model\DigitalsController;
@@ -17,16 +18,6 @@ use App\Http\Controllers\PhotosController;
 use App\Http\Controllers\VaporSignedStorageUrl;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 if (!function_exists("onboardingRoutes")) {
     function onboardingRoutes()
@@ -43,14 +34,18 @@ if (!function_exists("onboardingRoutes")) {
 }
 
 Route::get('/', [AuthenticatedSessionController::class, "create"] );
-
-Route::resource('roles/{role}/applications', ApplicationController::class, ["create", "store"])
-    ->name("index", "roles.applications")
-    ->name("create", "roles.apply");
+Route::get('about-modelwise', [OnboardingController::class, "index"])->name("onboarding.index");
 
 Route::resource('roles', RoleController::class, ["index", "view"])->name("index", "jobs");
 
 Route::middleware(['auth'])->group(callback: function () {
+
+    Route::resource("applications", ApplicationController::class, ["index", "view"])
+        ->name("index", "applications");
+
+    Route::resource('roles/{role}/applications', ApplicationController::class, ["create", "store"])
+        ->name("create", "roles.apply")
+        ->name("store", "roles.apply.store");
 
     Route::middleware("onboarding")->group(function() {
         Route::get('dashboard', DashboardController::class)->name("dashboard");
@@ -58,7 +53,6 @@ Route::middleware(['auth'])->group(callback: function () {
     });
 
     Route::post('photos/signed-url', VaporSignedStorageUrl::class.'@store');
-
 
     Route::name("account.")->prefix("account")->group(function() {
         onboardingRoutes();
@@ -82,9 +76,6 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::get('not-accepted', [ModelController::class, "notAccepted"])->name("not-accepted");
         Route::post('subscribe', [ModelController::class, "subscribe"])->name("subscribe");
     });
-
-
-    Route::get('jobs/{job}/applications/create', [ApplicationController::class, "create"])->name('jobs.apply');
 });
 
 require __DIR__.'/auth.php';

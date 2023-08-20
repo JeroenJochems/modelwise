@@ -2,13 +2,15 @@
 
 namespace Domain\Jobs\Models;
 
-use Domain\Models\Models\Photo;
+use Domain\Profiles\Models\Photo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kra8\Snowflake\HasShortflakePrimary;
 
 class Role extends Model
 {
     use HasShortflakePrimary;
+    use HasFactory;
 
     const PHOTO_FOLDER_PRIVATE = 'private';
     const PHOTO_FOLDER_PUBLIC = 'public';
@@ -38,8 +40,13 @@ class Role extends Model
             ->orderBy("sortable_order");
     }
 
-    public function longlistedModels()
+    public function applications()
     {
-        return $this->hasMany(LonglistedModel::class);
+        return $this->hasMany(Application::class);
+    }
+
+    public function invites()
+    {
+        return $this->hasMany(Invite::class);
     }
 }

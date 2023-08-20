@@ -7,8 +7,13 @@ use Spatie\LaravelData\Transformers\Transformer;
 
 class CdnPathTransformer implements Transformer
 {
+    public function __construct(
+        protected ?string $format = '',
+    ) {
+    }
+
     public function transform(DataProperty $property, mixed $value): mixed
     {
-        return env("CDN_URL").$value;
+        return env("CDN_URL").$value.$this->format;
     }
 }

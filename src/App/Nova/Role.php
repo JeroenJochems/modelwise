@@ -14,7 +14,11 @@ use Vyuldashev\NovaMoneyField\Money;
 class Role extends Resource
 {
     public static $model = \Domain\Jobs\Models\Role::class;
-    public static $title = 'name';
+
+    public function title()
+    {
+        return $this->name .' at ' . $this->job->title .' (' . $this->job->brand?->name .')';
+    }
 
     public static $search = [
         'name', 'description'
@@ -40,10 +44,10 @@ class Role extends Resource
                 ->storedInMinorUnits(),
             Text::make("Buyout note")->hideFromIndex(),
             Text::make("Travel reimbursement note")->hideFromIndex(),
-            Text::make('Longlisted models', function() {
+            Text::make('Invites', function() {
                 return '<div style="display: flex; width: 400px; height: 120px; overflow-x: scroll; overflow-y: hidden">
-                    ' .implode("", $this->longlistedModels->map(function ($shortlisted_model) {
-                        return '<img src="'.$shortlisted_model->model->profile_picture_cdn.'?w=720&h=960&fit=crop&fm=auto&crop=faces" width="90" height="120" />';
+                    ' .implode("", $this->invites->map(function ($invite) {
+                        return '<img src="'.$invite->model->profile_picture_cdn.'?w=720&h=960&fit=crop&fm=auto&crop=faces" title="'.$invite->model->name.'" width="90" height="120" />';
                     })->toArray())
                     . '</div>';
             })->asHtml()->onlyOnIndex(),
@@ -57,7 +61,8 @@ class Role extends Resource
                     })->toArray())
                     . '</div>';
             })->asHtml()->onlyOnIndex(),
-            HasMany::make("Longlisted models"),
+            HasMany::make("Applications"),
+            HasMany::make("Invites"),
             Text::make('Public URL', function() {
                 return '<a href="'.route("roles.show", $this->id).'" target="_blank">'.route("roles.show", $this->id).'</a>';
             })->asHtml()->onlyOnDetail(),

@@ -3,13 +3,15 @@
 namespace Domain\Jobs\Models;
 
 
-use Domain\Models\Models\Photo;
+use Domain\Profiles\Models\Photo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kra8\Snowflake\HasShortflakePrimary;
 
 class Brand extends Model
 {
     use HasShortflakePrimary;
+    use HasFactory;
 
     public function getScoutKey(): mixed
     {
@@ -21,8 +23,9 @@ class Brand extends Model
         return $this->hasMany(Job::class);
     }
 
-    public function logo()
+    public function getLogoCdnAttribute()
     {
-        return $this->morphOne(Photo::class, "photoable")->latestOfMany();
+        return $this->logo ? env("CDN_URL") . $this->logo : null;
     }
+
 }

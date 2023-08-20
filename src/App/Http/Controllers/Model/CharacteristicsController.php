@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Model;
 
 use App\Http\Controllers\Controller;
-use Domain\Models\Data\ModelCharacteristicsData;
-use Domain\Models\Enums\EyeColor;
-use Domain\Models\Enums\HairColor;
-use Domain\Models\Repositories\PhotoRepository;
+use Domain\Profiles\Data\ModelCharacteristicsData;
+use Domain\Profiles\Enums\EyeColor;
+use Domain\Profiles\Enums\HairColor;
+use Domain\Profiles\Repositories\PhotoRepository;
 use Inertia\Inertia;
 
 class CharacteristicsController extends Controller

@@ -2,9 +2,9 @@
 
 namespace Support;
 
-use Domain\Models\Actions\SendMail;
-use Domain\Models\Data\Mail\MailData;
-use Domain\Models\Data\Templates;
+use Domain\Profiles\Actions\SendMail;
+use Domain\Profiles\Data\Mail\MailData;
+use Domain\Profiles\Data\Templates;
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

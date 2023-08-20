@@ -28,6 +28,10 @@ export default {
                 teal: '#0D4F5E',
                 'teal-light': '#0F5767',
             },
+            width: {
+                '128': '32rem',
+                '144': '36rem',
+            }
         },
     },
 

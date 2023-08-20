@@ -2,7 +2,7 @@
 
 namespace App\ViewModels;
 
-use Domain\Models\Models\Model;
+use Domain\Profiles\Models\Model;
 use Illuminate\Contracts\Auth\Authenticatable;
 use PrinsFrank\Standards\Country\CountryAlpha2;
 use Spatie\ViewModels\ViewModel;

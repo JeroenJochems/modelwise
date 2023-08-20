@@ -3,9 +3,9 @@
 namespace App\Nova;
 
 use Datomatic\Nova\Fields\Enum\Enum;
-use Domain\Models\Enums\Ethnicity;
-use Domain\Models\Enums\EyeColor;
-use Domain\Models\Enums\HairColor;
+use Domain\Profiles\Enums\Ethnicity;
+use Domain\Profiles\Enums\EyeColor;
+use Domain\Profiles\Enums\HairColor;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
@@ -17,7 +17,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\VaporImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Domain\Models\Models\Model as ModelClass;
+use Domain\Profiles\Models\Model as ModelClass;
 use Laravel\Nova\Panel;
 use Spatie\TagsField\Tags;
 
@@ -85,6 +85,7 @@ class Model extends Resource
             Text::make('Tiktok')->rules('required', 'max:255')->hideFromIndex(),
             Text::make('Website')->rules('required', 'max:255')->hideFromIndex(),
             new Panel('Body Characteristics', $this->bodyFields()),
+            HasMany::make("Applications")->showOnIndex(false),
             HasMany::make("Longlisted jobs")->showOnIndex(false),
             HasMany::make("Exclusive countries")->showOnIndex(false),
             MorphMany::make("Photos", "photos", Photo::class)->showOnIndex(true),

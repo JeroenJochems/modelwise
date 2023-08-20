@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Model;
 
-use Domain\Models\Data\ModelProfilePictureData;
-use Domain\Models\Models\Model;
+use Domain\Profiles\Data\ModelProfilePictureData;
+use Domain\Profiles\Models\Model;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 

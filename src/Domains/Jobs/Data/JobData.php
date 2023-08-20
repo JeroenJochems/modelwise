@@ -2,7 +2,7 @@
 
 namespace Domain\Jobs\Data;
 
-use Domain\Models\Data\PhotoData;
+use Domain\Profiles\Data\PhotoData;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\DataCollection;

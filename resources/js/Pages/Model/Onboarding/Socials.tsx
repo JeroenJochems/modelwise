@@ -36,10 +36,10 @@ export default function Socials({modelData}: Props) {
     };
 
     return (
-        <CleanLayout>
+        <CleanLayout photo={"assets/3.png"}>
             <Header step={6} isOnboarding={isOnboarding} />
 
-            <div className="grid grid-cols-1 gap-4 mb-8 mt-8">
+            <div className="grid grid-cols-1 gap-4 mb-4">
                 <H1>Socials</H1>
                 <P>Sharing your social accounts helps showcasing your work, recognition and personality.</P>
                 <P>Include at least your Instagram or Tiktok account.</P>
@@ -56,7 +56,7 @@ export default function Socials({modelData}: Props) {
                 />
 
                 <InputGroupText
-                    title="Tik-tok"
+                    title="TikTok"
                     value={data.tiktok}
                     error={errors.tiktok}
                     autoComplete="tiktok"

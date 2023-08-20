@@ -66,7 +66,7 @@ return [
     'providers' => [
         'models' => [
             'driver' => 'eloquent',
-            'model' => \Domain\Models\Models\Model::class,
+            'model' => \Domain\Profiles\Models\Model::class,
         ],
        'users' => [
             'driver' => 'eloquent',

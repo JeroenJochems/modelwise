@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Domain\Models\Actions\RegisterModel;
-use Domain\Models\Actions\SendMail;
-use Domain\Models\Data\Mail\MailData;
-use Domain\Models\Data\RegisterModelData;
-use Domain\Models\Data\Templates;
+use Domain\Profiles\Actions\RegisterModel;
+use Domain\Profiles\Actions\SendMail;
+use Domain\Profiles\Data\Mail\MailData;
+use Domain\Profiles\Data\RegisterModelData;
+use Domain\Profiles\Data\Templates;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;

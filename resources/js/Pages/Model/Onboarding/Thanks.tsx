@@ -19,8 +19,8 @@ export default function Thanks({ is_subscribed}: {is_subscribed: boolean}) {
     return (
         <CleanLayout>
             <div className={"w-16"}>
-                <Link href={route("onboarding.characteristics")} className={"w-16"}>
-                    &lt; Back
+                <Link href={route("onboarding.characteristics")} className={"w-16 text-gray-400"}>
+                    &#9664; back
                 </Link>
             </div>
             <div className="grid grid-cols-1 gap-4 mb-8 mt-8">
