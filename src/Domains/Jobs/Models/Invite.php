@@ -2,11 +2,12 @@
 
 namespace Domain\Jobs\Models;
 
+use App\Notifications\InviteCreated;
+use Domain\Jobs\QueryBuilders\InviteQueryBuilder;
 use Domain\Profiles\Actions\SendMail;
 use Domain\Profiles\Data\Mail\MailData;
 use Domain\Profiles\Data\Mail\ShortlistedMailData;
 use Domain\Profiles\Data\Templates;
-use Domain\Profiles\QueryBuilders\InviteQueryBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kra8\Snowflake\HasShortflakePrimary;
@@ -31,20 +32,13 @@ class Invite extends Model
         parent::boot();
 
         self::created(function (Invite $invite) {
-
-            app(SendMail::class)(
-                new MailData(
-                    $invite->model,
-                    Templates::shortlisted,
-                    new ShortlistedMailData(
-                        $invite->role->job->client->name,
-                        $invite->role->job->title,
-                        $invite->role->job->url || "http://google.nl",
-                        $invite->role->start_date->format('d-m-Y')
-                    )
-                )
-            );
+            $invite->model->notify(new InviteCreated($invite));
         });
+    }
+
+    public function application()
+    {
+        return $this->belongsTo(Application::class);
     }
 
     public function role()

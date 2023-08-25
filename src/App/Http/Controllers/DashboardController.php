@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ViewModels\DashboardViewModel;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -10,6 +11,7 @@ class DashboardController extends Controller
 
         $model = auth()->user();
 
-        return Inertia::render("Dashboard");
+        return Inertia::render("Dashboard")
+            ->with('vm', new DashboardViewModel($model));
     }
 }

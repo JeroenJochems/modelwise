@@ -30,6 +30,14 @@ class Model extends Authenticatable implements Onboardable
     use GetsOnboarded;
     use HasShortflakePrimary;
 
+    const TAG_TYPE_MODEL_EXPERIENCE = 'Modeling experience';
+    const TAG_TYPE_PROFESSIONS = 'Professions';
+
+    const TAG_TYPES = [
+        self::TAG_TYPE_MODEL_EXPERIENCE => self::TAG_TYPE_MODEL_EXPERIENCE,
+        self::TAG_TYPE_PROFESSIONS => self::TAG_TYPE_PROFESSIONS,
+    ];
+
     protected $guarded = ['password'];
 
     public function searchableAs(): string
@@ -83,6 +91,7 @@ class Model extends Authenticatable implements Onboardable
         'has_completed_onboarding' => 'boolean',
         'is_accepted' => 'boolean',
         'date_of_birth' => 'date',
+        'seen_exclusive_countries' => 'boolean',
     ];
 
     public function invites()

@@ -61,9 +61,9 @@ class Model extends Resource
             Boolean::make('Is accepted'),
             Textarea::make("Bio")->alwaysShow()->hideFromIndex(),
             Textarea::make("Admin notes")->alwaysShow()->hideFromIndex(),
-            Tags::make('Modeling experience')->type("Modeling experience")->withLinkToTagResource()->hideFromIndex(),
-            Tags::make('Sports')->type("Sports")->withLinkToTagResource()->hideFromIndex(),
-            Tags::make('Creativity')->type("Creativity")->withLinkToTagResource()->hideFromIndex(),
+            Tags::make('Modeling experience')->type(ModelClass::TAG_TYPE_MODEL_EXPERIENCE)->withLinkToTagResource()->hideFromIndex(),
+            Text::make('Other experience'),
+            Tags::make('Other professions')->type(ModelClass::TAG_TYPE_PROFESSIONS)->withLinkToTagResource()->hideFromIndex(),
             VaporImage::make("Profile picture", "profile_picture")
                 ->path("profile_pictures")
                 ->preview(function ($value, $disk) {
@@ -82,11 +82,11 @@ class Model extends Resource
                      . '</div>';
             })->asHtml()->onlyOnIndex(),
             Text::make('Instagram')->rules('required', 'max:255')->hideFromIndex(),
-            Text::make('Tiktok')->rules('required', 'max:255')->hideFromIndex(),
-            Text::make('Website')->rules('required', 'max:255')->hideFromIndex(),
+            Text::make('Tiktok')->rules('required_without:instagram', 'max:255')->hideFromIndex(),
+            Text::make('Website')->rules('max:255')->hideFromIndex(),
             new Panel('Body Characteristics', $this->bodyFields()),
             HasMany::make("Applications")->showOnIndex(false),
-            HasMany::make("Longlisted jobs")->showOnIndex(false),
+            HasMany::make("Invites")->showOnIndex(false),
             HasMany::make("Exclusive countries")->showOnIndex(false),
             MorphMany::make("Photos", "photos", Photo::class)->showOnIndex(true),
         ];

@@ -10,7 +10,7 @@ use Inertia\Inertia;
 use PrinsFrank\Standards\Country\CountryAlpha2;
 use Support\Enums\ModelCountries;
 
-class ExclusiveCountriesController extends Controller
+class ExclusiveCountriesController extends BaseOnboardingController
 {
     public function index()
     {
@@ -22,6 +22,16 @@ class ExclusiveCountriesController extends Controller
                 'modelingCountries' => EnumArray::transform(ModelCountries::cases()),
                 'allCountries' => EnumArray::transform(CountryAlpha2::cases())
             ]);
+    }
+
+    public function done()
+    {
+        /** @var Model $model */
+        $model = auth()->user();
+
+        $model->update(['seen_exclusive_countries' => true]);
+
+        return $this->nextOrReturn();
     }
 
     public function store()

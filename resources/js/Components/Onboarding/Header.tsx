@@ -1,6 +1,4 @@
 import {H2} from "@/Components/Typography/H2";
-import {Link} from "@inertiajs/react";
-import {ArrowBack} from "@/Components/ArrowBack";
 import {BackLink} from "@/Components/BackLink";
 
 type Props = {
@@ -11,7 +9,7 @@ type Props = {
     isOnboarding?: boolean;
 }
 
-export const Header = ({step, totalSteps=8, children, isOnboarding }: Props) => {
+export const Header = ({step, children, isOnboarding }: Props) => {
 
     const onboardingPages = [
         { step: 2, route: route("onboarding.personal-details") },
@@ -21,7 +19,10 @@ export const Header = ({step, totalSteps=8, children, isOnboarding }: Props) => 
         { step: 6, route: route("onboarding.socials") },
         { step: 7, route: route("onboarding.characteristics") },
         { step: 8, route: route("onboarding.exclusive-countries") },
+        { step: 9, route: route("onboarding.professional-experience") },
     ]
+
+    const totalSteps = onboardingPages.length+1;
 
     const backLink = onboardingPages.find(page => page.step === step - 1)?.route
 

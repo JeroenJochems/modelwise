@@ -7,7 +7,7 @@ use Domain\Profiles\Models\Photo;
 use Domain\Profiles\Repositories\PhotoRepository;
 use Inertia\Inertia;
 
-class PortfolioController extends Controller
+class PortfolioController extends BaseOnboardingController
 {
     public function index(PhotoRepository $photos)
     {
@@ -24,6 +24,6 @@ class PortfolioController extends Controller
             return redirect()->route("onboarding.digitals");
         }
 
-        return redirect()->route('account.index');
+        return $this->nextOrReturn();
     }
 }

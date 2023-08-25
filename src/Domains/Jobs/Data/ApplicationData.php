@@ -1,21 +1,20 @@
 <?php
 
-namespace Domain\Profiles\Data;
+namespace Domain\Jobs\Data;
 
-use App\Transformers\CdnPathTransformer;
 use Domain\Jobs\Enums\ApplicationStatusEnum;
 use Domain\Jobs\Models\Application;
-use Illuminate\Support\Facades\App;
-use Spatie\LaravelData\Attributes\WithTransformer;
+use Domain\Profiles\Data\ModelData;
 use Spatie\LaravelData\Data;
 
 /** @typescript */
-class ModelApplicationData extends Data
+class ApplicationData extends Data
 {
     public function __construct(
         public string $id,
         public ApplicationStatusEnum $status,
         public RoleData $role,
+        public ModelData $model,
     ) { }
 
     public static function fromModel(Application $application): static
@@ -24,6 +23,7 @@ class ModelApplicationData extends Data
             $application->id,
             ApplicationStatusEnum::forApplication($application),
             RoleData::from($application->role),
+            ModelData::fromModel($application->model),
         );
     }
 }

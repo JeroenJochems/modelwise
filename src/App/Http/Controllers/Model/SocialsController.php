@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Domain\Profiles\Data\ModelSocialsData;
 use Inertia\Inertia;
 
-class SocialsController extends Controller
+class SocialsController extends BaseOnboardingController
 {
     public function index()
     {
@@ -26,6 +26,6 @@ class SocialsController extends Controller
         $model->has_completed_onboarding = true;
         $model->save();
 
-        return redirect()->route('account.index');
+        return $this->nextOrReturn();
     }
 }

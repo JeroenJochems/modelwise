@@ -2,7 +2,10 @@ import {Head, Link} from '@inertiajs/react';
 import { PageProps } from '@/types';
 import CleanLayout from "@/Layouts/CleanLayout";
 import {H1} from "@/Components/Typography/H1";
-import {Tabs} from "@/Components/Tabs";
+import DashboardViewModel = App.ViewModels.DashboardViewModel;
+import {Invites} from "@/Components/Invites";
+import {OpenApplications} from "@/Components/OpenApplications";
+import {Hires} from "@/Components/Hires";
 
 export function link(route: string, title: string, as: string = "a", method: "get"|"post" = "get") {
     return (
@@ -13,18 +16,28 @@ export function link(route: string, title: string, as: string = "a", method: "ge
     )
 }
 
-export default function Dashboard({ auth }: PageProps) {
+type Props = { vm: DashboardViewModel } & PageProps
+
+export default function Dashboard(props: Props) {
+
+    const { openInvites, openApplications, hires } = props.vm;
+
     return (
         <CleanLayout>
             <Head title="Dashboard" />
 
-            <H1>Dashboard</H1>
+            <H1>Welcome back { props.auth.user.first_name }</H1>
 
-            { link(route('account.index'), "Profile")}
-            { link(route('invites'), "Invites")}
-            { link(route('applications'), "Applications")}
-            { link(route('hires'), "Hires")}
-            { link(route('logout'), "Log out", "button", "post")}
+            <div className={"grid gap-8"}>
+                <Invites invites={openInvites} />
+                <OpenApplications applications={openApplications} />
+                <Hires hires={hires} />
+                <hr />
+                { link(route('account.index'), "Profile")}
+                { link(route('logout'), "Log out", "button", "post")}
+            </div>
+
+
 
         </CleanLayout>
 

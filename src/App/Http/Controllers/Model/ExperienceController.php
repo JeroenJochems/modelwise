@@ -9,6 +9,6 @@ class ExperienceController extends Controller
 {
     public function index()
     {
-        return Inertia::render("Model/Experience");
+        return Inertia::render("Model/Onboarding/ProfessionalExperience");
     }
 }

@@ -4,6 +4,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Model\OnboardingController;
+use App\Http\Controllers\Model\ProfessionalExperienceController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Model\CharacteristicsController;
 use App\Http\Controllers\Model\DigitalsController;
@@ -29,7 +30,20 @@ if (!function_exists("onboardingRoutes")) {
         Route::get('socials', [SocialsController::class, "index"])->name("socials");
         Route::get('characteristics', [CharacteristicsController::class, "index"])->name("characteristics");
         Route::get('exclusive-countries', [ExclusiveCountriesController::class, "index"])->name("exclusive-countries");
-        Route::get('experience', [ExperienceController::class, "index"])->name("experience");
+        Route::get('exclusive-countries/done', [ExclusiveCountriesController::class, "done"])->name("exclusive-countries.done");
+        Route::get('professional-experience', [ProfessionalExperienceController::class, "index"])->name("professional-experience");
+
+        Route::post('personal-details', [PersonalDetailsController::class, 'store'])->name("personal-details.store");
+        Route::post('profile-picture', [ProfilePictureController::class, 'store'])->name("profile-picture.store");
+        Route::post('portfolio', [PortfolioController::class, 'store'])->name("portfolio.store");
+        Route::post('digitals', [DigitalsController::class, 'store'])->name("digitals.store");
+        Route::post('socials', [SocialsController::class, 'store'])->name("socials.store");
+        Route::post('exclusive-countries', [ExclusiveCountriesController::class, "store"])->name("exclusive-countries.store");
+        Route::delete('exclusive-countries/{country}/delete', [ExclusiveCountriesController::class, "delete"])->name("exclusive-countries.delete");
+        Route::post('characteristics', [CharacteristicsController::class, "store"])->name("characteristics.store");
+        Route::post('photos/sort', [PhotosController::class, 'sort'])->name("photos.sort");
+        Route::post('professional-experience', [ProfessionalExperienceController::class, "store"])->name("professional-experience.store");
+        Route::delete('photos/{photo}/delete', [PhotosController::class, "delete"])->name("photos.delete");
     }
 }
 
@@ -56,17 +70,6 @@ Route::middleware(['auth'])->group(callback: function () {
 
     Route::name("account.")->prefix("account")->group(function() {
         onboardingRoutes();
-
-        Route::post('personal-details', [PersonalDetailsController::class, 'store'])->name("personal-details.store");
-        Route::post('profile-picture', [ProfilePictureController::class, 'store'])->name("profile-picture.store");
-        Route::post('portfolio', [PortfolioController::class, 'store'])->name("portfolio.store");
-        Route::post('digitals', [DigitalsController::class, 'store'])->name("digitals.store");
-        Route::post('socials', [SocialsController::class, 'store'])->name("socials.store");
-        Route::post('exclusive-countries', [ExclusiveCountriesController::class, "store"])->name("exclusive-countries.store");
-        Route::delete('exclusive-countries/{country}/delete', [ExclusiveCountriesController::class, "delete"])->name("exclusive-countries.delete");
-        Route::post('characteristics', [CharacteristicsController::class, "store"])->name("characteristics.store");
-        Route::post('photos/sort', [PhotosController::class, 'sort'])->name("photos.sort");
-        Route::delete('photos/{photo}/delete', [PhotosController::class, "delete"])->name("photos.delete");
     });
 
     Route::name("onboarding.")->prefix("onboarding")->group(function() {

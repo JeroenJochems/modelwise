@@ -2,14 +2,12 @@ import CleanLayout from "@/Layouts/CleanLayout";
 import {H1} from "@/Components/Typography/H1";
 import {P} from "@/Components/Typography/p";
 import {Header} from "@/Components/Onboarding/Header";
-import PrimaryButton from "@/Components/PrimaryButton";
-import {router, useForm, usePage} from "@inertiajs/react";
+import { useForm, usePage} from "@inertiajs/react";
 import {FormEvent, FormEventHandler, useState} from "react";
 import Vapor from "laravel-vapor";
 import {Submit} from "@/Components/Forms/Submit";
 import {PageProps} from "@/types";
-import SecondaryButton from "@/Components/SecondaryButton";
-import SmallButton from "@/Components/SmallButton";
+import {UserProfilePhoto} from "@/Components/Atoms/UserProfilePhoto";
 
 export type FileEventTarget = EventTarget & { files: FileList|null };
 
@@ -59,19 +57,15 @@ export default function ProfilePicture({ modelData }: Props) {
     const submit: FormEventHandler = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        post(route('account.profile-picture.store'));
+        post(ziggy.location);
     };
 
     const isOnboarding = ziggy.location.includes("onboarding");
 
-    const path = data.profile_picture
-        ? cdn_url + data.profile_picture + "?w=400&h=600&fit=crop&crop=faces"
-        : modelData.profile_picture
-            ? modelData.profile_picture + "?w=400&h=600&fit=crop&crop=faces"
-            : Vapor.asset('img/headshot-placeholder.png')
+    console.log(modelData);
 
     return (
-        <CleanLayout photo={"photos/f52a5068-0423-4eed-9507-c535ee69a347"}>
+        <CleanLayout photos={["https://modelwise.imgix.net/photos/f52a5068-0423-4eed-9507-c535ee69a347"]}>
             <div className={"grid gap-4"}>
 
                 <Header step={3} isOnboarding={isOnboarding} />
@@ -86,10 +80,12 @@ export default function ProfilePicture({ modelData }: Props) {
 
 
                     <label htmlFor={"profile_picture"} className={"grid gap-4 items-center flex-col cursor-pointer"}>
-                        <img src={path} alt="Profile picture" className={"mx-auto"} style={{width: 200}}/>
+
+                        { !!modelData.profile_picture ? <img src={modelData.profile_picture + "?w=400&h=400&fit=crop&crop=faces"} alt="Profile picture" className={"mx-auto"} style={{width: 200}}/>
+                            : <div className={"mx-auto"}><UserProfilePhoto /></div> }
                         <span
                             className={"mx-auto items-center py-1 px-4 bg-white border border-gray-300 rounded-md text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50"}>
-                            Upload a photo
+                            Upload headshot
                         </span>
                     </label>
 

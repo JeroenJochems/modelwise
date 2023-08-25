@@ -20,7 +20,10 @@ class DigitalsController extends Controller
     {
         $photoRepository->update(auth()->user(), Photo::FOLDER_DIGITALS, request()->get("photos"));
 
-        return redirect()->route('account.index');
+        return auth()->user()->onboarding()->inProgress()
+            ? redirect()->route("onboarding.socials")
+            : redirect()->route("account.index");
+
     }
 
 }

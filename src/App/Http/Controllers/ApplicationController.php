@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Nova\Invite;
 use App\ViewModels\ModelMeViewModel;
 use App\ViewModels\RoleApplyViewModel;
+use Domain\Jobs\Actions\Apply;
 use Domain\Jobs\Models\Application;
 use Domain\Jobs\Models\Role;
+use Domain\Profiles\Models\Model;
 use Domain\Profiles\Models\Photo;
 use Domain\Profiles\Repositories\PhotoRepository;
 use Illuminate\Support\Facades\App;
@@ -26,7 +29,6 @@ class ApplicationController extends Controller
             ));
     }
 
-
     public function create(Role $role)
     {
         return Inertia::render('Applications/Create')
@@ -36,18 +38,9 @@ class ApplicationController extends Controller
             ));
     }
 
-    public function store(Role $role, PhotoRepository $photoRepository)
+    public function store(Role $role)
     {
-        $application = Application::firstOrNew([
-            'role_id' => $role->id,
-            'model_id' => auth()->user()->id
-        ]);
-
-        $application->cover_letter = request()->get("cover_letter");
-        $application->save();
-
-        $photoRepository->update(auth()->user(), Photo::FOLDER_DIGITALS, request()->digitals);
-        $photoRepository->update($application, Application::PHOTO_FOLDER, request()->photos);
+        (new Apply)(auth()->user(), $role);
 
         return Inertia::render('Applications/Stored')
             ->with("viewModel", new RoleApplyViewModel($role));

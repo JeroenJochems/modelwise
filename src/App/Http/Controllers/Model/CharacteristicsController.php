@@ -9,7 +9,7 @@ use Domain\Profiles\Enums\HairColor;
 use Domain\Profiles\Repositories\PhotoRepository;
 use Inertia\Inertia;
 
-class CharacteristicsController extends Controller
+class CharacteristicsController extends BaseOnboardingController
 {
     public function index(PhotoRepository $photoRepository)
     {
@@ -32,10 +32,6 @@ class CharacteristicsController extends Controller
         $model->update($data->toArray());
         $model->save();
 
-        if (str_contains(request()->server("HTTP_REFERER"), "onboarding")) {
-            return redirect()->route('onboarding.thanks');
-        }
-
-        return redirect()->route('account.index');
+        return $this->nextOrReturn();
     }
 }

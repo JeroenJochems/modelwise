@@ -6,6 +6,7 @@ import InputGroupText from "@/Components/Forms/InputGroupText";
 import {useForm, usePage} from '@inertiajs/react';
 import {Submit} from "@/Components/Forms/Submit";
 import {PageProps} from "@/types";
+import CountriesViewModel = App.ViewModels.CountriesViewModel;
 
 type ModelDataType = {
     first_name: string
@@ -18,10 +19,11 @@ type ModelDataType = {
 }
 
 type Props = {
-    modelData: ModelDataType
+    modelData: ModelDataType,
+    countriesViewModel: CountriesViewModel,
 }
 
-export default function PersonalDetails({modelData}: Props) {
+export default function PersonalDetails({modelData, countriesViewModel }: Props) {
     const { ziggy } = usePage<PageProps>().props
 
     const {data, setData, post, clearErrors, errors } = useForm({
@@ -34,7 +36,7 @@ export default function PersonalDetails({modelData}: Props) {
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('account.personal-details.store'));
+        post(ziggy.location);
     };
 
     let genderOptions = [
@@ -47,21 +49,6 @@ export default function PersonalDetails({modelData}: Props) {
         genderOptions = ['', ...genderOptions];
     }
 
-    const countryCodes = [
-        { name: "Netherlands", code: "+31"},
-        { name: "Belgium", code: "+32"},
-        { name: "Brazil", code: "+55"},
-        { name: "Germany", code: "+49"},
-        { name: "France", code: "+33"},
-        { name: "Mexico", code: "+52"},
-        { name: "Norway", code: "+47"},
-        { name: "Portugal", code: "+351"},
-        { name: "Spain", code: "+34"},
-        { name: "Sweden", code: "+46"},
-        { name: "South Africa", code: "+27"},
-        { name: "United Kingdom", code: "+44"},
-    ];
-
 
     function setCountry(country: string) {
 
@@ -69,13 +56,13 @@ export default function PersonalDetails({modelData}: Props) {
 
         if (data.phone_number.length < 6) {
 
-            const countryObj = countryCodes.find(c => c.name === country);
+            const countryObj = countriesViewModel.countries.find(c => c.name === country);
 
             if (countryObj) {
                 setData({
                     ...data,
                     country,
-                    phone_number: `${countryObj.code} `
+                    phone_number: `+${countryObj.phone} `
                 });
             }
         }
@@ -84,7 +71,7 @@ export default function PersonalDetails({modelData}: Props) {
     const isOnboarding = ziggy.location.includes("onboarding");
 
     return (
-        <CleanLayout photo={"assets/18.jpeg"}>
+        <CleanLayout photos={["https://modelwise.imgix.net/assets/18.jpeg"]}>
 
             <Header step={2} isOnboarding={isOnboarding} />
 
@@ -127,7 +114,7 @@ export default function PersonalDetails({modelData}: Props) {
                 <InputGroupText
                     title="Country"
                     value={data.country}
-                    options={countryCodes.map(c => c.name)}
+                    options={countriesViewModel.countries.map(c => c.name)}
                     error={errors.country}
                     onChange={(value: string) => { setCountry(value) }}
                 />
@@ -145,8 +132,6 @@ export default function PersonalDetails({modelData}: Props) {
                     error={errors.phone_number}
                     onChange={(value: string) => { clearErrors('phone_number'); setData('phone_number', value) }}
                 />
-
-
 
                 <Submit>
                     {isOnboarding ? "Continue" : "Save" }

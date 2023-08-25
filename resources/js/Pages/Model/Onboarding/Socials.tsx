@@ -32,11 +32,11 @@ export default function Socials({modelData}: Props) {
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        post(route('account.socials.store'));
+        post(ziggy.location);
     };
 
     return (
-        <CleanLayout photo={"assets/3.png"}>
+        <CleanLayout photos={["https://modelwise.imgix.net/assets/3.png"]}>
             <Header step={6} isOnboarding={isOnboarding} />
 
             <div className="grid grid-cols-1 gap-4 mb-4">

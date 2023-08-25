@@ -4,6 +4,7 @@ namespace Domain\Profiles\Data;
 
 use App\Transformers\CdnPathTransformer;
 use DateTime;
+use Domain\Jobs\Data\ApplicationData;
 use Domain\Profiles\Models\Model;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\WithCast;
@@ -42,8 +43,8 @@ class ModelData extends Data
         #[DataCollectionOf(ModelPhotoData::class)]
         public Lazy|DataCollection $tattoo_photos,
 
-        /** @var ModelApplicationData[] */
-        #[DataCollectionOf(ModelApplicationData::class)]
+        /** @var ApplicationData[] */
+        #[DataCollectionOf(ApplicationData::class)]
         public Lazy|DataCollection $applications,
     ) {}
 
@@ -61,7 +62,7 @@ class ModelData extends Data
             Lazy::whenLoaded('portfolio', $model, fn() => ModelPhotoData::collection($model->portfolio)),
             Lazy::whenLoaded('digitals', $model, fn() => ModelPhotoData::collection($model->digitals)),
             Lazy::whenLoaded('tattoo_photos', $model, fn() => ModelPhotoData::collection($model->tattoo_photos)),
-            Lazy::whenLoaded('applications', $model, fn() => ModelApplicationData::collection($model->applications)),
+            Lazy::whenLoaded('applications', $model, fn() => ApplicationData::collection($model->applications)),
         );
     }
 }

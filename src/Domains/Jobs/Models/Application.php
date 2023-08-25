@@ -2,6 +2,7 @@
 
 namespace Domain\Jobs\Models;
 
+use Domain\Jobs\QueryBuilders\ApplicationQueryBuilder;
 use Domain\Profiles\Models\Photo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +19,21 @@ class Application extends Model
     ];
 
     const PHOTO_FOLDER = 'Application';
+
+    public function newEloquentBuilder($query)
+    {
+        return new ApplicationQueryBuilder($query);
+    }
+
+    public function hire()
+    {
+        return $this->hasOne(Hire::class)->latestOfMany();
+    }
+
+    public function rejection()
+    {
+        return $this->hasOne(Rejection::class)->latestOfMany();
+    }
 
     public function role()
     {

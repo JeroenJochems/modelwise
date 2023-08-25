@@ -62,11 +62,15 @@ export default function Characteristics({modelData, tattooPhotos, hairColors, ey
     }
 
     return (
-        <CleanLayout photo={"assets/4.png"}>
+        <CleanLayout header={
+            <>
+                <Header step={7} isOnboarding={isOnboarding} />
 
-            <Header step={7} isOnboarding={isOnboarding} />
+                <H1>Body characteristics</H1>
+            </>
+        } photos={["https://modelwise.imgix.net/assets/4.png"]}>
 
-            <H1>Body characteristics</H1>
+
 
             <div className="grid gap-4">
 
@@ -185,10 +189,6 @@ export default function Characteristics({modelData, tattooPhotos, hairColors, ey
                     options={["No", "Yes"]}
                     onChange={value => setData('piercings', value==="Yes")}
                 />
-
-                <PrimaryButton onClick={submit} disabled={ isUploading || isSubmitting }>
-                    { isSubmitting ? "Please wait..." : "Continue" }
-                </PrimaryButton>
             </div>
         </CleanLayout>
     )

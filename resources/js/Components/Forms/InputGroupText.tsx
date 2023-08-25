@@ -14,7 +14,7 @@ type Props =
         onChange: (value: string) => void,
         error?: string
         placeholder?: string
-        multiline: boolean
+        multiline?: boolean
     }
 
 

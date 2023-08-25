@@ -1,9 +1,10 @@
 import CleanLayout from "@/Layouts/CleanLayout";
 import {Header} from "@/Components/Onboarding/Header";
 import {H1} from "@/Components/Typography/H1";
-import {Link, router, useForm} from '@inertiajs/react';
+import {Link, router, useForm, usePage} from '@inertiajs/react';
 import {P} from "@/Components/Typography/p";
 import PrimaryButton from "@/Components/PrimaryButton";
+import {PageProps} from "@/types";
 
 type Country = {
     code: string
@@ -16,7 +17,9 @@ type Props = {
     allCountries: Country[]
 }
 
-export default function ExclusiveCountries({viewModel, modelingCountries, allCountries}: Props) {
+export default function ExclusiveCountries({viewModel, modelingCountries, allCountries }: Props) {
+
+    const { ziggy, cdn_url } = usePage<PageProps>().props
 
     const { data, setData } = useForm({
         country: '',
@@ -35,6 +38,8 @@ export default function ExclusiveCountries({viewModel, modelingCountries, allCou
         )
     }
 
+    const isOnboarding = ziggy.location.includes("onboarding");
+
     function getFlagEmoji(countryCode: string) {
         const codePoints = countryCode
             .toUpperCase()
@@ -45,7 +50,7 @@ export default function ExclusiveCountries({viewModel, modelingCountries, allCou
 
     return (
         <CleanLayout>
-            <Header step={8} />
+            <Header step={8} isOnboarding={isOnboarding} />
 
             <H1>Exclusive countries</H1>
             <P>Have you exclusively signed with another agency for specific countries? You can add them here so you
@@ -71,7 +76,7 @@ export default function ExclusiveCountries({viewModel, modelingCountries, allCou
                 ))}
             </div>
 
-            <PrimaryButton onClick={() => router.visit(route("account/index"))}>
+            <PrimaryButton onClick={() => router.visit(route(isOnboarding ? "onboarding.exclusive-countries.done" : 'account.index'))}>
                 Continue
             </PrimaryButton>
         </CleanLayout>

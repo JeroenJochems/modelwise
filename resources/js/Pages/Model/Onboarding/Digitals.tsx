@@ -9,8 +9,8 @@ import PrimaryButton from "@/Components/PrimaryButton";
 
 
 export default function Photos({modelDigitals}: {modelDigitals: Photo[] }) {
-
-    const isOnboarding = usePage<PageProps>().props.ziggy.location.includes("onboarding")
+    const { ziggy } = usePage<PageProps>().props;
+    const isOnboarding = ziggy.location.includes("onboarding")
 
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -22,7 +22,7 @@ export default function Photos({modelDigitals}: {modelDigitals: Photo[] }) {
 
     function submit() {
         setIsSubmitting(true);
-        post(route('account.digitals.store'), {
+        post(ziggy.location, {
             onFinish: () => {
                 setIsSubmitting(false);
             }
@@ -30,7 +30,7 @@ export default function Photos({modelDigitals}: {modelDigitals: Photo[] }) {
     }
 
     return (
-        <CleanLayout photo={"photos/d3f0b9b3-c079-41bc-b403-5ddc78d2dddd"}>
+        <CleanLayout photos={["https://modelwise.imgix.net/photos/d3f0b9b3-c079-41bc-b403-5ddc78d2dddd"]}>
             <div className="grid gap-4">
 
                 <Header step={5} isOnboarding={isOnboarding} />

@@ -2,8 +2,8 @@
 
 namespace App\ViewModels;
 
+use Domain\Jobs\Data\RoleData;
 use Domain\Jobs\Models\Role;
-use Domain\Profiles\Data\RoleData;
 use Spatie\ViewModels\ViewModel;
 
 /** @typescript  */

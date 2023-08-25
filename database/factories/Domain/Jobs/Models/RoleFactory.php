@@ -18,6 +18,8 @@ class RoleFactory extends Factory
             'name' => $this->faker->jobTitle,
             'description' => $this->faker->realText,
             'start_date' => Carbon::now()->addWeek(),
+            'fee' => 150,
+            'buyout' => 200,
         ];
     }
 }

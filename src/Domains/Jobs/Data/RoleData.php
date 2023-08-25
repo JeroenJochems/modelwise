@@ -1,9 +1,9 @@
 <?php
 
-namespace Domain\Profiles\Data;
+namespace Domain\Jobs\Data;
 
 use DateTime;
-use Domain\Jobs\Data\JobData;
+use Domain\Profiles\Data\PhotoData;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Attributes\WithTransformer;

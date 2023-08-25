@@ -8,10 +8,12 @@ use Domain\Jobs\Models\Job;
 use Domain\Jobs\Models\Invite;
 use Domain\Jobs\Models\Role;
 use Domain\Profiles\Models\Model;
+use Domain\Profiles\Models\Model as ModelClass;
 use Domain\Profiles\Models\Photo;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Onboard\Facades\Onboard;
+use Spatie\Tags\Tag;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,6 +39,7 @@ class AppServiceProvider extends ServiceProvider
             'brand' => Brand::class,
             'application' => Application::class,
             'longlist-model' => Invite::class,
+            'tag' => Tag::class,
         ]);
 
         Onboard::addStep('Personal details')
@@ -68,6 +71,20 @@ class AppServiceProvider extends ServiceProvider
             ->link("onboarding/characteristics")
             ->completeIf(function (Model $model) {
                 return $model->height > 0;
+            });
+
+        Onboard::addStep('Exclusive countries')
+            ->link("onboarding/exclusive-countries")
+            ->completeIf(function (Model $model) {
+                return !!$model->seen_exclusive_countries;
+            });
+
+        Onboard::addStep('Professional background')
+            ->link("onboarding/professional-experience")
+            ->completeIf(function (Model $model) {
+                return $model
+                        ->tagsWithType(ModelClass::TAG_TYPE_MODEL_EXPERIENCE)
+                        ->count() > 0;
             });
     }
 }

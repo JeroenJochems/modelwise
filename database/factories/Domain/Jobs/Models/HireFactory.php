@@ -1,0 +1,19 @@
+<?php
+
+namespace Database\Factories\Domain\Jobs\Models;
+
+use Domain\Jobs\Models\Application;
+use Domain\Jobs\Models\Hire;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class HireFactory extends Factory
+{
+    protected $model = Hire::class;
+
+    public function definition(): array
+    {
+        return [
+            'application_id' => fn() => Application::factory()->createOne()->id,
+        ];
+    }
+}
