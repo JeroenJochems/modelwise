@@ -7,6 +7,7 @@ import {useForm, usePage} from '@inertiajs/react';
 import {Submit} from "@/Components/Forms/Submit";
 import {PageProps} from "@/types";
 import CountriesViewModel = App.ViewModels.CountriesViewModel;
+import PrimaryButton from "@/Components/PrimaryButton";
 
 type ModelDataType = {
     first_name: string
@@ -71,13 +72,13 @@ export default function PersonalDetails({modelData, countriesViewModel }: Props)
     const isOnboarding = ziggy.location.includes("onboarding");
 
     return (
-        <CleanLayout photos={["https://modelwise.imgix.net/assets/18.jpeg"]}>
+        <CleanLayout header={
+            <Header step={2} isOnboarding={isOnboarding}>
+                <H1>Personal details</H1>
+            </Header>
+        } photos={["https://modelwise.imgix.net/assets/18.jpeg"]}>
 
-            <Header step={2} isOnboarding={isOnboarding} />
-
-            <H1>Personal details</H1>
-
-            <form onSubmit={submit} className="grid gap-4">
+            <form className="grid gap-4">
 
                 <InputGroupText
                     title="First name"
@@ -133,9 +134,9 @@ export default function PersonalDetails({modelData, countriesViewModel }: Props)
                     onChange={(value: string) => { clearErrors('phone_number'); setData('phone_number', value) }}
                 />
 
-                <Submit>
+                <PrimaryButton onClick={submit}>
                     {isOnboarding ? "Continue" : "Save" }
-                </Submit>
+                </PrimaryButton>
             </form>
         </CleanLayout>
     )

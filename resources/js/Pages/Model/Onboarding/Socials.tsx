@@ -20,7 +20,7 @@ type Props = {
 
 export default function Socials({modelData}: Props) {
 
-    const { ziggy } = usePage<PageProps>().props;
+    const {ziggy} = usePage<PageProps>().props;
     const isOnboarding = ziggy.location.includes("onboarding");
 
     const {data, setData, post, errors} = useForm({
@@ -36,11 +36,13 @@ export default function Socials({modelData}: Props) {
     };
 
     return (
-        <CleanLayout photos={["https://modelwise.imgix.net/assets/3.png"]}>
-            <Header step={6} isOnboarding={isOnboarding} />
-
-            <div className="grid grid-cols-1 gap-4 mb-4">
+        <CleanLayout photos={["https://modelwise.imgix.net/assets/3.png"]} header={
+            <Header step={6} isOnboarding={isOnboarding}>
                 <H1>Socials</H1>
+            </Header>
+        }>
+            <div className="grid grid-cols-1 gap-4 mb-4">
+
                 <P>Sharing your social accounts helps showcasing your work, recognition and personality.</P>
                 <P>Include at least your Instagram or Tiktok account.</P>
             </div>

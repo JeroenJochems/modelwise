@@ -30,13 +30,12 @@ export default function Photos({modelDigitals}: {modelDigitals: Photo[] }) {
     }
 
     return (
-        <CleanLayout photos={["https://modelwise.imgix.net/photos/d3f0b9b3-c079-41bc-b403-5ddc78d2dddd"]}>
-            <div className="grid gap-4">
-
-                <Header step={5} isOnboarding={isOnboarding} />
-
+        <CleanLayout header={
+            <Header step={5} isOnboarding={isOnboarding}>
                 <H1>Digitals (optional)</H1>
-
+            </Header>
+        } photos={["https://modelwise.imgix.net/photos/d3f0b9b3-c079-41bc-b403-5ddc78d2dddd"]}>
+            <div className="grid gap-4">
                 <InlinePhotoUploader
                     cols={3}
                     photos={data.photos}

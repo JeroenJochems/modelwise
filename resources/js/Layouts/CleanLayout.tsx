@@ -17,7 +17,7 @@ export default function CleanLayout({
     return (
         <div className="flex min-h-full h-full flex-row-reverse">
             <>
-                <div className="flex flex-col w-full min-h-full lg:w-full">
+                <div className="flex flex-col w-full min-h-full lg:w-full overflow-y-scroll">
                     <div className="mx-auto min-h-full flex flex-col w-full max-w-2xl">
 
                         { mobileSplit && (
@@ -26,18 +26,16 @@ export default function CleanLayout({
                             </div>
                         )}
 
-                        <div className={`${ mobileSplit ? 'hidden' : '' } w-full p-4 sm:flex`}>
+                        <div className={`${ mobileSplit ? 'hidden' : '' } w-full mt-4 flex-col p-4 sm:flex`}>
                             {header}
                         </div>
 
-                        <div className="p-4 flex-grow overflow-y-scroll">
-                            {children}
+                        <div className="p-4 flex-grow">
+                            <div className={"grid gap-4"}>
+                                {children}
+                            </div>
                         </div>
 
-                        <div>
-                            <PrimaryButton>test
-                            </PrimaryButton>
-                        </div>
                     </div>
                 </div>
 

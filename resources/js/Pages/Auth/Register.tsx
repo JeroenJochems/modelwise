@@ -28,16 +28,16 @@ export default function Register() {
     };
 
     return (
-        <CleanLayout photo={"assets/7.png"}>
+        <CleanLayout header={
+            <Header step={1} isOnboarding={true}>
+                <H1>Create your account</H1>
+            </Header>
+        } photos={["https://modelwise.imgix.net/assets/7.png"]}>
             <Head>
                 <title>Register</title>
             </Head>
 
-            <Header step={1} isOnboarding={true} />
-
             <div className="grid grid-cols-1 gap-4 mt-8">
-                <H1>Create your account</H1>
-
 
                 <form onSubmit={submit} method="POST" className="grid gap-4">
 

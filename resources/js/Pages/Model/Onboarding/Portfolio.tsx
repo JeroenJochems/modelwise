@@ -34,13 +34,13 @@ export default function Portfolio({modelPhotos}: {modelPhotos: Photo[] }) {
     }
 
     return (
-        <CleanLayout photos={["https://modelwise.imgix.net/photos/8c895ed3-1ad7-4df4-8e56-2b3cb0fe3235"]}>
-            <div className={`grid gap-4`}>
-
-                <Header step={4} isOnboarding={isOnboarding} />
-
+        <CleanLayout header={
+            <Header step={4} isOnboarding={isOnboarding}>
                 <H1>Work experience</H1>
-                <P>Upload at least6 portfolio photos. You can upload as many as you want and always update this later.</P>
+            </Header>
+        } photos={["https://modelwise.imgix.net/photos/8c895ed3-1ad7-4df4-8e56-2b3cb0fe3235"]}>
+
+                <P>Upload a minimum of 6 portfolio photos. You can upload as many as you want and always update this later.</P>
 
                 <InlinePhotoUploader
                     cols={3}
@@ -53,7 +53,6 @@ export default function Portfolio({modelPhotos}: {modelPhotos: Photo[] }) {
                 <PrimaryButton onClick={submit} disabled={isSubmitting || isUploading || ( isOnboarding && data.photos.length < 3)}>
                     { isSubmitting ? `Please wait...` : isOnboarding ? 'Continue' : 'Save' }
                 </PrimaryButton>
-            </div>
         </CleanLayout>
     )
 }

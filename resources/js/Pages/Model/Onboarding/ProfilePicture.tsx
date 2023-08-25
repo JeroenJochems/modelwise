@@ -8,6 +8,7 @@ import Vapor from "laravel-vapor";
 import {Submit} from "@/Components/Forms/Submit";
 import {PageProps} from "@/types";
 import {UserProfilePhoto} from "@/Components/Atoms/UserProfilePhoto";
+import PrimaryButton from "@/Components/PrimaryButton";
 
 export type FileEventTarget = EventTarget & { files: FileList|null };
 
@@ -65,47 +66,45 @@ export default function ProfilePicture({ modelData }: Props) {
     console.log(modelData);
 
     return (
-        <CleanLayout photos={["https://modelwise.imgix.net/photos/f52a5068-0423-4eed-9507-c535ee69a347"]}>
-            <div className={"grid gap-4"}>
-
-                <Header step={3} isOnboarding={isOnboarding} />
-
+        <CleanLayout header={
+            <Header step={3} isOnboarding={isOnboarding}>
                 <H1>Profile picture</H1>
-                <P>Upload a colour headshot in portrait format. This will be your primary portfolio photo.</P>
+            </Header>
+        } photos={["https://modelwise.imgix.net/photos/f52a5068-0423-4eed-9507-c535ee69a347"]}>
+            <P>Upload a colour headshot in portrait format. This will be your primary portfolio photo.</P>
 
-                <form onSubmit={submit} className={"grid gap-4"}>
-                    <input type="file" className="hidden" id={"profile_picture"}
-                           name={"profile_picture"}
-                           onChange={handleChange}/>
+            <form className={"grid gap-4"}>
+                <input type="file" className="hidden" id={"profile_picture"}
+                       name={"profile_picture"}
+                       onChange={handleChange}/>
 
 
-                    <label htmlFor={"profile_picture"} className={"grid gap-4 items-center flex-col cursor-pointer"}>
+                <label htmlFor={"profile_picture"} className={"grid gap-4 items-center flex-col cursor-pointer"}>
 
-                        { !!modelData.profile_picture ? <img src={modelData.profile_picture + "?w=400&h=400&fit=crop&crop=faces"} alt="Profile picture" className={"mx-auto"} style={{width: 200}}/>
-                            : <div className={"mx-auto"}><UserProfilePhoto /></div> }
-                        <span
-                            className={"mx-auto items-center py-1 px-4 bg-white border border-gray-300 rounded-md text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50"}>
-                            Upload headshot
-                        </span>
-                    </label>
+                    { !!modelData.profile_picture ? <img src={modelData.profile_picture + "?w=400&h=400&fit=crop&crop=faces"} alt="Profile picture" className={"mx-auto"} style={{width: 200}}/>
+                        : <div className={"mx-auto"}><UserProfilePhoto /></div> }
+                    <span
+                        className={"mx-auto items-center py-1 px-4 bg-white border border-gray-300 rounded-md text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50"}>
+                        Upload headshot
+                    </span>
+                </label>
 
-                    { !!uploadProgress && (
-                        <div className={"h-2 mt-2"}>
-                            { uploadProgress && uploadProgress < 100 ? (
-                                <div className="w-full bg-gray-100 h-2 rounded-full">
-                                    <div style={{ width: uploadProgress + '%'}}  className="bg-green h-2 rounded-full"></div>
-                                </div>
-                            ) : (
-                                <div className={"w-full h-2"}></div>
-                            ) }
-                        </div>
-                    )}
+                { !!uploadProgress && (
+                    <div className={"h-2 mt-2"}>
+                        { uploadProgress && uploadProgress < 100 ? (
+                            <div className="w-full bg-gray-100 h-2 rounded-full">
+                                <div style={{ width: uploadProgress + '%'}}  className="bg-green h-2 rounded-full"></div>
+                            </div>
+                        ) : (
+                            <div className={"w-full h-2"}></div>
+                        ) }
+                    </div>
+                )}
 
-                    <Submit disabled={uploadProgress>0 && uploadProgress<100}>
-                        { isOnboarding ? "Continue" : "Save" }
-                    </Submit>
-                </form>
-            </div>
+                <PrimaryButton onClick={submit} disabled={uploadProgress>0 && uploadProgress<100}>
+                    { isOnboarding ? "Continue" : "Save" }
+                </PrimaryButton>
+            </form>
         </CleanLayout>
     )
 }

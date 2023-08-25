@@ -1,5 +1,6 @@
 import {H2} from "@/Components/Typography/H2";
 import {BackLink} from "@/Components/BackLink";
+import {H1} from "@/Components/Typography/H1";
 
 type Props = {
     step: number;
@@ -31,21 +32,25 @@ export const Header = ({step, children, isOnboarding }: Props) => {
     }
 
     return (
-        <div className={"mb-8"}>
-            <div className="flex items-center justify-between mb-2">
-                <div className={"w-16"}>
-                    { !!backLink && <BackLink href={backLink} /> }
-                </div>
-                <H2 className={"text-center"}>
-                    Step {step} of {totalSteps}
-                </H2>
-                <div className={"w-16"}>
+        <>
+            <div className={"mb-8"}>
+                <div className="flex items-center justify-between mb-2">
+                    <div className={"w-16"}>
+                        { !!backLink && <BackLink href={backLink} /> }
+                    </div>
+                    <H2 className={"text-center"}>
+                        Step {step} of {totalSteps}
+                    </H2>
+                    <div className={"w-16"}>
 
+                    </div>
                 </div>
+                <div className="w-full bg-gray-100 h-2 rounded-full">
+                    <div style={{ width: (step / totalSteps * 100) + '%'}}  className="bg-green h-2 rounded-full"></div>
+                </div>
+
             </div>
-            <div className="w-full bg-gray-100 h-2 rounded-full">
-                <div style={{ width: (step / totalSteps * 100) + '%'}}  className="bg-green h-2 rounded-full"></div>
-            </div>
-        </div>
+            {children}
+        </>
     );
 }

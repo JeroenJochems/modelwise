@@ -50,10 +50,13 @@ export default function ProfessionalExperience({vm}: Props) {
 
     return (
         <CleanLayout
-            header={<Header step={9} isOnboarding={isOnboarding}/>}
+            header={
+                <Header step={9} isOnboarding={isOnboarding}>
+                    <H1>Professional experience</H1>
+                </Header>
+            }
             photos={["https://modelwise.imgix.net/assets/18.jpeg"]}>
 
-            <H1>Professional experience</H1>
             <P>What kind of professional experience do you have?</P>
             <TagCloud tags={vm.allCategories}
                       includeOther={true}

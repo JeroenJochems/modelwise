@@ -1,11 +1,8 @@
-import {FormEventHandler, useState} from "react";
+import { useState} from "react";
 import CleanLayout from "@/Layouts/CleanLayout";
 import {H1} from "@/Components/Typography/H1";
 import InputGroupText from "@/Components/Forms/InputGroupText";
-import {Link, router, useForm, usePage} from '@inertiajs/react';
-import {Submit} from "@/Components/Forms/Submit";
-import HairColor = Domain.Models.Enums.HairColor;
-import EyeColor = Domain.Models.Enums.EyeColor;
+import { useForm, usePage} from '@inertiajs/react';
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
@@ -14,6 +11,8 @@ import {P} from "@/Components/Typography/p";
 import {Header} from "@/Components/Onboarding/Header";
 import {PageProps} from "@/types";
 import PrimaryButton from "@/Components/PrimaryButton";
+import HairColor = Domain.Profiles.Enums.HairColor;
+import EyeColor = Domain.Profiles.Enums.EyeColor;
 
 type ModelDataType = {
     gender?: string
@@ -63,11 +62,9 @@ export default function Characteristics({modelData, tattooPhotos, hairColors, ey
 
     return (
         <CleanLayout header={
-            <>
-                <Header step={7} isOnboarding={isOnboarding} />
-
+            <Header step={7} isOnboarding={isOnboarding}>
                 <H1>Body characteristics</H1>
-            </>
+            </Header>
         } photos={["https://modelwise.imgix.net/assets/4.png"]}>
 
 
@@ -189,6 +186,10 @@ export default function Characteristics({modelData, tattooPhotos, hairColors, ey
                     options={["No", "Yes"]}
                     onChange={value => setData('piercings', value==="Yes")}
                 />
+
+                <PrimaryButton onClick={submit} disabled={ isUploading || isSubmitting }>
+                    { isSubmitting ? "Please wait..." : "Continue" }
+                </PrimaryButton>
             </div>
         </CleanLayout>
     )

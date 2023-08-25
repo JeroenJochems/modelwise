@@ -4,6 +4,7 @@ import {H1} from "@/Components/Typography/H1";
 import {Link, useForm} from '@inertiajs/react';
 import {P} from "@/Components/Typography/p";
 import {Submit} from "@/Components/Forms/Submit";
+import {LinkButton} from "@/Components/Atoms/LinkButton";
 
 
 export default function Thanks({ is_subscribed}: {is_subscribed: boolean}) {
@@ -41,11 +42,7 @@ export default function Thanks({ is_subscribed}: {is_subscribed: boolean}) {
                 </form>
             )}
 
-            <div className={"flex"}>
-                <Link as={"button"} href={route('dashboard')} className={"block w-full bg-teal p-4 mt-4 text-center text-sm"}>
-                    Go to dashboard
-                </Link>
-            </div>
+            <LinkButton href={route('dashboard')} caption={"Go to dashboard"} />
 
         </CleanLayout>
     )

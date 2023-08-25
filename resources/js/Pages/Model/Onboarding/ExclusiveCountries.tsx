@@ -49,10 +49,12 @@ export default function ExclusiveCountries({viewModel, modelingCountries, allCou
     }
 
     return (
-        <CleanLayout>
-            <Header step={8} isOnboarding={isOnboarding} />
+        <CleanLayout header={
+            <Header step={8} isOnboarding={isOnboarding}>
+                <H1>Exclusive countries</H1>
+            </Header>
+        }>
 
-            <H1>Exclusive countries</H1>
             <P>Have you exclusively signed with another agency for specific countries? You can add them here so you
                 don't receive unwanted invites to jobs.</P>
 
