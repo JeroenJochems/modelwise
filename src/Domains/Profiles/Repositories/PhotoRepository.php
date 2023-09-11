@@ -27,6 +27,7 @@ class PhotoRepository
     public function update(\Illuminate\Database\Eloquent\Model $model, string $folder, $photos)
     {
         $newSort = collect($photos)->map(function($photo) use($folder, $model) {
+
             if (isset($photo['tmpFile'])) {
 
                 if (!isset($photo['deleted']) || $photo['deleted'] == false) {
@@ -44,8 +45,11 @@ class PhotoRepository
             } else {
                 if (isset($photo['deleted']) && $photo['deleted'] == true) {
                     $photoObj = Photo::find($photo['id']);
-                    Storage::delete($photoObj->path);
-                    $photoObj->delete();
+
+                    if ($photoObj) {
+                        Storage::delete($photoObj->path);
+                        $photoObj->delete();
+                    }
 
                     return null;
                 }

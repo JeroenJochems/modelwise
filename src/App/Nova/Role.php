@@ -2,7 +2,9 @@
 
 namespace App\Nova;
 
+use Fourstacks\NovaCheckboxes\Checkboxes;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BooleanGroup;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\MorphMany;
@@ -43,6 +45,15 @@ class Role extends Resource
             Money::make("Buyout", "EUR")
                 ->storedInMinorUnits(),
             Text::make("Buyout note")->hideFromIndex(),
+            BooleanGroup::make("Fields")->options([
+                'digitals' => 'Digitals',
+                'height' => 'Height',
+                'chest' => 'Chest',
+                'waist' => 'Waist',
+                'hips' => 'Hips',
+                'shoe_size' => 'Shoe size',
+                'head' => 'Head',
+            ])->hideFalseValues(),
             Text::make("Travel reimbursement note")->hideFromIndex(),
             Text::make('Invites', function() {
                 return '<div style="display: flex; width: 400px; height: 120px; overflow-x: scroll; overflow-y: hidden">

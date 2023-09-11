@@ -3,7 +3,7 @@ import {H1} from "@/Components/Typography/H1";
 import {P} from "@/Components/Typography/p";
 import {Header} from "@/Components/Onboarding/Header";
 import {router, useForm, usePage} from "@inertiajs/react";
-import {InlinePhotoUploader, Photo} from "@/Components/InlinePhotoUploader";
+import {InlinePhotoUploader, Media} from "@/Components/InlinePhotoUploader";
 import PrimaryButton from "@/Components/PrimaryButton";
 import {PageProps} from "@/types";
 import {useState} from "react";
@@ -11,7 +11,7 @@ import {useState} from "react";
 
 export type FileEventTarget = EventTarget & { files: FileList|null };
 
-export default function Portfolio({modelPhotos}: {modelPhotos: Photo[] }) {
+export default function Portfolio({modelPhotos}: {modelPhotos: Media[] }) {
 
     const { props } = usePage<PageProps>()
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -36,11 +36,11 @@ export default function Portfolio({modelPhotos}: {modelPhotos: Photo[] }) {
     return (
         <CleanLayout header={
             <Header step={4} isOnboarding={isOnboarding}>
-                <H1>Work experience</H1>
+                <H1>Your best photos</H1>
             </Header>
         } photos={["https://modelwise.imgix.net/photos/8c895ed3-1ad7-4df4-8e56-2b3cb0fe3235"]}>
 
-                <P>Upload a minimum of 6 portfolio photos. You can upload as many as you want and always update this later.</P>
+                <P>Upload at least 6 of your best photos. You can upload as many as you want and always update this later.</P>
 
                 <InlinePhotoUploader
                     cols={3}

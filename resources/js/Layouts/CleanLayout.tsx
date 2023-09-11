@@ -11,7 +11,7 @@ export default function CleanLayout({
                                         children,
                                         mobileSplit,
                                         header = null,
-                                        photos = ['https://modelwise.imgix.net/photos/d065b15e-5b88-49bf-aae2-009f141fc30f?exp=-20']
+                                        photos = ['https://modelwise.imgix.net/assets/17.jpeg']
                                     }: Props) {
 
     return (
@@ -21,7 +21,7 @@ export default function CleanLayout({
                     <div className="mx-auto min-h-full flex flex-col w-full max-w-2xl">
 
                         { mobileSplit && (
-                            <div className={"w-full aspect-[4/3] text-white p-4 sm:hidden"} style={{backgroundImage: `url(${photos[0]})`, backgroundSize: 'cover'}}>
+                            <div className={"w-full aspect-[4/3] text-white px-4 py-2 sm:hidden"} style={{backgroundImage: `url(${photos[0]})`, backgroundSize: 'cover'}}>
                                 {header}
                             </div>
                         )}

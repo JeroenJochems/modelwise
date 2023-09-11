@@ -15,7 +15,7 @@ type Props = {
 type FormData = {
     categories: string[],
     professions: string[],
-    otherCategories: string
+    otherCategories: string | null
 }
 
 export default function ProfessionalExperience({vm}: Props) {
@@ -60,9 +60,9 @@ export default function ProfessionalExperience({vm}: Props) {
             <P>What kind of professional experience do you have?</P>
             <TagCloud tags={vm.allCategories}
                       includeOther={true}
-                      onSetOther={(value) => setData("otherCategories", value)}
+                      onSetOther={(value) => setData("otherCategories", value || null)}
                       selected={data.categories}
-                      otherValue={data.otherCategories}
+                      otherValue={data.otherCategories || ""}
                       onToggle={toggleCategory}/>
 
             <P>Additionally, do you have professional experience in any of these categories?</P>

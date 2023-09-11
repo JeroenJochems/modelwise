@@ -46,6 +46,12 @@ class ModelData extends Data
         /** @var ApplicationData[] */
         #[DataCollectionOf(ApplicationData::class)]
         public Lazy|DataCollection $applications,
+
+        public int $height,
+        public int $chest,
+        public int $waist,
+        public int $hips,
+        public int $shoe_size,
     ) {}
 
     public static function fromModel(Model $model): self
@@ -63,6 +69,11 @@ class ModelData extends Data
             Lazy::whenLoaded('digitals', $model, fn() => ModelPhotoData::collection($model->digitals)),
             Lazy::whenLoaded('tattoo_photos', $model, fn() => ModelPhotoData::collection($model->tattoo_photos)),
             Lazy::whenLoaded('applications', $model, fn() => ApplicationData::collection($model->applications)),
+            $model->height,
+            $model->chest,
+            $model->waist,
+            $model->hips,
+            $model->shoe_size,
         );
     }
 }

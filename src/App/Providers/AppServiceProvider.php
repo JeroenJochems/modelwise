@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Domain\Jobs\Models\Application;
 use Domain\Jobs\Models\Brand;
+use Domain\Jobs\Models\Client;
 use Domain\Jobs\Models\Job;
 use Domain\Jobs\Models\Invite;
 use Domain\Jobs\Models\Role;
@@ -39,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
             'brand' => Brand::class,
             'application' => Application::class,
             'longlist-model' => Invite::class,
+            'client' => Client::class,
             'tag' => Tag::class,
         ]);
 

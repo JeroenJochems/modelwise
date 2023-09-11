@@ -32,6 +32,7 @@ enum ModelCountries: string
     case Spain                                   = 'ES';
     case Sweden                                  = 'SE';
     case Switzerland                             = 'CH';
+    case Turkey                                  = 'TR';
     case United_Kingdom                          = 'GB';
     case United_States_of_America                = 'US';
 

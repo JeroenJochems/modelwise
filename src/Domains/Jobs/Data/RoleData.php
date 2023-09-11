@@ -2,7 +2,10 @@
 
 namespace Domain\Jobs\Data;
 
+use DateInterval;
+use DatePeriod;
 use DateTime;
+use Domain\Jobs\Models\Role;
 use Domain\Profiles\Data\PhotoData;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\WithCast;
@@ -16,6 +19,8 @@ use Spatie\LaravelData\Transformers\DateTimeInterfaceTransformer;
 /** @typescript */
 class RoleData extends Data
 {
+    public FieldsData $fields;
+
     public function __construct(
         public int $id,
         public string $name,
@@ -43,5 +48,21 @@ class RoleData extends Data
         public Lazy|DataCollection $public_photos,
 
         public JobData $job,
-    ) { }
+
+        #[DataCollectionOf(InviteData::class)]
+        /** @var InviteData[] */
+        public Lazy|DataCollection|null $my_invites,
+
+        #[DataCollectionOf(ApplicationData::class)]
+        /** @var ApplicationData[] */
+        public Lazy|DataCollection|null $my_applications,
+
+        $fields,
+    ) {
+
+        $this->fields = FieldsData::from($fields);
+
+
+    }
+
 }

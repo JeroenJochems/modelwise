@@ -56,12 +56,12 @@ export default function ExclusiveCountries({viewModel, modelingCountries, allCou
         }>
 
             <P>Have you exclusively signed with another agency for specific countries? You can add them here so you
-                don't receive unwanted invites to jobs.</P>
+                don't receive unwanted job invites.</P>
 
             <select id={"country"}
                     onChange={(e) => addSelectedCountry(e.target.value)}
                     className={"border-gray-300 focus:border-green focus:ring-green rounded-sm shadow-sm block mr-4 w-full"}>
-                <option value={""}>Select a country...</option>
+                <option value={""}>Add a country...</option>
                 { modelingCountries.map(({ code, name} ) => (
                     <option key={code} value={code} >{name}</option>
                 ))}

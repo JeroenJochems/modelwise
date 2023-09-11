@@ -7,6 +7,7 @@ use Domain\Profiles\Models\Photo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kra8\Snowflake\HasShortflakePrimary;
+use Support\User;
 
 class Job extends Model
 {
@@ -41,6 +42,11 @@ class Job extends Model
     public function brand()
     {
         return $this->belongsTo(Brand::class);
+    }
+
+    public function responsible_user()
+    {
+        return $this->belongsTo(User::class, 'responsible_user_id');
     }
 
     public function client()

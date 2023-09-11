@@ -47,6 +47,6 @@ class Application extends Model
 
     public function photos()
     {
-        return $this->morphMany(Photo::class, 'photoable');
+        return $this->morphMany(Photo::class, 'photoable')->orderBy('sortable_order');
     }
 }

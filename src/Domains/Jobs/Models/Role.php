@@ -18,6 +18,7 @@ class Role extends Model
     protected $casts = [
         "start_date" => "date",
         "end_date" => "date",
+        'fields' => "array",
     ];
 
     public function job()
@@ -40,13 +41,30 @@ class Role extends Model
             ->orderBy("sortable_order");
     }
 
+    public function role_views()
+    {
+        return $this->hasMany(RoleView::class);
+    }
+
     public function applications()
     {
         return $this->hasMany(Application::class);
     }
 
+    public function my_applications($model_id = null)
+    {
+        return $this->hasMany(Application::class)
+            ->where('model_id', $model_id ?? auth()->id());
+    }
+
     public function invites()
     {
         return $this->hasMany(Invite::class);
+    }
+
+    public function my_invites($model_id = null)
+    {
+        return $this->hasMany(Invite::class)
+            ->where('model_id', $model_id ?? auth()->id());
     }
 }

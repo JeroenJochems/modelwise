@@ -26,6 +26,12 @@ class ModelPersonalDetailsData extends Data
         #[Rule(['required', 'min:2'])]
         public ?string $last_name,
 
+        #[Rule(['min:2'])]
+        public ?string $parent_first_name,
+
+        #[Rule(['min:2'])]
+        public ?string $parent_last_name,
+
         #[Rule(['required', 'min:10'])]
         public ?string $phone_number,
 

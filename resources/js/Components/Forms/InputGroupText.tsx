@@ -2,20 +2,20 @@ import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
 import TextArea from "@/Components/TextArea";
+import {HTMLAttributes} from "react";
 
-type Props =
-    {
-        name?: string,
-        type?: string,
-        value?: string,
-        options?: Array<string>,
-        title: string,
-        autoComplete?: string,
-        onChange: (value: string) => void,
-        error?: string
-        placeholder?: string
-        multiline?: boolean
-    }
+type Props = {
+    name?: string,
+    type?: string,
+    value?: string | number,
+    options?: Array<string>,
+    title: string,
+    autoComplete?: string,
+    onChange: (value: string) => void,
+    error?: string
+    placeholder?: string
+    multiline?: boolean
+}
 
 
 export default function InputGroupText(props: Props) {
@@ -30,13 +30,13 @@ export default function InputGroupText(props: Props) {
         <div>
             <InputLabel htmlFor={name} value={props.title}/>
 
-            { props.multiline && <TextArea defaultValue={value} onChange={(e) => props.onChange(e.target.value)} />}
+            {props.multiline && <TextArea defaultValue={value} onChange={(e) => props.onChange(e.target.value)}/>}
 
             {!props.multiline && shouldShowSelect && !!props.options &&
                 <select id={name}
-                             className="border-gray-300 focus:border-green focus:ring-green rounded-sm shadow-sm block mt-1 w-full"
-                             value={value}
-                             onChange={(e) => props.onChange(e.target.value)}>
+                        className="border-gray-300 focus:border-green focus:ring-green rounded-sm shadow-sm block mt-1 w-full"
+                        value={value}
+                        onChange={(e) => props.onChange(e.target.value)}>
                     {props.options.map((option: any) =>
                         <option key={option} value={option}>{option}</option>
                     )}

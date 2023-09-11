@@ -10,6 +10,7 @@ use Spatie\EloquentSortable\SortableTrait;
 class Photo extends Model implements Sortable
 {
     use SortableTrait;
+
     use HasShortflakePrimary;
 
     public $sortable = [
@@ -27,6 +28,7 @@ class Photo extends Model implements Sortable
     const FOLDER_TATTOOS = 'Tattoos';
     const FOLDER_JOB_IMAGE = 'Look & Feel';
     const FOLDER_BRAND_LOGO = 'Brand logo';
+    const FOLDER_PIERCINGS = 'Piercings';
 
     public function photoable(): BelongsTo
     {

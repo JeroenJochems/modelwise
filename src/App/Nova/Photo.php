@@ -10,16 +10,23 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\VaporImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Outl1ne\NovaSortable\Traits\HasSortableRows;
+use Outl1ne\NovaSortable\Traits\HasSortableManyToManyRows;
 
 class Photo extends Resource
 {
-    use HasSortableRows;
+    use HasSortableManyToManyRows;
 
     public static $model = PhotoModel::class;
     public static $title = 'folder';
     public static $globallySearchable = false;
     public static $perPageViaRelationship = 10;
+
+    public $sortable = [
+        'order_column_name' => 'sortable_order',
+        'sort_when_creating' => true,
+        'sort_on_has_many' => true,
+    ];
+
 
     public static function authorizable()
     {

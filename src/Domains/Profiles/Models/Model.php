@@ -2,11 +2,12 @@
 
 namespace Domain\Profiles\Models;
 
+use App\Notifications\ResetPasswordNotification;
+use App\Notifications\SidemailData\ResetPasswordMailData;
+use App\Notifications\SidemailData\Templates;
 use Domain\Jobs\Models\Invite;
-use Domain\Profiles\Actions\SendMail;
+use Domain\Jobs\Models\RoleView;
 use Domain\Profiles\Data\Mail\MailData;
-use Domain\Profiles\Data\Mail\ResetPasswordMailData;
-use Domain\Profiles\Data\Templates;
 use Domain\Profiles\Enums\Ethnicity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -47,6 +48,10 @@ class Model extends Authenticatable implements Onboardable
         }
 
         return 'models_index';
+    }
+
+    public function role_views() {
+        return $this->hasMany(RoleView::class);
     }
 
     public function toSearchableArray(): array
@@ -141,21 +146,8 @@ class Model extends Authenticatable implements Onboardable
         return $this->hasMany(\Domain\Jobs\Models\Application::class);
     }
 
-    public function getUserName()
-    {
-        return $this->first_name." ".$this->last_name;
-    }
-
     public function sendPasswordResetNotification($token)
     {
-        app(SendMail::class)(
-            new MailData(
-                $this,
-                Templates::passwordReset,
-                new ResetPasswordMailData(
-                    reset_password_url: route("password.reset", ['email' => urlencode($this->email), 'token' => $token])
-                ),
-            )
-        );
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

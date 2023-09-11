@@ -27,29 +27,30 @@ export const Header = ({step, children, isOnboarding }: Props) => {
 
     const backLink = onboardingPages.find(page => page.step === step - 1)?.route
 
-    if (!isOnboarding) {
-        return <BackLink href={route("account.index")} />;
-    }
-
     return (
         <>
-            <div className={"mb-8"}>
-                <div className="flex items-center justify-between mb-2">
-                    <div className={"w-16"}>
-                        { !!backLink && <BackLink href={backLink} /> }
-                    </div>
-                    <H2 className={"text-center"}>
-                        Step {step} of {totalSteps}
-                    </H2>
-                    <div className={"w-16"}>
+            { isOnboarding ? (
+                <div className={"mb-8"}>
+                    <div className="flex items-center justify-between mb-2">
+                        <div className={"w-16"}>
+                            { !!backLink && <BackLink href={backLink} /> }
+                        </div>
+                        <H2 className={"text-center"}>
+                            Step {step} of {totalSteps}
+                        </H2>
+                        <div className={"w-16"}>
 
+                        </div>
+                    </div>
+                    <div className="w-full bg-gray-100 h-2 rounded-full">
+                        <div style={{ width: (step / totalSteps * 100) + '%'}}  className="bg-green h-2 rounded-full"></div>
                     </div>
                 </div>
-                <div className="w-full bg-gray-100 h-2 rounded-full">
-                    <div style={{ width: (step / totalSteps * 100) + '%'}}  className="bg-green h-2 rounded-full"></div>
+            ) : (
+                <div className={"mb-4"}>
+                    <BackLink href={route("account.index")} />
                 </div>
-
-            </div>
+            )}
             {children}
         </>
     );

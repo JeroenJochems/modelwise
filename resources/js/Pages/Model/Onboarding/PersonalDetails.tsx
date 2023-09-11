@@ -4,7 +4,6 @@ import {Header} from "@/Components/Onboarding/Header";
 import {H1} from "@/Components/Typography/H1";
 import InputGroupText from "@/Components/Forms/InputGroupText";
 import {useForm, usePage} from '@inertiajs/react';
-import {Submit} from "@/Components/Forms/Submit";
 import {PageProps} from "@/types";
 import CountriesViewModel = App.ViewModels.CountriesViewModel;
 import PrimaryButton from "@/Components/PrimaryButton";
@@ -12,6 +11,8 @@ import PrimaryButton from "@/Components/PrimaryButton";
 type ModelDataType = {
     first_name: string
     last_name: string
+    parent_first_name: string
+    parent_last_name: string
     phone_number: string
     city: string
     country: string
@@ -69,6 +70,8 @@ export default function PersonalDetails({modelData, countriesViewModel }: Props)
         }
     }
 
+    const age = data.date_of_birth ? new Date().getFullYear() - new Date(data.date_of_birth).getFullYear() : 0;
+
     const isOnboarding = ziggy.location.includes("onboarding");
 
     return (
@@ -79,6 +82,14 @@ export default function PersonalDetails({modelData, countriesViewModel }: Props)
         } photos={["https://modelwise.imgix.net/assets/18.jpeg"]}>
 
             <form className="grid gap-4">
+
+                <InputGroupText
+                    title="Date of birth"
+                    type={"date"}
+                    value={data.date_of_birth}
+                    error={errors.date_of_birth}
+                    onChange={(value: string) => { clearErrors('date_of_birth'); setData('date_of_birth', value) }}
+                />
 
                 <InputGroupText
                     title="First name"
@@ -96,12 +107,28 @@ export default function PersonalDetails({modelData, countriesViewModel }: Props)
                     onChange={(value: string) => { clearErrors('last_name'); setData('last_name', value) }}
                 />
 
+                { age < 18 &&
+                    <>
+                        <InputGroupText
+                            title="First name parent"
+                            value={data.parent_first_name}
+                            error={errors.parent_first_name}
+                            onChange={(value: string) => { clearErrors('parent_first_name'); setData('parent_first_name', value) }}
+                        />
+                        <InputGroupText
+                            title="Last name parent"
+                            value={data.parent_last_name}
+                            error={errors.parent_last_name}
+                            onChange={(value: string) => { clearErrors('parent_last_name'); setData('parent_last_name', value) }}
+                        />
+                    </>
+                }
+
                 <InputGroupText
-                    title="Date of birth"
-                    type={"date"}
-                    value={data.date_of_birth}
-                    error={errors.date_of_birth}
-                    onChange={(value: string) => { clearErrors('date_of_birth'); setData('date_of_birth', value) }}
+                    title={ age < 18 ? "Phone number parent" : "Phone number" }
+                    value={data.phone_number}
+                    error={errors.phone_number}
+                    onChange={(value: string) => { clearErrors('phone_number'); setData('phone_number', value) }}
                 />
 
                 <InputGroupText
@@ -125,13 +152,6 @@ export default function PersonalDetails({modelData, countriesViewModel }: Props)
                     value={data.city}
                     error={errors.city}
                     onChange={(value: string) => { clearErrors('city'); setData('city', value); } }
-                />
-
-                <InputGroupText
-                    title="Phone number"
-                    value={data.phone_number}
-                    error={errors.phone_number}
-                    onChange={(value: string) => { clearErrors('phone_number'); setData('phone_number', value) }}
                 />
 
                 <PrimaryButton onClick={submit}>

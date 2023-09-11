@@ -61,6 +61,11 @@ Route::middleware(['auth'])->group(callback: function () {
         ->name("create", "roles.apply")
         ->name("store", "roles.apply.store");
 
+    Route::resource('roles/{role}/pass', ApplicationController::class, ["create", "store"])
+        ->name("create", "roles.pass.create")
+        ->name("store", "roles.pass.store");
+
+
     Route::middleware("onboarding")->group(function() {
         Route::get('dashboard', DashboardController::class)->name("dashboard");
         Route::get('account', [ModelController::class, "index"])->name("account.index");

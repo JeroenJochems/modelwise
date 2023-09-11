@@ -12,6 +12,7 @@ class JobData extends Data
 {
     public function __construct(
         public string $title,
+        public string $location,
         public string $description,
         public ?BrandData $brand,
         public ?ClientData $client,

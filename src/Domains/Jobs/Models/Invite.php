@@ -4,10 +4,6 @@ namespace Domain\Jobs\Models;
 
 use App\Notifications\InviteCreated;
 use Domain\Jobs\QueryBuilders\InviteQueryBuilder;
-use Domain\Profiles\Actions\SendMail;
-use Domain\Profiles\Data\Mail\MailData;
-use Domain\Profiles\Data\Mail\ShortlistedMailData;
-use Domain\Profiles\Data\Templates;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kra8\Snowflake\HasShortflakePrimary;

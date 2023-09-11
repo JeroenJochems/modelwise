@@ -10,16 +10,19 @@ export default {
         './resources/js/**/*.tsx',
     ],
     safelist: [
-        'grid-cols-1',
-        'grid-cols-2',
-        'grid-cols-3',
-        'grid-cols-4',
-        'grid-cols-5',
-        'grid-cols-6',
+        {
+            pattern: /grid-cols-.+/,
+        },
+        {
+            pattern: /line-clamp-.+/,
+        },
     ],
 
     theme: {
         extend: {
+            "boxShadow": {
+                "outline": "0 4px 34px 10px rgb(0 0 0 / 0.1)",
+            },
             fontFamily: {
                 sans: ['Futura', ...defaultTheme.fontFamily.sans],
             },
@@ -27,6 +30,8 @@ export default {
                 green: '#34E179',
                 teal: '#0D4F5E',
                 'teal-light': '#0F5767',
+                'teal-200': '#CFDCDF',
+                'teal-100': '#E7EDEF',
             },
             width: {
                 '128': '32rem',

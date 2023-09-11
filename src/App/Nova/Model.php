@@ -9,9 +9,11 @@ use Domain\Profiles\Enums\HairColor;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\Email;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\MorphMany;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
@@ -55,6 +57,8 @@ class Model extends Resource
             ])->onlyOnIndex(),
             Text::make('First Name')->sortable()->rules('required', 'max:255')->hideFromIndex(),
             Text::make('Last Name')->sortable()->rules('required', 'max:255')->hideFromIndex(),
+            Email::make('Email')->sortable()->required()->rules('required', 'email')->hideFromIndex(),
+            Select::make('Preferred language')->options(['en' => 'English', 'nl' => 'Nederlands'])->rules('required', 'email')->hideFromIndex(),
             Date::make('Date of birth')->hideFromIndex(),
             Boolean::make('Completed onboarding', 'has_completed_onboarding')->readonly(),
             Boolean::make('Newsletter', 'is_subscribed_to_newsletter')->hideFromIndex(),

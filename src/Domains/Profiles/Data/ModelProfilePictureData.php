@@ -11,7 +11,6 @@ use Spatie\LaravelData\Data;
 class ModelProfilePictureData extends Data
 {
     public function __construct(
-        #[WithTransformer(CdnPathTransformer::class)]
         public ?string $profile_picture
     ) {
     }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Model;
 
-use App\Http\Controllers\Controller;
 use Domain\Profiles\Models\Photo;
 use Domain\Profiles\Repositories\PhotoRepository;
 use Inertia\Inertia;
@@ -19,10 +18,6 @@ class PortfolioController extends BaseOnboardingController
     public function store(PhotoRepository $photoRepository)
     {
         $photoRepository->update(auth()->user(), Photo::FOLDER_WORK_EXPERIENCE, request()->get("photos"));
-
-        if (str_contains(request()->server("HTTP_REFERER"), "onboarding")) {
-            return redirect()->route("onboarding.digitals");
-        }
 
         return $this->nextOrReturn();
     }

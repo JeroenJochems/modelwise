@@ -6,7 +6,7 @@ import { useForm, usePage} from '@inertiajs/react';
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
-import {InlinePhotoUploader, Photo} from "@/Components/InlinePhotoUploader";
+import {InlinePhotoUploader, Media} from "@/Components/InlinePhotoUploader";
 import {P} from "@/Components/Typography/p";
 import {Header} from "@/Components/Onboarding/Header";
 import {PageProps} from "@/types";
@@ -27,7 +27,7 @@ type ModelDataType = {
     tattoos: boolean
     piercings: boolean
     cup_size?: string
-    tattoo_photos?: Photo[]
+    tattoo_photos?: Media[]
 }
 
 
@@ -35,10 +35,11 @@ type Props = {
     modelData: ModelDataType
     hairColors: HairColor[],
     eyeColors: EyeColor[],
-    tattooPhotos: Photo[],
+    tattooPhotos: Media[],
+    piercingPhotos: Media[],
 }
 
-export default function Characteristics({modelData, tattooPhotos, hairColors, eyeColors}: Props) {
+export default function Characteristics({modelData, tattooPhotos, piercingPhotos, hairColors, eyeColors}: Props) {
 
     const { ziggy } = usePage<PageProps>().props
 
@@ -48,12 +49,13 @@ export default function Characteristics({modelData, tattooPhotos, hairColors, ey
 
     const {data, setData, post, errors } = useForm({
         ...modelData,
-        tattoo_photos: tattooPhotos ?? []
+        tattoo_photos: tattooPhotos ?? [],
+        piercing_photos: piercingPhotos ?? [],
     });
 
     function submit() {
         setIsSubmitting(true);
-        post(route('account.characteristics.store'), {
+        post(ziggy.location, {
             onFinish: () => {
                 setIsSubmitting(false);
             }
@@ -186,6 +188,20 @@ export default function Characteristics({modelData, tattooPhotos, hairColors, ey
                     options={["No", "Yes"]}
                     onChange={value => setData('piercings', value==="Yes")}
                 />
+
+                { data.piercings && (
+                    <div className={"mt-2 grid gap-2"}>
+                        <P>Piercing reference photos</P>
+
+                        <InlinePhotoUploader
+                            photos={data.piercing_photos}
+                            onUpdate={photos => setData('piercing_photos', photos)}
+                            onAdd={(photo) => setData(data => ({...data, piercing_photos: [...data.piercing_photos, photo]}))}
+                            onToggleUploading={setIsUploading}
+                        />
+                    </div>
+                )}
+
 
                 <PrimaryButton onClick={submit} disabled={ isUploading || isSubmitting }>
                     { isSubmitting ? "Please wait..." : "Continue" }

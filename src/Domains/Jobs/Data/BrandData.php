@@ -14,5 +14,7 @@ class BrandData extends Data
 
         #[WithTransformer(CdnPathTransformer::class)]
         public ?string $logo,
+
+        public ?string $description,
     ) { }
 }

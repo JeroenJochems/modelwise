@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Notifications\ModelCreated;
 use Domain\Profiles\Actions\RegisterModel;
-use Domain\Profiles\Actions\SendMail;
-use Domain\Profiles\Data\Mail\MailData;
 use Domain\Profiles\Data\RegisterModelData;
-use Domain\Profiles\Data\Templates;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -22,17 +20,13 @@ class RegisterModelController extends Controller
 
     public function store(RegisterModelData $data): RedirectResponse
     {
+        $data->viewedRoles = request()->session()->get('viewed_roles', []);
+
         $model = (new RegisterModel())($data);
 
+        $model->notify(new ModelCreated());
+
         Auth::login($model);
-
-        app(SendMail::class)(
-            new MailData(
-                $model,
-                Templates::registrationCompleted
-            )
-        );
-
         return redirect(route('onboarding.personal-details'));
     }
 }

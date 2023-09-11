@@ -1,10 +1,10 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef, InputHTMLAttributes } from 'react';
 
 export default forwardRef(function TextInput(
-    { type = 'text', className = '', isFocused = false, ...props }: InputHTMLAttributes<HTMLInputElement> & { isFocused?: boolean },
+    { type = 'text', className = '', isFocused = false, ...props }: InputHTMLAttributes<HTMLTextAreaElement> & { isFocused?: boolean },
     ref
 ) {
-    const localRef = useRef<HTMLInputElement>(null);
+    const localRef = useRef<HTMLTextAreaElement>(null);
 
     useImperativeHandle(ref, () => ({
         focus: () => localRef.current?.focus(),
@@ -20,7 +20,7 @@ export default forwardRef(function TextInput(
         <textarea
             {...props}
             className={
-                'border-gray-300 focus:border-green w-full focus:ring-green rounded-sm shadow-sm ' +
+                'border-gray-300 focus:border-green w-full focus:ring-green rounded shadow-sm ' +
                 className
             }
             ref={localRef}

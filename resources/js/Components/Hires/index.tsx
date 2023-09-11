@@ -1,28 +1,22 @@
 import {H2} from "@/Components/Typography/H2";
 import {P} from "@/Components/Typography/p";
 import HireData = Domain.Jobs.Data.HireData;
+import {DashboardRole} from "@/Components/Organisms/DashboardRole";
+import RoleData = Domain.Jobs.Data.RoleData;
 
 type Props = {
-    hires: HireData[]
+    roles: RoleData[]
 }
 
-export function Hires({ hires }: Props) {
+export function Hires({ roles }: Props) {
 
-    return (
-        <>
-            <H2>{ hires.length } { hires.length===1 ? "hire" : "hires"}</H2>
-
-            { hires.length > 0 &&
-                <ul className={"mb-8"}>
-                    {hires.map(hire =>
-                        <li>
-                            <a href={route("roles.show", hire.application.id)}>
-                                {hire.application.role.job.title}
-                            </a>
-                        </li>
-                    )}
-                </ul>
-            }
-        </>
-    )
+    return roles.length > 0 &&
+        <div>
+            <H2>Your hires</H2>
+            <ul className={"mt-4 mb-8"}>
+                {roles.map(role =>
+                    <DashboardRole role={role} key={role.id} />
+                )}
+            </ul>
+        </div>
 }

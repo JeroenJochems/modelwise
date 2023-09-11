@@ -1,29 +1,21 @@
-import {H2} from "@/Components/Typography/H2";
 import {P} from "@/Components/Typography/p";
-import ApplicationData = Domain.Jobs.Data.ApplicationData;
+import {DashboardRole} from "../Organisms/DashboardRole";
+import RoleData = Domain.Jobs.Data.RoleData;
+import {H2} from "@/Components/Typography/H2";
 
 type Props = {
-    applications: ApplicationData[]
+    roles: RoleData[]
 }
 
-export function OpenApplications({ applications }: Props) {
+export function OpenApplications({ roles }: Props) {
 
-    return (
-        <>
-            <H2>{ applications.length } pending { applications.length===1 ? "application" : "applications"}</H2>
-
-            { applications.length > 0 &&
-                <ul>
-                    <P></P>
-                    {applications.map(application =>
-                        <li>
-                            <a href={route("roles.show", application.role.id)}>
-                                {application.role.name} at {application.role.job.title}
-                            </a>
-                        </li>
-                    )}
-                </ul>
-            }
-        </>
-    )
+    return roles.length > 0 &&
+        <div>
+            <H2>Your applications waiting for response</H2>
+            <ul className={"mb-8 mt-4"}>
+                {roles.map(role =>
+                    <DashboardRole role={role} key={role.id} />
+                )}
+            </ul>
+        </div>
 }

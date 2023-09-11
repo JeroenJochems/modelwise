@@ -8,6 +8,10 @@ import {Head, Link, useForm} from '@inertiajs/react';
 import CleanLayout from "@/Layouts/CleanLayout";
 import {H1} from "@/Components/Typography/H1";
 import {asset} from "laravel-vapor";
+import {CtaLink} from "@/Components/CtaLink";
+import {P} from "@/Components/Typography/p";
+import {H3} from "@/Components/Typography/H3";
+import {H2} from "@/Components/Typography/H2";
 
 export default function Login({ status, canResetPassword }: { status?: string, canResetPassword: boolean }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -29,13 +33,13 @@ export default function Login({ status, canResetPassword }: { status?: string, c
     };
 
     return (
-        <CleanLayout photo={'assets/17.jpeg'}>
+        <CleanLayout photos={['https://modelwise.imgix.net/assets/17.jpeg']}>
             <Head title="Log in" />
 
             <img src={asset("img/logo-black.svg")} className={"mb-4 w-1/2 mx-auto lg:hidden"} />
 
             <div className={"grid gap-8"}>
-                <H1>Hello, who's this?</H1>
+                <H1>Hello! Have you registered yet?</H1>
 
                 {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
@@ -88,7 +92,7 @@ export default function Login({ status, canResetPassword }: { status?: string, c
 
 
                             <PrimaryButton disabled={processing}>
-                                Log in
+                                LOG IN
                             </PrimaryButton>
 
                             <div className={"grid gap-4 mt-8"}>
@@ -104,16 +108,13 @@ export default function Login({ status, canResetPassword }: { status?: string, c
                         </div>
                     </form>
 
-                <div className="relative flex py-5 items-center">
+                <div className="relative flex py-4 items-center">
                     <div className="flex-grow border-t border-gray-400"></div>
                     <span className="flex-shrink mx-4 text-gray-400">Or</span>
                     <div className="flex-grow border-t border-gray-400"></div>
                 </div>
 
-                <Link className={"p-4 bg-teal border text-center border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest focus:bg-teal-light active:bg-teal-light focus:outline-none transition ease-in-out duration-150"}
-                      href={route("onboarding.index")}>
-                    Sign up
-                </Link>
+                <CtaLink title="SIGN UP" href={route("onboarding.index")} />
             </div>
         </CleanLayout>
     );

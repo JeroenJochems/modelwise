@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Model;
 
-abstract class BaseOnboardingController
+use App\Http\Controllers\Controller;
+
+abstract class BaseOnboardingController extends Controller
 {
     protected function nextOrReturn() {
         if (str_contains(request()->route()->uri, "onboarding")) {

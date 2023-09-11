@@ -2,7 +2,7 @@
 
 namespace Domain\Profiles\Data\Mail;
 
-use Domain\Profiles\Data\Templates;
+use App\Notifications\SidemailData\Templates;
 use Domain\Profiles\Models\Model;
 use Spatie\LaravelData\Data;
 

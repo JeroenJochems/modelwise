@@ -15,6 +15,13 @@ class RegisterModel
         $model->email = $data->email;
         $model->save();
 
+        foreach ($data->viewedRoles as $role_id) {
+            $model->role_views()->create([
+                'role_id' => $role_id,
+            ]);
+        }
+
+
         return $model;
     }
 }

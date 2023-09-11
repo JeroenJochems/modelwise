@@ -1,4 +1,3 @@
-import {ArrowBack} from "@/Components/ArrowBack";
 import {Link} from "@inertiajs/react";
 
 type Props = {

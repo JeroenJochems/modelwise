@@ -2,33 +2,44 @@
 
 namespace Domain\Jobs\Actions;
 
-use App\ViewModels\RoleApplyViewModel;
+use App\Notifications\Admin\ApplicationCreated;
+use Domain\Jobs\Data\ApplyData;
 use Domain\Jobs\Models\Application;
-use Domain\Jobs\Models\Role;
-use Domain\Profiles\Models\Model;
 use Domain\Profiles\Models\Photo;
 use Domain\Profiles\Repositories\PhotoRepository;
-use Illuminate\Contracts\Auth\Authenticatable;
+use Support\User;
 
 class Apply
 {
-    public function __invoke(Model|Authenticatable $model, Role $role)
+    public function __invoke(ApplyData $applyData)
     {
         $application = Application::firstOrNew([
-            'role_id' => $role->id,
-            'model_id' => $model->id
+            'role_id' => $applyData->role->id,
+            'model_id' => $applyData->model->id
         ]);
 
-        $application->cover_letter = request()->get("cover_letter");
+        $application->cover_letter = "Available dates: (".count($applyData->available_dates).") " . join(", ", $applyData->available_dates)."\n\n".request()->get("cover_letter");
+        $application->brand_conflicted = $applyData->brand_conflicted;
         $application->save();
 
-        $model
+        $applyData->model
             ->invites()
-            ->where('role_id', $role->id)
+            ->where('role_id', $applyData->role->id)
             ->update(['application_id' => $application->id]);
 
-        app(PhotoRepository::class)->update($model, Photo::FOLDER_DIGITALS, request()->digitals);
+        if ($applyData->height) $applyData->model->height = $applyData->height;
+        if ($applyData->chest) $applyData->model->chest = $applyData->height;
+        if ($applyData->waist) $applyData->model->waist = $applyData->height;
+        if ($applyData->hips) $applyData->model->hips = $applyData->height;
+        if ($applyData->shoe_size) $applyData->model->shoe_size = $applyData->shoe_size;
+        $applyData->model->save();
+
+        app(PhotoRepository::class)->update($applyData->model, Photo::FOLDER_DIGITALS, request()->digitals);
         app(PhotoRepository::class)->update($application, Application::PHOTO_FOLDER, request()->photos);
+
+        $admin = $applyData->role->job->responsible_user;
+
+        $admin->notify(new ApplicationCreated($application));
 
         return $application;
     }

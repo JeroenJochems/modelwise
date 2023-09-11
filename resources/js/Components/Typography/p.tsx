@@ -1,9 +1,23 @@
-import { HTMLAttributes,} from "react";
+import {HTMLAttributes, useState } from "react";
 
-export function P({children, className = '' }: HTMLAttributes<HTMLParagraphElement>) {
+type Props = {
+    lineClamp?: number
+} & HTMLAttributes<HTMLParagraphElement>
+
+
+export function P({ children, className = '', lineClamp }: Props) {
+    const [clicked, setClicked] = useState(false);
+    const baseClasses = 'text-gray-700 text-normal';
+
+    const handleToggleClick = () => {
+        setClicked(!clicked);
+    };
+
+    const conditionalClasses = lineClamp && !clicked ? ` ${baseClasses} line-clamp-${lineClamp}` : '';
+
     return (
-        <p className={`text-gray-600 text-sm ` + className}>
+        <p onClick={handleToggleClick} className={`${baseClasses} ${className}${conditionalClasses}`}>
             {children}
         </p>
-    )
+    );
 }

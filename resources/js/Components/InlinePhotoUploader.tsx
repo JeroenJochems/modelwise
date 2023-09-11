@@ -2,16 +2,16 @@ import {FormEvent, useEffect, useRef, useState} from "react";
 import Vapor from "laravel-vapor";
 import {ReactSortable} from "react-sortablejs";
 import {FileEventTarget} from "@/Pages/Model/Onboarding/Portfolio";
-import {Link, usePage} from "@inertiajs/react";
+import { usePage} from "@inertiajs/react";
 import {PageProps} from "@/types";
-import ModelPhotoData = Domain.Models.Data.ModelPhotoData;
-import PrimaryButton from "@/Components/PrimaryButton";
 import SmallButton from "@/Components/SmallButton";
-import InputGroupText from "@/Components/Forms/InputGroupText";
+import InputError from "@/Components/InputError";
+import {Cross} from "@/Components/Icons/Cross";
 
-export type Photo = {
+export type Media = {
     id: string
     path: string
+    type: "image" | "video"
     tmpFile?: string
     folder?: string
     deleted?: boolean
@@ -19,12 +19,15 @@ export type Photo = {
 }
 
 type Props = {
-    photos: Array<Photo>
-    onUpdate: (photos: Photo[]) => void
-    onAdd: (photo: Photo) => void
+    photos: Array<Media>
+    onUpdate?: (photos: Media[]) => void
+    onAdd: (media: Media) => void
     onToggleUploading?: (state: boolean) => void
     slots?: number
     cols?: number
+    max?: number
+    colsOnMobile?: number
+    error?: string
 }
 
 type UploadProgress = {
@@ -37,7 +40,7 @@ type ResponseType = {
     key: string
 }
 
-export function InlinePhotoUploader({photos, onAdd, onUpdate, onToggleUploading, slots = 6, cols = 6}: Props) {
+export function InlinePhotoUploader({photos, onAdd, error, onUpdate, onToggleUploading, colsOnMobile=3, slots = 6, max=99, cols = 6}: Props) {
 
     const ref = useRef<HTMLInputElement | null>(null)
     const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
@@ -61,6 +64,7 @@ export function InlinePhotoUploader({photos, onAdd, onUpdate, onToggleUploading,
         if (e.target.files === null) return;
 
         Array.from(e.target.files).map((file, i) => {
+
 
             setUploadProgress((progres) => {
                 const oldProgress = [...progres];
@@ -88,13 +92,16 @@ export function InlinePhotoUploader({photos, onAdd, onUpdate, onToggleUploading,
                     onAdd({
                         id: response.uuid,
                         tmpFile: response.key,
+                        type: file.type,
                         path: `${cdn_url}/${response.key}?w=600&h=600&fm=auto&fit=crop&crop=faces`
                     });
                 });
         });
     }
 
-    function handleDelete({ id }: Photo) {
+    function handleDelete({ id }: Media) {
+        if (!onUpdate) return;
+
         onUpdate(photos.map((photo) => {
             if (photo.id === id) {
                 photo.deleted = true;
@@ -106,24 +113,25 @@ export function InlinePhotoUploader({photos, onAdd, onUpdate, onToggleUploading,
 
     return (
         <div>
-            <ReactSortable tag={"div"} list={photos} setList={onUpdate} className={`grid grid-cols-${cols} gap-2`}>
-                {photos.filter(photo => !photo.deleted).map((photo: Photo) =>
-                    <div key={photo.id} className={'cursor-pointer w-full h-full aspect-[1/1] border rounded-md overflow-hidden relative'}>
-                        <div onClick={() => {handleDelete(photo) }} className={'absolute top-0 right-0 p-1 bg-white bg-opacity-50 hover:bg-opacity-100 transition duration-200'}>
-                            x
+            <ReactSortable tag={"div"} list={photos} setList={onUpdate} className={`grid grid-cols-${colsOnMobile} sm:grid-cols-${cols} gap-2`}>
+
+                {photos.filter(photo => !photo.deleted).map((photo: Media) =>
+                    <div key={photo.id} className={'cursor-pointer w-full h-full aspect-[1/1] border rounded overflow-hidden relative'}>
+                        <div onClick={() => {handleDelete(photo) }} className={'absolute top-0 right-0 p-1 text-teal bg-teal-100 bg-opacity-50 hover:bg-opacity-100 transition duration-200'}>
+                            <Cross className={"h-4 w-4"} />
                         </div>
                         <img src={photo.path} key={photo.id} className={"rounded-sm aspect-square object-cover w-full h-full aspect-[1/1] overflow-hidden"} />
                     </div>
                 )}
 
                 {[...Array(Math.max(0, slots - photos.filter(photo => !photo.deleted).length))].map((item, i) => (
-                    <label key={i} onClick={() => !!ref.current && ref.current.click() } className={"flex text-gray-500 text-2xl cursor-pointer justify-center items-center aspect-[1/1] bg-gray-200 border border-gray-400 rounded-sm"}>
+                    <label key={i} onClick={() => !!ref.current && ref.current.click() } className={"flex rounded text-teal text-2xl cursor-pointer justify-center items-center aspect-[1/1] bg-teal-100 border border-gray-400"}>
                         +
                     </label>
                 ))}
             </ReactSortable>
 
-            { photos.length >= slots && (
+            { max>1 && photos.length >= slots && (
                 <div className={"flex items-center mt-4"}>
                     <SmallButton onClick={() => !!ref.current && ref.current.click()} className={"mx-auto"}>+ Add more photos</SmallButton>
                 </div>
@@ -138,6 +146,10 @@ export function InlinePhotoUploader({photos, onAdd, onUpdate, onToggleUploading,
             </div>
 
             <input type="file" ref={ref} className={"hidden"} name="photo" multiple={true} onChange={handleChange}/>
+
+            { !!error && (
+                <InputError message={error} />
+            )}
         </div>
     )
 }

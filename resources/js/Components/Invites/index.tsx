@@ -1,29 +1,22 @@
 import InviteData = Domain.Jobs.Data.InviteData;
 import {H2} from "@/Components/Typography/H2";
 import {P} from "@/Components/Typography/p";
+import {DashboardRole} from "../Organisms/DashboardRole";
+import RoleData = Domain.Jobs.Data.RoleData;
 
 type Props = {
-    invites: InviteData[]
+    roles: RoleData[]
 }
 
-export function Invites({ invites }: Props) {
+export function Invites({ roles }: Props) {
 
-    return (
-        <>
-            <H2>{ invites.length } pending { invites.length===1 ? "invite" : "invites"}</H2>
-
-            { invites.length > 0 &&
-                <ul className={"mb-8"}>
-                    <P></P>
-                    {invites.map(invite =>
-                        <li>
-                            <a href={route("roles.show", invite.role.id)}>
-                                {invite.role.name} at {invite.role.job.title}
-                            </a>
-                        </li>
-                    )}
-                </ul>
-            }
-        </>
-    )
+    return roles.length > 0 &&
+        <div>
+            <H2>Your invites</H2>
+            <ul className={"mb-8 mt-4"}>
+                {roles.map(role =>
+                    <DashboardRole role={role} key={role.id} />
+                )}
+            </ul>
+        </div>
 }
