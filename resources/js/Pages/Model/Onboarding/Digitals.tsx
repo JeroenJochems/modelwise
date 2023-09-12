@@ -38,7 +38,7 @@ export default function Photos({modelDigitals}: {modelDigitals: Photo[] }) {
             <div className="grid gap-4">
                 <InlinePhotoUploader
                     cols={3}
-                    photos={data.photos}
+                    files={data.photos}
                     onToggleUploading={setIsUploading}
                     onAdd={(photo) => setData(data => ({...data, photos: [...data.photos, photo]}))}
                     onUpdate={(photos) => setData(data => ({...data, photos}))}

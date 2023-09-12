@@ -30,6 +30,7 @@
     "dependencies": {
         "@heroicons/react": "^2.0.18",
         "@hotwired/turbo": "^7.3.0",
+        "@mux/mux-player-react": "^1.14.2",
         "@types/laravel-vapor": "^0.6.1",
         "@types/sortablejs": "^1.15.1",
         "react-sortablejs": "^6.1.4",

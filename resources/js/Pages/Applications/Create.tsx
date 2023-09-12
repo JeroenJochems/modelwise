@@ -83,7 +83,7 @@ export default function Create({ viewModel, meViewModel }: Props) {
                             colsOnMobile={3}
                             cols={6}
                             slots={6}
-                            photos={data.digitals}
+                            files={data.digitals}
                             error={errors.digitals}
                             onToggleUploading={setIsUploading}
                             onUpdate={(digitals) => setData(data => ({...data, digitals}))}
@@ -98,7 +98,7 @@ export default function Create({ viewModel, meViewModel }: Props) {
 
                     <InlinePhotoUploader
                         error={errors.photos}
-                        photos={data.photos}
+                        files={data.photos}
                         onToggleUploading={setIsUploading}
                         onUpdate={(photos) => setData(data => ({...data, photos}))}
                         onAdd={(photo) => setData(data => ({...data, photos: [...data.photos, photo]}))}

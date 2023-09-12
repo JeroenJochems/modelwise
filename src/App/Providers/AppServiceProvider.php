@@ -14,6 +14,8 @@ use Domain\Profiles\Models\Photo;
 use Domain\Profiles\Models\Video;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
+use Inertia\Inertia;
+use Inertia\Testing\Assert;
 use Spatie\Onboard\Facades\Onboard;
 use Spatie\Tags\Tag;
 
@@ -24,7 +26,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-
     }
 
     /**

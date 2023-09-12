@@ -43,7 +43,7 @@ export default function ProfilePicture(props: ModelDataType) {
                         colsOnMobile={1}
                         max={1}
                         slots={1}
-                        photos={data.profile_picture ? [data.profile_picture] : []}
+                        files={data.profile_picture ? [data.profile_picture] : []}
                         onAdd={(photo) => setData('profile_picture', photo)}
                         onUpdate={(photos) => setData('profile_picture', photos[0] || null)}
                     />

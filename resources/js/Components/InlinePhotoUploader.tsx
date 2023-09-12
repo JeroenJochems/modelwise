@@ -11,6 +11,7 @@ import {Cross} from "@/Components/Icons/Cross";
 export type Photo = {
     id: string
     path: string
+    type: "photo" | "video"
     tmpFile?: string
     folder?: string
     deleted?: boolean
@@ -18,9 +19,9 @@ export type Photo = {
 }
 
 type Props = {
-    photos: Array<Photo>
+    files: Array<Photo>
     onUpdate?: (photos: Photo[]) => void
-    onAdd: (media: Photo) => void
+    onAdd: (photo: Photo) => void
     onToggleUploading?: (state: boolean) => void
     slots?: number
     cols?: number
@@ -39,7 +40,7 @@ type ResponseType = {
     key: string
 }
 
-export function InlinePhotoUploader({photos, onAdd, error, onUpdate, onToggleUploading, colsOnMobile=3, slots = 6, max=99, cols = 6}: Props) {
+export function InlinePhotoUploader({files, onAdd, error, onUpdate, onToggleUploading, colsOnMobile=3, slots = 6, max=99, cols = 6}: Props) {
 
     const ref = useRef<HTMLInputElement | null>(null)
     const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
@@ -87,10 +88,10 @@ export function InlinePhotoUploader({photos, onAdd, error, onUpdate, onToggleUpl
                 }
             })
                 .then((response: ResponseType) => {
-
                     onAdd({
                         id: response.uuid,
                         tmpFile: response.key,
+                        type: file.type.includes('video') ? 'video' : 'photo',
                         path: `${cdn_url}/${response.key}?w=600&h=600&fm=auto&fit=crop&crop=faces`
                     });
                 });
@@ -100,7 +101,7 @@ export function InlinePhotoUploader({photos, onAdd, error, onUpdate, onToggleUpl
     function handleDelete({ id }: Photo) {
         if (!onUpdate) return;
 
-        onUpdate(photos.map((photo) => {
+        onUpdate(files.map((photo) => {
             if (photo.id === id) {
                 photo.deleted = true;
             }
@@ -111,25 +112,25 @@ export function InlinePhotoUploader({photos, onAdd, error, onUpdate, onToggleUpl
 
     return (
         <div>
-            <ReactSortable tag={"div"} list={photos} setList={onUpdate} className={`grid grid-cols-${colsOnMobile} sm:grid-cols-${cols} gap-2`}>
+            <ReactSortable tag={"div"} list={files} setList={onUpdate} className={`grid grid-cols-${colsOnMobile} sm:grid-cols-${cols} gap-2`}>
 
-                {photos.filter(photo => !photo.deleted).map((photo: Photo) =>
-                    <div key={photo.id} className={'cursor-pointer w-full h-full aspect-[1/1] border rounded overflow-hidden relative'}>
-                        <div onClick={() => {handleDelete(photo) }} className={'absolute top-0 right-0 p-1 text-teal bg-teal-100 bg-opacity-50 hover:bg-opacity-100 transition duration-200'}>
+                {files.filter(media => !media.deleted).map((media: Photo) =>
+                    <div key={media.id} className={'cursor-pointer w-full h-full aspect-[1/1] border rounded overflow-hidden relative'}>
+                        <div onClick={() => {handleDelete(media) }} className={'absolute top-0 right-0 p-1 text-teal bg-teal-100 bg-opacity-50 hover:bg-opacity-100 transition duration-200'}>
                             <Cross className={"h-4 w-4"} />
                         </div>
-                        <img src={photo.path} key={photo.id} className={"rounded-sm aspect-square object-cover w-full h-full aspect-[1/1] overflow-hidden"} />
+                        <img src={media.path} key={media.id} className={"rounded-sm object-cover w-full h-full aspect-[1/1] overflow-hidden"} />
                     </div>
                 )}
 
-                {[...Array(Math.max(0, slots - photos.filter(photo => !photo.deleted).length))].map((item, i) => (
+                {[...Array(Math.max(0, slots - files.filter(photo => !photo.deleted).length))].map((item, i) => (
                     <label key={i} onClick={() => !!ref.current && ref.current.click() } className={"flex rounded text-teal text-2xl cursor-pointer justify-center items-center aspect-[1/1] bg-teal-100 border border-gray-400"}>
                         +
                     </label>
                 ))}
             </ReactSortable>
 
-            { max>1 && photos.length >= slots && (
+            { max>1 && files.length >= slots && (
                 <div className={"flex items-center mt-4"}>
                     <SmallButton onClick={() => !!ref.current && ref.current.click()} className={"mx-auto"}>+ Add more photos</SmallButton>
                 </div>

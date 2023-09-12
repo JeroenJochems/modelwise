@@ -44,7 +44,7 @@ export default function Portfolio({modelPhotos}: {modelPhotos: Photo[] }) {
 
                 <InlinePhotoUploader
                     cols={3}
-                    photos={data.photos}
+                    files={data.photos}
                     onToggleUploading={setIsUploading}
                     onAdd={(photo) => setData(data => ({...data, photos: [...data.photos, photo]}))}
                     onUpdate={(photos) => { setData(data => ({...data, photos})) }}

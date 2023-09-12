@@ -172,7 +172,7 @@ export default function Characteristics({modelData, tattooPhotos, piercingPhotos
                             <P>Tattoo reference photos</P>
 
                             <InlinePhotoUploader
-                                photos={data.tattoo_photos}
+                                files={data.tattoo_photos}
                                 onUpdate={photos => setData('tattoo_photos', photos)}
                                 onAdd={(photo) => setData(data => ({...data, tattoo_photos: [...data.tattoo_photos, photo]}))}
                                 onToggleUploading={setIsUploading}
@@ -194,7 +194,7 @@ export default function Characteristics({modelData, tattooPhotos, piercingPhotos
                         <P>Piercing reference photos</P>
 
                         <InlinePhotoUploader
-                            photos={data.piercing_photos}
+                            files={data.piercing_photos}
                             onUpdate={photos => setData('piercing_photos', photos)}
                             onAdd={(photo) => setData(data => ({...data, piercing_photos: [...data.piercing_photos, photo]}))}
                             onToggleUploading={setIsUploading}
