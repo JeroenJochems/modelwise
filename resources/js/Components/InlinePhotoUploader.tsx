@@ -8,7 +8,7 @@ import SmallButton from "@/Components/SmallButton";
 import InputError from "@/Components/InputError";
 import {Cross} from "@/Components/Icons/Cross";
 
-export type Photoi = {
+export type Photo = {
     id: string
     path: string
     tmpFile?: string
