@@ -6,10 +6,10 @@ import { useForm, usePage} from "@inertiajs/react";
 import {FormEvent, FormEventHandler } from "react";
 import {PageProps} from "@/types";
 import PrimaryButton from "@/Components/PrimaryButton";
-import {InlinePhotoUploader, Media} from "@/Components/InlinePhotoUploader";
+import {InlinePhotoUploader, Photo} from "@/Components/InlinePhotoUploader";
 
 type ModelDataType = {
-    profile_picture: Media|null
+    profile_picture: Photo|null
 }
 
 export default function ProfilePicture(props: ModelDataType) {

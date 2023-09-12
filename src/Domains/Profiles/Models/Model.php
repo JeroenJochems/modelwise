@@ -109,6 +109,11 @@ class Model extends Authenticatable implements Onboardable
         return $this->profile_picture ? env("CDN_URL").$this->profile_picture : null;
     }
 
+    public function getProfilePictureCdnThumbAttribute()
+    {
+        return $this->profile_picture ? $this->profile_picture_cdn.'?w=600&h=600&fit=crop&crop=faces&fm=auto' : null;
+    }
+
     public function getNameAttribute()
     {
         return $this->first_name." ".$this->last_name;

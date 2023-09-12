@@ -19,7 +19,7 @@ class Role extends Resource
 
     public function title()
     {
-        return $this->name .' at ' . $this->job->title .' (' . $this->job->brand?->name .')';
+        return $this->job->title .' - '.$this->name.' (' . $this->job->brand?->name .')';
     }
 
     public static $search = [

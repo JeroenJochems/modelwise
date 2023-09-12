@@ -71,7 +71,7 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::get('account', [ModelController::class, "index"])->name("account.index");
     });
 
-    Route::post('photos/signed-url', VaporSignedStorageUrl::class.'@store');
+    Route::post('signed-url', VaporSignedStorageUrl::class.'@store');
 
     Route::name("account.")->prefix("account")->group(function() {
         onboardingRoutes();

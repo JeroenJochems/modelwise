@@ -2,13 +2,13 @@ import CleanLayout from "@/Layouts/CleanLayout";
 import {H1} from "@/Components/Typography/H1";
 import {Header} from "@/Components/Onboarding/Header";
 import { useForm, usePage} from "@inertiajs/react";
-import {InlinePhotoUploader, Media} from "@/Components/InlinePhotoUploader";
+import {InlinePhotoUploader, Photo} from "@/Components/InlinePhotoUploader";
 import {PageProps} from "@/types";
 import {useState} from "react";
 import PrimaryButton from "@/Components/PrimaryButton";
 
 
-export default function Photos({modelDigitals}: {modelDigitals: Media[] }) {
+export default function Photos({modelDigitals}: {modelDigitals: Photo[] }) {
     const { ziggy } = usePage<PageProps>().props;
     const isOnboarding = ziggy.location.includes("onboarding")
 

@@ -11,6 +11,7 @@ use Domain\Jobs\Models\Role;
 use Domain\Profiles\Models\Model;
 use Domain\Profiles\Models\Model as ModelClass;
 use Domain\Profiles\Models\Photo;
+use Domain\Profiles\Models\Video;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Onboard\Facades\Onboard;
@@ -36,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
             'model' => Model::class,
             'job' => Job::class,
             'photo' => Photo::class,
+            'video' => Video::class,
             'role' => Role::class,
             'brand' => Brand::class,
             'application' => Application::class,

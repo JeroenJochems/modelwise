@@ -2,12 +2,13 @@
 
 namespace Domain\Profiles\Models;
 
+use Domain\Profiles\Actions\VideoToMux;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Kra8\Snowflake\HasShortflakePrimary;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
-class Photo extends Model implements Sortable
+class Video extends Model implements Sortable
 {
     use SortableTrait;
 
@@ -18,19 +19,19 @@ class Photo extends Model implements Sortable
         'sort_when_creating' => true,
     ];
 
+    protected static function booted()
+    {
+        static::created(function (Video $video) {
+            app(VideoToMux::class)->execute($video);
+        });
+    }
+
     public function getScoutKey(): mixed
     {
         return $this->id;
     }
 
-    const FOLDER_WORK_EXPERIENCE = 'Work experience';
-    const FOLDER_DIGITALS = 'Digitals';
-    const FOLDER_TATTOOS = 'Tattoos';
-    const FOLDER_JOB_IMAGE = 'Look & Feel';
-    const FOLDER_BRAND_LOGO = 'Brand logo';
-    const FOLDER_PIERCINGS = 'Piercings';
-
-    public function photoable(): BelongsTo
+    public function videoable(): BelongsTo
     {
         return $this->morphTo();
     }
@@ -38,18 +39,23 @@ class Photo extends Model implements Sortable
     public function buildSortQuery()
     {
         return static::query()
-            ->where('photoable_id', $this->photoable_id)
-            ->where('photoable_type', $this->photoable_type)
+            ->where('videoable_id', $this->videoable_id)
+            ->where('videoable_type', $this->videoable_type)
             ->where('folder', $this->folder);
     }
 
     public function getCdnPathAttribute()
     {
-        return env("CDN_URL").$this->path;
+
+        return $this->mux_id
+            ? "https://stream.mux.com/".$this->mux_id.".m3u8"
+            : env("CDN_URL").$this->path;
     }
 
     public function getCdnPathThumbAttribute()
     {
-        return $this->cdn_path."?w=600&h=600&fit=crop&crop=faces&fm=auto";
+        return $this->mux_id
+            ? "https://images.mux.com/".$this->mux_id."/animated.gif"
+            : null;
     }
 }

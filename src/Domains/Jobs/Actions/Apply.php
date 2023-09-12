@@ -7,7 +7,6 @@ use Domain\Jobs\Data\ApplyData;
 use Domain\Jobs\Models\Application;
 use Domain\Profiles\Models\Photo;
 use Domain\Profiles\Repositories\PhotoRepository;
-use Support\User;
 
 class Apply
 {
@@ -28,9 +27,9 @@ class Apply
             ->update(['application_id' => $application->id]);
 
         if ($applyData->height) $applyData->model->height = $applyData->height;
-        if ($applyData->chest) $applyData->model->chest = $applyData->height;
-        if ($applyData->waist) $applyData->model->waist = $applyData->height;
-        if ($applyData->hips) $applyData->model->hips = $applyData->height;
+        if ($applyData->chest) $applyData->model->chest = $applyData->chest;
+        if ($applyData->waist) $applyData->model->waist = $applyData->waist;
+        if ($applyData->hips) $applyData->model->hips = $applyData->hips;
         if ($applyData->shoe_size) $applyData->model->shoe_size = $applyData->shoe_size;
         $applyData->model->save();
 

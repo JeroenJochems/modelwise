@@ -6,7 +6,7 @@ import { useForm, usePage} from '@inertiajs/react';
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
-import {InlinePhotoUploader, Media} from "@/Components/InlinePhotoUploader";
+import {InlinePhotoUploader, Photo} from "@/Components/InlinePhotoUploader";
 import {P} from "@/Components/Typography/p";
 import {Header} from "@/Components/Onboarding/Header";
 import {PageProps} from "@/types";
@@ -27,7 +27,7 @@ type ModelDataType = {
     tattoos: boolean
     piercings: boolean
     cup_size?: string
-    tattoo_photos?: Media[]
+    tattoo_photos?: Photo[]
 }
 
 
@@ -35,8 +35,8 @@ type Props = {
     modelData: ModelDataType
     hairColors: HairColor[],
     eyeColors: EyeColor[],
-    tattooPhotos: Media[],
-    piercingPhotos: Media[],
+    tattooPhotos: Photo[],
+    piercingPhotos: Photo[],
 }
 
 export default function Characteristics({modelData, tattooPhotos, piercingPhotos, hairColors, eyeColors}: Props) {

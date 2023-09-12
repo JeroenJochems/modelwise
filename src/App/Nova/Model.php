@@ -70,24 +70,21 @@ class Model extends Resource
             Tags::make('Other professions')->type(ModelClass::TAG_TYPE_PROFESSIONS)->withLinkToTagResource()->hideFromIndex(),
             VaporImage::make("Profile picture", "profile_picture")
                 ->path("profile_pictures")
-                ->preview(function ($value, $disk) {
-                    // @phpstan-ignore-next-line
-                    return $value ? $this->profile_picture_cdn : null;
-                })
+                ->preview(fn() => $this->profile_picture_cdn)
                 ->hideFromIndex()
                 ->detailWidth(300)
                 ->disableDownload(),
             Text::make('Photos', function() {
                 return '<div style="display: flex; width: 600px; height: 120px; overflow-x: scroll; overflow-y: hidden">
-                        <img src="'.$this->profile_picture_cdn.'?w=720&h=960&fit=crop&fm=auto&crop=faces" width="90" height="120" />
+                        <img src="'.$this->profile_picture_cdn_thumb.'" height="120" />
                         ' .implode("", $this->photos->map(function ($photo) {
-                        return '<img src="'.$photo->cdn_path.'?w=720&h=960&fit=crop&fm=auto&crop=faces" width="90" height="120" />';
+                        return '<img src="'.$photo->cdn_path_thumb.'" height="120" />';
                     })->toArray())
                      . '</div>';
             })->asHtml()->onlyOnIndex(),
-            Text::make('Instagram')->rules('required', 'max:255')->hideFromIndex(),
-            Text::make('Tiktok')->rules('required_without:instagram', 'max:255')->hideFromIndex(),
-            Text::make('Website')->rules('max:255')->hideFromIndex(),
+            Text::make('Instagram')->rules('required', 'max:255')->hideFromIndex()->copyable(),
+            Text::make('Tiktok')->rules('required_without:instagram', 'max:255')->hideFromIndex()->copyable(),
+            Text::make('Website')->rules('max:255')->hideFromIndex()->copyable(),
             new Panel('Body Characteristics', $this->bodyFields()),
             HasMany::make("Applications")->showOnIndex(false),
             HasMany::make("Invites")->showOnIndex(false),

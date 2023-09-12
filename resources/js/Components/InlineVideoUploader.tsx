@@ -8,7 +8,7 @@ import SmallButton from "@/Components/SmallButton";
 import InputError from "@/Components/InputError";
 import {Cross} from "@/Components/Icons/Cross";
 
-export type Photoi = {
+export type Video = {
     id: string
     path: string
     tmpFile?: string
@@ -18,9 +18,9 @@ export type Photoi = {
 }
 
 type Props = {
-    photos: Array<Photo>
-    onUpdate?: (photos: Photo[]) => void
-    onAdd: (media: Photo) => void
+    photos: Array<Video>
+    onUpdate?: (photos: Video[]) => void
+    onAdd: (media: Video) => void
     onToggleUploading?: (state: boolean) => void
     slots?: number
     cols?: number
@@ -39,7 +39,7 @@ type ResponseType = {
     key: string
 }
 
-export function InlinePhotoUploader({photos, onAdd, error, onUpdate, onToggleUploading, colsOnMobile=3, slots = 6, max=99, cols = 6}: Props) {
+export function InlinVideoUploader({videos, onAdd, error, onUpdate, onToggleUploading, colsOnMobile=3, slots = 6, max=99, cols = 6}: Props) {
 
     const ref = useRef<HTMLInputElement | null>(null)
     const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
@@ -97,7 +97,7 @@ export function InlinePhotoUploader({photos, onAdd, error, onUpdate, onToggleUpl
         });
     }
 
-    function handleDelete({ id }: Photo) {
+    function handleDelete({ id }: Video) {
         if (!onUpdate) return;
 
         onUpdate(photos.map((photo) => {
@@ -113,7 +113,7 @@ export function InlinePhotoUploader({photos, onAdd, error, onUpdate, onToggleUpl
         <div>
             <ReactSortable tag={"div"} list={photos} setList={onUpdate} className={`grid grid-cols-${colsOnMobile} sm:grid-cols-${cols} gap-2`}>
 
-                {photos.filter(photo => !photo.deleted).map((photo: Photo) =>
+                {photos.filter(photo => !photo.deleted).map((photo: Video) =>
                     <div key={photo.id} className={'cursor-pointer w-full h-full aspect-[1/1] border rounded overflow-hidden relative'}>
                         <div onClick={() => {handleDelete(photo) }} className={'absolute top-0 right-0 p-1 text-teal bg-teal-100 bg-opacity-50 hover:bg-opacity-100 transition duration-200'}>
                             <Cross className={"h-4 w-4"} />
