@@ -17,6 +17,7 @@ use App\Http\Controllers\Model\SocialsController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\PhotosController;
 use App\Http\Controllers\VaporSignedStorageUrl;
+use App\Http\Controllers\VideosController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -44,6 +45,7 @@ if (!function_exists("onboardingRoutes")) {
         Route::post('photos/sort', [PhotosController::class, 'sort'])->name("photos.sort");
         Route::post('professional-experience', [ProfessionalExperienceController::class, "store"])->name("professional-experience.store");
         Route::delete('photos/{photo}/delete', [PhotosController::class, "delete"])->name("photos.delete");
+        Route::delete('videos/{videos}/delete', [VideosController::class, "delete"])->name("videos.delete");
     }
 }
 
@@ -54,10 +56,12 @@ Route::resource('roles', RoleController::class, ["index", "view"])->name("index"
 
 Route::middleware(['auth'])->group(callback: function () {
 
-    Route::resource("applications", ApplicationController::class, ["index", "view"])
-        ->name("index", "applications");
+    Route::resource("applications", ApplicationController::class)->only(["index", "show", "update"])
+        ->name("index", "applications")
+        ->name("show", "applications.show")
+        ->name("upate", "applications.update");
 
-    Route::resource('roles/{role}/applications', ApplicationController::class, ["create", "store"])
+    Route::resource('roles/{role}/applications', ApplicationController::class)->only(["create", "store"])
         ->name("create", "roles.apply")
         ->name("store", "roles.apply.store");
 

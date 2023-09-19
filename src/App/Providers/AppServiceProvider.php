@@ -2,20 +2,18 @@
 
 namespace App\Providers;
 
-use Domain\Jobs\Models\Application;
 use Domain\Jobs\Models\Brand;
 use Domain\Jobs\Models\Client;
-use Domain\Jobs\Models\Job;
 use Domain\Jobs\Models\Invite;
+use Domain\Jobs\Models\Job;
 use Domain\Jobs\Models\Role;
 use Domain\Profiles\Models\Model;
 use Domain\Profiles\Models\Model as ModelClass;
 use Domain\Profiles\Models\Photo;
 use Domain\Profiles\Models\Video;
+use Domain\Work\Models\Application;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
-use Inertia\Inertia;
-use Inertia\Testing\Assert;
 use Spatie\Onboard\Facades\Onboard;
 use Spatie\Tags\Tag;
 

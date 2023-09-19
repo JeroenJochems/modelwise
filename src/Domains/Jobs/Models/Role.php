@@ -3,8 +3,10 @@
 namespace Domain\Jobs\Models;
 
 use Domain\Profiles\Models\Photo;
+use Domain\Work\Models\Application;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Kra8\Snowflake\HasShortflakePrimary;
 
 class Role extends Model
@@ -19,6 +21,7 @@ class Role extends Model
         "start_date" => "date",
         "end_date" => "date",
         'fields' => "array",
+        'extra_fields' => "array",
     ];
 
     public function job()
@@ -46,20 +49,26 @@ class Role extends Model
         return $this->hasMany(RoleView::class);
     }
 
-    public function applications()
-    {
-        return $this->hasMany(Application::class);
-    }
-
-    public function my_applications($model_id = null)
+    public function my_applications()
     {
         return $this->hasMany(Application::class)
-            ->where('model_id', $model_id ?? auth()->id());
+            ->where('model_id', auth()->id());
+    }
+
+    public function my_application()
+    {
+        return $this->hasOne(Application::class)->latestOfMany()
+            ->where('model_id', auth()->id());
     }
 
     public function invites()
     {
         return $this->hasMany(Invite::class);
+    }
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
     }
 
     public function my_invites($model_id = null)

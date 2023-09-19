@@ -33,7 +33,10 @@
         "@mux/mux-player-react": "^1.14.2",
         "@types/laravel-vapor": "^0.6.1",
         "@types/sortablejs": "^1.15.1",
+        "@types/uuid": "^9.0.4",
         "react-sortablejs": "^6.1.4",
-        "sortablejs": "^1.15.0"
+        "react-tabs": "^6.0.2",
+        "sortablejs": "^1.15.0",
+        "uuid": "^9.0.1"
     }
 }

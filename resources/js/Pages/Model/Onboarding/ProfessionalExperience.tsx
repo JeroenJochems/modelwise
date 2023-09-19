@@ -55,7 +55,7 @@ export default function ProfessionalExperience({vm}: Props) {
                     <H1>Professional experience</H1>
                 </Header>
             }
-            photos={["https://modelwise.imgix.net/assets/18.jpeg"]}>
+            photos={["https://modelwise.imgix.net/assets/7.4.jpg?w=1200&fm=auto"]}>
 
             <P>What kind of professional experience do you have?</P>
             <TagCloud tags={vm.allCategories}

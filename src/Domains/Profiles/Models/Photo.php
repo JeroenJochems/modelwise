@@ -2,6 +2,7 @@
 
 namespace Domain\Profiles\Models;
 
+use Domain\Profiles\Collections\PhotoCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Kra8\Snowflake\HasShortflakePrimary;
 use Spatie\EloquentSortable\Sortable;
@@ -12,6 +13,11 @@ class Photo extends Model implements Sortable
     use SortableTrait;
 
     use HasShortflakePrimary;
+
+    public function newCollection($models = [])
+    {
+        return new PhotoCollection($models);
+    }
 
     public $sortable = [
         'order_column_name' => 'sortable_order',

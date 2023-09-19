@@ -2,7 +2,7 @@
 
 namespace Domain\Jobs\Enums;
 
-use Domain\Jobs\Models\Application;
+use Domain\Work\Models\Application;
 
 /** @typescript  */
 enum ApplicationStatusEnum: string

@@ -1,8 +1,8 @@
 <?php
 
-use Domain\Jobs\Models\Application;
-use Domain\Jobs\Models\Hire;
-use Domain\Jobs\Models\Rejection;
+use Domain\Work\Models\Application;
+use Domain\Work\Models\Hire;
+use Domain\Work\Models\Rejection;
 
 test('it selects only my application', function() {
 

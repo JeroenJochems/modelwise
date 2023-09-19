@@ -2,14 +2,12 @@
 
 namespace App\Nova;
 
-use Domain\Jobs\Models\Application as ApplicationModel;
-use Domain\Jobs\Models\Role as RoleModel;
+use Domain\Work\Models\Application as ApplicationModel;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\VaporFile;
-use Laravel\Nova\Fields\VaporImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Outl1ne\NovaSortable\Traits\HasSortableManyToManyRows;
 

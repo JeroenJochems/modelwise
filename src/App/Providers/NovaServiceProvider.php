@@ -6,6 +6,7 @@ use App\Nova\Brand;
 use App\Nova\Client;
 use App\Nova\Job;
 use App\Nova\Model;
+use App\Nova\Role;
 use App\Nova\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
@@ -36,6 +37,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 MenuSection::make('Work', [
                     MenuItem::resource(Client::class),
                     MenuItem::resource(Job::class),
+                    MenuItem::resource(Role::class),
                     MenuItem::resource(Brand::class),
                 ])->icon('document-text')->collapsable(),
             ];

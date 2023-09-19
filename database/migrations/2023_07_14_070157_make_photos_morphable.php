@@ -16,7 +16,7 @@ return new class extends Migration
             $table->nullableMorphs("photoable");
         });
 
-        foreach (Media::get() as $photo) {
+        foreach (\Domain\Profiles\Models\Photo::get() as $photo) {
             $photo->photoable_type = "model";
             $photo->photoable_id = $photo->model_id;
             $photo->save();
@@ -36,7 +36,7 @@ return new class extends Migration
             $table->unsignedBigInteger("model_id")->nullable()->after("id");
         });
 
-        $photos = Media::get();
+        $photos = \Domain\Profiles\Models\Photo::get();
 
         foreach ($photos as $photo) {
             $photo->model_id = $photo->photoable_id;

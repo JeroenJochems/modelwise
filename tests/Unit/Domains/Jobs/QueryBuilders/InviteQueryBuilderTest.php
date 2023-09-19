@@ -1,8 +1,8 @@
 <?php
 
-use Domain\Jobs\Models\Application;
 use Domain\Jobs\Models\Invite;
 use Domain\Profiles\Models\Model;
+use Domain\Work\Models\Application;
 
 test('it selects open invites', function () {
     $invite = Invite::factory()->createOne();

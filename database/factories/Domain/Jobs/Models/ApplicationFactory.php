@@ -2,9 +2,9 @@
 
 namespace Database\Factories\Domain\Jobs\Models;
 
-use Domain\Jobs\Models\Application;
 use Domain\Jobs\Models\Role;
 use Domain\Profiles\Models\Model;
+use Domain\Work\Models\Application;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ApplicationFactory extends Factory

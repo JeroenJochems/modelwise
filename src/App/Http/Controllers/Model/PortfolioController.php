@@ -10,9 +10,10 @@ class PortfolioController extends BaseOnboardingController
 {
     public function index(PhotoRepository $photos)
     {
-        return Inertia::render("Model/Onboarding/Portfolio")->with([
-            'modelPhotos' => $photos->getPhotos(auth()->user(), Photo::FOLDER_WORK_EXPERIENCE)
-        ]);
+        return Inertia::render("Model/Onboarding/Portfolio")
+            ->with([
+                'modelPhotos' => $photos->getPhotos(auth()->user(), Photo::FOLDER_WORK_EXPERIENCE)
+            ]);
     }
 
     public function store(PhotoRepository $photoRepository)

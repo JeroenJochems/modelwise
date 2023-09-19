@@ -7,7 +7,7 @@ export default function Thanks() {
 
 
     return (
-        <CleanLayout>
+        <CleanLayout  photos={["https://modelwise.imgix.net/assets/14.jpeg"]}>
             <div className="grid grid-cols-1 gap-4 mb-8 mt-8">
                 <H1>Application rejected</H1>
                 <P>Sadly, your application to Modelwise has not been accepted.</P>

@@ -18,44 +18,44 @@ class PhotoRepository
             ->map(function (Photo $photo) {
                 return [
                     "id" => $photo->id,
-                    "path" => $photo->cdnPath."?w=600&h=600&fit=crop&crop=faces",
+                    "path" => $photo->path,
+                    "mime" => "image/*",
                     "deleteRoute" => route('account.photos.delete', $photo),
                 ];
             });
     }
 
-    public function update(\Illuminate\Database\Eloquent\Model $model, string $folder, $photos)
+    public function update(\Illuminate\Database\Eloquent\Model|Authenticatable $model, string $folder, $photos)
     {
         $newSort = collect($photos)->map(function($photo) use($folder, $model) {
 
-            if (isset($photo['tmpFile'])) {
+            if (!isset($photo['isNew'])) {
+                if (isset($photo['deleted']) && $photo['deleted'] != 0) {
 
-                if (!isset($photo['deleted']) || $photo['deleted'] == false) {
-                    $photoObj = new Photo;
-                    $photoObj->photoable()->associate($model);
-                    $photoObj->path = str_replace("tmp/", "photos/", $photo['tmpFile']);
-                    $photoObj->folder = $folder;
-                    Storage::copy($photo['tmpFile'], $photoObj->path);
-                    $photoObj->save();
-
-                    $photo['id'] = $photoObj->id;
-                } else {
-                    return null;
-                }
-            } else {
-                if (isset($photo['deleted']) && $photo['deleted'] == true) {
-                    $photoObj = Photo::find($photo['id']);
-
-                    if ($photoObj) {
+                    if ($photoObj = Photo::find($photo['id'])) {
                         Storage::delete($photoObj->path);
                         $photoObj->delete();
                     }
 
                     return null;
                 }
+
+                return $photo['id'];
             }
 
-            return $photo['id'];
+            if (isset($photo['deleted']) && $photo['deleted']!=0) return null;
+
+            $photoObj = new Photo;
+            $photoObj->photoable()->associate($model);
+            $photoObj->path = str_replace("tmp/", "photos/", $photo['path']);
+            $photoObj->folder = $folder;
+            $photoObj->save();
+
+            if ($photo['path'] != $photoObj->path) {
+                Storage::copy($photo['path'], $photoObj->path);
+            }
+
+            return $photoObj->id;
         });
 
 

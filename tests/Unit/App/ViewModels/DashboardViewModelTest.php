@@ -1,10 +1,9 @@
 <?php
 
-use Domain\Jobs\Models\Application;
-use Domain\Jobs\Models\Hire;
-use Domain\Jobs\Models\Invite;
 use App\ViewModels\DashboardViewModel;
-use function Pest\Laravel\{expectsNotification};
+use Domain\Jobs\Models\Invite;
+use Domain\Work\Models\Application;
+use Domain\Work\Models\Hire;
 use Illuminate\Support\Facades\Notification;
 
 test('it selects open invites', function() {

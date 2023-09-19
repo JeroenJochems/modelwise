@@ -33,7 +33,7 @@ export default function Login({ status, canResetPassword }: { status?: string, c
     };
 
     return (
-        <CleanLayout photos={['https://modelwise.imgix.net/assets/17.jpeg']}>
+        <CleanLayout photos={['https://modelwise.imgix.net/assets/2.jpeg?fm=auto&w=1200']}>
             <Head title="Log in" />
 
             <img src={asset("img/logo-black.svg")} className={"mb-4 w-1/2 mx-auto lg:hidden"} />

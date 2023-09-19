@@ -2,8 +2,8 @@
 
 namespace Database\Factories\Domain\Jobs\Models;
 
-use Domain\Jobs\Models\Application;
-use Domain\Jobs\Models\Hire;
+use Domain\Work\Models\Application;
+use Domain\Work\Models\Hire;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class HireFactory extends Factory

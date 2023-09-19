@@ -2,9 +2,7 @@
 
 namespace Domain\Jobs\Data;
 
-use Domain\Jobs\Enums\ApplicationStatusEnum;
-use Domain\Jobs\Models\Application;
-use Domain\Jobs\Models\Hire;
+use Domain\Work\Models\Hire;
 use Spatie\LaravelData\Data;
 
 /** @typescript */

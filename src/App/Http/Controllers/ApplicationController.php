@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\ViewModels\ModelMeViewModel;
 use App\ViewModels\RoleApplyViewModel;
-use Domain\Jobs\Actions\Apply;
 use Domain\Jobs\Data\ApplyData;
 use Domain\Jobs\Models\Role;
+use Domain\Profiles\Repositories\PhotoRepository;
+use Domain\Profiles\Repositories\VideoRepository;
+use Domain\Work\Actions\Apply;
+use Domain\Work\Models\Application;
 use Inertia\Inertia;
 
 class ApplicationController extends Controller
@@ -16,6 +19,12 @@ class ApplicationController extends Controller
         return redirect()->to("/dashboard");
     }
 
+    public function show(Application $application)
+    {
+        return Inertia::render('Roles/Show')
+            ->with("viewModel", new RoleApplyViewModel($application->role));
+    }
+
     public function create(Role $role)
     {
         return Inertia::render('Applications/Create')
@@ -23,15 +32,27 @@ class ApplicationController extends Controller
             ->with("meViewModel", new ModelMeViewModel(
                 auth()->user()
                     ->load("digitals")
-                    ->load("portfolio")
             ));
+    }
+
+    public function update(Application $application)
+    {
+        if ($videos = request()->get("casting_videos")) {
+            app(VideoRepository::class)->update($application, Application::CASTING_VIDEOS, $videos);
+        }
+
+        if ($photos = request()->get("casting_photos")) {
+            app(PhotoRepository::class)->update($application, Application::CASTING_PHOTO_FOLDER, $photos);
+        }
+
+        return Inertia::render('Applications/Updated')
+            ->with("viewModel", new RoleApplyViewModel($application->role));
     }
 
     public function store(Role $role, ApplyData $data)
     {
         app(Apply::class)($data);
 
-        return Inertia::render('Applications/Stored')
-            ->with("viewModel", new RoleApplyViewModel($role));
+        return redirect()->route("roles.show", $role);
     }
 }

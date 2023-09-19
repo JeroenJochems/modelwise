@@ -3,11 +3,9 @@
 namespace Domain\Profiles\Models;
 
 use App\Notifications\ResetPasswordNotification;
-use App\Notifications\SidemailData\ResetPasswordMailData;
 use App\Notifications\SidemailData\Templates;
 use Domain\Jobs\Models\Invite;
 use Domain\Jobs\Models\RoleView;
-use Domain\Profiles\Data\Mail\MailData;
 use Domain\Profiles\Enums\Ethnicity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -148,7 +146,7 @@ class Model extends Authenticatable implements Onboardable
 
     public function applications(): HasMany
     {
-        return $this->hasMany(\Domain\Jobs\Models\Application::class);
+        return $this->hasMany(\Domain\Work\Models\Application::class);
     }
 
     public function sendPasswordResetNotification($token)

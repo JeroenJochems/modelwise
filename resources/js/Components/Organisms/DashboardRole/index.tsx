@@ -1,10 +1,10 @@
 import {H2} from "@/Components/Typography/H2";
 import {P} from "@/Components/Typography/p";
 import {JobSpecifics} from "@/Components/Molecules/JobSpecifics";
-import {useState} from "react";
 import {CtaLink} from "@/Components/CtaLink";
 import {getRoleLabel} from "@/Utils/RoleLabel";
 import {Label} from "@/Components/Atoms/Label";
+import {useCdnLink} from "@/Hooks/useCdnLink";
 
 type Props = {
     role: Domain.Jobs.Data.RoleData
@@ -12,8 +12,7 @@ type Props = {
 
 export function DashboardRole({ role }: Props) {
 
-    const [clicked, setClicked] = useState(false);
-
+    const cdnLink = useCdnLink()
     const photos = [...role.public_photos, ...role.job.look_and_feel_photos];
 
     return (
@@ -29,11 +28,17 @@ export function DashboardRole({ role }: Props) {
                 <JobSpecifics role={ role}/>
 
                 <div className={"flex"}>
-                    <CtaLink title={"Show details"} className={"bg-teal p-4 rounded text-white"} href={route("roles.show", role.id)} />
+                    <CtaLink
+                        title={"Show details"}
+                        className={"bg-teal p-4 rounded text-white"}
+                        href={role.my_application
+                             ? route("applications.show", role.my_application)
+                             : route("roles.show", role)
+                            } />
                 </div>
             </div>
             <div className={"hidden md:flex max-w-xs"}>
-                <img src={photos[0].path_square_face} className={"h-full w-full object-cover"} />
+                <img src={cdnLink(photos[0].path, "face_square")} className={"h-full w-full object-cover"} />
             </div>
         </li>
     )

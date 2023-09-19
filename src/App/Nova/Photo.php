@@ -2,9 +2,9 @@
 
 namespace App\Nova;
 
-use Domain\Jobs\Models\Application as ApplicationModel;
 use Domain\Jobs\Models\Role as RoleModel;
 use Domain\Profiles\Models\Photo as PhotoModel;
+use Domain\Work\Models\Application as ApplicationModel;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;

@@ -7,6 +7,7 @@ import {useForm, usePage} from '@inertiajs/react';
 import {PageProps} from "@/types";
 import CountriesViewModel = App.ViewModels.CountriesViewModel;
 import PrimaryButton from "@/Components/PrimaryButton";
+import {BaseFile} from "@/Components/FileUploader";
 
 type ModelDataType = {
     first_name: string
@@ -25,11 +26,25 @@ type Props = {
     countriesViewModel: CountriesViewModel,
 }
 
+type FormData = {
+    first_name: string
+    last_name: string
+    parent_first_name: string
+    parent_last_name: string
+    phone_number: string
+    city: string
+    gender: string
+    country: string
+    video?: BaseFile
+    date_of_birth: string
+}
+
 export default function PersonalDetails({modelData, countriesViewModel }: Props) {
     const { ziggy } = usePage<PageProps>().props
 
-    const {data, setData, post, clearErrors, errors } = useForm({
+    const {data, setData, post, clearErrors, errors } = useForm<FormData>({
         ...modelData,
+        video: undefined,
         country: modelData.country ?? "Netherlands",
         phone_number: modelData.phone_number ?? "+31",
         date_of_birth: modelData.date_of_birth ? modelData.date_of_birth.split(' ')[0] : "",
@@ -79,7 +94,7 @@ export default function PersonalDetails({modelData, countriesViewModel }: Props)
             <Header step={2} isOnboarding={isOnboarding}>
                 <H1>Personal details</H1>
             </Header>
-        } photos={["https://modelwise.imgix.net/assets/18.jpeg"]}>
+        } photos={["https://modelwise.imgix.net/assets/15.2.jpeg?w=1200&fm=auto"]}>
 
             <form className="grid gap-4">
 

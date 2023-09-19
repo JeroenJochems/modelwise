@@ -1,6 +1,5 @@
 import RoleApplyViewModel = App.ViewModels.RoleApplyViewModel;
 import {P} from "@/Components/Typography/p";
-import {InlinePhotoUploader} from "@/Components/InlinePhotoUploader";
 import ModelMeViewModel = App.ViewModels.ModelMeViewModel;
 import {ChangeEvent, useState} from "react";
 import {useForm, usePage} from "@inertiajs/react";
@@ -11,6 +10,9 @@ import InputGroupText from "@/Components/Forms/InputGroupText";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import {Content} from "@/Layouts/DashboardLayout/Content";
 import InputError from "@/Components/InputError";
+import {H1} from "@/Components/Typography/H1";
+import {useUploadingFields} from "@/Hooks/useUploadingFields";
+import {BaseFile, FileUploader} from "@/Components/FileUploader";
 
 type Props = {
     viewModel: RoleApplyViewModel;
@@ -19,8 +21,8 @@ type Props = {
 
 type Form = {
     role_id: number;
-    digitals: Array<Domain.Profiles.Data.ModelPhotoData>;
-    photos: Array<Domain.Profiles.Data.ModelPhotoData>;
+    digitals: Array<BaseFile>;
+    photos: Array<BaseFile>;
     cover_letter: string;
     height: number;
     chest: number;
@@ -31,17 +33,17 @@ type Form = {
     available_dates: Array<string>;
 }
 
-export default function Create({ viewModel, meViewModel }: Props) {
+export default function Create({viewModel, meViewModel}: Props) {
 
-    const { errors } = usePage().props
+    const {errors} = usePage().props
 
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-    const [isUploading, setIsUploading] = useState<boolean>(false);
+    const {isUploading, setUploadingField} = useUploadingFields();
 
-    const { role, shootDates } = viewModel;
+    const {role, shootDates} = viewModel;
     const me = meViewModel.me;
 
-    const { post, data, setData } = useForm<Form>({
+    const {post, data, setData} = useForm<Form>({
         role_id: viewModel.role.id,
         digitals: me.digitals,
         photos: [],
@@ -69,49 +71,50 @@ export default function Create({ viewModel, meViewModel }: Props) {
     return (
         <DashboardLayout>
 
-            <JobHeader role={role} />
+            <JobHeader role={role}/>
 
             <Content>
-                <H2 className={"mt-8"}>Apply for this role</H2>
+                <H1 className={"mt-8"}>Apply for this role</H1>
 
-                { role.fields.digitals && (
+                {role.fields.digitals && (
                     <div>
                         <H2>Digitals</H2>
                         <P className={"mb-2"}>Are your digitals up-to-date and relevant for this role?</P>
 
-                        <InlinePhotoUploader
+                        <FileUploader
+                            accept="image/*"
                             colsOnMobile={3}
                             cols={6}
-                            slots={6}
                             files={data.digitals}
-                            error={errors.digitals}
-                            onToggleUploading={setIsUploading}
+                            onAdd={(file) => setData(data => ({...data, digitals: [...data.digitals, file]}))}
+                            onToggleUploading={(state) => setUploadingField('digitals', state)}
                             onUpdate={(digitals) => setData(data => ({...data, digitals}))}
-                            onAdd={(photo) => setData(data => ({...data, digitals: [...data.digitals, photo]}))}
                         />
                     </div>
                 )}
 
                 <div>
                     <H2>Relevant photos</H2>
-                    <P className={`mb-2`}>Select and sort your most relevant photos that will get you hired for this role.</P>
+                    <P className={`mb-2`}>Select and sort your most relevant photos that will get you hired for this
+                        role.</P>
 
-                    <InlinePhotoUploader
-                        error={errors.photos}
+                    <FileUploader
+                        accept={"image/*"}
                         files={data.photos}
-                        onToggleUploading={setIsUploading}
-                        onUpdate={(photos) => setData(data => ({...data, photos}))}
                         onAdd={(photo) => setData(data => ({...data, photos: [...data.photos, photo]}))}
+                        onUpdate={(photos) => setData(data => ({...data, photos}))}
+                        onToggleUploading={(state) => setUploadingField('photos', state)}
                     />
                 </div>
 
-                { (role.fields.height || role.fields.chest || role.fields.waist || role.fields.hips || role.fields.shoe_size) && (
+                {(role.fields.height || role.fields.chest || role.fields.waist || role.fields.hips || role.fields.shoe_size) && (
                     <div>
                         <H2>Sizes</H2>
-                        <P className={"mb-2"}>The following sizes are relevant for this job. Is everything still up to date?</P>
+                        <P className={"mb-2"}>The following sizes are relevant for this job. Is everything still up to
+                            date?</P>
 
                         <div className={"grid grid-cols-2 md:grid-cols-3 gap-4"}>
-                            { role.fields.height && (
+                            {role.fields.height && (
                                 <InputGroupText
                                     title="Height (cm)"
                                     placeholder="cm"
@@ -121,7 +124,7 @@ export default function Create({ viewModel, meViewModel }: Props) {
                                 />
                             )}
 
-                            { role.fields.chest && (
+                            {role.fields.chest && (
                                 <InputGroupText
                                     title="Chest (cm)"
                                     type={"number"}
@@ -130,7 +133,7 @@ export default function Create({ viewModel, meViewModel }: Props) {
                                 />
                             )}
 
-                            { role.fields.waist && (
+                            {role.fields.waist && (
                                 <InputGroupText
                                     title="Waist (cm)"
                                     type={"number"}
@@ -139,7 +142,7 @@ export default function Create({ viewModel, meViewModel }: Props) {
                                 />
                             )}
 
-                            { role.fields.hips && (
+                            {role.fields.hips && (
                                 <InputGroupText
                                     title="Hips (cm)"
                                     type={"number"}
@@ -148,7 +151,7 @@ export default function Create({ viewModel, meViewModel }: Props) {
                                 />
                             )}
 
-                            { role.fields.shoe_size && (
+                            {role.fields.shoe_size && (
                                 <InputGroupText
                                     title="Shoe size (eu)"
                                     type={"number"}
@@ -160,18 +163,21 @@ export default function Create({ viewModel, meViewModel }: Props) {
                     </div>
                 )}
 
+
                 <div>
                     <H2>Availability</H2>
                     <P className={"mb-2"}>
-                        Please confirm your availability for the following shoot dates. If not all are available we will contact you to discuss.</P>
-                        { shootDates.map((shootDate) => (
-                            <label className={"flex flex-row text-teal items-center mb-2"} key={shootDate}>
-                                <input type="checkbox" onChange={handleAvailability} name={"available"} value={shootDate} className={"mr-2"} />
-                                <span>{ new Date(shootDate).toLocaleDateString() }</span>
-                            </label>
-                        ))
+                        Please confirm your availability for the following shoot dates. If not all are available we will
+                        contact you to discuss.</P>
+                    {shootDates.map((shootDate) => (
+                        <label className={"flex flex-row text-teal items-center mb-2"} key={shootDate}>
+                            <input type="checkbox" onChange={handleAvailability} name={"available"} value={shootDate}
+                                   className={"mr-2"}/>
+                            <span>{new Date(shootDate).toLocaleDateString()}</span>
+                        </label>
+                    ))
                     }
-                    <InputError message={errors.available_dates} />
+                    <InputError message={errors.available_dates}/>
                 </div>
 
                 <InputGroupText
@@ -187,7 +193,7 @@ export default function Create({ viewModel, meViewModel }: Props) {
                 />
 
                 <PrimaryButton onClick={submit} className={"mb-8"} disabled={isUploading}>
-                    { isSubmitting ? "Please wait..." : "Submit application"}
+                    {isSubmitting ? "Please wait..." : "Submit application"}
                 </PrimaryButton>
             </Content>
         </DashboardLayout>

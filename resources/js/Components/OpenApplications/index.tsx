@@ -1,4 +1,3 @@
-import {P} from "@/Components/Typography/p";
 import {DashboardRole} from "../Organisms/DashboardRole";
 import RoleData = Domain.Jobs.Data.RoleData;
 import {H2} from "@/Components/Typography/H2";

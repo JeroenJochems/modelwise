@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Filters\RoleUpcoming;
 use Fourstacks\NovaCheckboxes\Checkboxes;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BooleanGroup;
@@ -11,6 +12,7 @@ use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Panel;
 use Vyuldashev\NovaMoneyField\Money;
 
 class Role extends Resource
@@ -37,15 +39,15 @@ class Role extends Resource
         return [
             BelongsTo::make("Job")->onlyOnDetail(),
             Text::make("Name"),
-            Date::make("Start date"),
-            Date::make("End date")->nullable(true),
-            Textarea::make("Description")->alwaysShow(),
+            Date::make("Start date")->hideFromIndex(),
+            Date::make("End date")->nullable(true)->hideFromIndex(),
+            Textarea::make("Description")->alwaysShow()->hideFromIndex(),
             Money::make("Fee", "EUR")
                 ->storedInMinorUnits(),
             Money::make("Buyout", "EUR")
                 ->storedInMinorUnits(),
             Text::make("Buyout note")->hideFromIndex(),
-            BooleanGroup::make("Fields")->options([
+            BooleanGroup::make("Basic fields", "fields")->hideFromIndex()->options([
                 'digitals' => 'Digitals',
                 'height' => 'Height',
                 'chest' => 'Chest',
@@ -54,6 +56,17 @@ class Role extends Resource
                 'shoe_size' => 'Shoe size',
                 'head' => 'Head',
             ])->hideFalseValues(),
+            new Panel(
+                "Fields specific for shortlisted models",
+                [
+                    BooleanGroup::make("Extra fields")->hideFromIndex()->options([
+                        'casting_photos' => 'Casting photos',
+                        'casting_videos' => 'Casting videos',
+                    ]),
+                    Textarea::make("Casting photo instructions", "casting_photo_instructions")->help("Only applicable if field is active")->hideFromIndex()->alwaysShow(),
+                    Textarea::make("Casting video instructions", "casting_video_instructions")->help("Only applicable if field is active")->hideFromIndex()->alwaysShow(),
+                ]
+            ),
             Text::make("Travel reimbursement note")->hideFromIndex(),
             Text::make('Invites', function() {
                 return '<div style="display: flex; width: 400px; height: 120px; overflow-x: scroll; overflow-y: hidden">
@@ -92,15 +105,12 @@ class Role extends Resource
         return [];
     }
 
-    /**
-     * Get the filters available for the resource.
-     *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @return array
-     */
+
     public function filters(NovaRequest $request)
     {
-        return [];
+        return [
+            new RoleUpcoming(),
+        ];
     }
 
     /**

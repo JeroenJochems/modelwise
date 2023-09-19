@@ -12,6 +12,10 @@ export default {
     safelist: [
         {
             pattern: /grid-cols-.+/,
+            variants: ['sm'],
+        },
+        {
+            pattern: /grid-cols-.+/,
         },
         {
             pattern: /line-clamp-.+/,
@@ -21,7 +25,7 @@ export default {
     theme: {
         extend: {
             "boxShadow": {
-                "outline": "0 4px 34px 10px rgb(0 0 0 / 0.1)",
+                "outline": "0 4px 34px 10px rgb(0 0 0 / 0.07)",
             },
             fontFamily: {
                 sans: ['Futura', ...defaultTheme.fontFamily.sans],

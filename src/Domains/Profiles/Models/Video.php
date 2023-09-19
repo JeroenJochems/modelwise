@@ -3,6 +3,7 @@
 namespace Domain\Profiles\Models;
 
 use Domain\Profiles\Actions\VideoToMux;
+use Domain\Profiles\Collections\VideoCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Kra8\Snowflake\HasShortflakePrimary;
 use Spatie\EloquentSortable\Sortable;
@@ -13,6 +14,11 @@ class Video extends Model implements Sortable
     use SortableTrait;
 
     use HasShortflakePrimary;
+
+    public function newCollection($models = [])
+    {
+        return new VideoCollection($models);
+    }
 
     public $sortable = [
         'order_column_name' => 'sortable_order',

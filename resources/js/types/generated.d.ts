@@ -37,10 +37,13 @@ slug: string;
 }
 declare namespace Domain.Jobs.Data {
 export type ApplicationData = {
+is_shortlisted: boolean;
+is_rejected: boolean;
 id: string;
-status: Domain.Jobs.Enums.ApplicationStatusEnum;
+model_id: string;
+photos: Array<Domain.Profiles.Data.PhotoData>;
+casting_photos: Array<Domain.Profiles.Data.PhotoData>;
 hire: Domain.Jobs.Data.HireData | null;
-rejection: Domain.Jobs.Data.RejectionData | null;
 };
 export type BrandData = {
 name: string;
@@ -49,6 +52,10 @@ description: string | null;
 };
 export type ClientData = {
 name: string;
+};
+export type ExtraFieldsData = {
+casting_photos: boolean;
+casting_videos: boolean;
 };
 export type FieldsData = {
 digitals: boolean;
@@ -64,6 +71,7 @@ id: string;
 };
 export type InviteData = {
 id: number;
+model_id: number;
 };
 export type JobData = {
 title: string;
@@ -78,6 +86,7 @@ id: string;
 };
 export type RoleData = {
 fields: Domain.Jobs.Data.FieldsData;
+extra_fields: Domain.Jobs.Data.ExtraFieldsData;
 id: number;
 name: string;
 description: string;
@@ -90,8 +99,10 @@ travel_reimbursement_note: string | null;
 photos: Array<Domain.Profiles.Data.PhotoData>;
 public_photos: Array<Domain.Profiles.Data.PhotoData>;
 job: Domain.Jobs.Data.JobData;
-my_invites: Array<Domain.Jobs.Data.InviteData> | null;
-my_applications: Array<Domain.Jobs.Data.ApplicationData> | null;
+my_invites: Array<Domain.Jobs.Data.InviteData>;
+my_application: Domain.Jobs.Data.ApplicationData;
+casting_video_instructions: string | null;
+casting_photo_instructions: string | null;
 };
 }
 declare namespace Domain.Jobs.Enums {
@@ -154,7 +165,9 @@ gender: string | null;
 date_of_birth: string | null;
 };
 export type ModelPhotoData = {
-id: string;
+pathSquareFace?: string;
+mime: string;
+id: string | number;
 path: string;
 };
 export type ModelPhotosCollection = {
@@ -171,8 +184,12 @@ instagram: string | null;
 tiktok: string | null;
 website: string | null;
 };
+export type ModelVideoData = {
+id: string;
+muxId: string;
+folder: string;
+};
 export type PhotoData = {
-path_square_face: string;
 id: number;
 path: string;
 };

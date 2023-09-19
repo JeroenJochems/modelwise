@@ -4,6 +4,7 @@ namespace Domain\Jobs\Models;
 
 use App\Notifications\InviteCreated;
 use Domain\Jobs\QueryBuilders\InviteQueryBuilder;
+use Domain\Work\Models\Application;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kra8\Snowflake\HasShortflakePrimary;

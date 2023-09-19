@@ -1,6 +1,5 @@
 import {Head, Link} from '@inertiajs/react';
 import { PageProps } from '@/types';
-import CleanLayout from "@/Layouts/CleanLayout";
 import {H1} from "@/Components/Typography/H1";
 import DashboardViewModel = App.ViewModels.DashboardViewModel;
 import {Invites} from "@/Components/Invites";

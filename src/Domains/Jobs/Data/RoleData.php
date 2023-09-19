@@ -20,6 +20,7 @@ use Spatie\LaravelData\Transformers\DateTimeInterfaceTransformer;
 class RoleData extends Data
 {
     public FieldsData $fields;
+    public ExtraFieldsData $extra_fields;
 
     public function __construct(
         public int $id,
@@ -51,18 +52,18 @@ class RoleData extends Data
 
         #[DataCollectionOf(InviteData::class)]
         /** @var InviteData[] */
-        public Lazy|DataCollection|null $my_invites,
+        public DataCollection $my_invites,
 
-        #[DataCollectionOf(ApplicationData::class)]
-        /** @var ApplicationData[] */
-        public Lazy|DataCollection|null $my_applications,
+        public ?ApplicationData $my_application,
+
+        public ?string $casting_video_instructions,
+        public ?string $casting_photo_instructions,
 
         $fields,
+        $extra_fields
     ) {
-
         $this->fields = FieldsData::from($fields);
-
-
+        $this->extra_fields = ExtraFieldsData::from($extra_fields);
     }
 
 }

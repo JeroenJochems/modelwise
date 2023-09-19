@@ -10,5 +10,6 @@ class InviteData extends Data
 {
     public function __construct(
         public int $id,
+        public int $model_id,
     ) { }
 }

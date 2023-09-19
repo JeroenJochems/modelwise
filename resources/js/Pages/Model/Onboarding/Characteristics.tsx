@@ -6,13 +6,13 @@ import { useForm, usePage} from '@inertiajs/react';
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
 import InputError from "@/Components/InputError";
-import {InlinePhotoUploader, Photo} from "@/Components/InlinePhotoUploader";
 import {P} from "@/Components/Typography/p";
 import {Header} from "@/Components/Onboarding/Header";
 import {PageProps} from "@/types";
 import PrimaryButton from "@/Components/PrimaryButton";
 import HairColor = Domain.Profiles.Enums.HairColor;
 import EyeColor = Domain.Profiles.Enums.EyeColor;
+import {BaseFile, FileUploader} from "@/Components/FileUploader";
 
 type ModelDataType = {
     gender?: string
@@ -27,7 +27,7 @@ type ModelDataType = {
     tattoos: boolean
     piercings: boolean
     cup_size?: string
-    tattoo_photos?: Photo[]
+    tattoo_photos?: BaseFile[]
 }
 
 
@@ -35,8 +35,8 @@ type Props = {
     modelData: ModelDataType
     hairColors: HairColor[],
     eyeColors: EyeColor[],
-    tattooPhotos: Photo[],
-    piercingPhotos: Photo[],
+    tattooPhotos: BaseFile[],
+    piercingPhotos: BaseFile[],
 }
 
 export default function Characteristics({modelData, tattooPhotos, piercingPhotos, hairColors, eyeColors}: Props) {
@@ -67,9 +67,7 @@ export default function Characteristics({modelData, tattooPhotos, piercingPhotos
             <Header step={7} isOnboarding={isOnboarding}>
                 <H1>Body characteristics</H1>
             </Header>
-        } photos={["https://modelwise.imgix.net/assets/4.png"]}>
-
-
+        } photos={["https://modelwise.imgix.net/assets/8.jpeg?fm=auto&w=1200"]}>
 
             <div className="grid gap-4">
 
@@ -171,7 +169,8 @@ export default function Characteristics({modelData, tattooPhotos, piercingPhotos
                         <div className={"mt-2 grid gap-2"}>
                             <P>Tattoo reference photos</P>
 
-                            <InlinePhotoUploader
+                            <FileUploader
+                                accept={"image/*"}
                                 files={data.tattoo_photos}
                                 onUpdate={photos => setData('tattoo_photos', photos)}
                                 onAdd={(photo) => setData(data => ({...data, tattoo_photos: [...data.tattoo_photos, photo]}))}
@@ -193,7 +192,8 @@ export default function Characteristics({modelData, tattooPhotos, piercingPhotos
                     <div className={"mt-2 grid gap-2"}>
                         <P>Piercing reference photos</P>
 
-                        <InlinePhotoUploader
+                        <FileUploader
+                            accept={"image/*"}
                             files={data.piercing_photos}
                             onUpdate={photos => setData('piercing_photos', photos)}
                             onAdd={(photo) => setData(data => ({...data, piercing_photos: [...data.piercing_photos, photo]}))}

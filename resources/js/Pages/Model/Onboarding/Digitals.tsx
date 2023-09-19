@@ -2,13 +2,13 @@ import CleanLayout from "@/Layouts/CleanLayout";
 import {H1} from "@/Components/Typography/H1";
 import {Header} from "@/Components/Onboarding/Header";
 import { useForm, usePage} from "@inertiajs/react";
-import {InlinePhotoUploader, Photo} from "@/Components/InlinePhotoUploader";
 import {PageProps} from "@/types";
 import {useState} from "react";
 import PrimaryButton from "@/Components/PrimaryButton";
+import {BaseFile, FileUploader} from "@/Components/FileUploader";
 
 
-export default function Photos({modelDigitals}: {modelDigitals: Photo[] }) {
+export default function Photos({modelDigitals}: {modelDigitals: BaseFile[] }) {
     const { ziggy } = usePage<PageProps>().props;
     const isOnboarding = ziggy.location.includes("onboarding")
 
@@ -34,9 +34,9 @@ export default function Photos({modelDigitals}: {modelDigitals: Photo[] }) {
             <Header step={5} isOnboarding={isOnboarding}>
                 <H1>Digitals / polaroids</H1>
             </Header>
-        } photos={["https://modelwise.imgix.net/photos/d3f0b9b3-c079-41bc-b403-5ddc78d2dddd"]}>
+        }  photos={["https://modelwise.imgix.net/assets/9.jpeg?w=1200&fm=auto"]}>
             <div className="grid gap-4">
-                <InlinePhotoUploader
+                <FileUploader
                     cols={3}
                     files={data.photos}
                     onToggleUploading={setIsUploading}

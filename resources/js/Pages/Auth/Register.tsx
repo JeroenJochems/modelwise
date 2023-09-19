@@ -6,7 +6,6 @@ import {Head, Link, useForm} from '@inertiajs/react';
 import {H1} from "@/Components/Typography/H1";
 import CleanLayout from "@/Layouts/CleanLayout";
 import {Header} from "@/Components/Onboarding/Header";
-import {Submit} from "@/Components/Forms/Submit";
 import PrimaryButton from "@/Components/PrimaryButton";
 
 export default function Register() {
@@ -29,7 +28,7 @@ export default function Register() {
     };
 
     return (
-        <CleanLayout header={
+        <CleanLayout photos={["https://modelwise.imgix.net/assets/13.jpeg?fm=auto&w=1200"]} header={
             <Header step={1} isOnboarding={true}>
                 <H1>Create your account</H1>
             </Header>

@@ -4,11 +4,7 @@ namespace App\ViewModels;
 
 use Domain\Jobs\Data\ApplicationData;
 use Domain\Jobs\Data\HireData;
-use Domain\Jobs\Data\InviteData;
 use Domain\Jobs\Data\RoleData;
-use Domain\Jobs\Models\Application;
-use Domain\Jobs\Models\Hire;
-use Domain\Jobs\Models\Invite;
 use Domain\Jobs\Models\Role;
 use Domain\Profiles\Models\Model;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -40,15 +36,25 @@ class DashboardViewModel extends ViewModel
                 ->get()
         );
 
+        $openApplications = Role::query()
+            ->whereHas("my_applications", function ($q) {
+                $q->whereDoesntHave("hire")
+                    ->whereDoesntHave("rejection");
+            })
+            ->with(
+                'my_application.hire',
+                'my_application.casting_photos',
+                'my_application.photos',
+                'photos',
+                'public_photos',
+                'my_invites',
+                'job',
+                'job.look_and_feel_photos',
+                'job.brand',
+                'job.client')
+            ->get();
         $this->openApplications = RoleData::collection(
-            Role::query()
-                ->withWhereHas("my_applications", function ($q) {
-                    $q->whereDoesntHave("hire")
-                      ->whereDoesntHave("rejection")
-                      ->with('hire');
-                })
-                ->with('photos', 'public_photos', 'job.look_and_feel_photos')
-                ->get()
+            $openApplications
         );
 
         $this->hires = RoleData::collection(

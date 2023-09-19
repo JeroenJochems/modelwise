@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Jobs\Models;
+namespace Domain\Work\Models;
 
 use Domain\Jobs\QueryBuilders\HireQueryBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

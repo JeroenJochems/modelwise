@@ -16,20 +16,20 @@ class ProfilePictureController extends BaseOnboardingController
         $profilePicture = $model->profile_picture;
 
         return Inertia::render("Model/Onboarding/ProfilePicture")
-            ->with(['profile_picture' => $profilePicture ? ["path" => $model->profilePictureCdn."?w=600&h=600&fit=crop&crop=faces",] : null]);
+            ->with(['profile_picture' => $profilePicture ? ["path" => $model->profile_picture, "mime" => "image/*"] : null]);
     }
 
     public function store()
     {
         $profilePicture = request()->get("profile_picture");
 
-        if ($profilePicture && isset($profilePicture['tmpFile'])) {
+        if ($profilePicture && isset($profilePicture['isNew'])) {
 
             /** @var Model $model */
             $model = auth()->user();
-            $model->profile_picture = str_replace("tmp/", "profile_pictures/", $profilePicture['tmpFile']);
+            $model->profile_picture = str_replace("tmp/", "profile_pictures/", $profilePicture['path']);
 
-            Storage::copy($profilePicture['tmpFile'], $model->profile_picture);
+            Storage::copy($profilePicture['path'], $model->profile_picture);
 
             $model->save();
         }

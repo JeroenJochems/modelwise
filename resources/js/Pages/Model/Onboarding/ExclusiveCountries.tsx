@@ -49,7 +49,7 @@ export default function ExclusiveCountries({viewModel, modelingCountries, allCou
     }
 
     return (
-        <CleanLayout header={
+        <CleanLayout photos={["https://modelwise.imgix.net/assets/34.png?w=1200&fm=auto"]} header={
             <Header step={8} isOnboarding={isOnboarding}>
                 <H1>Exclusive countries</H1>
             </Header>

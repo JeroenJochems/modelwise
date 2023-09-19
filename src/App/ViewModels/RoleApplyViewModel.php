@@ -8,7 +8,7 @@ use Domain\Jobs\Data\RoleData;
 use Domain\Jobs\Models\Role;
 use Spatie\ViewModels\ViewModel;
 
-/** @typescript  */
+/** @typescript */
 class RoleApplyViewModel extends ViewModel
 {
     public RoleData $role;
@@ -19,7 +19,19 @@ class RoleApplyViewModel extends ViewModel
 
     public function __construct(Role $role)
     {
-        $role->load('my_applications.hire', 'my_invites', 'job', 'job.look_and_feel_photos', 'photos', 'public_photos', 'job.brand', 'job.client');
+        $role->load(
+            'my_application',
+            'my_application.hire',
+            'my_application.photos',
+            'my_application.casting_photos',
+            'photos',
+            'public_photos',
+            'job',
+            'job.look_and_feel_photos',
+            'job.brand',
+            'job.client',
+            'my_invites',
+        );
 
         $this->role = RoleData::from($role);
 

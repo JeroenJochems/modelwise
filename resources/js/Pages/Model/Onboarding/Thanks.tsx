@@ -24,7 +24,7 @@ export default function Thanks({ is_subscribed}: Props) {
     }
 
     return (
-        <CleanLayout mobileSplit header={
+        <CleanLayout  photos={["https://modelwise.imgix.net/assets/7.jpeg"]} mobileSplit header={
             <div className={"grid gap-4"}>
                 <div className={"w-16"}>
                     <Link href={route("onboarding.professional-experience")} className={"w-16 text-gray-400"}>

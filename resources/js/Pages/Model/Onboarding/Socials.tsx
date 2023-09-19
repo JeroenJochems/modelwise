@@ -36,7 +36,7 @@ export default function Socials({modelData}: Props) {
     };
 
     return (
-        <CleanLayout photos={["https://modelwise.imgix.net/assets/3.png"]} header={
+        <CleanLayout  photos={["https://modelwise.imgix.net/assets/6.2.jpeg?w=1200&fm=auto"]} header={
             <Header step={6} isOnboarding={isOnboarding}>
                 <H1>Socials</H1>
             </Header>

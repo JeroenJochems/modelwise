@@ -9,7 +9,7 @@ import {CheckIcon} from "@heroicons/react/24/outline";
 export default function Index() {
 
     return (
-        <CleanLayout mobileSplit>
+        <CleanLayout photos={["https://modelwise.imgix.net/assets/1.jpeg?fm=auto&w=1200"]} mobileSplit>
             <div className="grid grid-cols-1 gap-4">
                 <H1>Join the tribe!</H1>
                 <P>You’re just a few steps away from a happier model life.</P>

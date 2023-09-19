@@ -20,25 +20,17 @@ export function JobHeader({ role }: Props ) {
     const { job } = role;
 
     return (
-        <div className={"grid gap-8"}>
+        <div className={"grid gap-8 mt-4 mb-4"}>
             <Label>
                 { getRoleLabel(role) }
             </Label>
 
             <div>
-                <H2 className={"mt-4"}>{role.name}</H2>
+                <H2 className={"mt-4 whitespace-pre-wrap"}>
+                    {role.job.brand?.name } { "\n" }
+                    {role.name}
+                </H2>
                 <H1>{job.title}</H1>
-                <P className={"mt-4"} lineClamp={4}>{ role.description }</P>
-
-                <Bubbles>
-                    <Bubble className={"mr-2"}>
-                        <CalendarDays className={"mr-1"} /> { formatDate(role.start_date) }
-                    </Bubble>
-
-                    <Bubble>
-                        <Globe className={"mr-1"} /> { job.location }
-                    </Bubble>
-                </Bubbles>
             </div>
         </div>
     )

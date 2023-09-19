@@ -6,7 +6,7 @@ use App\Notifications\SidemailChannel;
 use App\Notifications\SidemailData\SidemailNotification;
 use App\Notifications\SidemailData\SidemailRecipient;
 use App\Notifications\SideMailMessage;
-use Domain\Jobs\Models\Application;
+use Domain\Work\Models\Application;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
