@@ -99,15 +99,16 @@ export function FileUploader({ files, error, max = 99, slots = 6, cols = 6, cols
                 })
                 .then(function (response: ResponseType) {
 
+
                     setSelectedFiles(s => [...s].filter(f => f.name !== file.name));
 
                     onAdd({
                         id: uuidv4(),
                         path: response.key,
                         isNew: true,
-                        tmpLocalFile: file,
                         mime: file.type,
                     });
+
                 });
         });
     }

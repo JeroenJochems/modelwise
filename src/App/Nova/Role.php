@@ -55,6 +55,7 @@ class Role extends Resource
                 'hips' => 'Hips',
                 'shoe_size' => 'Shoe size',
                 'head' => 'Head',
+                'clothing_size_top' => 'Clothing size, top (XS-XXL)'
             ])->hideFalseValues(),
             new Panel(
                 "Fields specific for shortlisted models",

@@ -122,7 +122,7 @@ export default function PersonalDetails({modelData, countriesViewModel }: Props)
                     onChange={(value: string) => { clearErrors('last_name'); setData('last_name', value) }}
                 />
 
-                { age < 18 &&
+                { age > 0 && age < 18 &&
                     <>
                         <InputGroupText
                             title="First name parent"

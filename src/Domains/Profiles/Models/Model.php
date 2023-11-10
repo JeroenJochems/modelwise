@@ -3,7 +3,6 @@
 namespace Domain\Profiles\Models;
 
 use App\Notifications\ResetPasswordNotification;
-use App\Notifications\SidemailData\Templates;
 use Domain\Jobs\Models\Invite;
 use Domain\Jobs\Models\RoleView;
 use Domain\Profiles\Enums\Ethnicity;
@@ -13,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Kra8\Snowflake\HasShortflakePrimary;
+use Laravel\Nova\Auth\Impersonatable;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Spatie\Onboard\Concerns\GetsOnboarded;
@@ -28,6 +28,8 @@ class Model extends Authenticatable implements Onboardable
     use HasTags;
     use GetsOnboarded;
     use HasShortflakePrimary;
+    use Impersonatable;
+
 
     const TAG_TYPE_MODEL_EXPERIENCE = 'Modeling experience';
     const TAG_TYPE_PROFESSIONS = 'Professions';

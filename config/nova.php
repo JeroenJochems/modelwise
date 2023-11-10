@@ -122,7 +122,7 @@ return [
     |
     */
 
-    'pagination' => 'simple',
+    'pagination' => 'load-more',
 
     /*
     |--------------------------------------------------------------------------
@@ -197,6 +197,7 @@ return [
     | to redirect the administrator after stopping impersonating a user.
     |
     */
+
 
     'impersonation' => [
         'started' => '/',

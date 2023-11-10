@@ -62,7 +62,7 @@ export default function Show({ viewModel }: Props)
 
                     <TabPanel>
                         <Content>
-                            <P lineClamp={10}>{ role.description }</P>
+                            <P className={"whitespace-pre-wrap"} lineClamp={10}>{ role.description }</P>
 
                             <div className={"hidden sm:block"}>
                                 <JobSpecifics role={role} />
@@ -100,14 +100,14 @@ export default function Show({ viewModel }: Props)
                             { job.look_and_feel_photos.length > 0 && (
                                 <div className={"mt-4 grid gap-4"}>
                                     <H3>Shoot look & feel</H3>
-                                    <PhotoScroller photos={job.look_and_feel_photos.map(photo => cdnLink(photo.path, 'face_square'))} />
+                                    <PhotoScroller photos={job.look_and_feel_photos.map(photo => cdnLink(photo.path))} />
                                 </div>
                             )}
 
                             { role.public_photos.length > 0 && (
                                 <div className={"mt-4 grid gap-4"}>
                                     <H3>For this role</H3>
-                                    <PhotoScroller photos={role.public_photos.map(photo => cdnLink(photo.path, 'face_square'))} />
+                                    <PhotoScroller photos={role.public_photos.map(photo => cdnLink(photo.path))} />
                                 </div>
                             )}
 

@@ -11,6 +11,9 @@ type Props = {
 export function ApplicationStatus({ role }: Props) {
 
     const application = role.my_application
+
+    if (!application) return null;
+
     const isShortlisted = application.is_shortlisted;
     const isHired = !!application.hire;
     const isRejected = application.is_rejected;

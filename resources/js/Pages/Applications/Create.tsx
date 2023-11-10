@@ -29,6 +29,7 @@ type Form = {
     waist: number;
     hips: number;
     shoe_size: number;
+    clothing_size_top: string | null;
     brand_conflicted: string;
     available_dates: Array<string>;
 }
@@ -37,13 +38,12 @@ export default function Create({viewModel, meViewModel}: Props) {
 
     const {errors} = usePage().props
 
-    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const {isUploading, setUploadingField} = useUploadingFields();
 
     const {role, shootDates} = viewModel;
     const me = meViewModel.me;
 
-    const {post, data, setData} = useForm<Form>({
+    const {post, data, setData, processing, isDirty, hasErrors } = useForm<Form>({
         role_id: viewModel.role.id,
         digitals: me.digitals,
         photos: [],
@@ -52,13 +52,13 @@ export default function Create({viewModel, meViewModel}: Props) {
         waist: me.waist,
         hips: me.hips,
         shoe_size: me.shoe_size,
+        clothing_size_top: me.clothing_size_top,
         cover_letter: '',
         available_dates: [],
         brand_conflicted: '',
     });
 
     function submit() {
-        setIsSubmitting(true);
         post(route('roles.apply.store', viewModel.role.id));
     }
 
@@ -90,6 +90,8 @@ export default function Create({viewModel, meViewModel}: Props) {
                             onToggleUploading={(state) => setUploadingField('digitals', state)}
                             onUpdate={(digitals) => setData(data => ({...data, digitals}))}
                         />
+
+                        <InputError message={errors.digitals}/>
                     </div>
                 )}
 
@@ -105,9 +107,10 @@ export default function Create({viewModel, meViewModel}: Props) {
                         onUpdate={(photos) => setData(data => ({...data, photos}))}
                         onToggleUploading={(state) => setUploadingField('photos', state)}
                     />
+                    <InputError message={errors.photos}/>
                 </div>
 
-                {(role.fields.height || role.fields.chest || role.fields.waist || role.fields.hips || role.fields.shoe_size) && (
+                {(role.fields.height || role.fields.chest || role.fields.waist || role.fields.hips || role.fields.shoe_size || role.fields.clothing_size_top) && (
                     <div>
                         <H2>Sizes</H2>
                         <P className={"mb-2"}>The following sizes are relevant for this job. Is everything still up to
@@ -138,7 +141,7 @@ export default function Create({viewModel, meViewModel}: Props) {
                                     title="Waist (cm)"
                                     type={"number"}
                                     value={data.waist}
-                                    onChange={value => parseInt(value)}
+                                    onChange={value => setData("waist", parseInt(value))}
                                 />
                             )}
 
@@ -147,7 +150,7 @@ export default function Create({viewModel, meViewModel}: Props) {
                                     title="Hips (cm)"
                                     type={"number"}
                                     value={data.hips}
-                                    onChange={value => parseInt(value)}
+                                    onChange={value => setData("hips", parseInt(value))}
                                 />
                             )}
 
@@ -156,7 +159,17 @@ export default function Create({viewModel, meViewModel}: Props) {
                                     title="Shoe size (eu)"
                                     type={"number"}
                                     value={data.shoe_size}
-                                    onChange={value => parseInt(value)}
+                                    onChange={value => setData("shoe_size", parseInt(value))}
+                                />
+                            )}
+
+                            {role.fields.clothing_size_top && (
+                                <InputGroupText
+                                    title="Size (top, XS-XXL)"
+                                    type={"text"}
+                                    options={["", "XS", "S", "M", "L", "XL", "XXL"]}
+                                    value={data.clothing_size_top || ""}
+                                    onChange={value => setData("clothing_size_top", value)}
                                 />
                             )}
                         </div>
@@ -192,8 +205,10 @@ export default function Create({viewModel, meViewModel}: Props) {
                     onChange={value => setData('cover_letter', value)}
                 />
 
-                <PrimaryButton onClick={submit} className={"mb-8"} disabled={isUploading}>
-                    {isSubmitting ? "Please wait..." : "Submit application"}
+                { !isDirty && hasErrors && <InputError message={"Please review the form errors before submitting again."} /> }
+
+                <PrimaryButton onClick={submit} className={"mb-8"} disabled={isUploading || processing}>
+                    {processing ? "Please wait..." : "Submit application"}
                 </PrimaryButton>
             </Content>
         </DashboardLayout>

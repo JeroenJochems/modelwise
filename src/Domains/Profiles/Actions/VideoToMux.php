@@ -9,9 +9,12 @@ use MuxPhp\Api\AssetsApi;
 use MuxPhp\Models\InputSettings;
 use MuxPhp\Models\CreateAssetRequest;
 use MuxPhp\Models\PlaybackPolicy;
+use Spatie\QueueableAction\QueueableAction;
 
 class VideoToMux
 {
+    use QueueableAction;
+
     public function execute(Video $video)
     {
         $config = Configuration::getDefaultConfiguration()

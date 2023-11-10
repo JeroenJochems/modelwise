@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Model\OnboardingController;
 use App\Http\Controllers\Model\ProfessionalExperienceController;
 use App\Http\Controllers\RoleController;
@@ -49,7 +51,12 @@ if (!function_exists("onboardingRoutes")) {
     }
 }
 
-Route::get('/', [AuthenticatedSessionController::class, "create"] );
+Route::get('/', [LandingController::class, "index"] )->name("landing");
+Route::get('/login', [AuthenticatedSessionController::class, "create"] )->name("login");
+Route::post('/contact', [ContactController::class, "store"] )->name("contact");
+
+
+
 Route::get('about-modelwise', [OnboardingController::class, "index"])->name("onboarding.index");
 
 Route::resource('roles', RoleController::class, ["index", "view"])->name("index", "jobs");

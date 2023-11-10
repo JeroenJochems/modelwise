@@ -21,7 +21,6 @@ class Apply
         $application->brand_conflicted = $applyData->brand_conflicted;
         $application->save();
 
-
         app(PhotoRepository::class)->update($application, Application::PHOTO_FOLDER, $applyData->photos);
         app(PhotoRepository::class)->update($applyData->model, Photo::FOLDER_DIGITALS, $applyData->digitals);
 
@@ -35,6 +34,7 @@ class Apply
         if ($applyData->waist) $applyData->model->waist = $applyData->waist;
         if ($applyData->hips) $applyData->model->hips = $applyData->hips;
         if ($applyData->shoe_size) $applyData->model->shoe_size = $applyData->shoe_size;
+        if ($applyData->clothing_size_top) $applyData->model->clothing_size_top = $applyData->clothing_size_top;
         $applyData->model->save();
     }
 }

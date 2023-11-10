@@ -22,7 +22,7 @@ class ApplicationCreated extends Notification implements SidemailNotification
         return SidemailChannel::class;
     }
 
-    public function toSidemail(object $notifiable): SidemailMessage
+    public function toSidemail(object $notifiable): SideMailMessage
     {
         return new SideMailMessage(
             recipient: new SidemailRecipient(

@@ -37,6 +37,11 @@ class Model extends Resource
         return $this->first_name . ' ' . $this->last_name;
     }
 
+    public static function perPageOptions()
+    {
+        return [200];
+    }
+
     public function fields(NovaRequest $request)
     {
         return [
@@ -54,9 +59,11 @@ class Model extends Resource
             Stack::make("Name", [
                 Line::make("Name", function() { return $this->first_name." ".$this->last_name; })->asHeading(),
                 Line::make("Location", function() { return $this->city.", ".$this->country; })->asSmall(),
+                Line::make("Phone number", function() { return $this->phone_number; })->asSmall(),
             ])->onlyOnIndex(),
             Text::make('First Name')->sortable()->rules('required', 'max:255')->hideFromIndex(),
             Text::make('Last Name')->sortable()->rules('required', 'max:255')->hideFromIndex(),
+            Text::make('Phone number')->rules('required', 'max:255')->hideFromIndex(),
             Email::make('Email')->sortable()->required()->rules('required', 'email')->hideFromIndex(),
             Select::make('Preferred language')->options(['en' => 'English', 'nl' => 'Nederlands'])->rules('required', 'email')->hideFromIndex(),
             Date::make('Date of birth')->hideFromIndex(),

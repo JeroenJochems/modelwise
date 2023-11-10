@@ -2,6 +2,7 @@ import MuxPlayer from "@mux/mux-player-react";
 import {Cross} from "@/Components/Icons/Cross";
 import {BaseFile } from "@/Components/FileUploader";
 import {useCdnLink} from "@/Hooks/useCdnLink";
+import {LoadingFile} from "@/Components/FileUploader/ExistingFile/LoadingFile";
 
 type Props = {
     file: BaseFile;
@@ -18,15 +19,15 @@ export function ExistingFile({ file, onDelete }: Props) {
 
             { file.mime.includes("video") && (
                 <>
-                 { !!file.tmpLocalFile
-                     ? <video controls className={"object-cover rounded-lg w-full h-full"}><source src={URL.createObjectURL(file.tmpLocalFile)} /></video>
+                 { !!file.isNew
+                     ? <video controls className={"object-cover rounded-lg w-full h-full"}><source src={cdnLink(file.path)} /></video>
                      : <MuxPlayer playbackId={file.muxId} className={"object-cover rounded-lg w-full h-full"} />
                  }
                  </>
             )}
 
             { file.mime.includes("image") && (
-                <img className={"object-cover rounded-lg w-full h-full"} src={!!file.tmpLocalFile ? URL.createObjectURL(file.tmpLocalFile) : cdnLink(file.path, "face_square") } />
+                <LoadingFile className={"object-cover rounded-lg w-full h-full"} src={cdnLink(file.path, "face_square") } />
             )}
 
             {

@@ -53,6 +53,7 @@ class DashboardViewModel extends ViewModel
                 'job.brand',
                 'job.client')
             ->get();
+
         $this->openApplications = RoleData::collection(
             $openApplications
         );
@@ -69,7 +70,7 @@ class DashboardViewModel extends ViewModel
 
 
         $recentlyViewed = $model->role_views()
-            ->with("role", 'role.photos', 'role.public_photos', 'role.job.look_and_feel_photos')
+            ->with("role",'role.photos', 'role.my_invites', 'role.public_photos', 'role.job.look_and_feel_photos')
             ->orderByDesc('created_at')
             ->take(5)
             ->whereNotIn('role_id', collect($this->openApplications)->pluck('id'))
@@ -79,6 +80,5 @@ class DashboardViewModel extends ViewModel
             ->pluck('role');
 
         $this->recentlyViewedRoles = RoleData::collection($recentlyViewed);
-
     }
 }

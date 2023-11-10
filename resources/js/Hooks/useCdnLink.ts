@@ -12,7 +12,7 @@ export function useCdnLink() {
 
     function cdnLink(path: string, style: "face_square" | "original" = "original") {
 
-        let format = "?fm=auto&w=600&h=600";
+        let format = "?fm=auto&w=600&h=600&fit=crop";
 
         if (style === "face_square") {
             format = "?fm=auto&w=600&h=600&fit=crop&crop=faces";

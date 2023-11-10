@@ -29,7 +29,7 @@ class VideoRepository
     public function update(\Illuminate\Database\Eloquent\Model $model, string $folder, $videos)
     {
         $newSort = collect($videos)->map(function($video) use($folder, $model) {
-            if (!isset($video['tmpFile'])) {
+            if (!isset($video['isNew'])) {
                 return $video['id'];
             }
 
@@ -39,9 +39,9 @@ class VideoRepository
 
             $videoObj = new Video();
             $videoObj->videoable()->associate($model);
-            $videoObj->path = str_replace("tmp/", "videos/", $video['tmpFile']);
+            $videoObj->path = str_replace("tmp/", "videos/", $video['path']);
             $videoObj->folder = $folder;
-            Storage::move($video['tmpFile'], $videoObj->path);
+            Storage::move($video['path'], $videoObj->path);
             $videoObj->save();
 
             return $videoObj->id;
@@ -49,6 +49,7 @@ class VideoRepository
 
 
 
-        Photo::setNewOrder($newSort->toArray());
+
+        Video::setNewOrder($newSort->toArray());
     }
 }

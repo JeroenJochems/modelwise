@@ -52,6 +52,7 @@ class ModelData extends Data
         public int $waist,
         public int $hips,
         public int $shoe_size,
+        public ?string $clothing_size_top,
     ) {}
 
     public static function fromModel(Model $model): self
@@ -74,6 +75,7 @@ class ModelData extends Data
             $model->waist,
             $model->hips,
             $model->shoe_size,
+            $model->clothing_size_top,
         );
     }
 }

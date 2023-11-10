@@ -6,6 +6,8 @@ use Domain\Profiles\Models\Model;
 use Domain\Profiles\Models\Photo;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Storage;
+use Support\Actions\DeletePhoto;
+use Support\Actions\MovePhoto;
 
 class PhotoRepository
 {
@@ -33,7 +35,7 @@ class PhotoRepository
                 if (isset($photo['deleted']) && $photo['deleted'] != 0) {
 
                     if ($photoObj = Photo::find($photo['id'])) {
-                        Storage::delete($photoObj->path);
+                        app(DeletePhoto::class)->onQueue()->execute($photoObj->path);
                         $photoObj->delete();
                     }
 
@@ -52,7 +54,7 @@ class PhotoRepository
             $photoObj->save();
 
             if ($photo['path'] != $photoObj->path) {
-                Storage::copy($photo['path'], $photoObj->path);
+                app(MovePhoto::class)->onQueue()->execute($photo['path'], $photoObj->path);
             }
 
             return $photoObj->id;

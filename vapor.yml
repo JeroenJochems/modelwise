@@ -4,24 +4,11 @@ environments:
     production:
         storage: modelwise-production
         memory: 1024
-        queues:
-            - events-production
-        domain:
-            - test.modelwise.agency
+        queues: events-production
+        domain: modelwise.agency
         cli-memory: 512
         runtime: 'php-8.2:al2'
         build:
             - 'COMPOSER_MIRROR_PATH_REPOS=1 composer install --no-dev'
             - 'php artisan event:cache'
             - 'npm ci && npm run build && rm -rf node_modules'
-    staging:
-        storage: modelwise-staging
-        queues:
-            - events-staging
-        memory: 1024
-        cli-memory: 512
-        runtime: 'php-8.2:al2'
-        build:
-            - 'COMPOSER_MIRROR_PATH_REPOS=1 composer install --no-dev'
-            - 'php artisan event:cache'
-            - 'npm run build && rm -rf node_modules'

@@ -22,7 +22,7 @@ class ApplyData extends Data
     public function __construct(
         public ?string $cover_letter,
 
-        #[Rule(["array", "min:3"])]
+        #[Rule(["required", "array", "min:3"])]
         public array $digitals,
 
         #[Rule(["array", "min:3"])]
@@ -36,6 +36,7 @@ class ApplyData extends Data
         public ?int $waist,
         public ?int $hips,
         public ?int $shoe_size,
+        public ?string $clothing_size_top,
         public ?string $brand_conflicted,
     ) {
         $this->model = Auth::user();

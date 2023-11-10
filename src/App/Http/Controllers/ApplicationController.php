@@ -35,6 +35,15 @@ class ApplicationController extends Controller
             ));
     }
 
+
+    public function store(Role $role, ApplyData $data)
+    {
+        app(Apply::class)($data);
+
+        return redirect()->route("roles.show", $role);
+    }
+
+
     public function update(Application $application)
     {
         if ($videos = request()->get("casting_videos")) {
@@ -47,12 +56,5 @@ class ApplicationController extends Controller
 
         return Inertia::render('Applications/Updated')
             ->with("viewModel", new RoleApplyViewModel($application->role));
-    }
-
-    public function store(Role $role, ApplyData $data)
-    {
-        app(Apply::class)($data);
-
-        return redirect()->route("roles.show", $role);
     }
 }

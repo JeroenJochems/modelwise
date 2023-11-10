@@ -4,7 +4,7 @@ namespace App\Notifications;
 
 use App\Notifications\SidemailData\SidemailRecipient;
 
-class SidemailMessage
+class SideMailMessage
 {
     public function __construct(
         public SidemailRecipient $recipient,

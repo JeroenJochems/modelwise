@@ -28,7 +28,7 @@ class Video extends Model implements Sortable
     protected static function booted()
     {
         static::created(function (Video $video) {
-            app(VideoToMux::class)->execute($video);
+            app(VideoToMux::class)->onQueue()->execute($video);
         });
     }
 

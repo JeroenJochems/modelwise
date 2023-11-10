@@ -4,8 +4,11 @@ import '../css/app.css';
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import LogRocket from 'logrocket';
+LogRocket.init('ovxwul/modelwise');
 
-const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
+const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Modelwise';
+
 
 const app = createInertiaApp({
     title: (title) => `${appName} 📸 ${title}`,

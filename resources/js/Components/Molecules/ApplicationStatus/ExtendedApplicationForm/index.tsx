@@ -22,7 +22,7 @@ export function ExtendedApplicationForm({ role }: { role: RoleData}) {
     });
 
     function submit() {
-        post(route('applications.update', role.my_application.id));
+        post(route('applications.update', role.my_application?.id));
     }
 
     return (

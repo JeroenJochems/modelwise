@@ -1,5 +1,4 @@
 import {PropsWithChildren, ReactNode} from 'react';
-import PrimaryButton from "@/Components/PrimaryButton";
 
 type Props = PropsWithChildren & {
     photos?: Array<string>;

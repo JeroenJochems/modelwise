@@ -12,5 +12,6 @@ class FieldsData extends Data {
     public bool $waist;
     public bool $hips;
     public bool $shoe_size;
+    public bool $clothing_size_top;
     public bool $head;
 }

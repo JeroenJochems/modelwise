@@ -64,6 +64,7 @@ chest: boolean;
 waist: boolean;
 hips: boolean;
 shoe_size: boolean;
+clothing_size_top: boolean;
 head: boolean;
 };
 export type HireData = {
@@ -100,7 +101,7 @@ photos: Array<Domain.Profiles.Data.PhotoData>;
 public_photos: Array<Domain.Profiles.Data.PhotoData>;
 job: Domain.Jobs.Data.JobData;
 my_invites: Array<Domain.Jobs.Data.InviteData>;
-my_application: Domain.Jobs.Data.ApplicationData;
+my_application: Domain.Jobs.Data.ApplicationData | null;
 casting_video_instructions: string | null;
 casting_photo_instructions: string | null;
 };
@@ -146,6 +147,7 @@ chest: number;
 waist: number;
 hips: number;
 shoe_size: number;
+clothing_size_top: string | null;
 };
 export type ModelDigitalData = {
 path: string | null;

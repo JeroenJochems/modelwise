@@ -20,7 +20,7 @@ export default function Menu() {
 
     return (
         <header className={""}>
-            <nav className="mx-auto flex max-w-6xl items-center justify-between p-4" aria-label="Global">
+            <nav className="mx-auto flex max-w-7xl items-center justify-between p-4" aria-label="Global">
                 <div className="flex flex-1">
                     { isLoggedIn && (
                         <>
@@ -50,11 +50,11 @@ export default function Menu() {
                 <div className="flex flex-1 justify-end">
                     { isLoggedIn ? (
                         <Link href={route("logout")} method="post" as="button" type="button">
-                            <ArrowRightOnRectangleIcon className="h-6 w-6" aria-hidden="true" />
+                            Log out
                         </Link>
                     ) : (
                         <Link href={route("login")} type="button">
-                            <ArrowLeftOnRectangleIcon className="h-6 w-6" aria-hidden="true" />
+                            Log in
                         </Link>
                     )}
                 </div>
