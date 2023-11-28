@@ -14,12 +14,26 @@ class RoleFactory extends Factory
     public function definition(): array
     {
         return [
-            'job_id' => Job::factory()->createOne()->id,
+            'job_id' => fn() => Job::factory()->createOne()->id,
             'name' => $this->faker->jobTitle,
             'description' => $this->faker->realText,
             'start_date' => Carbon::now()->addWeek(),
             'fee' => 150,
             'buyout' => 200,
+            'fields' => [
+                'digitals' => true,
+                'height' => true,
+                'chest' => true,
+                'waist' => true,
+                'hips' => true,
+                'shoe_size' => true,
+                'clothing_size_top' => true,
+                'head' => true,
+                ],
+            'extra_fields' => [
+                'casting_photos' => true,
+                'casting_videos' => true
+            ],
         ];
     }
 }

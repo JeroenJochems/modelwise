@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Model\OnboardingController;
 use App\Http\Controllers\Model\ProfessionalExperienceController;
+use App\Http\Controllers\PassController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Model\CharacteristicsController;
 use App\Http\Controllers\Model\DigitalsController;
@@ -72,8 +73,7 @@ Route::middleware(['auth'])->group(callback: function () {
         ->name("create", "roles.apply")
         ->name("store", "roles.apply.store");
 
-    Route::resource('roles/{role}/pass', ApplicationController::class, ["create", "store"])
-        ->name("create", "roles.pass.create")
+    Route::resource('roles/{role}/pass', PassController::class, ["store"])
         ->name("store", "roles.pass.store");
 
 

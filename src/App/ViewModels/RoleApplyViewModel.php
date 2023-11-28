@@ -14,8 +14,8 @@ class RoleApplyViewModel extends ViewModel
     public RoleData $role;
     public bool $isInvited;
     public bool $hasApplied;
+    public bool $hasPassed;
     public array $shootDates;
-    public array $viewedRoles;
 
     public function __construct(Role $role)
     {
@@ -30,6 +30,7 @@ class RoleApplyViewModel extends ViewModel
             'job.look_and_feel_photos',
             'job.brand',
             'job.client',
+            'my_passes',
             'my_invites',
         );
 
@@ -42,8 +43,6 @@ class RoleApplyViewModel extends ViewModel
             DatePeriod::INCLUDE_END_DATE
         );
 
-        $this->viewedRoles = request()->session()->get('viewed_roles', []);
-
         $this->shootDates = [];
         foreach ($period as $date) {
             $this->shootDates[] = $date->format('Y-m-d');
@@ -51,5 +50,7 @@ class RoleApplyViewModel extends ViewModel
 
         $this->isInvited = $role->my_invites->count() > 0;
         $this->hasApplied = $role->my_applications->count() > 0;
+
+        $this->hasPassed = !$this->hasApplied && $role->my_passes()->count() > 0;
     }
 }

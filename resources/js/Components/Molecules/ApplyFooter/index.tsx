@@ -6,13 +6,11 @@ import RoleData = Domain.Jobs.Data.RoleData;
 type Props = {
     isInvited: boolean
     hasApplied: boolean
+    hasPassed: boolean
     role: RoleData
 }
 
-export function ApplyFooter({role}: Props) {
-
-    const hasApplied = !!role.my_application;
-    const isInvited = role.my_invites?.length > 0;
+export function ApplyFooter({role, hasPassed, hasApplied, isInvited}: Props) {
 
     if (hasApplied) {
 
@@ -29,18 +27,19 @@ export function ApplyFooter({role}: Props) {
         }
     }
 
-    return <>
-        {isInvited && (
-            <div className={"flex"}>
-                <CtaLink href={route('roles.apply', role.id)} icon={<Heart/>} className={'w-4/5 mr-4 mb-4'}
-                         title={"I'm interested"}/>
-                <CtaLink href={route('roles.pass.create', role.id)} icon={<Cross/>} variant={"negative"}
-                         className={'w-1/5 mb-4'} title={"Pass"}/>
-            </div>
-        )}
+    if (hasPassed) {
+        return null;
+    }
 
-        {!isInvited && (
-            <CtaLink href={route('roles.apply', role.id)} title={"I'm interested"}/>
-        )}
+    return <>
+        <div className={"flex"}>
+            <CtaLink href={route('roles.apply', role.id)} icon={<Heart/>} className={'w-4/5 mr-4 mb-4'}>
+                {"I'm interested"}
+            </CtaLink>
+
+            <CtaLink method={"post"} href={route('roles.pass.store', role.id)} icon={<Cross/>} variant={"negative"} className={'w-1/5 mb-4'}>
+                <span className={"hidden sm:flex"}>Pass</span>
+            </CtaLink>
+        </div>
     </>
 }

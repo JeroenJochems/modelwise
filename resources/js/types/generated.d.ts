@@ -26,8 +26,8 @@ export type RoleApplyViewModel = {
 role: Domain.Jobs.Data.RoleData;
 isInvited: boolean;
 hasApplied: boolean;
+hasPassed: boolean;
 shootDates: Array<any>;
-viewedRoles: Array<any>;
 };
 export type Tag = {
 id: number;
@@ -82,6 +82,9 @@ brand: Domain.Jobs.Data.BrandData | null;
 client: Domain.Jobs.Data.ClientData | null;
 look_and_feel_photos: Array<Domain.Profiles.Data.PhotoData>;
 };
+export type PassData = {
+id: string;
+};
 export type RejectionData = {
 id: string;
 };
@@ -102,6 +105,7 @@ public_photos: Array<Domain.Profiles.Data.PhotoData>;
 job: Domain.Jobs.Data.JobData;
 my_invites: Array<Domain.Jobs.Data.InviteData>;
 my_application: Domain.Jobs.Data.ApplicationData | null;
+my_passes: any | null;
 casting_video_instructions: string | null;
 casting_photo_instructions: string | null;
 };

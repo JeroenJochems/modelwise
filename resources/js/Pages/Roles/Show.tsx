@@ -26,11 +26,10 @@ type Props = {
 
 export default function Show({ viewModel }: Props)
 {
-    const { role, isInvited } = viewModel;
+    const { role, isInvited, hasPassed, hasApplied } = viewModel;
     const { job } = role;
     const cdnLink = useCdnLink();
 
-    const hasApplied = !!role.my_application;
     const isHired = role.my_application?.hire;
 
     const tabClasses = "outline-none w-1/2 sm:w-1/2 text-center  cursor-pointer text-lg py-4 border-r border-white ";
@@ -39,7 +38,7 @@ export default function Show({ viewModel }: Props)
         <DashboardLayout footer={
             !hasApplied &&
                 <DashboardFooter>
-                    <ApplyFooter isInvited={isInvited} hasApplied={false} role={role}/>
+                    <ApplyFooter isInvited={isInvited} hasApplied={viewModel.hasApplied} hasPassed={viewModel.hasPassed} role={role}/>
                 </DashboardFooter>
         }>
             <div className={"flex-grow"}>

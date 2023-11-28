@@ -4,6 +4,7 @@ namespace Domain\Jobs\Models;
 
 use Domain\Profiles\Models\Photo;
 use Domain\Work\Models\Application;
+use Domain\Work\Models\Pass;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -69,6 +70,11 @@ class Role extends Model
     public function applications()
     {
         return $this->hasMany(Application::class);
+    }
+
+    public function my_passes() {
+        return $this->hasMany(Pass::class)
+            ->where('model_id', auth()->id());
     }
 
     public function my_invites($model_id = null)

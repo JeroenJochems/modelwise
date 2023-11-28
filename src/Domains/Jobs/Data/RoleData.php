@@ -56,6 +56,9 @@ class RoleData extends Data
 
         public ?ApplicationData $my_application,
 
+        #[DataCollectionOf(PassData::class)]
+        public ?DataCollection $my_passes,
+
         public ?string $casting_video_instructions,
         public ?string $casting_photo_instructions,
 

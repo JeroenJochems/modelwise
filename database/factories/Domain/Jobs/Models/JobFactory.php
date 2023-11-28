@@ -15,6 +15,7 @@ class JobFactory extends Factory
         return [
             'client_id' => fn() => Client::factory()->createOne()->id,
             'title' => $this->faker->jobTitle,
+            'location' => $this->faker->city,
             'description' => $this->faker->paragraph(3),
         ];
     }

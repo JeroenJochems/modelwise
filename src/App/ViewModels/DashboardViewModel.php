@@ -45,6 +45,7 @@ class DashboardViewModel extends ViewModel
                 'my_application.hire',
                 'my_application.casting_photos',
                 'my_application.photos',
+                'my_passes',
                 'photos',
                 'public_photos',
                 'my_invites',

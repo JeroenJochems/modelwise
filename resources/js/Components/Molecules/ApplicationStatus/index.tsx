@@ -44,8 +44,8 @@ export function ApplicationStatus({ role }: Props) {
                 { application.casting_photos.length > 0
                     ? <>You have provided additional casting information. This will now be presented to the client. We'll keep you posted once the client has made a decision.</>
                     : <>
-                        <P>You've been pre-selected for this job. The client has requested additional information to make a hiring decision.</P>
-                        <P>Provide the requested information below to increase your chances of being hired.</P>
+                        <P>The client has requested additional information to make a hiring decision.</P>
+                        <P>Please provide the information below to increase your chances of being hired.</P>
                         <ExtendedApplicationForm role={role} />
                     </>}
             </Content>

@@ -11,11 +11,11 @@ import {Label} from "@/Components/Atoms/Label";
 import {getRoleLabel} from "@/Utils/RoleLabel";
 import {P} from "@/Components/Typography/p";
 
-type Props = {
+export type ModelRoleProps = {
     role: RoleData;
 }
 
-export function JobHeader({ role }: Props ) {
+export function JobHeader({ role }: ModelRoleProps ) {
 
     const { job } = role;
 

@@ -1,15 +1,17 @@
 import {Link} from "@inertiajs/react";
 import {RightArrow} from "@/Components/Icons/RightArrow";
-import {HTMLAttributes, LinkHTMLAttributes, ReactElement} from "react";
+import {HTMLAttributes, ReactElement} from "react";
+import { Method } from '@inertiajs/core';
 
 type Props = {
     href: string;
-    title: ReactElement|string;
+    method?: Method;
+    title?: ReactElement|string;
     variant?: "primary" | "negative";
     icon?: ReactElement|boolean;
 }
 
-export function CtaLink({href, variant="primary", title, className='', icon=<RightArrow />}: Props & HTMLAttributes<HTMLDivElement>) {
+export function CtaLink({href, variant="primary", method="get", title, className='', icon=<RightArrow />, children}: Props & HTMLAttributes<HTMLDivElement>) {
 
     const backgroundColor = {
         primary: 'bg-teal text-white',
@@ -18,9 +20,9 @@ export function CtaLink({href, variant="primary", title, className='', icon=<Rig
 
 
     return (
-        <Link href={href} className={`${className} ${backgroundColor[variant]} justify-between font-semibold rounded-lg flex text-center p-4`}>
-            <span>&nbsp;</span>
-                {title}
+        <Link method={method} href={href} className={`${className} ${backgroundColor[variant]} justify-between font-semibold rounded-lg flex text-center p-4`}>
+            <span className={"hidden"}>&nbsp;</span>
+            {children || title}
             {icon ? icon : <span>&nbsp;</span>}
         </Link>
         );
