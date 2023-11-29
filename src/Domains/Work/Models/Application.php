@@ -9,15 +9,24 @@ use Domain\Profiles\Models\Video;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kra8\Snowflake\HasShortflakePrimary;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
-class Application extends Model
+class Application extends Model implements Sortable
 {
     use HasShortflakePrimary;
     use HasFactory;
+    use SortableTrait;
 
     protected $casts = [
         'rejected_at' => 'datetime',
         'shortlisted_at' => 'datetime',
+    ];
+
+    public $sortable = [
+        'order_column_name' => 'order_column',
+        'sort_when_creating' => true,
+        'sort_on_has_many' => true,
     ];
 
     protected $fillable = [

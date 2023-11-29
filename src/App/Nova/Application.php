@@ -8,17 +8,31 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\MorphMany;
+use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Outl1ne\NovaSortable\Traits\HasSortableRows;
 
 class Application extends Resource
 {
+    use HasSortableRows;
+
     public static $model = \Domain\Work\Models\Application::class;
+
+    public function buildSortQuery()
+    {
+        return static::query()->where('role_id', $this->role_id);
+    }
 
     public function title()
     {
         return $this->model->name. ' - ' . $this->role->name;
+    }
+
+    public static function canSort(NovaRequest $request, $resource)
+    {
+        return true;
     }
 
     /**
@@ -31,8 +45,8 @@ class Application extends Resource
     {
         return [
             Stack::make("Role and status", [
-                Line::make("Status", fn() => ($this->hire ? "Hired" : ($this->rejection ? "Rejected" : "Pending")))->asHeading(),
-                Line::make("Model", fn() => $this->model->name),
+                Line::make("Model", fn() => $this->model->name)->asHeading(),
+                Line::make("Status", fn() => ($this->hire ? "Hired" : ($this->rejection ? "Rejected" : "Pending"))),
                 Line::make("Role", fn() => $this->role->name),
                 Line::make("Job", fn() => $this->role->job->title),
                 Line::make("Brand and client", fn() => $this->role->job->brand?->name. ' via '.$this->role->job->client->name)->asSmall(),

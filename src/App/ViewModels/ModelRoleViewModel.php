@@ -9,13 +9,15 @@ use Domain\Jobs\Models\Role;
 use Spatie\ViewModels\ViewModel;
 
 /** @typescript */
-class RoleApplyViewModel extends ViewModel
+class ModelRoleViewModel extends ViewModel
 {
     public RoleData $role;
     public bool $isInvited;
     public bool $hasApplied;
     public bool $hasPassed;
+    public bool $isHired;
     public array $shootDates;
+    public string $status;
 
     public function __construct(Role $role)
     {
@@ -51,6 +53,19 @@ class RoleApplyViewModel extends ViewModel
         $this->isInvited = $role->my_invites->count() > 0;
         $this->hasApplied = $role->my_applications->count() > 0;
 
+        $this->isHired = $role->my_applications->count()>0 && $role->my_applications->first()->hire()->count()>0;
         $this->hasPassed = !$this->hasApplied && $role->my_passes()->count() > 0;
+
+        if ($this->isHired) {
+            $this->status = "hired";
+        } elseif ($this->hasPassed) {
+            $this->status = "passed";
+        } elseif ($this->isInvited) {
+            $this->status = "invited";
+        } elseif ($this->hasApplied) {
+            $this->status = "applied";
+        } else {
+            $this->status = "open";
+        }
     }
 }

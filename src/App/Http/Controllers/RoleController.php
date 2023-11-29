@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\ViewModels\RoleApplyViewModel;
+use App\ViewModels\ModelRoleViewModel;
 use Domain\Jobs\Models\Job;
 use Domain\Jobs\Models\Role;
 use Illuminate\Support\Facades\Session;
@@ -15,6 +15,6 @@ class RoleController extends Controller
         Session::put('viewed_roles', array_unique([$role->id, ...Session::get('viewed_roles', [])]));
 
         return Inertia::render('Roles/Show')
-            ->with("viewModel", new RoleApplyViewModel($role));
+            ->with("viewModel", new ModelRoleViewModel($role));
     }
 }

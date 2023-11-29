@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ViewModels\ModelMeViewModel;
-use App\ViewModels\RoleApplyViewModel;
+use App\ViewModels\ModelRoleViewModel;
 use Domain\Jobs\Data\ApplyData;
 use Domain\Jobs\Models\Role;
 use Domain\Profiles\Repositories\PhotoRepository;
@@ -22,13 +22,13 @@ class ApplicationController extends Controller
     public function show(Application $application)
     {
         return Inertia::render('Roles/Show')
-            ->with("viewModel", new RoleApplyViewModel($application->role));
+            ->with("viewModel", new ModelRoleViewModel($application->role));
     }
 
     public function create(Role $role)
     {
         return Inertia::render('Applications/Create')
-            ->with("viewModel", new RoleApplyViewModel($role))
+            ->with("viewModel", new ModelRoleViewModel($role))
             ->with("meViewModel", new ModelMeViewModel(
                 auth()->user()
                     ->load("digitals")
@@ -55,6 +55,6 @@ class ApplicationController extends Controller
         }
 
         return Inertia::render('Applications/Updated')
-            ->with("viewModel", new RoleApplyViewModel($application->role));
+            ->with("viewModel", new ModelRoleViewModel($application->role));
     }
 }

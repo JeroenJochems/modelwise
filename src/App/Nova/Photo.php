@@ -11,6 +11,7 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\VaporImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Outl1ne\NovaSortable\Traits\HasSortableManyToManyRows;
+use Outl1ne\NovaSortable\Traits\HasSortableRows;
 
 class Photo extends Resource
 {
@@ -26,7 +27,6 @@ class Photo extends Resource
         'sort_when_creating' => true,
         'sort_on_has_many' => true,
     ];
-
 
     public static function authorizable()
     {

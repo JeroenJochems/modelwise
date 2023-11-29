@@ -1,4 +1,3 @@
-import RoleApplyViewModel = App.ViewModels.RoleApplyViewModel;
 import {P} from "@/Components/Typography/p";
 import {H3} from "@/Components/Typography/H3";
 import {JobHeader} from "@/Components/JobHeader";
@@ -19,18 +18,17 @@ import {CurrencyEuroIcon } from "@heroicons/react/24/outline";
 import {formatCents} from "@/Utils/Money";
 import {Train} from "@/Components/Icons/Train";
 import {useCdnLink} from "@/Hooks/useCdnLink";
+import ModelRoleViewModel = App.ViewModels.ModelRoleViewModel;
 
 type Props = {
-    viewModel: RoleApplyViewModel
+    viewModel: ModelRoleViewModel
 }
 
 export default function Show({ viewModel }: Props)
 {
-    const { role, isInvited, hasPassed, hasApplied } = viewModel;
+    const { role, isHired, hasApplied, isInvited } = viewModel;
     const { job } = role;
     const cdnLink = useCdnLink();
-
-    const isHired = role.my_application?.hire;
 
     const tabClasses = "outline-none w-1/2 sm:w-1/2 text-center  cursor-pointer text-lg py-4 border-r border-white ";
 
@@ -43,7 +41,7 @@ export default function Show({ viewModel }: Props)
         }>
             <div className={"flex-grow"}>
 
-                <JobHeader role={role} />
+                <JobHeader viewModel={viewModel} />
 
                 <Tabs selectedTabClassName={"border-b-4 border-b-teal border-r-0"}>
 

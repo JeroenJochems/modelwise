@@ -19,6 +19,7 @@ use App\Http\Controllers\Model\ProfilePictureController;
 use App\Http\Controllers\Model\SocialsController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\PhotosController;
+use App\Http\Controllers\RoleProposalController;
 use App\Http\Controllers\VaporSignedStorageUrl;
 use App\Http\Controllers\VideosController;
 use Illuminate\Support\Facades\Route;
@@ -57,10 +58,10 @@ Route::get('/login', [AuthenticatedSessionController::class, "create"] )->name("
 Route::post('/contact', [ContactController::class, "store"] )->name("contact");
 
 
-
 Route::get('about-modelwise', [OnboardingController::class, "index"])->name("onboarding.index");
 
 Route::resource('roles', RoleController::class, ["index", "view"])->name("index", "jobs");
+Route::get('proposals/{role}', [RoleProposalController::class, "show"]);
 
 Route::middleware(['auth'])->group(callback: function () {
 

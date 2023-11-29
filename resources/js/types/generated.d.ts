@@ -15,19 +15,21 @@ countryCodes: Array<any>;
 export type ModelMeViewModel = {
 me: Domain.Profiles.Data.ModelData;
 };
+export type ModelRoleViewModel = {
+role: Domain.Jobs.Data.RoleData;
+isInvited: boolean;
+hasApplied: boolean;
+hasPassed: boolean;
+isHired: boolean;
+shootDates: Array<any>;
+status: string;
+};
 export type ProfessionalExperienceViewModel = {
 allCategories: Array<App.ViewModels.Tag>;
 allProfessions: Array<App.ViewModels.Tag>;
 selectedCategories: Array<string>;
 selectedProfessions: Array<string>;
 otherCategories: string | null;
-};
-export type RoleApplyViewModel = {
-role: Domain.Jobs.Data.RoleData;
-isInvited: boolean;
-hasApplied: boolean;
-hasPassed: boolean;
-shootDates: Array<any>;
 };
 export type Tag = {
 id: number;
@@ -103,9 +105,6 @@ travel_reimbursement_note: string | null;
 photos: Array<Domain.Profiles.Data.PhotoData>;
 public_photos: Array<Domain.Profiles.Data.PhotoData>;
 job: Domain.Jobs.Data.JobData;
-my_invites: Array<Domain.Jobs.Data.InviteData>;
-my_application: Domain.Jobs.Data.ApplicationData | null;
-my_passes: any | null;
 casting_video_instructions: string | null;
 casting_photo_instructions: string | null;
 };

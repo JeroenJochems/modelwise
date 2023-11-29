@@ -1,28 +1,25 @@
 import {H2} from "@/Components/Typography/H2";
 import {H1} from "@/Components/Typography/H1";
-import RoleData = Domain.Jobs.Data.RoleData;
-import {Globe} from "@/Components/Icons/Globe";
-import {CalendarDays} from "@/Components/Icons/CalendarDays";
-import {Bubble} from "@/Components/Atoms/JobHeader/Bubbles/Bubble";
-import {Bubbles} from "@/Components/Atoms/JobHeader/Bubbles";
-import {HeaderBar} from "@/Components/Atoms/JobHeader";
-import {formatDate} from "@/Utils/Dates";
 import {Label} from "@/Components/Atoms/Label";
-import {getRoleLabel} from "@/Utils/RoleLabel";
-import {P} from "@/Components/Typography/p";
+import ModelRoleViewModel = App.ViewModels.ModelRoleViewModel;
 
-export type ModelRoleProps = {
-    role: RoleData;
+type Props = {
+    viewModel: ModelRoleViewModel
 }
 
-export function JobHeader({ role }: ModelRoleProps ) {
+export function JobHeader({ viewModel }: Props ) {
 
+    const { role, status } = viewModel;
     const { job } = role;
 
     return (
         <div className={"grid gap-8 mt-4 mb-4"}>
             <Label>
-                { getRoleLabel(role) }
+                { status ==="hired" && "Hired" }
+                { status ==="applied" && "Applied" }
+                { status ==="invited" && "Invited" }
+                { status ==="open" && "Open" }
+                { status ==="passed" && "Passed" }
             </Label>
 
             <div>
@@ -34,5 +31,4 @@ export function JobHeader({ role }: ModelRoleProps ) {
             </div>
         </div>
     )
-
 }

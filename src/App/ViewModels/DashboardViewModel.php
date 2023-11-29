@@ -30,7 +30,7 @@ class DashboardViewModel extends ViewModel
 
         $this->openInvites = RoleData::collection(
             Role::query()
-                ->withWhereHas("my_invites")
+                ->whereHas("my_invites")
                 ->whereDoesntHave("my_applications")
                 ->with('photos', 'public_photos', 'job.look_and_feel_photos')
                 ->get()
@@ -42,13 +42,8 @@ class DashboardViewModel extends ViewModel
                     ->whereDoesntHave("rejection");
             })
             ->with(
-                'my_application.hire',
-                'my_application.casting_photos',
-                'my_application.photos',
-                'my_passes',
                 'photos',
                 'public_photos',
-                'my_invites',
                 'job',
                 'job.look_and_feel_photos',
                 'job.brand',
@@ -61,17 +56,14 @@ class DashboardViewModel extends ViewModel
 
         $this->hires = RoleData::collection(
             Role::query()
-                ->withWhereHas("my_invites")
-                ->withWhereHas("my_applications", function ($q) {
-                    $q->withWhereHas("hire");
-                })
+                ->whereHas("my_applications.hire")
                 ->with('photos', 'public_photos', 'job.look_and_feel_photos')
                 ->get()
         );
 
 
         $recentlyViewed = $model->role_views()
-            ->with("role",'role.photos', 'role.my_invites', 'role.public_photos', 'role.job.look_and_feel_photos')
+            ->with("role",'role.photos', 'role.public_photos', 'role.job.look_and_feel_photos')
             ->orderByDesc('created_at')
             ->take(5)
             ->whereNotIn('role_id', collect($this->openApplications)->pluck('id'))

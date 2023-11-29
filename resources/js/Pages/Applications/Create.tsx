@@ -71,7 +71,7 @@ export default function Create({viewModel, meViewModel}: Props) {
     return (
         <DashboardLayout>
 
-            <JobHeader role={role}/>
+            <JobHeader viewModel={viewModel}/>
 
             <Content>
                 <H1 className={"mt-8"}>Apply for this role</H1>
