@@ -1,7 +1,6 @@
-import RoleApplyViewModel = App.ViewModels.RoleApplyViewModel;
 import {P} from "@/Components/Typography/p";
 import ModelMeViewModel = App.ViewModels.ModelMeViewModel;
-import {ChangeEvent, useState} from "react";
+import {ChangeEvent } from "react";
 import {useForm, usePage} from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import {H2} from "@/Components/Typography/H2";
@@ -13,25 +12,26 @@ import InputError from "@/Components/InputError";
 import {H1} from "@/Components/Typography/H1";
 import {useUploadingFields} from "@/Hooks/useUploadingFields";
 import {BaseFile, FileUploader} from "@/Components/FileUploader";
+import ModelRoleViewModel = App.ViewModels.ModelRoleViewModel;
 
 type Props = {
-    viewModel: RoleApplyViewModel;
+    viewModel: ModelRoleViewModel;
     meViewModel: ModelMeViewModel;
 }
 
 type Form = {
-    role_id: number;
+    role_id: number | string;
     digitals: Array<BaseFile>;
     photos: Array<BaseFile>;
+    height: number | string;
+    chest: number | string;
+    waist: number | string;
+    hips: number | string;
+    shoe_size: number | string;
+    clothing_size_top: string;
     cover_letter: string;
-    height: number;
-    chest: number;
-    waist: number;
-    hips: number;
-    shoe_size: number;
-    clothing_size_top: string | null;
-    brand_conflicted: string;
     available_dates: Array<string>;
+    brand_conflicted: string;
 }
 
 export default function Create({viewModel, meViewModel}: Props) {
@@ -47,15 +47,15 @@ export default function Create({viewModel, meViewModel}: Props) {
         role_id: viewModel.role.id,
         digitals: me.digitals,
         photos: [],
-        height: me.height,
-        chest: me.chest,
-        waist: me.waist,
-        hips: me.hips,
-        shoe_size: me.shoe_size,
-        clothing_size_top: me.clothing_size_top,
+        height: me.height || '',
+        chest: me.chest || '',
+        waist: me.waist || '',
+        hips: me.hips || '',
+        shoe_size: me.shoe_size || '',
+        clothing_size_top: me.clothing_size_top || '',
         cover_letter: '',
         available_dates: [],
-        brand_conflicted: '',
+        brand_conflicted: ''
     });
 
     function submit() {
@@ -79,7 +79,12 @@ export default function Create({viewModel, meViewModel}: Props) {
                 {role.fields.digitals && (
                     <div>
                         <H2>Digitals</H2>
-                        <P className={"mb-2"}>Are your digitals up-to-date and relevant for this role?</P>
+                        <P className={"mb-2"}>
+                            { data.digitals.length >= 3
+                                ? "Are your digitals up-to-date and relevant for this role?"
+                                : "Upload at least 3 recent digitals"
+                            }
+                        </P>
 
                         <FileUploader
                             accept="image/*"
@@ -182,13 +187,13 @@ export default function Create({viewModel, meViewModel}: Props) {
                     <P className={"mb-2"}>
                         Please confirm your availability for the following shoot dates. If not all are available we will
                         contact you to discuss.</P>
-                    {shootDates.map((shootDate) => (
-                        <label className={"flex flex-row text-teal items-center mb-2"} key={shootDate}>
-                            <input type="checkbox" onChange={handleAvailability} name={"available"} value={shootDate}
-                                   className={"mr-2"}/>
-                            <span>{new Date(shootDate).toLocaleDateString()}</span>
-                        </label>
-                    ))
+                        {shootDates.map((shootDate) => (
+                            <label className={"flex flex-row text-teal items-center mb-2"} key={shootDate}>
+                                <input type="checkbox" onChange={handleAvailability} name={"available"} value={shootDate}
+                                       className={"mr-2"}/>
+                                <span>{new Date(shootDate).toLocaleDateString()}</span>
+                            </label>
+                        ))
                     }
                     <InputError message={errors.available_dates}/>
                 </div>
@@ -206,6 +211,7 @@ export default function Create({viewModel, meViewModel}: Props) {
                 />
 
                 { !isDirty && hasErrors && <InputError message={"Please review the form errors before submitting again."} /> }
+
 
                 <PrimaryButton onClick={submit} className={"mb-8"} disabled={isUploading || processing}>
                     {processing ? "Please wait..." : "Submit application"}

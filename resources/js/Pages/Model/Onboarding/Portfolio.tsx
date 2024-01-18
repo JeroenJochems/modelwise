@@ -40,7 +40,7 @@ export default function Portfolio({modelPhotos}: {modelPhotos: BaseFile[] }) {
             </Header>
         } photos={["https://modelwise.imgix.net/assets/11.jpeg?w=1200&fm=auto"]}>
 
-                <P>Upload at least 6 of your best photos. You can upload as many as you want and always update this later.</P>
+                <P>Upload of your best photos, hundreds if you want, at least 6.</P>
 
                 <FileUploader
                     cols={3}

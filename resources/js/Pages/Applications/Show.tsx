@@ -1,22 +1,19 @@
-import RoleApplyViewModel = App.ViewModels.RoleApplyViewModel;
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import React from "react";
 import {Content} from "@/Layouts/DashboardLayout/Content";
 import {JobHeader} from "@/Components/JobHeader";
+import ModelRoleViewModel = App.ViewModels.ModelRoleViewModel;
 
 type Props = {
-    viewModel: RoleApplyViewModel
+    viewModel: ModelRoleViewModel
 }
 
 export default function Stored({ viewModel }: Props) {
 
-    const { role } = viewModel;
-    const { job } = role;
-
     return (
         <DashboardLayout>
             <Content>
-                <JobHeader role={role} />
+                <JobHeader viewModel={viewModel} />
             </Content>
         </DashboardLayout>
     )

@@ -19,11 +19,17 @@ use App\Http\Controllers\Model\ProfilePictureController;
 use App\Http\Controllers\Model\SocialsController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\PhotosController;
-use App\Http\Controllers\RoleProposalController;
+use App\Http\Controllers\PresentationController;
 use App\Http\Controllers\VaporSignedStorageUrl;
 use App\Http\Controllers\VideosController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('test', function() {
+    $instagram = new \InstagramScraper\Instagram(new \GuzzleHttp\Client());
+    $nonPrivateAccountMedias = $instagram->getMedias('arnbraun');
+    dd($nonPrivateAccountMedias[0]->getImageHighResolutionUrl());
+
+});
 
 if (!function_exists("onboardingRoutes")) {
     function onboardingRoutes()
@@ -61,7 +67,7 @@ Route::post('/contact', [ContactController::class, "store"] )->name("contact");
 Route::get('about-modelwise', [OnboardingController::class, "index"])->name("onboarding.index");
 
 Route::resource('roles', RoleController::class, ["index", "view"])->name("index", "jobs");
-Route::get('proposals/{role}', [RoleProposalController::class, "show"]);
+Route::get('presentations/{presentation}', [PresentationController::class, "show"])->name("presentations.show");
 
 Route::middleware(['auth'])->group(callback: function () {
 

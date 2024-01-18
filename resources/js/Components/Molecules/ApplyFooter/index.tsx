@@ -1,21 +1,20 @@
 import {CtaLink} from "@/Components/CtaLink";
 import {Heart} from "@/Components/Icons/Heart";
 import {Cross} from "@/Components/Icons/Cross";
-import RoleData = Domain.Jobs.Data.RoleData;
+import ModelRoleViewModel = App.ViewModels.ModelRoleViewModel;
 
 type Props = {
-    isInvited: boolean
-    hasApplied: boolean
-    hasPassed: boolean
-    role: RoleData
+    viewModel: ModelRoleViewModel;
 }
 
-export function ApplyFooter({role, hasPassed, hasApplied, isInvited}: Props) {
+export function ApplyFooter({viewModel}: Props) {
+
+    const { role, my_application, hasApplied, hasPassed } = viewModel;
 
     if (hasApplied) {
 
-        const isHired = role.my_application?.hire
-        const isRejected = role.my_application?.is_rejected
+        const isHired = my_application?.hire
+        const isRejected = my_application?.is_rejected
 
         if (hasApplied) {
             return <div className={"py-4"}>

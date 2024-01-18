@@ -2,48 +2,49 @@ import {usePage} from "@inertiajs/react";
 import MuxPlayer from "@mux/mux-player-react";
 import "@mux/mux-player/themes/minimal";
 
-
-export default function ProposalModel({application}) {
+export default function ProposalModel({ presentation, application}) {
     const {cdn_url} = usePage().props;
 
-    const photos = [...application.casting_photos, ...application.photos];
+    const photos = presentation.should_show_casting_media
+        ? [...application.casting_photos, ...application.photos]
+        : application.photos;
 
     return (
-        <div className={"mt-12 break-before-page grid gap-4"}>
+        <div className={"pt-12 break-inside-avoid-page grid gap-4"}>
 
-            <div className={"grid justify-between"}>
+            <div className={"w-ful"}>
                 <div>
                     <h1 className="sm:w-1/2 text-3xl font-medium text-gray-900">{application.model.first_name}</h1>
-                    { application.cover_letter && <div className="mb-4 prose prose-sm">{ application.cover_letter }</div> }
-                    { application.brand_conflicted && <div className="mb-4 prose prose-sm">
+                    { presentation.should_show_cover_letter && application.cover_letter && <div className="mb-4 prose prose-sm">{ application.cover_letter }</div> }
+                    { presentation.should_show_conflicts && application.brand_conflicted && <div className="mb-4 prose prose-sm">
                         <div className={"font-semibold"}>Brand conflicts</div>
                         { application.brand_conflicted }
                     </div> }
                 </div>
                 <div className={"col-span-1 w-full grid grid-cols-2 sm:grid-cols-3 gap-4"}>
-                    { application.model.instagram &&
+                    { presentation.should_show_socials && application.model.instagram &&
                         <div>
                             <div className={"font-semibold"}>
                                 Instragram
                             </div>
                             <div className={"mb-4"}>
-                                <a href={`https://www.instagram.com/${application.model.instagram.replace("@", "")}`} target="_blank">
+                                <a className={"underline"} href={`https://www.instagram.com/${application.model.instagram}`} target="_blank">
                                     { application.model.instagram }
                                 </a>
                             </div>
                         </div>
                     }
-                    { application.model.website &&
+                    { presentation.should_show_socials && application.model.website &&
                         <div>
                             <div className={"font-semibold"}>
                                 Website
                             </div>
                             <div className={"mb-4"}>
-                                { application.model.website }
+                                <a target={"_blank"} href={application.model.website} className={"underline"}>Open in new tab</a>
                             </div>
                         </div>
                     }
-                    { application.model.tiktok &&
+                    { presentation.should_show_socials && application.model.tiktok &&
                         <div>
                             <div className={"font-semibold"}>
                                 Website
@@ -129,31 +130,35 @@ export default function ProposalModel({application}) {
                 </div>
             </div>
             <div className={"mt-4 grid grid-cols-1 lg:grid-cols-4 gap-4"}>
-                { application.casting_videos.map((video) => (
+
+                { presentation.should_show_casting_media && application.casting_videos.map((video) => (
                     <div key={video.mux_id} className={"aspect-square rounded-lg overflow-hidden"}>
                         <MuxPlayer theme="minimal" poster="/img/poster-casting-video.png" playbackId={video.mux_id} className={"object-fit aspect-square rounded-lg"} />
                     </div>
                 ))}
 
                 {photos.slice(0,8).map((photo) => (
-                    <div>
+                    <div className={"flex"}>
                         <img
                             key={photo.path}
-                            src={cdn_url + photo.path + '?w=600&h=600&fit=crop&crop=faces'}
-                            className={'cursor-zoom-in rounded-lg object-cover aspect-square'}
+                            src={cdn_url + photo.path + '?w=1200&h=1200&fit=crop&crop=faces'}
+                            className={'rounded-lg object-cover aspect-square'}
                         />
                     </div>
                 ))}
             </div>
-            <div className={`mt-4 grid grid-cols-2 lg:grid-cols-${application.model.digitals.slice(0,8).length} gap-4`}>
-                {application.model.digitals.slice(0,8).map((photo) => (
-                    <img
-                        key={photo.id}
-                        src={cdn_url + photo.path + '?w=600&h=600&fit=crop&crop=faces'}
-                        className={'cursor-zoom-in rounded-lg'}
-                    />
-                ))}
-            </div>
+
+            { presentation.should_show_digitals && (
+                <div className={`mt-4 grid grid-cols-2 lg:grid-cols-${application.model.digitals.slice(0,8).length} gap-4`}>
+                    {application.model.digitals.slice(0,8).map((photo) => (
+                        <img
+                            key={photo.id}
+                            src={cdn_url + photo.path + '?w=1200&h=1200&fit=crop&crop=faces'}
+                            className={'cursor-zoom-in rounded-lg'}
+                        />
+                    ))}
+                </div>
+            )}
 
         </div>
     )

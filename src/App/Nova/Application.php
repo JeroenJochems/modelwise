@@ -2,13 +2,13 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\CreatePresentation;
 use App\Nova\Actions\Shortlist;
-use App\Nova\Filters\RoleUpcoming;
+use App\Nova\Actions\Reject;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\MorphMany;
-use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -77,6 +77,8 @@ class Application extends Resource
     {
         return [
             new Shortlist(),
+            new Reject(),
+            new CreatePresentation(),
         ];
     }
 

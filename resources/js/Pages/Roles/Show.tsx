@@ -36,7 +36,7 @@ export default function Show({ viewModel }: Props)
         <DashboardLayout footer={
             !hasApplied &&
                 <DashboardFooter>
-                    <ApplyFooter isInvited={isInvited} hasApplied={viewModel.hasApplied} hasPassed={viewModel.hasPassed} role={role}/>
+                    <ApplyFooter viewModel={viewModel}/>
                 </DashboardFooter>
         }>
             <div className={"flex-grow"}>
@@ -53,7 +53,7 @@ export default function Show({ viewModel }: Props)
 
                     { hasApplied && (
                         <TabPanel>
-                            <ApplicationStatus role={role} />
+                            <ApplicationStatus viewModel={viewModel} />
                         </TabPanel>
                     )}
 

@@ -7,6 +7,7 @@ use Domain\Jobs\Models\Client;
 use Domain\Jobs\Models\Invite;
 use Domain\Jobs\Models\Job;
 use Domain\Jobs\Models\Role;
+use Domain\Present\Models\Presentation;
 use Domain\Profiles\Models\Model;
 use Domain\Profiles\Models\Model as ModelClass;
 use Domain\Profiles\Models\Photo;
@@ -43,6 +44,7 @@ class AppServiceProvider extends ServiceProvider
             'longlist-model' => Invite::class,
             'client' => Client::class,
             'tag' => Tag::class,
+            'presentation' => Presentation::class,
         ]);
 
         Onboard::addStep('Personal details')

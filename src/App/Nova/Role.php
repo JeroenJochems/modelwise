@@ -37,7 +37,7 @@ class Role extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            BelongsTo::make("Job")->onlyOnDetail(),
+            BelongsTo::make("Job")->hideFromIndex(),
             Text::make("Name"),
             Date::make("Start date")->hideFromIndex(),
             Date::make("End date")->nullable(true)->hideFromIndex(),
@@ -87,7 +87,8 @@ class Role extends Resource
                     . '</div>';
             })->asHtml()->onlyOnIndex(),
             HasMany::make("Applications"),
-            HasMany::make("Invites"),
+            HasMany::make("Invites", "open_invites"),
+            HasMany::make("Presentations"),
             Text::make('Public URL', function() {
                 return '<a href="'.route("roles.show", $this->id).'" target="_blank">'.route("roles.show", $this->id).'</a>';
             })->asHtml()->onlyOnDetail(),

@@ -4,6 +4,7 @@ namespace App\ViewModels;
 
 use DateInterval;
 use DatePeriod;
+use Domain\Jobs\Data\ApplicationData;
 use Domain\Jobs\Data\RoleData;
 use Domain\Jobs\Models\Role;
 use Spatie\ViewModels\ViewModel;
@@ -18,6 +19,7 @@ class ModelRoleViewModel extends ViewModel
     public bool $isHired;
     public array $shootDates;
     public string $status;
+    public ?ApplicationData $my_application;
 
     public function __construct(Role $role)
     {
@@ -51,7 +53,11 @@ class ModelRoleViewModel extends ViewModel
         }
 
         $this->isInvited = $role->my_invites->count() > 0;
-        $this->hasApplied = $role->my_applications->count() > 0;
+        $this->hasApplied = !!$role->my_application;
+
+        $this->my_application = ($application = $role->my_application)
+            ? ApplicationData::from($application)
+            : null;
 
         $this->isHired = $role->my_applications->count()>0 && $role->my_applications->first()->hire()->count()>0;
         $this->hasPassed = !$this->hasApplied && $role->my_passes()->count() > 0;

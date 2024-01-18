@@ -12,10 +12,13 @@ export default {
     safelist: [
         {
             pattern: /grid-cols-.+/,
-            variants: ['sm'],
+            variants: ['sm', 'lg'],
         },
         {
             pattern: /grid-cols-.+/,
+        },
+        {
+            pattern: /scale-.+/,
         },
         {
             pattern: /line-clamp-.+/,

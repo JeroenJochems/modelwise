@@ -6,12 +6,18 @@ import RoleData = Domain.Jobs.Data.RoleData;
 import PrimaryButton from "@/Components/PrimaryButton";
 import {BaseFile, FileUploader} from "@/Components/FileUploader";
 
+
+type Props = {
+    role: RoleData
+    application: Domain.Jobs.Data.ApplicationData
+}
+
 type Form = {
     _method: string;
     casting_photos: BaseFile[];
     casting_videos: BaseFile[];
 }
-export function ExtendedApplicationForm({ role }: { role: RoleData}) {
+export function ExtendedApplicationForm({ application, role }: Props) {
 
     const { isUploading, setUploadingField } = useUploadingFields();
 
@@ -22,7 +28,7 @@ export function ExtendedApplicationForm({ role }: { role: RoleData}) {
     });
 
     function submit() {
-        post(route('applications.update', role.my_application?.id));
+        post(route('applications.update', application.id));
     }
 
     return (

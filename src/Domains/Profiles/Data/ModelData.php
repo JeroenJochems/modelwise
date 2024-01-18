@@ -47,11 +47,11 @@ class ModelData extends Data
         #[DataCollectionOf(ApplicationData::class)]
         public Lazy|DataCollection $applications,
 
-        public int $height,
-        public int $chest,
-        public int $waist,
-        public int $hips,
-        public int $shoe_size,
+        public ?int $height,
+        public ?int $chest,
+        public ?int $waist,
+        public ?int $hips,
+        public ?int $shoe_size,
         public ?string $clothing_size_top,
     ) {}
 

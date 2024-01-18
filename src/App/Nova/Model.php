@@ -5,6 +5,7 @@ namespace App\Nova;
 use Datomatic\Nova\Fields\Enum\Enum;
 use Domain\Profiles\Enums\Ethnicity;
 use Domain\Profiles\Enums\EyeColor;
+use Domain\Profiles\Enums\Gender;
 use Domain\Profiles\Enums\HairColor;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\Boolean;
@@ -13,6 +14,7 @@ use Laravel\Nova\Fields\Email;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\MorphMany;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
@@ -21,6 +23,7 @@ use Laravel\Nova\Fields\VaporImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Domain\Profiles\Models\Model as ModelClass;
 use Laravel\Nova\Panel;
+use NrmlCo\NovaBigFilter\NovaBigFilter;
 use Spatie\TagsField\Tags;
 
 class Model extends Resource
@@ -61,10 +64,13 @@ class Model extends Resource
                 Line::make("Location", function() { return $this->city.", ".$this->country; })->asSmall(),
                 Line::make("Phone number", function() { return $this->phone_number; })->asSmall(),
             ])->onlyOnIndex(),
+
             Text::make('First Name')->sortable()->rules('required', 'max:255')->hideFromIndex(),
             Text::make('Last Name')->sortable()->rules('required', 'max:255')->hideFromIndex(),
             Text::make('Phone number')->rules('required', 'max:255')->hideFromIndex(),
             Email::make('Email')->sortable()->required()->rules('required', 'email')->hideFromIndex(),
+            Enum::make('Gender')->displayUsingLabels()->attach(Gender::class)->filterable()->rules('required', 'max:255')->hideFromIndex(),
+            Enum::make('Class', 'model_class')->displayUsingLabels()->attach(\Domain\Profiles\Enums\ModelClass::class)->filterable(),
             Select::make('Preferred language')->options(['en' => 'English', 'nl' => 'Nederlands'])->rules('required', 'email')->hideFromIndex(),
             Date::make('Date of birth')->hideFromIndex(),
             Boolean::make('Completed onboarding', 'has_completed_onboarding')->readonly(),
@@ -103,20 +109,23 @@ class Model extends Resource
     public function bodyFields()
     {
         return [
-            Enum::make('Ethnicity')->attach(Ethnicity::class)->hideFromIndex(),
-            Enum::make('Eye color')->attach(EyeColor::class)->hideFromIndex(),
-            Enum::make('Hair color')->attach(HairColor::class)->hideFromIndex(),
-            Text::make("Shoe size")->help("EU format")->hideFromIndex(),
-            Text::make("Chest")->help("in cm")->hideFromIndex(),
-            Text::make("Waist")->help("in cm")->hideFromIndex(),
-            Text::make("Hips")->help("in cm")->hideFromIndex(),
-            Text::make("Height")->help("in cm")->hideFromIndex(),
+            Enum::make('Ethnicity')->attach(Ethnicity::class)->filterable()->hideFromIndex(),
+            Enum::make('Eye color')->attach(EyeColor::class)->filterable()->hideFromIndex(),
+            Enum::make('Hair color')->attach(HairColor::class)->filterable()->hideFromIndex(),
+            Number::make("Shoe size")->help("EU format")->filterable()->hideFromIndex(),
+            Number::make("Chest")->help("in cm")->filterable()->hideFromIndex(),
+            Number::make("Waist")->help("in cm")->filterable()->hideFromIndex(),
+            Number::make("Hips")->help("in cm")->filterable()->hideFromIndex(),
+            Number::make("Height")->help("in cm")->filterable()->hideFromIndex(),
+            Text::make("Cup size")->hideFromIndex()->filterable(),
         ];
     }
 
     public function cards(NovaRequest $request)
     {
-        return [];
+        return [
+            new NovaBigFilter,
+        ];
     }
 
     public function filters(NovaRequest $request)

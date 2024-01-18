@@ -50,6 +50,14 @@ class Model extends Authenticatable implements Onboardable
         return 'models_index';
     }
 
+    public function setInstagramAttribute($value)
+    {
+        $value = str_replace("@", "", $value);
+        $value = str_replace("https://www.instagram.com/", "", $value);
+
+        $this->attributes['instagram'] = $value;
+    }
+
     public function role_views() {
         return $this->hasMany(RoleView::class);
     }
@@ -89,6 +97,7 @@ class Model extends Authenticatable implements Onboardable
      * @var array<string, string>
      */
     protected $casts = [
+        "height" => "float",
         'ethnicity' => Ethnicity::class,
         'email_verified_at' => 'datetime',
         'password' => 'hashed',

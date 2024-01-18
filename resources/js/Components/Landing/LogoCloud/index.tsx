@@ -33,8 +33,14 @@ export default function LogoCloud() {
                         />
                         <img
                             className="max-h-24 w-full object-contain object-left"
-                            src="https://modelwise.imgix.net/assets/richa-3.png?fm=auto&w=212"
-                            alt="Richa"
+                            src="https://modelwise.imgix.net/assets/mcdonalds.png?fm=auto&w=212"
+                            alt="McDonalds"
+                            width={210}
+                        />
+                        <img
+                            className="max-h-24 w-full object-contain object-left"
+                            src="https://modelwise.imgix.net/assets/nike.webp?fm=auto&w=212"
+                            alt="Nike"
                             width={210}
                         />
                     </div>

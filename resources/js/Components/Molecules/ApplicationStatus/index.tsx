@@ -2,21 +2,21 @@ import {H2} from "@/Components/Typography/H2";
 import {P} from "@/Components/Typography/p";
 import {Content} from "@/Layouts/DashboardLayout/Content";
 import {ExtendedApplicationForm} from "@/Components/Molecules/ApplicationStatus/ExtendedApplicationForm";
-import RoleData = Domain.Jobs.Data.RoleData;
+import ModelRoleViewModel = App.ViewModels.ModelRoleViewModel;
 
 type Props = {
-    role: RoleData;
+    viewModel: ModelRoleViewModel;
 }
 
-export function ApplicationStatus({ role }: Props) {
+export function ApplicationStatus({ viewModel }: Props) {
 
-    const application = role.my_application
+    const { role, my_application } = viewModel;
 
-    if (!application) return null;
+    if (!my_application) return null;
 
-    const isShortlisted = application.is_shortlisted;
-    const isHired = !!application.hire;
-    const isRejected = application.is_rejected;
+    const isShortlisted = my_application.is_shortlisted;
+    const isHired = !!my_application.hire;
+    const isRejected = my_application.is_rejected;
 
     if (isHired) {
         return (
@@ -41,12 +41,12 @@ export function ApplicationStatus({ role }: Props) {
             <Content>
                 <H2>You've been shortlisted!</H2>
 
-                { application.casting_photos.length > 0
+                { my_application.casting_photos.length > 0
                     ? <>You have provided additional casting information. This will now be presented to the client. We'll keep you posted once the client has made a decision.</>
                     : <>
                         <P>The client has requested additional information to make a hiring decision.</P>
                         <P>Please provide the information below to increase your chances of being hired.</P>
-                        <ExtendedApplicationForm role={role} />
+                        <ExtendedApplicationForm application={my_application} role={role} />
                     </>}
             </Content>
         )

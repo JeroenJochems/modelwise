@@ -13,7 +13,7 @@ class RegisterModelData extends Data
     public array $viewedRoles = [];
 
     public function __construct(
-        #[Rule(['email', 'unique:models,email'])]
+        #[Rule(['email:rfc,dns', 'unique:models,email'])]
         public string $email,
         #[Rule(['required', 'confirmed', 'min:8'])]
         public ?string $password,

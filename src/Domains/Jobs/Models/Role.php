@@ -2,6 +2,7 @@
 
 namespace Domain\Jobs\Models;
 
+use Domain\Present\Models\Presentation;
 use Domain\Profiles\Models\Photo;
 use Domain\Work\Models\Application;
 use Domain\Work\Models\Pass;
@@ -65,6 +66,16 @@ class Role extends Model
     public function invites()
     {
         return $this->hasMany(Invite::class);
+    }
+
+    public function open_invites()
+    {
+        return $this->hasMany(Invite::class)->whereNull('application_id');
+    }
+
+    public function presentations()
+    {
+        return $this->hasMany(Presentation::class);
     }
 
     public function applications()

@@ -23,6 +23,7 @@ hasPassed: boolean;
 isHired: boolean;
 shootDates: Array<any>;
 status: string;
+my_application: Domain.Jobs.Data.ApplicationData;
 };
 export type ProfessionalExperienceViewModel = {
 allCategories: Array<App.ViewModels.Tag>;
@@ -145,11 +146,11 @@ portfolio: Array<Domain.Profiles.Data.ModelPhotoData>;
 digitals: Array<Domain.Profiles.Data.ModelPhotoData>;
 tattoo_photos: Array<Domain.Profiles.Data.ModelPhotoData>;
 applications: Array<Domain.Jobs.Data.ApplicationData>;
-height: number;
-chest: number;
-waist: number;
-hips: number;
-shoe_size: number;
+height: number | null;
+chest: number | null;
+waist: number | null;
+hips: number | null;
+shoe_size: number | null;
 clothing_size_top: string | null;
 };
 export type ModelDigitalData = {

@@ -22,7 +22,7 @@ class ApplyData extends Data
     public function __construct(
         public ?string $cover_letter,
 
-        #[Rule(["required", "array", "min:3"])]
+        #[Rule(["array", "min:3"])]
         public array $digitals,
 
         #[Rule(["array", "min:3"])]
@@ -50,10 +50,10 @@ class ApplyData extends Data
     {
         return [
             'available_dates.min' => 'Without your availability, we cannot process your application.',
-            'digitals.min' => 'With your application, please upload at least three digitals.',
-            'digitals.required' => 'With your application, please upload at least three digitals.',
-            'photos.min' => 'Please upload at least three photos.',
-            'photos.required' => 'With your application, please upload at least three photos.'
+            'digitals.min' => 'Upload at least three digitals.',
+            'digitals.required' => 'Upload at least three digitals.',
+            'photos.min' => 'Upload at least three photos.',
+            'photos.required' => 'Upload at least three photos.'
         ];
     }
 }

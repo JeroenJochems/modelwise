@@ -9,7 +9,6 @@ LogRocket.init('ovxwul/modelwise');
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Modelwise';
 
-
 const app = createInertiaApp({
     title: (title) => `${appName} 📸 ${title}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.tsx`, import.meta.glob('./Pages/**/*.tsx')),
