@@ -15,6 +15,7 @@ type ModelDataType = {
     parent_first_name: string
     parent_last_name: string
     phone_number: string
+    whatsapp_number: string
     city: string
     country: string
     gender: string
@@ -32,6 +33,7 @@ type FormData = {
     parent_first_name: string
     parent_last_name: string
     phone_number: string
+    whatsapp_number: string
     city: string
     gender: string
     country: string
@@ -47,6 +49,7 @@ export default function PersonalDetails({modelData, countriesViewModel }: Props)
         video: undefined,
         country: modelData.country ?? "Netherlands",
         phone_number: modelData.phone_number ?? "+31",
+        whatsapp_number: modelData.whatsapp_number ?? "+31",
         date_of_birth: modelData.date_of_birth ? modelData.date_of_birth.split(' ')[0] : "",
     });
 
@@ -79,6 +82,7 @@ export default function PersonalDetails({modelData, countriesViewModel }: Props)
                 setData({
                     ...data,
                     country,
+                    whatsapp_number: `+${countryObj.phone} `,
                     phone_number: `+${countryObj.phone} `
                 });
             }
@@ -144,6 +148,14 @@ export default function PersonalDetails({modelData, countriesViewModel }: Props)
                     value={data.phone_number}
                     error={errors.phone_number}
                     onChange={(value: string) => { clearErrors('phone_number'); setData('phone_number', value) }}
+                />
+
+
+                <InputGroupText
+                    title={ age < 18 ? "WhatsApp number parent" : "Whatsapp number" }
+                    value={data.whatsapp_number}
+                    error={errors.whatsapp_number}
+                    onChange={(value: string) => { clearErrors('whatsapp_number'); setData('whatsapp_number', value) }}
                 />
 
                 <InputGroupText

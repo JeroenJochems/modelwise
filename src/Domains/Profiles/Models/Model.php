@@ -30,7 +30,6 @@ class Model extends Authenticatable implements Onboardable
     use HasShortflakePrimary;
     use Impersonatable;
 
-
     const TAG_TYPE_MODEL_EXPERIENCE = 'Modeling experience';
     const TAG_TYPE_PROFESSIONS = 'Professions';
 
