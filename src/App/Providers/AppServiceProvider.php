@@ -66,6 +66,12 @@ class AppServiceProvider extends ServiceProvider
                 return !!$model->photos()->count();
             });
 
+        Onboard::addStep('Activities')
+            ->link("onboarding/activities")
+            ->completeIf(function (Model $model) {
+                return $model->photos()->where('folder', Photo::FOLDER_ACTIVITIES)->count() > 0;
+            });
+
         Onboard::addStep('Socials')
             ->link("onboarding/socials")
             ->completeIf(function (Model $model) {

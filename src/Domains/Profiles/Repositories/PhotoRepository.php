@@ -2,6 +2,7 @@
 
 namespace Domain\Profiles\Repositories;
 
+use Domain\Profiles\Actions\AnalysePhoto;
 use Domain\Profiles\Models\Model;
 use Domain\Profiles\Models\Photo;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -55,6 +56,10 @@ class PhotoRepository
 
             if ($photo['path'] != $photoObj->path) {
                 app(MovePhoto::class)->onQueue()->execute($photo['path'], $photoObj->path);
+
+                if ($folder === Photo::FOLDER_ACTIVITIES || $folder === Photo::FOLDER_WORK_EXPERIENCE) {
+                    app(AnalysePhoto::class)->onQueue()->execute($photoObj);
+                }
             }
 
             return $photoObj->id;

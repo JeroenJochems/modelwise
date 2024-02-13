@@ -35,6 +35,9 @@ class ModelPersonalDetailsData extends Data
         #[Rule(['required', 'min:10'])]
         public ?string $phone_number,
 
+        #[Rule(['required', 'min:10'])]
+        public ?string $whatsapp_number,
+
         #[Rule(['required', 'min:2'])]
         public ?string $city,
 

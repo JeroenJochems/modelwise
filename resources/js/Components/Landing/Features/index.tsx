@@ -49,7 +49,7 @@ export default function Features() {
 
                             <div className="mx-auto max-w-2xl sm:mx-0 sm:max-w-none">
                                 <img
-                                    src="https://modelwise.imgix.net/assets/16.2.jpg?fm=auto&fit=fill&w=2432&h=1442&q=80"
+                                    src="https://modelwise.imgix.net/photos/2bc5358f-d3b4-4eb3-a1e0-bd586faa9866?fm=auto&w=2400&h=1442&q=80"
                                     alt="Product screenshot"
                                     width={2432}
                                     height={1442}

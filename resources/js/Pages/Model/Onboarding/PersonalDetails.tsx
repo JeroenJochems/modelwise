@@ -8,6 +8,8 @@ import {PageProps} from "@/types";
 import CountriesViewModel = App.ViewModels.CountriesViewModel;
 import PrimaryButton from "@/Components/PrimaryButton";
 import {BaseFile} from "@/Components/FileUploader";
+import Checkbox from "@/Components/Checkbox";
+import {Label} from "@/Components/Atoms/Label";
 
 type ModelDataType = {
     first_name: string
@@ -41,10 +43,10 @@ type FormData = {
     date_of_birth: string
 }
 
-export default function PersonalDetails({modelData, countriesViewModel }: Props) {
-    const { ziggy } = usePage<PageProps>().props
+export default function PersonalDetails({modelData, countriesViewModel}: Props) {
+    const {ziggy} = usePage<PageProps>().props
 
-    const {data, setData, post, clearErrors, errors } = useForm<FormData>({
+    const {data, setData, post, clearErrors, errors} = useForm<FormData>({
         ...modelData,
         video: undefined,
         country: modelData.country ?? "Netherlands",
@@ -107,7 +109,10 @@ export default function PersonalDetails({modelData, countriesViewModel }: Props)
                     type={"date"}
                     value={data.date_of_birth}
                     error={errors.date_of_birth}
-                    onChange={(value: string) => { clearErrors('date_of_birth'); setData('date_of_birth', value) }}
+                    onChange={(value: string) => {
+                        clearErrors('date_of_birth');
+                        setData('date_of_birth', value)
+                    }}
                 />
 
                 <InputGroupText
@@ -115,7 +120,10 @@ export default function PersonalDetails({modelData, countriesViewModel }: Props)
                     value={data.first_name ?? ""}
                     error={errors.first_name}
                     autoComplete={"given-name"}
-                    onChange={(value: string) => { clearErrors('first_name'); setData('first_name', value) }}
+                    onChange={(value: string) => {
+                        clearErrors('first_name');
+                        setData('first_name', value)
+                    }}
                 />
 
                 <InputGroupText
@@ -123,39 +131,65 @@ export default function PersonalDetails({modelData, countriesViewModel }: Props)
                     value={data.last_name}
                     error={errors.last_name}
                     autoComplete={"family-name"}
-                    onChange={(value: string) => { clearErrors('last_name'); setData('last_name', value) }}
+                    onChange={(value: string) => {
+                        clearErrors('last_name');
+                        setData('last_name', value)
+                    }}
                 />
 
-                { age > 0 && age < 18 &&
+                {age > 0 && age < 18 &&
                     <>
                         <InputGroupText
                             title="First name parent"
                             value={data.parent_first_name}
                             error={errors.parent_first_name}
-                            onChange={(value: string) => { clearErrors('parent_first_name'); setData('parent_first_name', value) }}
+                            onChange={(value: string) => {
+                                clearErrors('parent_first_name');
+                                setData('parent_first_name', value)
+                            }}
                         />
                         <InputGroupText
                             title="Last name parent"
                             value={data.parent_last_name}
                             error={errors.parent_last_name}
-                            onChange={(value: string) => { clearErrors('parent_last_name'); setData('parent_last_name', value) }}
+                            onChange={(value: string) => {
+                                clearErrors('parent_last_name');
+                                setData('parent_last_name', value)
+                            }}
                         />
                     </>
                 }
 
                 <InputGroupText
-                    title={ age < 18 ? "Phone number parent" : "Phone number" }
+                    title={age && age < 18 ? "Phone number parent" : "Phone number"}
                     value={data.phone_number}
                     error={errors.phone_number}
-                    onChange={(value: string) => { clearErrors('phone_number'); setData('phone_number', value) }}
+                    onChange={(value: string) => {
+
+                        if (data.phone_number == data.whatsapp_number) {
+                            setData({
+                                ...data,
+                                'whatsapp_number': value,
+                                'phone_number': value
+                            });
+                        } else {
+                            setData({
+                                ...data,
+                                'phone_number': value
+                            });
+                        }
+                        clearErrors('phone_number');
+                    }}
                 />
 
-
                 <InputGroupText
-                    title={ age < 18 ? "WhatsApp number parent" : "Whatsapp number" }
+                    title={age && age < 18 ? "WhatsApp number parent" : "Whatsapp number"}
                     value={data.whatsapp_number}
                     error={errors.whatsapp_number}
-                    onChange={(value: string) => { clearErrors('whatsapp_number'); setData('whatsapp_number', value) }}
+                    onChange={(value: string) => {
+                        clearErrors('whatsapp_number');
+                        setData('whatsapp_number', value)
+                    }}
                 />
 
                 <InputGroupText
@@ -163,7 +197,10 @@ export default function PersonalDetails({modelData, countriesViewModel }: Props)
                     value={data.gender}
                     options={genderOptions}
                     error={errors.gender}
-                    onChange={(value: string) => { clearErrors('gender'); setData('gender', value) }}
+                    onChange={(value: string) => {
+                        clearErrors('gender');
+                        setData('gender', value)
+                    }}
                 />
 
                 <InputGroupText
@@ -171,18 +208,23 @@ export default function PersonalDetails({modelData, countriesViewModel }: Props)
                     value={data.country}
                     options={countriesViewModel.countries.map(c => c.name)}
                     error={errors.country}
-                    onChange={(value: string) => { setCountry(value) }}
+                    onChange={(value: string) => {
+                        setCountry(value)
+                    }}
                 />
 
                 <InputGroupText
                     title="City"
                     value={data.city}
                     error={errors.city}
-                    onChange={(value: string) => { clearErrors('city'); setData('city', value); } }
+                    onChange={(value: string) => {
+                        clearErrors('city');
+                        setData('city', value);
+                    }}
                 />
 
                 <PrimaryButton onClick={submit}>
-                    {isOnboarding ? "Continue" : "Save" }
+                    {isOnboarding ? "Continue" : "Save"}
                 </PrimaryButton>
             </form>
         </CleanLayout>

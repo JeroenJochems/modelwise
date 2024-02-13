@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\Model\ActivitiesController;
 use App\Http\Controllers\Model\OnboardingController;
 use App\Http\Controllers\Model\ProfessionalExperienceController;
 use App\Http\Controllers\PassController;
@@ -37,6 +38,7 @@ if (!function_exists("onboardingRoutes")) {
         Route::get('personal-details', [PersonalDetailsController::class, "index"])->name("personal-details");
         Route::get('profile-picture', [ProfilePictureController::class, "index"])->name("profile-picture");
         Route::get('portfolio', [PortfolioController::class, "index"])->name("portfolio");
+        Route::get('activities', [ActivitiesController::class, "index"])->name("activities");
         Route::get('digitals', [DigitalsController::class, "index"])->name("digitals");
         Route::get('socials', [SocialsController::class, "index"])->name("socials");
         Route::get('characteristics', [CharacteristicsController::class, "index"])->name("characteristics");
@@ -47,6 +49,7 @@ if (!function_exists("onboardingRoutes")) {
         Route::post('personal-details', [PersonalDetailsController::class, 'store'])->name("personal-details.store");
         Route::post('profile-picture', [ProfilePictureController::class, 'store'])->name("profile-picture.store");
         Route::post('portfolio', [PortfolioController::class, 'store'])->name("portfolio.store");
+        Route::post('activities', [ActivitiesController::class, 'store'])->name("activities.store");
         Route::post('digitals', [DigitalsController::class, 'store'])->name("digitals.store");
         Route::post('socials', [SocialsController::class, 'store'])->name("socials.store");
         Route::post('exclusive-countries', [ExclusiveCountriesController::class, "store"])->name("exclusive-countries.store");

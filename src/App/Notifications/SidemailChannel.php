@@ -29,7 +29,7 @@ class SidemailChannel
                     "fromAddress" => "hello@6fipo.via.sidemail.net",
                     "toAddress" => $message->recipient->email,
                     "templateName" => implode(".", [$message->template, $message->recipient->preferred_language]),
-                    "templateProps" => [...$message->data, "first_name" => $message->recipient->first_name ?? ""],
+                    "templateProps" => ["first_name" => $message->recipient->first_name ?? "", ...$message->data],
                 ]),
             ]
         ];

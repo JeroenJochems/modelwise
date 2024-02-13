@@ -2,16 +2,17 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\AnalysePhoto;
 use Domain\Jobs\Models\Role as RoleModel;
 use Domain\Profiles\Models\Photo as PhotoModel;
 use Domain\Work\Models\Application as ApplicationModel;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\VaporImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Outl1ne\NovaSortable\Traits\HasSortableManyToManyRows;
-use Outl1ne\NovaSortable\Traits\HasSortableRows;
 
 class Photo extends Resource
 {
@@ -21,6 +22,10 @@ class Photo extends Resource
     public static $title = 'folder';
     public static $globallySearchable = false;
     public static $perPageViaRelationship = 10;
+
+    protected $casts = [
+        'analysis' => 'array'
+    ];
 
     public $sortable = [
         'order_column_name' => 'sortable_order',
@@ -35,7 +40,6 @@ class Photo extends Resource
 
     public function fields(NovaRequest $request)
     {
-
         $resource = $this->photoable_type ?? substr($request->viaResource,0, -1);
 
         $options = match($resource) {
@@ -54,6 +58,7 @@ class Photo extends Resource
         return [
             MorphTo::make("Photoable")->onlyOnDetail(),
             Select::make("Folder")->options($options),
+            Text::make("Analysis")->onlyOnDetail(),
             VaporImage::make('Photo', 'path')
                 ->path("photos")
                 ->indexWidth(200)
@@ -101,6 +106,8 @@ class Photo extends Resource
      */
     public function actions(NovaRequest $request)
     {
-        return [];
+        return [
+            new AnalysePhoto
+        ];
     }
 }

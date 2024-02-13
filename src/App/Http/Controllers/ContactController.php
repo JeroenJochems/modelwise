@@ -9,6 +9,13 @@ class ContactController extends Controller
 {
     public function store()
     {
+        $this->validate(request(), [
+            "phone" => "required",
+            "email" => "required|email",
+            "first_name" => "required",
+            "last_name" => "required",
+        ]);
+
         $lead = new Lead();
         $lead->phone = request()->get("phone");
         $lead->email = request()->get("email");

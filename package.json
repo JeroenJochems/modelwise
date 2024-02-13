@@ -4,7 +4,11 @@
     "scripts": {
         "dev": "vite",
         "test": "tsc",
-        "build": "vite build && vite build --ssr"
+        "build": "vite build && vite build --ssr",
+        "build-BooleanAt": "cd nova-components/BooleanAt && npm run dev",
+        "build-BooleanAt-prod": "cd nova-components/BooleanAt && npm run prod",
+        "build-boolean-at": "cd nova-components/BooleanAt && npm run dev",
+        "build-boolean-at-prod": "cd nova-components/BooleanAt && npm run prod"
     },
     "devDependencies": {
         "@headlessui/react": "^1.4.2",

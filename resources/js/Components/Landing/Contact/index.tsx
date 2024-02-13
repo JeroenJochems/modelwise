@@ -19,7 +19,7 @@ export default function Contact({ successMessage}: { successMessage?: string }) 
 
     const [submitted, setSubmitted] = useState(false);
 
-    const { post, setData } = useForm({
+    const { post, setData, errors } = useForm({
         first_name: '',
         last_name: '',
         email: '',
@@ -28,6 +28,7 @@ export default function Contact({ successMessage}: { successMessage?: string }) 
 
     const submit = () => {
         post(route("contact"), {
+            preserveState: true,
             preserveScroll: true,
             onSuccess: () => {
                 setSubmitted(true);
@@ -72,6 +73,10 @@ export default function Contact({ successMessage}: { successMessage?: string }) 
                                             autoComplete="given-name"
                                             className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal sm:text-sm sm:leading-6"
                                         />
+
+                                        <div className={"mt-2 text-sm text-red-600"}>
+                                            {errors.first_name}
+                                        </div>
                                     </div>
                                 </div>
                                 <div>
@@ -87,6 +92,9 @@ export default function Contact({ successMessage}: { successMessage?: string }) 
                                             autoComplete="family-name"
                                             className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal sm:text-sm sm:leading-6"
                                         />
+                                        <div className={"mt-2 text-sm text-red-600"}>
+                                            {errors.last_name}
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="sm:col-span-2">
@@ -102,10 +110,14 @@ export default function Contact({ successMessage}: { successMessage?: string }) 
                                             autoComplete="email"
                                             className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal sm:text-sm sm:leading-6"
                                         />
+                                        <div className={"mt-2 text-sm text-red-600"}>
+                                            {errors.email}
+                                        </div>
                                     </div>
+
                                 </div>
                                 <div className="sm:col-span-2">
-                                    <div className="flex justify-between text-sm leading-6">
+                                <div className="flex justify-between text-sm leading-6">
                                         <label htmlFor="phone" className="block font-semibold text-gray-900">
                                             Phone
                                         </label>
@@ -120,12 +132,15 @@ export default function Contact({ successMessage}: { successMessage?: string }) 
                                             aria-describedby="phone-description"
                                             className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-teal sm:text-sm sm:leading-6"
                                         />
+                                        <div className={"mt-2 text-sm text-red-600"}>
+                                            {errors.phone}
+                                        </div>
                                     </div>
                                 </div>
 
                             </div>
 
-                            { submitted && (
+                            {submitted && (
                                 <div className={"mt-4 text-sm text-green-600"}>
                                     Thank you for your message. We will get back to you within 48 hours.
                                 </div>

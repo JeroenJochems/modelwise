@@ -2,12 +2,16 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.1",
         "algolia/algoliasearch-client-php": "^3.3",
         "datomatic/nova-enum-field": "^1.6",
+        "eventsauce/eventsauce": "^3.5",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.3",
         "inspheric/nova-indicator-field": "^1.43",
@@ -47,6 +51,7 @@
     },
     "require-dev": {
         "doctrine/dbal": "^3.7",
+        "eventsauce/test-utilities": "^3.4",
         "fakerphp/faker": "^1.9.1",
         "laravel/breeze": "^1.21",
         "laravel/dusk": "^7.11",

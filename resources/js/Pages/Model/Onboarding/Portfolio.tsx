@@ -36,11 +36,11 @@ export default function Portfolio({modelPhotos}: {modelPhotos: BaseFile[] }) {
     return (
         <CleanLayout header={
             <Header step={4} isOnboarding={isOnboarding}>
-                <H1>Your best photos</H1>
+                <H1>Your portfolio</H1>
             </Header>
         } photos={["https://modelwise.imgix.net/assets/11.jpeg?w=1200&fm=auto"]}>
 
-                <P>Upload of your best photos, hundreds if you want, at least 6.</P>
+                <P>Upload your best portfolio photos</P>
 
                 <FileUploader
                     cols={3}
@@ -50,6 +50,8 @@ export default function Portfolio({modelPhotos}: {modelPhotos: BaseFile[] }) {
                     onAdd={(photo) => setData(data => ({...data, photos: [...data.photos, photo]}))}
                     onUpdate={(photos) => { setData(data => ({...data, photos})) }}
                 />
+
+                { data.photos.length > 5 && data.photos.length <= 12 && <P>You can add as many photos as you like!</P> }
 
                 <PrimaryButton onClick={submit} disabled={isSubmitting || isUploading || ( isOnboarding && data.photos.length < 3)}>
                     { isSubmitting ? `Please wait...` : isOnboarding ? 'Continue' : 'Save' }

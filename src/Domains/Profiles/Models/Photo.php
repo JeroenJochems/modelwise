@@ -30,6 +30,7 @@ class Photo extends Model implements Sortable
     }
 
     const FOLDER_WORK_EXPERIENCE = 'Work experience';
+    const FOLDER_ACTIVITIES = 'Activities';
     const FOLDER_DIGITALS = 'Digitals';
     const FOLDER_TATTOOS = 'Tattoos';
     const FOLDER_JOB_IMAGE = 'Look & Feel';

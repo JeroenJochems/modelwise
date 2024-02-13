@@ -22,6 +22,7 @@ export default function Index() {
             {link(route('account.personal-details'), 'Personal Details')}
             {link(route('account.profile-picture'), 'Profile picture')}
             {link(route('account.portfolio'), 'Portfolio')}
+            {link(route('account.activities'), 'Activities & Skills')}
             {link(route('account.digitals'), 'Digitals')}
             {link(route('account.socials'), 'Socials')}
             {link(route('account.characteristics'), 'Characteristics')}

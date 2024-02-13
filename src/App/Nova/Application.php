@@ -13,6 +13,7 @@ use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Outl1ne\NovaSortable\Traits\HasSortableRows;
+use PragmaRX\BooleanDatetime\BooleanDatetime;
 
 class Application extends Resource
 {
@@ -52,7 +53,6 @@ class Application extends Resource
                 Line::make("Brand and client", fn() => $this->role->job->brand?->name. ' via '.$this->role->job->client->name)->asSmall(),
             ])->onlyOnIndex(),
             BelongsTo::make("Role")->hideFromIndex(),
-            Boolean::make("Shortlisted", fn() => $this->shortlisted_at)->onlyOnIndex(),
             BelongsTo::make("Model")->hideFromIndex(),
             Text::make('Photos', fn() => '<div style="display: flex; width: 340px; overflow-x: scroll">
                         ' .implode("", $this->photos->map(fn($photo) => '<img src="'.$photo->cdn_path_thumb.'" style="height: 120px;" />')->toArray())
@@ -68,6 +68,9 @@ class Application extends Resource
                 ->asHtml()->hideFromIndex(),
             Text::make("Cover letter"),
             Text::make("Brand conflicted"),
+            Boolean::make("Shortlisted", "shortlisted")
+                ->resolveUsing(fn($request, $model) => $model['shortlisted_at']!==null)
+                ->fillUsing(function($request, $model) { return $model['shortlisted_at'] = $request->shortlisted==="1" ? now() : null; }),
             MorphMany::make("Photos")->showOnIndex(true),
             MorphMany::make("Casting videos", "casting_videos", Video::class)->showOnIndex(true),
         ];

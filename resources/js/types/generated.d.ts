@@ -23,7 +23,7 @@ hasPassed: boolean;
 isHired: boolean;
 shootDates: Array<any>;
 status: string;
-my_application: Domain.Jobs.Data.ApplicationData;
+my_application: Domain.Jobs.Data.ApplicationData | null;
 };
 export type ProfessionalExperienceViewModel = {
 allCategories: Array<App.ViewModels.Tag>;
@@ -208,5 +208,7 @@ password: string | null;
 declare namespace Domain.Profiles.Enums {
 export type Ethnicity = 'White' | 'Black' | 'Latino' | 'Asian' | 'NativeAmerican';
 export type EyeColor = 'Light blue' | 'Blue' | 'Light gray' | 'Gray' | 'Blue gray' | 'Gray green' | 'Green' | 'Hazel' | 'Light brown' | 'Medium brown' | 'Dark brown';
-export type HairColor = 'Black' | 'Brown' | 'Blond' | 'White/Gray' | 'Red' | 'Colored' | 'None' | 'Other';
+export type Gender = 'Male' | 'Female' | 'Non-binary';
+export type HairColor = 'Black' | 'Brown' | 'Blond' | 'Dark Blond' | 'White' | 'Gray' | 'Red' | 'Colored' | 'None' | 'Other';
+export type ModelClass = 'AAA - €2000/day+' | 'A - €1000-€2000/day' | 'B - ~€600/day' | 'C - ~€400/day' | 'D - ~€200/day';
 }

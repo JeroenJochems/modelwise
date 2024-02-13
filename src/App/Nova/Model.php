@@ -36,7 +36,8 @@ class Model extends Resource
         'email',
     ];
 
-    public function title() {
+    public function title()
+    {
         return $this->first_name . ' ' . $this->last_name;
     }
 
@@ -51,7 +52,7 @@ class Model extends Resource
             Avatar::make('Profile picture', 'profile_picture_cdn')
                 ->thumbnail(function ($value, $disk) {
                     // @phpstan-ignore-next-line
-                    return $value ? $this->profile_picture_cdn."?w=600&h=600&fit=crop&crop=faces" : null;
+                    return $value ? $this->profile_picture_cdn . "?w=600&h=600&fit=crop&crop=faces" : null;
                 })
                 ->path("profile_pictures")
                 ->preview(function ($value, $disk) {
@@ -60,14 +61,24 @@ class Model extends Resource
                 })
                 ->hideFromIndex()->hideFromDetail()->readonly(true)->showOnUpdating(false),
             Stack::make("Name", [
-                Line::make("Name", function() { return $this->first_name." ".$this->last_name; })->asHeading(),
-                Line::make("Location", function() { return $this->city.", ".$this->country; })->asSmall(),
-                Line::make("Phone number", function() { return $this->phone_number; })->asSmall(),
+                Line::make("Name", function () {
+                    return $this->first_name . " " . $this->last_name;
+                })->asHeading(),
+                Line::make("Location", function () {
+                    return $this->city . ", " . $this->country;
+                })->asSmall(),
+                Line::make("Phone number", function () {
+                    return $this->phone_number;
+                })->asSmall(),
+                Line::make("Whatsapp number", function () {
+                    return $this->whatsapp_number;
+                })->asSmall(),
             ])->onlyOnIndex(),
 
             Text::make('First Name')->sortable()->rules('required', 'max:255')->hideFromIndex(),
             Text::make('Last Name')->sortable()->rules('required', 'max:255')->hideFromIndex(),
             Text::make('Phone number')->rules('required', 'max:255')->hideFromIndex(),
+            Text::make('WhatsApp number')->rules('max:255')->hideFromIndex(),
             Email::make('Email')->sortable()->required()->rules('required', 'email')->hideFromIndex(),
             Enum::make('Gender')->displayUsingLabels()->attach(Gender::class)->filterable()->rules('required', 'max:255')->hideFromIndex(),
             Enum::make('Class', 'model_class')->displayUsingLabels()->attach(\Domain\Profiles\Enums\ModelClass::class)->filterable(),
@@ -82,19 +93,29 @@ class Model extends Resource
             Text::make('Other experience'),
             Tags::make('Other professions')->type(ModelClass::TAG_TYPE_PROFESSIONS)->withLinkToTagResource()->hideFromIndex(),
             VaporImage::make("Profile picture", "profile_picture")
-                ->path("profile_pictures")
+                ->path(
+                    "profile_pictures")
                 ->preview(fn() => $this->profile_picture_cdn)
                 ->hideFromIndex()
+                ->hideFromDetail()
                 ->detailWidth(300)
                 ->disableDownload(),
-            Text::make('Photos', function() {
+            Text::make('Photos', function () {
                 return '<div style="display: flex; width: 600px; height: 120px; overflow-x: scroll; overflow-y: hidden">
-                        <img src="'.$this->profile_picture_cdn_thumb.'" height="120" />
-                        ' .implode("", $this->photos->map(function ($photo) {
-                        return '<img src="'.$photo->cdn_path_thumb.'" height="120" />';
+                        <img src="' . $this->profile_picture_cdn . '" height="120" />
+                        ' . implode("", $this->photos->map(function ($photo) {
+                        return '<img title="' . $photo->analysis . '" src="' . $photo->cdn_path_thumb . '" height="120" />';
                     })->toArray())
-                     . '</div>';
+                    . '</div>';
             })->asHtml()->onlyOnIndex(),
+            Text::make('Photo preview', function () {
+                return '<div style="display: flex; height: 400px; overflow-x: scroll; overflow-y: hidden">
+                        <img src="' . $this->profile_picture_cdn_thumb . '" height="120" />
+                        ' . implode("", $this->photos->map(function ($photo) {
+                        return '<img title="' . $photo->analysis . '" src="' . $photo->cdn_path_thumb . '" height="120" />';
+                    })->toArray())
+                    . '</div>';
+            })->asHtml()->hideFromIndex(),
             Text::make('Instagram')->rules('required', 'max:255')->hideFromIndex()->copyable(),
             Text::make('Tiktok')->rules('required_without:instagram', 'max:255')->hideFromIndex()->copyable(),
             Text::make('Website')->rules('max:255')->hideFromIndex()->copyable(),
