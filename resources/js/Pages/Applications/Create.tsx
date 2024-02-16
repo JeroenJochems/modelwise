@@ -13,6 +13,7 @@ import {H1} from "@/Components/Typography/H1";
 import {useUploadingFields} from "@/Hooks/useUploadingFields";
 import {BaseFile, FileUploader} from "@/Components/FileUploader";
 import ModelRoleViewModel = App.ViewModels.ModelRoleViewModel;
+import TextArea from "@/Components/TextArea";
 
 type Props = {
     viewModel: ModelRoleViewModel;
@@ -24,6 +25,7 @@ type Form = {
     digitals: Array<BaseFile>;
     photos: Array<BaseFile>;
     height: number | string;
+    casting_questions: string;
     chest: number | string;
     waist: number | string;
     hips: number | string;
@@ -47,6 +49,7 @@ export default function Create({viewModel, meViewModel}: Props) {
         role_id: viewModel.role.id,
         digitals: me.digitals,
         photos: [],
+        casting_questions: '',
         height: me.height || '',
         chest: me.chest || '',
         waist: me.waist || '',
@@ -180,6 +183,14 @@ export default function Create({viewModel, meViewModel}: Props) {
                         </div>
                     </div>
                 )}
+
+                {role.casting_questions!==null &&
+                    <InputGroupText
+                        multiline
+                        onChange={value => setData('casting_questions', value)}
+                        title={role.casting_questions}
+                    />
+                }
 
 
                 <div>

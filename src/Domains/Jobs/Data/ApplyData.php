@@ -38,6 +38,7 @@ class ApplyData extends Data
         public ?int $shoe_size,
         public ?string $clothing_size_top,
         public ?string $brand_conflicted,
+        public ?string $casting_questions,
     ) {
         $this->model = Auth::user();
 

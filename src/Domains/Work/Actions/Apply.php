@@ -19,6 +19,7 @@ class Apply
         $application->model_id = $applyData->model->id;
         $application->cover_letter = $applyData->cover_letter;
         $application->brand_conflicted = $applyData->brand_conflicted;
+        $application->casting_questions = $applyData->casting_questions;
         $application->save();
 
         app(PhotoRepository::class)->update($application, Application::PHOTO_FOLDER, $applyData->photos);

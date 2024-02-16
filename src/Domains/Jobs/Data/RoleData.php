@@ -52,6 +52,7 @@ class RoleData extends Data
 
         public ?string $casting_video_instructions,
         public ?string $casting_photo_instructions,
+        public ?string $casting_questions,
 
         $fields,
         $extra_fields

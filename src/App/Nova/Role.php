@@ -66,6 +66,7 @@ class Role extends Resource
                     ]),
                     Textarea::make("Casting photo instructions", "casting_photo_instructions")->help("Only applicable if field is active")->hideFromIndex()->alwaysShow(),
                     Textarea::make("Casting video instructions", "casting_video_instructions")->help("Only applicable if field is active")->hideFromIndex()->alwaysShow(),
+                    Textarea::make("Additional questions", "casting_questions")->hideFromIndex()->alwaysShow(),
                 ]
             ),
             Text::make("Travel reimbursement note")->hideFromIndex(),

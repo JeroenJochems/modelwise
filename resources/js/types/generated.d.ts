@@ -108,6 +108,7 @@ public_photos: Array<Domain.Profiles.Data.PhotoData>;
 job: Domain.Jobs.Data.JobData;
 casting_video_instructions: string | null;
 casting_photo_instructions: string | null;
+casting_questions: string | null;
 };
 }
 declare namespace Domain.Jobs.Enums {
@@ -165,6 +166,7 @@ last_name: string | null;
 parent_first_name: string | null;
 parent_last_name: string | null;
 phone_number: string | null;
+whatsapp_number: string | null;
 city: string | null;
 country: string | null;
 gender: string | null;

@@ -11,6 +11,7 @@ use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\MorphMany;
 use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Outl1ne\NovaSortable\Traits\HasSortableRows;
 
@@ -65,8 +66,9 @@ class Application extends Resource
                         ' .$this->casting_videos->map(fn($video) => '<video src="'.$video->cdn_path.'" style="height: 120px;" controls="true" />')->implode('')
                 . '</div>')
                 ->asHtml()->hideFromIndex(),
-            Text::make("Cover letter"),
-            Text::make("Brand conflicted"),
+            Textarea::make("Cover letter")->alwaysShow(),
+            Textarea::make("Brand conflicted")->alwaysShow(),
+            Textarea::make("Answer to casting questions", "casting_questions")->alwaysShow(),
             Boolean::make("Shortlisted", "shortlisted")
                 ->resolveUsing(fn($request, $model) => $model['shortlisted_at']!==null)
                 ->fillUsing(function($request, $model) { return $model['shortlisted_at'] = $request->shortlisted==="1" ? now() : null; }),

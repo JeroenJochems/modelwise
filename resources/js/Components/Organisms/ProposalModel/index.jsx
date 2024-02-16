@@ -22,6 +22,12 @@ export default function ProposalModel({ presentation, application}) {
                 <div>
                     <h1 className="sm:w-1/2 text-3xl font-medium text-gray-900">{application.model.first_name}</h1>
                     { presentation.should_show_cover_letter && application.cover_letter && <div className="mb-4 prose prose-sm">{ application.cover_letter }</div> }
+                    { presentation.role.casting_questions!==null && application.casting_questions && (
+                        <div className="mb-4 prose prose-sm">
+                            <strong>{ presentation.role.casting_questions}</strong><br />
+                            { application.casting_questions }
+                        </div>
+                    )}
                     { presentation.should_show_conflicts && application.brand_conflicted && <div className="mb-4 prose prose-sm">
                         <div className={"font-semibold"}>Brand conflicts</div>
                         { application.brand_conflicted }
