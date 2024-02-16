@@ -1,5 +1,6 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 import forms from '@tailwindcss/forms';
+import safeArea from 'tailwindcss-safe-area'
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -47,5 +48,5 @@ export default {
         },
     },
 
-    plugins: [forms],
+    plugins: [forms, safeArea],
 };

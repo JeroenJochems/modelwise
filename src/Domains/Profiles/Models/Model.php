@@ -8,6 +8,7 @@ use Domain\Jobs\Models\RoleView;
 use Domain\Profiles\Enums\Ethnicity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -153,6 +154,11 @@ class Model extends Authenticatable implements Onboardable
     public function tattoo_photos(): MorphMany
     {
         return $this->photos()->where("folder", Photo::FOLDER_TATTOOS);
+    }
+
+    public function roles(): HasManyThrough
+    {
+        return $this->hasManyThrough(\Domain\Jobs\Models\Role::class, Invite::class);
     }
 
     public function applications(): HasMany

@@ -26,7 +26,7 @@ class SidemailChannel
                 ],
                 "content" => json_encode([
                     "fromName" => "Modelwise",
-                    "fromAddress" => "hello@6fipo.via.sidemail.net",
+                    "fromAddress" => "hello@modelwise.agency",
                     "toAddress" => $message->recipient->email,
                     "templateName" => implode(".", [$message->template, $message->recipient->preferred_language]),
                     "templateProps" => ["first_name" => $message->recipient->first_name ?? "", ...$message->data],

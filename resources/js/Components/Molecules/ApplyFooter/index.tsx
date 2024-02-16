@@ -17,7 +17,7 @@ export function ApplyFooter({viewModel}: Props) {
         const isRejected = my_application?.is_rejected
 
         if (hasApplied) {
-            return <div className={"py-4"}>
+            return <div className={"py-4 pb-safe"}>
                 {isHired && <p>Congratulations! You have been hired for this role.</p>}
                 {isRejected && <p>Unfortunately you have not been selected for this role.</p>}
                 {!isHired && !isRejected &&
@@ -32,11 +32,11 @@ export function ApplyFooter({viewModel}: Props) {
 
     return <>
         <div className={"flex"}>
-            <CtaLink href={route('roles.apply', role.id)} icon={<Heart/>} className={'w-4/5 mr-4 mb-4'}>
+            <CtaLink href={route('roles.apply', role.id)} icon={<Heart/>} className={'w-4/5 mr-4'}>
                 {"I'm interested"}
             </CtaLink>
 
-            <CtaLink method={"post"} href={route('roles.pass.store', role.id)} icon={<Cross/>} variant={"negative"} className={'w-1/5 mb-4'}>
+            <CtaLink method={"post"} href={route('roles.pass.store', role.id)} icon={<Cross/>} variant={"negative"} className={'w-1/5'}>
                 <span className={"hidden sm:flex"}>Pass</span>
             </CtaLink>
         </div>

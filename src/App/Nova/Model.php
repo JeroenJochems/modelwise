@@ -2,6 +2,8 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\CreateApplication;
+use App\Nova\Actions\InviteForRole;
 use Datomatic\Nova\Fields\Enum\Enum;
 use Domain\Profiles\Enums\Ethnicity;
 use Domain\Profiles\Enums\EyeColor;
@@ -161,6 +163,9 @@ class Model extends Resource
 
     public function actions(NovaRequest $request)
     {
-        return [];
+        return [
+            new InviteForRole(),
+            new CreateApplication(),
+        ];
     }
 }

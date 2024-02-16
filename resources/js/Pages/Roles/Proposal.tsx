@@ -13,6 +13,7 @@ export default function Show({ presentation, role, applications})
             { applications.map(application => <ProposalModel
                 presentation={presentation}
                 application={application}
+                key={application.id}
             />) }
         </div>
     )

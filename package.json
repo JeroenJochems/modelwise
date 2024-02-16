@@ -43,6 +43,7 @@
         "react-sortablejs": "^6.1.4",
         "react-tabs": "^6.0.2",
         "sortablejs": "^1.15.0",
+        "tailwindcss-safe-area": "^0.5.1",
         "uuid": "^9.0.1"
     }
 }

@@ -13,7 +13,6 @@ use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Outl1ne\NovaSortable\Traits\HasSortableRows;
-use PragmaRX\BooleanDatetime\BooleanDatetime;
 
 class Application extends Resource
 {
@@ -53,7 +52,7 @@ class Application extends Resource
                 Line::make("Brand and client", fn() => $this->role->job->brand?->name. ' via '.$this->role->job->client->name)->asSmall(),
             ])->onlyOnIndex(),
             BelongsTo::make("Role")->hideFromIndex(),
-            BelongsTo::make("Model")->hideFromIndex(),
+            BelongsTo::make("Model")->hideFromIndex()->searchable(),
             Text::make('Photos', fn() => '<div style="display: flex; width: 340px; overflow-x: scroll">
                         ' .implode("", $this->photos->map(fn($photo) => '<img src="'.$photo->cdn_path_thumb.'" style="height: 120px;" />')->toArray())
                 . '</div>')
@@ -85,4 +84,15 @@ class Application extends Resource
         ];
     }
 
+    protected static function afterValidation(NovaRequest $request, $validator)
+    {
+        $isDuplicate = \Domain\Work\Models\Application::query()
+            ->whereModelId($request->model)
+            ->whereRoleId($request->role)
+            ->exists();
+
+        if ($isDuplicate) {
+            $validator->errors()->add('model', 'This model has already applied for this role');
+        }
+    }
 }

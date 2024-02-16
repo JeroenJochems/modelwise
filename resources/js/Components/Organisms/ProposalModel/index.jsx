@@ -5,9 +5,15 @@ import "@mux/mux-player/themes/minimal";
 export default function ProposalModel({ presentation, application}) {
     const {cdn_url} = usePage().props;
 
-    const photos = presentation.should_show_casting_media
-        ? [...application.casting_photos, ...application.photos]
-        : application.photos;
+    let photos = application.photos ;
+
+    if (presentation.should_show_casting_media) {
+        photos = [...application.casting_photos, ...photos];
+    }
+
+    if (photos.length < 1) {
+        photos = [...application.model.photos.slice(8)]
+    }
 
     return (
         <div className={"pt-12 break-inside-avoid-page grid gap-4"}>
@@ -138,7 +144,7 @@ export default function ProposalModel({ presentation, application}) {
                 ))}
 
                 {photos.slice(0,8).map((photo) => (
-                    <div className={"flex"}>
+                    <div className={"flex"} id={photo.id}>
                         <img
                             key={photo.path}
                             src={cdn_url + photo.path + '?w=1200&h=1200&fit=crop&crop=faces'}
