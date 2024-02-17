@@ -74,12 +74,12 @@ class Model extends Authenticatable implements Onboardable
 
     public function getScoutKey(): mixed
     {
-        return $this->email;
+        return $this->id;
     }
 
     public function getScoutKeyName(): mixed
     {
-        return 'email';
+        return 'id';
     }
 
     /**

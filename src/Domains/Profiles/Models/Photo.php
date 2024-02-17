@@ -5,18 +5,40 @@ namespace Domain\Profiles\Models;
 use Domain\Profiles\Collections\PhotoCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Kra8\Snowflake\HasShortflakePrimary;
+use Laravel\Scout\Searchable;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
 class Photo extends Model implements Sortable
 {
     use SortableTrait;
-
+    use Searchable;
     use HasShortflakePrimary;
 
     public function newCollection($models = [])
     {
         return new PhotoCollection($models);
+    }
+
+    public function toSearchableArray(): array
+    {
+        $array = [
+            'id' => $this->id,
+            'folder' => $this->folder,
+            'path' => $this->path,
+            'analysis' => $this->analysis,
+        ];
+
+        return $array;
+    }
+
+    public function searchableAs(): string
+    {
+        if (app()->environment('local')) {
+            return 'dev_photo_index';
+        }
+
+        return 'photo_index';
     }
 
     public $sortable = [
@@ -27,6 +49,11 @@ class Photo extends Model implements Sortable
     public function getScoutKey(): mixed
     {
         return $this->id;
+    }
+
+    public function getScoutKeyName(): mixed
+    {
+        return 'id';
     }
 
     const FOLDER_WORK_EXPERIENCE = 'Work experience';

@@ -6,6 +6,7 @@ use App\Nova\Brand;
 use App\Nova\Client;
 use App\Nova\Job;
 use App\Nova\Model;
+use App\Nova\Photo;
 use App\Nova\Role;
 use App\Nova\Tag;
 use Illuminate\Http\Request;
@@ -32,6 +33,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 MenuSection::make('Models', [
                     MenuItem::resource(Model::class),
                     MenuItem::resource(Tag::class),
+                    MenuItem::resource(Photo::class),
                 ])->icon('user')->collapsable(),
 
                 MenuSection::make('Work', [
