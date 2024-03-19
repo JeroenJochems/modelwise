@@ -15,6 +15,10 @@ class Photo extends Model implements Sortable
     use Searchable;
     use HasShortflakePrimary;
 
+    protected $casts = [
+        'analysis' => 'object',
+    ];
+
     public function newCollection($models = [])
     {
         return new PhotoCollection($models);

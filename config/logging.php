@@ -58,6 +58,17 @@ return [
             'ignore_exceptions' => false,
         ],
 
+        'flare' => [
+            'driver' => 'flare',
+            'level' => 'debug',
+        ],
+
+        'vapor' => [
+            'driver' => 'stack',
+            'channels' => ['flare', 'stderr'],
+            'ignore_exceptions' => false,
+        ],
+
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),

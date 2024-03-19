@@ -62,8 +62,7 @@ class Photo extends Resource
             "brand" => [PhotoModel::FOLDER_BRAND_LOGO],
             "role" => [RoleModel::PHOTO_FOLDER_PRIVATE, RoleModel::PHOTO_FOLDER_PUBLIC],
             "model" => [PhotoModel::FOLDER_WORK_EXPERIENCE, PhotoModel::FOLDER_DIGITALS, PhotoModel::FOLDER_TATTOOS],
-            null => [],
-            '' => [],
+            default => [],
         };
 
         $options = collect($options)->mapWithKeys(function ($item) {
@@ -74,12 +73,12 @@ class Photo extends Resource
             Avatar::make('Profile picture', 'path')
                 ->thumbnail(function ($value, $disk) {
                     // @phpstan-ignore-next-line
-                    return $value ? env("CDN_URL").$this->path . "?w=600&h=600&fit=crop&crop=faces" : null;
+                    return $value ? env("CDN_URL") . $this->path . "?w=600&h=600&fit=crop&crop=faces" : null;
                 })
                 ->path("profile_pictures")
                 ->preview(function ($value, $disk) {
                     // @phpstan-ignore-next-line
-                    return $value ? env("CDN_URL").$this->path : null;
+                    return $value ? env("CDN_URL") . $this->path : null;
                 })
                 ->hideFromIndex()->hideFromDetail()->readonly(true)->showOnUpdating(false),
             MorphTo::make("Photoable")->onlyOnDetail(),

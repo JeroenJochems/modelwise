@@ -11,9 +11,7 @@ export default function ProposalModel({ presentation, application}) {
         photos = [...application.casting_photos, ...photos];
     }
 
-    if (photos.length < 1) {
-        photos = [...application.model.photos.slice(8)]
-    }
+    photos = [...photos, ...application.model.photos.slice(0, 8)];
 
     return (
         <div className={"pt-12 break-inside-avoid-page grid gap-4"}>
@@ -150,7 +148,7 @@ export default function ProposalModel({ presentation, application}) {
                 ))}
 
                 {photos.slice(0,8).map((photo) => (
-                    <div className={"flex"} id={photo.id}>
+                    <div className={"flex"} key={photo.id} id={photo.id}>
                         <img
                             key={photo.path}
                             src={cdn_url + photo.path + '?w=1200&h=1200&fit=crop&crop=faces'}

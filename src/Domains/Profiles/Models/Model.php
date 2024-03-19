@@ -65,9 +65,7 @@ class Model extends Authenticatable implements Onboardable
     public function toSearchableArray(): array
     {
         $array = $this->toArray();
-
         $array['tags'] = $this->tags->pluck('name')->toArray();
-        $array['photo_analysis'] = implode(", ", array_unique(explode(", ", $this->photos()->pluck('analysis')->implode(' '))));
 
         return $array;
     }

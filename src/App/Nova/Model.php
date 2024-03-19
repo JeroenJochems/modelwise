@@ -106,7 +106,7 @@ class Model extends Resource
                 return '<div style="display: flex; width: 600px; height: 120px; overflow-x: scroll; overflow-y: hidden">
                         <img src="' . $this->profile_picture_cdn . '" height="120" />
                         ' . implode("", $this->photos->map(function ($photo) {
-                        return '<img title="' . $photo->analysis . '" src="' . $photo->cdn_path_thumb . '" height="120" />';
+                        return '<img src="' . $photo->cdn_path_thumb . '" height="120" />';
                     })->toArray())
                     . '</div>';
             })->asHtml()->onlyOnIndex(),
@@ -114,7 +114,7 @@ class Model extends Resource
                 return '<div style="display: flex; height: 400px; overflow-x: scroll; overflow-y: hidden">
                         <img src="' . $this->profile_picture_cdn_thumb . '" height="120" />
                         ' . implode("", $this->photos->map(function ($photo) {
-                        return '<img title="' . $photo->analysis . '" src="' . $photo->cdn_path_thumb . '" height="120" />';
+                        return '<img src="' . $photo->cdn_path_thumb . '" height="120" />';
                     })->toArray())
                     . '</div>';
             })->asHtml()->hideFromIndex(),
