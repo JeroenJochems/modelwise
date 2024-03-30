@@ -93,7 +93,6 @@ Route::middleware(['auth'])->group(callback: function () {
     });
 
     Route::post('signed-url', VaporSignedStorageUrl::class.'@store');
-    Route::post('vapor/signed-url', VaporSignedStorageUrl::class.'@store');
 
     Route::name("account.")->prefix("account")->group(function() {
         onboardingRoutes();
@@ -107,5 +106,8 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::post('subscribe', [ModelController::class, "subscribe"])->name("subscribe");
     });
 });
+
+Route::middleware(['auth:admin'])->post('vapor/signed-storage-url', [VaporSignedStorageUrl::class, "store"])->name("vapor.signed-storage-url");
+
 
 require __DIR__.'/auth.php';
