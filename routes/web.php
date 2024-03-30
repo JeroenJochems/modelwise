@@ -13,7 +13,6 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Model\CharacteristicsController;
 use App\Http\Controllers\Model\DigitalsController;
 use App\Http\Controllers\Model\ExclusiveCountriesController;
-use App\Http\Controllers\Model\ExperienceController;
 use App\Http\Controllers\Model\PersonalDetailsController;
 use App\Http\Controllers\Model\PortfolioController;
 use App\Http\Controllers\Model\ProfilePictureController;
@@ -24,12 +23,13 @@ use App\Http\Controllers\PresentationController;
 use App\Http\Controllers\VaporSignedStorageUrl;
 use App\Http\Controllers\VideosController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('test', function() {
-    $instagram = new \InstagramScraper\Instagram(new \GuzzleHttp\Client());
-    $nonPrivateAccountMedias = $instagram->getMedias('arnbraun');
-    dd($nonPrivateAccountMedias[0]->getImageHighResolutionUrl());
 
+    $file = Storage::disk("r2")->get("tmp/fb6536da-934b-4ce3-b3ab-40405e8d28a0");
+    Storage::disk('r2')->put("profile_pictures/fb6536da-934b-4ce3-b3ab-40405e8d28a0", $file);
+    return Storage::disk('r2')->get('profile_pictures/fb6536da-934b-4ce3-b3ab-40405e8d28a0');
 });
 
 if (!function_exists("onboardingRoutes")) {
@@ -93,6 +93,7 @@ Route::middleware(['auth'])->group(callback: function () {
     });
 
     Route::post('signed-url', VaporSignedStorageUrl::class.'@store');
+    Route::post('vapor/signed-url', VaporSignedStorageUrl::class.'@store');
 
     Route::name("account.")->prefix("account")->group(function() {
         onboardingRoutes();

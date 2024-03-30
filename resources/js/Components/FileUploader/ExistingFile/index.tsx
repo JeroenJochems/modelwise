@@ -13,6 +13,8 @@ export function ExistingFile({ file, onDelete }: Props) {
 
     const cdnLink = useCdnLink();
 
+    console.log(cdnLink(file.path));
+
 
     return (
         <div className={"relative aspect-square"}>

@@ -27,8 +27,9 @@ class AnalyseAllPhotos extends Command
      */
     public function handle()
     {
-        $photos = Photo::whereNull('analysis')->limit(100)->get();
+        $photos = Photo::whereNull('analysis')->get();
 
+        ray("Analyzing {$photos->count()} photos");
         $photos->each(function ($photo) {
             app(AnalysePhoto::class)
                 ->onQueue()

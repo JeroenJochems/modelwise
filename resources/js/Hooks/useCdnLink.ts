@@ -12,13 +12,9 @@ export function useCdnLink() {
 
     function cdnLink(path: string, style: "face_square" | "original" = "original") {
 
-        let format = "?fm=auto&w=600&h=600&fit=crop";
+        let format = "cdn-cgi/image/fit=crop,width=600,height=600/";
 
-        if (style === "face_square") {
-            format = "?fm=auto&w=600&h=600&fit=crop&crop=faces";
-        }
-
-        return `${cdn_url}${path}${format}`;
+        return `${cdn_url}${format}${path}`;
     }
 
     return cdnLink;

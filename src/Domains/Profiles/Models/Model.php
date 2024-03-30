@@ -65,7 +65,24 @@ class Model extends Authenticatable implements Onboardable
     public function toSearchableArray(): array
     {
         $array = $this->toArray();
+        unset($array['profile_picture']);
         $array['tags'] = $this->tags->pluck('name')->toArray();
+
+        foreach ($this->photos as $photo) {
+            if (!$photo->analysis) continue;
+
+            foreach ($photo->analysis as $key => $value) {
+                foreach (explode(", ", $value) as $word) {
+                    $array['photo_values'][$key][] = $word;
+                }
+            }
+        }
+
+        if (isset($array['photo_values'])) {
+            foreach ($array['photo_values'] as $key => $value) {
+                $array['photo_values'][$key] = implode(", ", array_unique($value));
+            }
+        }
 
         return $array;
     }
@@ -119,7 +136,7 @@ class Model extends Authenticatable implements Onboardable
 
     public function getProfilePictureCdnThumbAttribute()
     {
-        return $this->profile_picture ? $this->profile_picture_cdn.'?w=600&h=600&fit=crop&crop=faces&fm=auto' : null;
+        return $this->profile_picture ? env("CDN_URL").'cdn-cgi/image/fit=crop,width=600,height=600/'.$this->profile_picture : null;
     }
 
     public function getNameAttribute()
