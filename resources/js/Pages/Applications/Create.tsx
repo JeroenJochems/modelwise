@@ -73,7 +73,6 @@ export default function Create({viewModel, meViewModel}: Props) {
 
     return (
         <DashboardLayout>
-
             <JobHeader viewModel={viewModel}/>
 
             <Content>
@@ -83,7 +82,7 @@ export default function Create({viewModel, meViewModel}: Props) {
                     <div>
                         <H2>Digitals</H2>
                         <P className={"mb-2"}>
-                            { data.digitals.length >= 3
+                            {data.digitals.length >= 3
                                 ? "Are your digitals up-to-date and relevant for this role?"
                                 : "Upload at least 3 recent digitals"
                             }
@@ -184,12 +183,15 @@ export default function Create({viewModel, meViewModel}: Props) {
                     </div>
                 )}
 
-                {role.casting_questions!==null &&
-                    <InputGroupText
-                        multiline
-                        onChange={value => setData('casting_questions', value)}
-                        title={role.casting_questions}
-                    />
+                {role.casting_questions !== null &&
+                    <div className={'my-4'}>
+                        <H2>{role.casting_questions.split("\n").length > 1 ? "Please answer these questions" : "Please answer this question"}</H2>
+                        <InputGroupText
+                            multiline
+                            onChange={value => setData('casting_questions', value)}
+                            title={role.casting_questions}
+                        />
+                    </div>
                 }
 
 
@@ -198,13 +200,13 @@ export default function Create({viewModel, meViewModel}: Props) {
                     <P className={"mb-2"}>
                         Please confirm your availability for the following shoot dates. If not all are available we will
                         contact you to discuss.</P>
-                        {shootDates.map((shootDate) => (
-                            <label className={"flex flex-row text-teal items-center mb-2"} key={shootDate}>
-                                <input type="checkbox" onChange={handleAvailability} name={"available"} value={shootDate}
-                                       className={"mr-2"}/>
-                                <span>{new Date(shootDate).toLocaleDateString()}</span>
-                            </label>
-                        ))
+                    {shootDates.map((shootDate) => (
+                        <label className={"flex flex-row text-teal items-center mb-2"} key={shootDate}>
+                            <input type="checkbox" onChange={handleAvailability} name={"available"} value={shootDate}
+                                   className={"mr-2"}/>
+                            <span>{new Date(shootDate).toLocaleDateString()}</span>
+                        </label>
+                    ))
                     }
                     <InputError message={errors.available_dates}/>
                 </div>
@@ -221,7 +223,8 @@ export default function Create({viewModel, meViewModel}: Props) {
                     onChange={value => setData('cover_letter', value)}
                 />
 
-                { !isDirty && hasErrors && <InputError message={"Please review the form errors before submitting again."} /> }
+                {!isDirty && hasErrors &&
+                    <InputError message={"Please review the form errors before submitting again."}/>}
 
 
                 <PrimaryButton onClick={submit} className={"mb-8"} disabled={isUploading || processing}>

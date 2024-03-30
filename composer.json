@@ -10,7 +10,9 @@
     "require": {
         "php": "^8.1",
         "algolia/algoliasearch-client-php": "^3.3",
+        "algolia/scout-extended": "^3.0",
         "datomatic/nova-enum-field": "^1.6",
+        "digital-creative/nova-slider-filter": "^1.0",
         "eventsauce/eventsauce": "^3.5",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.3",
@@ -23,11 +25,12 @@
         "laravel/scout": "^10.2",
         "laravel/tinker": "^2.8",
         "laravel/vapor-core": "^2.31",
-        "laravel/vapor-ui": "^1.7",
-        "league/flysystem-aws-s3-v3": "^3.15",
+        "league/flysystem-aws-s3-v3": "dev-r2patch",
+        "league/flysystem-path-prefixing": "^3.0",
         "livewire/livewire": "^2.12",
         "muxinc/mux-php": "^3.11",
         "nrml-co/nova-big-filter": "^1.0",
+        "openai-php/laravel": "^0.8.1",
         "outl1ne/nova-sortable": "^3.4",
         "phpfastcache/phpfastcache": "^9.1",
         "predis/predis": "^2.2",
@@ -51,6 +54,7 @@
         "vyuldashev/nova-money-field": "^2.0"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.12",
         "doctrine/dbal": "^3.7",
         "eventsauce/test-utilities": "^3.4",
         "fakerphp/faker": "^1.9.1",
@@ -113,6 +117,10 @@
         {
             "type": "composer",
             "url": "https://nova.laravel.com"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/JeroenJochems/flysystem-aws-s3-v3"
         }
     ],
     "minimum-stability": "stable",

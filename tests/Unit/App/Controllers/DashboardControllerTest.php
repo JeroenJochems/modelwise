@@ -24,12 +24,12 @@ class DashboardControllerTest extends \Tests\TestCase
             );
     }
 
+
     public function test_it_shows_invites()
     {
         list($model, $role) = $this->prep();
 
         $model->invites()->create(['role_id' => $role->id]);
-
 
         $this->get(route('dashboard'))
             ->assertInertia(fn(Assert $page) => $page

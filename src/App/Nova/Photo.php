@@ -29,7 +29,7 @@ class Photo extends Resource
 
     public function title()
     {
-        return $this->analysis;
+        return $this->folder . " - " . $this->photoable->name;
     }
 
     public function subtitle()

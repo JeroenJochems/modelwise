@@ -9,7 +9,7 @@ use Kra8\Snowflake\HasShortflakePrimary;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
-class Video extends Model implements Sortable
+class Video extends \Illuminate\Database\Eloquent\Model implements Sortable
 {
     use SortableTrait;
 
@@ -30,6 +30,17 @@ class Video extends Model implements Sortable
         static::created(function (Video $video) {
             app(VideoToMux::class)->onQueue()->execute($video);
         });
+    }
+
+    public function searchableAs(): string
+    {
+        $name = 'video_index';
+
+        if (app()->environment('local')) {
+            return 'dev_'.$name;
+        }
+
+        return $name;
     }
 
     public function getScoutKey(): mixed

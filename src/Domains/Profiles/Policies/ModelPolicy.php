@@ -6,6 +6,7 @@ namespace Domain\Profiles\Policies;
 use Domain\Jobs\Models\Job;
 use Domain\Profiles\Models\Model;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Support\User;
 
 class ModelPolicy
 {

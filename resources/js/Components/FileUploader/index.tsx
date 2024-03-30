@@ -8,6 +8,8 @@ import {ProgressBar} from "@/Components/FileUploader/ProgressBar";
 import {ExistingFile} from "@/Components/FileUploader/ExistingFile";
 import SmallButton from "@/Components/SmallButton";
 import InputError from "@/Components/InputError";
+import Resizer from "react-image-file-resizer";
+
 
 export type BaseFile = {
     muxId?: string
@@ -53,6 +55,7 @@ export function FileUploader({ files, error, max = 99, slots = 6, cols = 6, cols
         ? Array(slots - notDeletedFiles.length).fill('')
         : [];
 
+
     return (
         <>
             <ReactSortable tag={"div"} list={files} setList={onUpdate} className={`grid grid-cols-${colsOnMobile} sm:grid-cols-${cols} gap-2`}>
@@ -80,14 +83,37 @@ export function FileUploader({ files, error, max = 99, slots = 6, cols = 6, cols
         </>
     );
 
+    function resizeFile(file: File): Promise<string> {
 
-    function handleChange(e: FormEvent<HTMLInputElement> & { target: FileEventTarget }) {
+        return new Promise((resolve) => {
+            Resizer.imageFileResizer(
+                file,
+                2000,
+                2000,
+                "JPEG",
+                100,
+                0,
+                (uri) => {
+                    /** @ts-ignore */
+                    resolve(uri);
+                },
+                "base64"
+            );
+        });
+    }
+
+    async function handleChange(e: FormEvent<HTMLInputElement> & { target: FileEventTarget }) {
 
         if (e.target.files === null || !e.target.files[0]) return;
 
         setSelectedFiles(Array.from(e.target.files));
 
-        Array.from(e.target.files).map((file, i) => {
+        Array.from(e.target.files).map(async (file, i) => {
+
+            if (file.size > 10000000) {
+                const image = await resizeFile(file);
+                file = blobToFile(base64ToBlob(image), file.name);
+            }
 
             addFileToProgress(file.name);
 
@@ -98,7 +124,6 @@ export function FileUploader({ files, error, max = 99, slots = 6, cols = 6, cols
                     progress: progress => updateProgress(file.name, progress)
                 })
                 .then(function (response: ResponseType) {
-
 
                     setSelectedFiles(s => [...s].filter(f => f.name !== file.name));
 
@@ -111,6 +136,24 @@ export function FileUploader({ files, error, max = 99, slots = 6, cols = 6, cols
 
                 });
         });
+    }
+
+    function base64ToBlob(base64Data: string) {
+        const parts = base64Data.split(';base64,');
+        const imageType = parts[0].split(':')[1];
+        const base64 = parts[1];
+        const byteCharacters = atob(base64);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+
+        return new Blob([byteArray], { type: imageType });
+    }
+
+    function blobToFile(blob: Blob, fileName: string) {
+        return new File([blob], fileName, { type: blob.type });
     }
 
     function handleDelete({ id }: BaseFile) {

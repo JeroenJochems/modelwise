@@ -9,10 +9,9 @@ use Laravel\Scout\Searchable;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
-class Photo extends Model implements Sortable
+class Photo extends \Illuminate\Database\Eloquent\Model implements Sortable
 {
     use SortableTrait;
-    use Searchable;
     use HasShortflakePrimary;
 
     protected $casts = [
@@ -38,11 +37,13 @@ class Photo extends Model implements Sortable
 
     public function searchableAs(): string
     {
+        $name = 'photo_index';
+
         if (app()->environment('local')) {
-            return 'dev_photo_index';
+            return 'dev_'.$name;
         }
 
-        return 'photo_index';
+        return $name;
     }
 
     public $sortable = [
@@ -83,11 +84,11 @@ class Photo extends Model implements Sortable
 
     public function getCdnPathAttribute()
     {
-        return env("CDN_URL").$this->path;
+        return env("CDN_URL")."cdn-cgi/image/fit=scale-down,width=2000,height=2000/".$this->attributes['path'];
     }
 
     public function getCdnPathThumbAttribute()
     {
-        return $this->cdn_path."?w=600&h=600&fit=crop&crop=faces&fm=auto";
+        return env("CDN_URL")."cdn-cgi/image/fit=contain,width=600,height=600/".$this->attributes['path'];
     }
 }

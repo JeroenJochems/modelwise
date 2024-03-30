@@ -8,7 +8,9 @@
         "build-BooleanAt": "cd nova-components/BooleanAt && npm run dev",
         "build-BooleanAt-prod": "cd nova-components/BooleanAt && npm run prod",
         "build-boolean-at": "cd nova-components/BooleanAt && npm run dev",
-        "build-boolean-at-prod": "cd nova-components/BooleanAt && npm run prod"
+        "build-boolean-at-prod": "cd nova-components/BooleanAt && npm run prod",
+        "build-age-range": "cd nova-components/AgeRange && npm run dev",
+        "build-age-range-prod": "cd nova-components/AgeRange && npm run prod"
     },
     "devDependencies": {
         "@headlessui/react": "^1.4.2",
@@ -39,6 +41,7 @@
         "@types/sortablejs": "^1.15.1",
         "@types/uuid": "^9.0.4",
         "logrocket": "^5.0.1",
+        "react-image-file-resizer": "^0.4.8",
         "react-scroll-parallax": "^3.4.2",
         "react-sortablejs": "^6.1.4",
         "react-tabs": "^6.0.2",

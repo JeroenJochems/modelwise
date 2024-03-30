@@ -4,6 +4,7 @@ namespace App\Nova;
 
 use App\Nova\Actions\CreateApplication;
 use App\Nova\Actions\InviteForRole;
+use App\Nova\Filters\AgeFilter;
 use Datomatic\Nova\Fields\Enum\Enum;
 use Domain\Profiles\Enums\Ethnicity;
 use Domain\Profiles\Enums\EyeColor;
@@ -25,7 +26,6 @@ use Laravel\Nova\Fields\VaporImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Domain\Profiles\Models\Model as ModelClass;
 use Laravel\Nova\Panel;
-use NrmlCo\NovaBigFilter\NovaBigFilter;
 use Spatie\TagsField\Tags;
 
 class Model extends Resource
@@ -54,7 +54,7 @@ class Model extends Resource
             Avatar::make('Profile picture', 'profile_picture_cdn')
                 ->thumbnail(function ($value, $disk) {
                     // @phpstan-ignore-next-line
-                    return $value ? $this->profile_picture_cdn . "?w=600&h=600&fit=crop&crop=faces" : null;
+                    return $value ? $this->profile_picture_cdn : null;
                 })
                 ->path("profile_pictures")
                 ->preview(function ($value, $disk) {
@@ -83,8 +83,7 @@ class Model extends Resource
             Text::make('WhatsApp number')->rules('max:255')->hideFromIndex(),
             Email::make('Email')->sortable()->required()->rules('required', 'email')->hideFromIndex(),
             Enum::make('Gender')->displayUsingLabels()->attach(Gender::class)->filterable()->rules('required', 'max:255')->hideFromIndex(),
-            Enum::make('Class', 'model_class')->displayUsingLabels()->attach(\Domain\Profiles\Enums\ModelClass::class)->filterable(),
-            Select::make('Preferred language')->options(['en' => 'English', 'nl' => 'Nederlands'])->rules('required', 'email')->hideFromIndex(),
+            Select::make('Preferred language')->options(['en' => 'English', 'nl' => 'Nederlands'])->rules('required')->hideFromIndex(),
             Date::make('Date of birth')->hideFromIndex(),
             Boolean::make('Completed onboarding', 'has_completed_onboarding')->readonly(),
             Boolean::make('Newsletter', 'is_subscribed_to_newsletter')->hideFromIndex(),
@@ -92,7 +91,6 @@ class Model extends Resource
             Textarea::make("Bio")->alwaysShow()->hideFromIndex(),
             Textarea::make("Admin notes")->alwaysShow()->hideFromIndex(),
             Tags::make('Modeling experience')->type(ModelClass::TAG_TYPE_MODEL_EXPERIENCE)->withLinkToTagResource()->hideFromIndex(),
-            Text::make('Other experience'),
             Tags::make('Other professions')->type(ModelClass::TAG_TYPE_PROFESSIONS)->withLinkToTagResource()->hideFromIndex(),
             VaporImage::make("Profile picture", "profile_picture")
                 ->path(
@@ -118,8 +116,8 @@ class Model extends Resource
                     })->toArray())
                     . '</div>';
             })->asHtml()->hideFromIndex(),
-            Text::make('Instagram')->rules('required', 'max:255')->hideFromIndex()->copyable(),
-            Text::make('Tiktok')->rules('required_without:instagram', 'max:255')->hideFromIndex()->copyable(),
+            Text::make('Instagram')->rules( 'max:255')->hideFromIndex()->copyable(),
+            Text::make('Tiktok')->rules( 'max:255')->hideFromIndex()->copyable(),
             Text::make('Website')->rules('max:255')->hideFromIndex()->copyable(),
             new Panel('Body Characteristics', $this->bodyFields()),
             HasMany::make("Applications")->showOnIndex(false),
@@ -132,10 +130,10 @@ class Model extends Resource
     public function bodyFields()
     {
         return [
-            Enum::make('Ethnicity')->attach(Ethnicity::class)->filterable()->hideFromIndex(),
-            Enum::make('Eye color')->attach(EyeColor::class)->filterable()->hideFromIndex(),
-            Enum::make('Hair color')->attach(HairColor::class)->filterable()->hideFromIndex(),
-            Number::make("Shoe size")->help("EU format")->filterable()->hideFromIndex(),
+            Enum::make('Ethnicity')->attach(Ethnicity::class)->nullable()->filterable()->hideFromIndex(),
+            Enum::make('Eye color')->attach(EyeColor::class)->nullable()->filterable()->hideFromIndex(),
+            Enum::make('Hair color')->attach(HairColor::class)->nullable()->filterable()->hideFromIndex(),
+            Number::make("Shoe size")->help("EU format")->nullable()->filterable()->hideFromIndex(),
             Number::make("Chest")->help("in cm")->filterable()->hideFromIndex(),
             Number::make("Waist")->help("in cm")->filterable()->hideFromIndex(),
             Number::make("Hips")->help("in cm")->filterable()->hideFromIndex(),
@@ -147,13 +145,14 @@ class Model extends Resource
     public function cards(NovaRequest $request)
     {
         return [
-            new NovaBigFilter,
         ];
     }
 
     public function filters(NovaRequest $request)
     {
-        return [];
+        return [
+            AgeFilter::make()->range(0,75),
+        ];
     }
 
     public function lenses(NovaRequest $request)
