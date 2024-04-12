@@ -71,6 +71,7 @@ Route::get('about-modelwise', [OnboardingController::class, "index"])->name("onb
 
 Route::resource('roles', RoleController::class, ["index", "view"])->name("index", "jobs");
 Route::get('presentations/{presentation}', [PresentationController::class, "show"])->name("presentations.show");
+Route::post('presentations/{presentation}/shortlist', [PresentationController::class, "shortlist"])->name("presentations.shortlist");
 
 Route::middleware(['auth'])->group(callback: function () {
 

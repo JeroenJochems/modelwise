@@ -2,7 +2,7 @@ import DashboardLayout from "@/Layouts/DashboardLayout";
 import React from "react";
 import {Content} from "@/Layouts/DashboardLayout/Content";
 import {JobHeader} from "@/Components/JobHeader";
-import ModelRoleViewModel = App.ViewModels.ModelRoleViewModel;
+import {ModelRoleViewModel} from "@/types/generated";
 
 type Props = {
     viewModel: ModelRoleViewModel

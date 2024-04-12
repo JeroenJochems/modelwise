@@ -3,9 +3,10 @@ import {P} from "@/Components/Typography/p";
 import {JobSpecifics} from "@/Components/Molecules/JobSpecifics";
 import {CtaLink} from "@/Components/CtaLink";
 import {useCdnLink} from "@/Hooks/useCdnLink";
+import {RoleData} from "@/types/generated";
 
 type Props = {
-    role: Domain.Jobs.Data.RoleData
+    role: RoleData
 }
 
 export function DashboardRole({ role }: Props) {
@@ -30,7 +31,7 @@ export function DashboardRole({ role }: Props) {
                 </div>
             </div>
             <div className={"hidden md:flex max-w-xs"}>
-                <img src={cdnLink(photos[0].path, "face_square")} className={"h-full w-full object-cover"} />
+                { !!photos[0] && <img src={cdnLink(photos[0].path, "face_square")} className={"h-full w-full object-cover"} /> }
             </div>
         </li>
     )

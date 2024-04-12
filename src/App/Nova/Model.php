@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\ApplyForRole;
 use App\Nova\Actions\CreateApplication;
 use App\Nova\Actions\InviteForRole;
 use App\Nova\Filters\AgeFilter;
@@ -164,7 +165,7 @@ class Model extends Resource
     {
         return [
             new InviteForRole(),
-            new CreateApplication(),
+            new ApplyForRole(),
         ];
     }
 }

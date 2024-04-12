@@ -38,11 +38,18 @@ class ApplicationController extends Controller
 
     public function store(Role $role, ApplyData $data)
     {
-        app(Apply::class)($data);
+        try {
+            app(Apply::class)($data);
+        } catch (\Exception $e) {
+            if (str_contains(strtolower($e->getMessage()), 'duplicate')) {
+                return redirect()->route("roles.show", $role)->with("error", "You have already applied for this role.");
+            }
+
+            throw $e;
+        }
 
         return redirect()->route("roles.show", $role);
     }
-
 
     public function update(Application $application)
     {

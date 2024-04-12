@@ -37,6 +37,7 @@
         "@heroicons/react": "^2.0.18",
         "@hotwired/turbo": "^7.3.0",
         "@mux/mux-player-react": "^1.14.2",
+        "@twicpics/components": "^0.28.1",
         "@types/laravel-vapor": "^0.6.1",
         "@types/sortablejs": "^1.15.1",
         "@types/uuid": "^9.0.4",

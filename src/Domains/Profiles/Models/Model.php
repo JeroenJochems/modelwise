@@ -136,7 +136,7 @@ class Model extends Authenticatable implements Onboardable
 
     public function getProfilePictureCdnThumbAttribute()
     {
-        return $this->profile_picture ? env("CDN_URL").'cdn-cgi/image/fit=crop,width=600,height=600/'.$this->profile_picture : null;
+        return $this->profile_picture ? env("CDN_URL").$this->profile_picture.'?twic=v1/cover=1:1/resize=600/focus=auto' : null;
     }
 
     public function getNameAttribute()

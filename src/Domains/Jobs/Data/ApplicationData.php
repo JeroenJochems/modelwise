@@ -3,7 +3,9 @@
 namespace Domain\Jobs\Data;
 
 use Carbon\Carbon;
+use Domain\Profiles\Data\ModelData;
 use Domain\Profiles\Data\PhotoData;
+use Domain\Profiles\Data\VideoData;
 use Spatie\LaravelData\Attributes\Computed;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Data;
@@ -21,6 +23,10 @@ class ApplicationData extends Data
     public function __construct(
         public string $id,
         public string $model_id,
+        public ?string $cover_letter,
+        public ?string $casting_questions,
+        public ?string $brand_conflicted,
+
         ?Carbon $shortlisted_at,
         ?Carbon $rejected_at,
 
@@ -28,9 +34,15 @@ class ApplicationData extends Data
         /** @var PhotoData[] */
         public DataCollection $photos,
 
+        public ModelData $model,
+
         #[DataCollectionOf(PhotoData::class)]
         /** @var PhotoData[] */
         public DataCollection $casting_photos,
+
+        #[DataCollectionOf(VideoData::class)]
+        /** @var VideoData[] */
+        public DataCollection $casting_videos,
 
         public ?HireData $hire,
     )

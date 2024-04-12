@@ -84,11 +84,11 @@ class Photo extends \Illuminate\Database\Eloquent\Model implements Sortable
 
     public function getCdnPathAttribute()
     {
-        return env("CDN_URL")."cdn-cgi/image/fit=scale-down,width=2000,height=2000/".$this->attributes['path'];
+        return env("CDN_URL").$this->attributes['path']."?twic=v1/focus=auto/cover=1:1/resize=2000";
     }
 
     public function getCdnPathThumbAttribute()
     {
-        return env("CDN_URL")."cdn-cgi/image/fit=contain,width=600,height=600/".$this->attributes['path'];
+        return env("CDN_URL").$this->attributes['path']."?twic=v1/focus=auto/cover=1:1/resize=600";
     }
 }

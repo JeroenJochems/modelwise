@@ -1,4 +1,26 @@
-declare namespace App.ViewModels {
+export type ApplicationData = {
+is_shortlisted: boolean;
+is_rejected: boolean;
+id: string;
+model_id: string;
+cover_letter: string;
+casting_questions: string;
+brand_conflicted: string;
+photos: Array<PhotoData>;
+model: ModelData;
+casting_photos: Array<PhotoData>;
+casting_videos: Array<VideoData>;
+hire: HireData | null;
+};
+export type ApplicationStatusEnum = 'pending' | 'accepted' | 'rejected' | 'cancelled';
+export type BrandData = {
+name: string;
+logo: string | null;
+description: string | null;
+};
+export type ClientData = {
+name: string;
+};
 export type CountriesViewModel = {
 countries: Array<any>;
 };
@@ -9,57 +31,12 @@ recentlyViewedRoles: any;
 hires: any;
 model: any | any;
 };
-export type ModelExclusiveCountriesViewModel = {
-countryCodes: Array<any>;
-};
-export type ModelMeViewModel = {
-me: Domain.Profiles.Data.ModelData;
-};
-export type ModelRoleViewModel = {
-role: Domain.Jobs.Data.RoleData;
-isInvited: boolean;
-hasApplied: boolean;
-hasPassed: boolean;
-isHired: boolean;
-shootDates: Array<any>;
-status: string;
-my_application: Domain.Jobs.Data.ApplicationData | null;
-};
-export type ProfessionalExperienceViewModel = {
-allCategories: Array<App.ViewModels.Tag>;
-allProfessions: Array<App.ViewModels.Tag>;
-selectedCategories: Array<string>;
-selectedProfessions: Array<string>;
-otherCategories: string | null;
-};
-export type Tag = {
-id: number;
-name: string;
-slug: string;
-};
-}
-declare namespace Domain.Jobs.Data {
-export type ApplicationData = {
-is_shortlisted: boolean;
-is_rejected: boolean;
-id: string;
-model_id: string;
-photos: Array<Domain.Profiles.Data.PhotoData>;
-casting_photos: Array<Domain.Profiles.Data.PhotoData>;
-hire: Domain.Jobs.Data.HireData | null;
-};
-export type BrandData = {
-name: string;
-logo: string | null;
-description: string | null;
-};
-export type ClientData = {
-name: string;
-};
+export type Ethnicity = 'White' | 'Black' | 'Latino' | 'Asian' | 'NativeAmerican';
 export type ExtraFieldsData = {
 casting_photos: boolean;
 casting_videos: boolean;
 };
+export type EyeColor = 'Light blue' | 'Blue' | 'Light gray' | 'Gray' | 'Blue gray' | 'Gray green' | 'Green' | 'Hazel' | 'Light brown' | 'Medium brown' | 'Dark brown';
 export type FieldsData = {
 digitals: boolean;
 height: boolean;
@@ -70,8 +47,14 @@ shoe_size: boolean;
 clothing_size_top: boolean;
 head: boolean;
 };
+export type Gender = 'Male' | 'Female' | 'Non-binary';
+export type HairColor = 'Black' | 'Brown' | 'Blond' | 'Dark Blond' | 'White' | 'Gray' | 'Red' | 'Colored' | 'None' | 'Other';
 export type HireData = {
 id: string;
+};
+export type InviteData = {
+id: number;
+role: RoleData;
 };
 export type InviteData = {
 id: number;
@@ -81,49 +64,15 @@ export type JobData = {
 title: string;
 location: string;
 description: string;
-brand: Domain.Jobs.Data.BrandData | null;
-client: Domain.Jobs.Data.ClientData | null;
-look_and_feel_photos: Array<Domain.Profiles.Data.PhotoData>;
-};
-export type PassData = {
-id: string;
-};
-export type RejectionData = {
-id: string;
-};
-export type RoleData = {
-fields: Domain.Jobs.Data.FieldsData;
-extra_fields: Domain.Jobs.Data.ExtraFieldsData;
-id: number;
-name: string;
-description: string;
-start_date: string;
-end_date: string | null;
-fee: number;
-buyout: number;
-buyout_note: string | null;
-travel_reimbursement_note: string | null;
-photos: Array<Domain.Profiles.Data.PhotoData>;
-public_photos: Array<Domain.Profiles.Data.PhotoData>;
-job: Domain.Jobs.Data.JobData;
-casting_video_instructions: string | null;
-casting_photo_instructions: string | null;
-casting_questions: string | null;
-};
-}
-declare namespace Domain.Jobs.Enums {
-export type ApplicationStatusEnum = 'pending' | 'accepted' | 'rejected' | 'cancelled';
-}
-declare namespace Domain.Profiles.Data {
-export type InviteData = {
-id: number;
-role: Domain.Jobs.Data.RoleData;
+brand: BrandData | null;
+client: ClientData | null;
+look_and_feel_photos: Array<PhotoData>;
 };
 export type ModelCharacteristicsData = {
 gender: string | null;
-hair_color: Domain.Profiles.Enums.HairColor | null;
+hair_color: HairColor | null;
 hair_color_other: string | null;
-eye_color: Domain.Profiles.Enums.EyeColor | null;
+eye_color: EyeColor | null;
 eye_color_other: string | null;
 height: string | null;
 chest: string | null;
@@ -134,7 +83,9 @@ cup_size: string | null;
 tattoos: boolean | null;
 piercings: boolean | null;
 };
+export type ModelClass = 'AAA - €2000/day+' | 'A - €1000-€2000/day' | 'B - ~€600/day' | 'C - ~€400/day' | 'D - ~€200/day';
 export type ModelData = {
+id: string | null;
 profile_picture: string | null;
 first_name: string | null;
 last_name: string | null;
@@ -143,22 +94,35 @@ city: string | null;
 country: string | null;
 gender: string | null;
 date_of_birth: string | null;
-portfolio: Array<Domain.Profiles.Data.ModelPhotoData>;
-digitals: Array<Domain.Profiles.Data.ModelPhotoData>;
-tattoo_photos: Array<Domain.Profiles.Data.ModelPhotoData>;
-applications: Array<Domain.Jobs.Data.ApplicationData>;
+portfolio: Array<ModelPhotoData>;
+digitals: Array<ModelPhotoData>;
+tattoo_photos: Array<ModelPhotoData>;
+applications: Array<ApplicationData>;
+hair_color: HairColor | null;
+eye_color: EyeColor | string | null;
+eye_color_other: string | null;
 height: number | null;
 chest: number | null;
 waist: number | null;
 hips: number | null;
 shoe_size: number | null;
 clothing_size_top: string | null;
+cup_size: string | null;
+instagram: string | null;
+tiktok: string | null;
+website: string | null;
 };
 export type ModelDigitalData = {
 path: string | null;
 };
 export type ModelDigitalsCollection = {
 digitals: any;
+};
+export type ModelExclusiveCountriesViewModel = {
+countryCodes: Array<any>;
+};
+export type ModelMeViewModel = {
+me: ModelData;
 };
 export type ModelPersonalDetailsData = {
 first_name: string | null;
@@ -187,6 +151,16 @@ portfolio: any;
 export type ModelProfilePictureData = {
 profile_picture: string | null;
 };
+export type ModelRoleViewModel = {
+role: RoleData;
+isInvited: boolean;
+hasApplied: boolean;
+hasPassed: boolean;
+isHired: boolean;
+shootDates: Array<any>;
+status: string;
+my_application: ApplicationData | null;
+};
 export type ModelSocialsData = {
 instagram: string | null;
 tiktok: string | null;
@@ -197,20 +171,54 @@ id: string;
 muxId: string;
 folder: string;
 };
+export type PassData = {
+id: string;
+};
 export type PhotoData = {
 id: number;
 path: string;
+};
+export type ProfessionalExperienceViewModel = {
+allCategories: Array<Tag>;
+allProfessions: Array<Tag>;
+selectedCategories: Array<string>;
+selectedProfessions: Array<string>;
+otherCategories: string | null;
 };
 export type RegisterModelData = {
 viewedRoles: Array<any>;
 email: string;
 password: string | null;
 };
-}
-declare namespace Domain.Profiles.Enums {
-export type Ethnicity = 'White' | 'Black' | 'Latino' | 'Asian' | 'NativeAmerican';
-export type EyeColor = 'Light blue' | 'Blue' | 'Light gray' | 'Gray' | 'Blue gray' | 'Gray green' | 'Green' | 'Hazel' | 'Light brown' | 'Medium brown' | 'Dark brown';
-export type Gender = 'Male' | 'Female' | 'Non-binary';
-export type HairColor = 'Black' | 'Brown' | 'Blond' | 'Dark Blond' | 'White' | 'Gray' | 'Red' | 'Colored' | 'None' | 'Other';
-export type ModelClass = 'AAA - €2000/day+' | 'A - €1000-€2000/day' | 'B - ~€600/day' | 'C - ~€400/day' | 'D - ~€200/day';
-}
+export type RejectionData = {
+id: string;
+};
+export type RoleData = {
+fields: FieldsData;
+extra_fields: ExtraFieldsData;
+id: number;
+name: string;
+description: string;
+start_date: string;
+end_date: string | null;
+fee: number;
+buyout: number;
+buyout_note: string | null;
+travel_reimbursement_note: string | null;
+photos: Array<PhotoData>;
+public_photos: Array<PhotoData>;
+job: JobData;
+casting_video_instructions: string | null;
+casting_photo_instructions: string | null;
+casting_questions: string | null;
+};
+export type Tag = {
+id: number;
+name: string;
+slug: string;
+};
+export type VideoData = {
+id: number;
+path: string;
+mux_id: string;
+};
