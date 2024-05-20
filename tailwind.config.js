@@ -22,6 +22,13 @@ export default {
             pattern: /scale-.+/,
         },
         {
+            pattern: /col-span-.+/,
+        },
+        {
+            pattern: /col-span-.+/,
+            variants: ['sm'],
+        },
+        {
             pattern: /line-clamp-.+/,
         },
     ],

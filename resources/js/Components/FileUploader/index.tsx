@@ -1,4 +1,4 @@
-import {FormEvent, useEffect, useRef, useState} from "react";
+import {FormEvent, useEffect, useId, useRef, useState} from "react";
 import {FileEventTarget} from "@/Pages/Model/Onboarding/Portfolio";
 import {useUploadProgress} from "@/Hooks/useUploadProgress";
 import Vapor from "laravel-vapor";
@@ -41,8 +41,8 @@ type Props = {
 
 export function FileUploader({ files, error, max = 99, slots = 6, cols = 6, colsOnMobile = 3, accept, onAdd, onUpdate, onToggleUploading }: Props) {
 
+    const id = useId();
     const {totalProgressRatio, addFileToProgress, updateProgress} = useUploadProgress();
-    const ref = useRef<HTMLInputElement | null>(null)
 
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
@@ -50,7 +50,13 @@ export function FileUploader({ files, error, max = 99, slots = 6, cols = 6, cols
         onToggleUploading && selectedFiles.length>0 && totalProgressRatio % 1 === 0 && onToggleUploading(totalProgressRatio === 0);
     }, [totalProgressRatio]);
 
-    const notDeletedFiles = files.filter(file => !file.deleted);
+    const notDeletedFiles = files.filter((file) => {
+
+        if (file.deleted === undefined) return true;
+
+        return !file.deleted;
+    });
+
     const emptySlots = slots - notDeletedFiles.length > 0
         ? Array(slots - notDeletedFiles.length).fill('')
         : [];
@@ -58,28 +64,31 @@ export function FileUploader({ files, error, max = 99, slots = 6, cols = 6, cols
 
     return (
         <>
-            <ReactSortable tag={"div"} list={files} setList={onUpdate} className={`grid grid-cols-${colsOnMobile} sm:grid-cols-${cols} gap-2`}>
+            <ReactSortable tag={"div"} list={files} setList={onUpdate} className={`grid gap-2 grid-cols-${colsOnMobile} sm:grid-cols-${cols}`}>
                 {notDeletedFiles.map(file => <ExistingFile key={file.id ?? file.path} onDelete={handleDelete} file={file}/>)}
-                {emptySlots.map((slot, i) => (
-                    <div key={i}
-                         onClick={() => !!ref.current && ref.current.click()}
-                         className={"flex rounded text-teal text-2xl cursor-pointer justify-center items-center aspect-[1/1] bg-teal-100 border border-gray-400"}>
-                        +
-                    </div>)
-                )}
             </ReactSortable>
 
-            { max>1 && notDeletedFiles.length >= slots && (
-                <div className={"flex items-center"}>
-                    <SmallButton onClick={() => !!ref.current && ref.current.click()} className={"mx-auto"}>+ Add more photos</SmallButton>
+            { notDeletedFiles.length==0 && (
+                <div className={`grid gap-2 grid-cols-${colsOnMobile} sm:grid-cols-${cols}`}>
+                    {emptySlots.map((slot, i) => (
+                        <label key={i} htmlFor={id} className={"static flex rounded text-teal text-2xl cursor-pointer justify-center items-center aspect-[1/1] bg-teal-100 border border-gray-400"}>
+                            +
+                        </label>)
+                    )}
                 </div>
+            )}
+
+            { max>1 && notDeletedFiles.length > 0 && (
+                <label htmlFor={id} className={"border border-gray-300 rounded-md p-2 mt-2 items-center inline-flex cursor-pointer "}>
+                    + Add more photos
+                </label>
             )}
 
             <ProgressBar progress={totalProgressRatio} />
 
             <InputError message={error} />
 
-            <input type="file" accept={accept} ref={ref} multiple className={"hidden"} onChange={handleChange}/>
+            <input type="file" id={id} accept={accept} multiple className={"hidden"} onChange={handleChange}/>
         </>
     );
 
@@ -132,6 +141,7 @@ export function FileUploader({ files, error, max = 99, slots = 6, cols = 6, cols
                         path: response.key,
                         isNew: true,
                         mime: file.type,
+                        deleted: false,
                     });
 
                 });

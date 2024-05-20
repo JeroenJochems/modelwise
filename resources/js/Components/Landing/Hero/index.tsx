@@ -104,7 +104,7 @@ export default function Hero() {
                             <div className="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
                                 <div className="w-full max-w-xl lg:shrink-0 pb-24 xl:max-w-2xl">
                                     <h1 className="text-4xl pt-12 font-bold tracking-tight text-gray-900 sm:text-6xl">
-                                        Model bookings<br />done right.
+                                        Talent bookings<br />done right.
                                     </h1>
                                     <p className="relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
                                         20% flat agency fee on bookings and buyouts.<br />

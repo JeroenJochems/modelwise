@@ -13,21 +13,16 @@ type Props =  {
 
 export default function Show({ presentation, role, applications}: Props)
 {
-    const initialShortList = applications.filter(application => application.is_shortlisted);
-    const [shortlisted, setShortListed] = useState<ApplicationData[]>(initialShortList);
+    const [selected, setSelected] = useState<ApplicationData[]>([]);
 
     const handleSelect = (application: ApplicationData) => {
-        setShortListed((prev) => {
+        setSelected((prev) => {
             if (prev.includes(application)) {
                 return prev.filter((app) => app !== application);
             }
 
             return [...prev, application];
         })
-    }
-
-    function hasChanged() {
-        return JSON.stringify(shortlisted.map(application => application.id).sort()) !== JSON.stringify(initialShortList.map(application => application.id).sort());
     }
 
     function concat(applications: ApplicationData[]) {
@@ -49,7 +44,7 @@ export default function Show({ presentation, role, applications}: Props)
     }
 
     function handleSubmit() {
-        router.post(`/presentations/${presentation.id}/shortlist`, { applications: shortlisted.map(application => application.id) });
+        router.post(`/presentations/${presentation.id}/shortlist`, { applications: selected.map(application => application.id) });
     }
 
 
@@ -65,18 +60,18 @@ export default function Show({ presentation, role, applications}: Props)
                         presentation={presentation}
                         application={application}
                         onSelect={handleSelect}
-                        isSelected={shortlisted.some(app => app.id === application.id)}
+                        isSelected={selected.some(app => app.id === application.id)}
                         key={application.id}
                     />)}
                 </div>
             </div>
 
-            { hasChanged() && (
+            { selected.length > 0 && (
                 <div className={"p-4"}>
                     <div className={"mx-auto max-w-2xl  lg:max-w-7xl"}>
-                        { shortlisted.length > 0 && (
+                        { selected.length > 0 && (
                             <PrimaryButton onClick={handleSubmit} className={"w-full"}>
-                                Shortlist {concat(shortlisted)}
+                                Submit preference for {concat(selected)}
                             </PrimaryButton>
                         )}
                     </div>

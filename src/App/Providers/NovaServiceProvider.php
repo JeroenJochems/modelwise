@@ -29,7 +29,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         parent::boot();
 
         Nova::mainMenu(function (Request $request) {
-            return [
+
+            $menuSections = [
                 MenuSection::make('Models', [
                     MenuItem::resource(Model::class),
                     MenuItem::resource(Tag::class),
@@ -43,6 +44,14 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                     MenuItem::resource(Brand::class),
                 ])->icon('document-text')->collapsable(),
             ];
+
+            if ($request->user()->isSuperAdmin()) {
+                $menuSections[] = MenuSection::make('Admin', [
+                    MenuItem::linkToUrl('Nova', '/nova'),
+                ])->icon('lock')->collapsable();
+            }
+
+            return $menuSections;
         });
 
         Nova::footer(function ($request) {

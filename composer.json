@@ -11,6 +11,7 @@
         "php": "^8.1",
         "algolia/algoliasearch-client-php": "^3.3",
         "algolia/scout-extended": "^3.0",
+        "aws/aws-sdk-php": "^3.304",
         "datomatic/nova-enum-field": "^1.6",
         "digital-creative/nova-slider-filter": "^1.0",
         "eventsauce/eventsauce": "^3.5",
@@ -97,12 +98,22 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
-        ]
+        ],
+        "pre-autoload-dump": "Aws\\Script\\Composer\\Composer::removeUnusedServices"
     },
     "extra": {
         "laravel": {
             "dont-discover": []
-        }
+        },
+        "aws/aws-sdk-php": [
+            "Ses",
+            "S3",
+            "Sqs",
+            "Lambda",
+            "Ec2",
+            "CloudWatch",
+            "DynamoDb"
+        ]
     },
     "config": {
         "optimize-autoloader": true,

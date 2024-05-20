@@ -1,7 +1,7 @@
 import {CtaLink} from "@/Components/CtaLink";
 import {Heart} from "@/Components/Icons/Heart";
 import {Cross} from "@/Components/Icons/Cross";
-import ModelRoleViewModel = App.ViewModels.ModelRoleViewModel;
+import {ModelRoleViewModel} from "@/types/generated";
 
 type Props = {
     viewModel: ModelRoleViewModel;

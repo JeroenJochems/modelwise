@@ -23,7 +23,7 @@ export default function ProposalModel({ presentation, application, onSelect, isS
         photos.unshift({ id: application.model.id, path: application.model.profile_picture, mime: "image/jpeg" });
     }
 
-    const showToggles = false;
+    const showToggle = false;
 
     return (
         <div className={"pt-12 break-inside-avoid-page grid gap-4"}>
@@ -39,7 +39,7 @@ export default function ProposalModel({ presentation, application, onSelect, isS
                                 <CheckCircleIcon className={"w-4 h-4"} /> Shortlisted
                             </span>
                         </label>
-                        { showToggles && <div className="flex h-6 items-center">
+                        { showToggle && <div className="flex h-6 items-center">
                             <input
                                 id={`shortlist${application.id}`}
                                 aria-describedby="comments-description"

@@ -1,5 +1,6 @@
 import { PropsWithChildren } from 'react';
 import Menu from "@/Components/Menu/Menu";
+import {flare} from "@flareapp/js";
 
 type Props = {
     header?: React.ReactNode

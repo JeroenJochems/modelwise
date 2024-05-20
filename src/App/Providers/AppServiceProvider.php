@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Onboard\Facades\Onboard;
 use Spatie\Tags\Tag;
+use Support\User;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -40,6 +41,7 @@ class AppServiceProvider extends ServiceProvider
             'video' => Video::class,
             'role' => Role::class,
             'brand' => Brand::class,
+            'user' => User::class,
             'application' => Application::class,
             'longlist-model' => Invite::class,
             'client' => Client::class,

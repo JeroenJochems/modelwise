@@ -1,5 +1,4 @@
 import {P} from "@/Components/Typography/p";
-import ModelMeViewModel = App.ViewModels.ModelMeViewModel;
 import {ChangeEvent } from "react";
 import {useForm, usePage} from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
@@ -12,8 +11,7 @@ import InputError from "@/Components/InputError";
 import {H1} from "@/Components/Typography/H1";
 import {useUploadingFields} from "@/Hooks/useUploadingFields";
 import {BaseFile, FileUploader} from "@/Components/FileUploader";
-import ModelRoleViewModel = App.ViewModels.ModelRoleViewModel;
-import TextArea from "@/Components/TextArea";
+import {ModelMeViewModel, ModelRoleViewModel} from "@/types/generated";
 
 type Props = {
     viewModel: ModelRoleViewModel;
@@ -45,7 +43,7 @@ export default function Create({viewModel, meViewModel}: Props) {
     const {role, shootDates} = viewModel;
     const me = meViewModel.me;
 
-    const {post, data, setData, processing, isDirty, hasErrors } = useForm<Form>({
+    const {post, data, setData, processing, isDirty, hasErrors, clearErrors } = useForm<Form>({
         role_id: viewModel.role.id,
         digitals: me.digitals,
         photos: [],
@@ -62,6 +60,7 @@ export default function Create({viewModel, meViewModel}: Props) {
     });
 
     function submit() {
+        clearErrors();
         post(route('roles.apply.store', viewModel.role.id));
     }
 
@@ -70,6 +69,8 @@ export default function Create({viewModel, meViewModel}: Props) {
             ? setData('available_dates', [...data.available_dates, event.target.value])
             : setData('available_dates', data.available_dates.filter((item) => item !== event.target.value));
     }
+
+    console.log(isDirty);
 
     return (
         <DashboardLayout>
@@ -223,9 +224,8 @@ export default function Create({viewModel, meViewModel}: Props) {
                     onChange={value => setData('cover_letter', value)}
                 />
 
-                {!isDirty && hasErrors &&
-                    <InputError message={"Please review the form errors before submitting again."}/>}
 
+                { hasErrors && <InputError message="Please review the errors in the form above."/> }
 
                 <PrimaryButton onClick={submit} className={"mb-8"} disabled={isUploading || processing}>
                     {processing ? "Please wait..." : "Submit application"}

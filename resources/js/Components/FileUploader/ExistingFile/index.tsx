@@ -17,7 +17,7 @@ export function ExistingFile({ file, onDelete }: Props) {
 
 
     return (
-        <div className={"relative aspect-square"}>
+        <div className={`relative aspect-square`}>
 
             { file.mime.includes("video") && (
                 <>

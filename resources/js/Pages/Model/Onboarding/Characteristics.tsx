@@ -10,9 +10,8 @@ import {P} from "@/Components/Typography/p";
 import {Header} from "@/Components/Onboarding/Header";
 import {PageProps} from "@/types";
 import PrimaryButton from "@/Components/PrimaryButton";
-import HairColor = Domain.Profiles.Enums.HairColor;
-import EyeColor = Domain.Profiles.Enums.EyeColor;
 import {BaseFile, FileUploader} from "@/Components/FileUploader";
+import {EyeColor, HairColor} from "@/types/generated";
 
 type ModelDataType = {
     gender?: string

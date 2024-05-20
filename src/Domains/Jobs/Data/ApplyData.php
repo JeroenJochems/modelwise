@@ -21,14 +21,8 @@ class ApplyData extends Data
 
     public function __construct(
         public ?string $cover_letter,
-
-        #[Rule(["array", "min:3"])]
         public array $digitals,
-
-        #[Rule(["array", "min:3"])]
         public array $photos,
-
-        #[Rule(['array', 'min:1'])]
         public ?array $available_dates,
 
         public ?int $height,

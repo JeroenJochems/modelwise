@@ -66,6 +66,11 @@ Route::get('/', [LandingController::class, "index"] )->name("landing");
 Route::get('/login', [AuthenticatedSessionController::class, "create"] )->name("login");
 Route::post('/contact', [ContactController::class, "store"] )->name("contact");
 
+Route::get('favicon.png', function () {
+    return response()->redirectTo(asset('img/favicon.png'), 302, [
+        'Content-Type' => 'image/png'
+    ]);
+});
 
 Route::get('about-modelwise', [OnboardingController::class, "index"])->name("onboarding.index");
 

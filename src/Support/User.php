@@ -18,4 +18,9 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+
+    public function isSuperUser()
+    {
+        return str_starts_with($this->email, 'bas@') || str_starts_with($this->email, 'jeroen@');
+    }
 }

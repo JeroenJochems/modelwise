@@ -18,7 +18,7 @@ import {CurrencyEuroIcon } from "@heroicons/react/24/outline";
 import {formatCents} from "@/Utils/Money";
 import {Train} from "@/Components/Icons/Train";
 import {useCdnLink} from "@/Hooks/useCdnLink";
-import ModelRoleViewModel = App.ViewModels.ModelRoleViewModel;
+import {ModelRoleViewModel} from "@/types/generated";
 
 type Props = {
     viewModel: ModelRoleViewModel

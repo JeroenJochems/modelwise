@@ -10,6 +10,7 @@ use Domain\Profiles\Repositories\PhotoRepository;
 use Domain\Profiles\Repositories\VideoRepository;
 use Domain\Work\Actions\Apply;
 use Domain\Work\Models\Application;
+use Illuminate\Session\TokenMismatchException;
 use Inertia\Inertia;
 
 class ApplicationController extends Controller

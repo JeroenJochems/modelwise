@@ -2,6 +2,8 @@
 
 namespace App\Nova;
 
+use Laravel\Nova\Fields\Email;
+use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -21,6 +23,8 @@ class User extends Resource
     {
         return [
             Text::make('Name')->sortable(),
+            Email::make('Email')->sortable(),
+            Password::make('Password')->onlyOnForms(),
         ];
     }
 }
