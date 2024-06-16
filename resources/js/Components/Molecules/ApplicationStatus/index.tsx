@@ -2,7 +2,7 @@ import {H2} from "@/Components/Typography/H2";
 import {P} from "@/Components/Typography/p";
 import {Content} from "@/Layouts/DashboardLayout/Content";
 import {ExtendedApplicationForm} from "@/Components/Molecules/ApplicationStatus/ExtendedApplicationForm";
-import ModelRoleViewModel = App.ViewModels.ModelRoleViewModel;
+import {ModelRoleViewModel} from "@/types/generated";
 
 type Props = {
     viewModel: ModelRoleViewModel;
@@ -17,6 +17,7 @@ export function ApplicationStatus({ viewModel }: Props) {
     const isShortlisted = my_application.is_shortlisted;
     const isHired = !!my_application.hire;
     const isRejected = my_application.is_rejected;
+    const isEmptyAdminApplication = my_application.is_empty_admin_application;
 
     if (isHired) {
         return (
@@ -51,7 +52,6 @@ export function ApplicationStatus({ viewModel }: Props) {
             </Content>
         )
     }
-
 
     return (<Content>
                 <P>Thank you for applying to this job!</P>

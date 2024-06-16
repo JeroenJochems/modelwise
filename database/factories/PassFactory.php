@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories\Domain\Work\Models;
+namespace Database\Factories;
 
 use Domain\Jobs\Models\Role;
 use Domain\Profiles\Models\Model;

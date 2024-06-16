@@ -4,25 +4,29 @@ namespace Tests\Unit\App\Controllers;
 
 use Domain\Jobs\Models\Role;
 use Domain\Profiles\Models\Model;
-use Illuminate\Support\Collection;
+use Domain\Work\Models\Application;
 use Inertia\Testing\AssertableInertia as Assert;
+use Tests\TestCase;
 
-class DashboardControllerTest extends \Tests\TestCase
+class DashboardControllerTest extends TestCase
 {
     public function test_it_shows_recently_viewed_role()
     {
         list($model, $role) = $this->prep();
 
         $model->role_views()->create(['role_id' => $role->id]);
+        Application::factory()->createOne(['model_id' => $model->id]);
 
         $this->get(route('dashboard'))
             ->assertInertia(fn(Assert $page) => $page
                 ->component("Dashboard")
                 ->has('vm.recentlyViewedRoles', 1)
-                ->has('vm.openApplications', 0)
+                ->has('vm.openApplications', 1)
                 ->has('vm.openInvites', 0)
             );
     }
+
+
 
 
     public function test_it_shows_invites()
@@ -88,10 +92,7 @@ class DashboardControllerTest extends \Tests\TestCase
                 ->has('vm.hires', 1)
             );
     }
-
-    /**
-     * @return array
-     */
+    
     protected function prep(): array
     {
         $model = Model::factory()->createOne();

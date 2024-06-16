@@ -3,9 +3,7 @@
 namespace Domain\Work2;
 
 use App\Application;
-use App\EventSauce\QueuedMessageDispatcher;
-use CashCards\CashCardRepository;
-use CashCards\Projectors\CashCardsReadModelProjector;
+use Domain\Work2\Projectors\RoleModelReadModelProjector;
 use EventSauce\EventSourcing\MessageDispatcherChain;
 use EventSauce\EventSourcing\Serialization\ConstructingMessageSerializer;
 use EventSauce\EventSourcing\SynchronousMessageDispatcher;
@@ -19,11 +17,11 @@ class WorkServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->bind(CashCardRepository::class, concrete: function (Application $application) {
-            return new CashCardRepository(
+        $this->app->bind(RoleRepository::class, concrete: function (Application $application) {
+            return new RoleRepository(
                 messageRepository: new IlluminateMessageRepository(
                     connection: $application->make(DatabaseManager::class)->connection(),
-                    tableName: 'cashcard_events',
+                    tableName: 'work_events',
                     serializer: new ConstructingMessageSerializer(),
                     jsonEncodeOptions: 0,
                     tableSchema: new DefaultTableSchema(),
@@ -33,7 +31,7 @@ class WorkServiceProvider extends ServiceProvider
                 dispatcher:
                 new MessageDispatcherChain(
                     new SynchronousMessageDispatcher(
-                        new CashCardsReadModelProjector(),
+                        new RoleModelReadModelProjector(),
                     ),
                 ),
             );

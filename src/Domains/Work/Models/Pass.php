@@ -12,6 +12,11 @@ class Pass extends Model
     use HasShortflakePrimary;
     use HasFactory;
 
+    protected static function newFactory()
+    {
+        return \Database\Factories\PassFactory::new();
+    }
+
     public function role()
     {
         return $this->belongsTo(Role::class);

@@ -15,7 +15,15 @@ abstract class BaseOnboardingController extends Controller
 
             $nextStep = $steps->get($currentStep+1);
 
-            if (!$nextStep) return redirect()->route("onboarding.thanks");
+            if (!$nextStep) {
+
+                $recentlyViewedRole = auth()->user()->role_views()->latest()->first();
+                if ($recentlyViewedRole) {
+                    return redirect()->route("roles.apply", $recentlyViewedRole->role);
+                }
+
+                return redirect()->route("onboarding.thanks");
+            }
 
             return redirect()->to($nextStep->link);
         }

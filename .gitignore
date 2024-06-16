@@ -21,3 +21,5 @@ yarn-error.log
 /.vscode
 .env.staging
 .env.test
+meilisearch
+/.vapor

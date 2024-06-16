@@ -2,9 +2,7 @@
 
 namespace Domain\Profiles\Data;
 
-use App\Transformers\CdnPathTransformer;
 use Spatie\LaravelData\Attributes\Computed;
-use Spatie\LaravelData\Attributes\WithTransformer;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\Optional;
 
@@ -17,7 +15,7 @@ class ModelPhotoData extends Data
     #[Computed]
     public string $mime;
 
-    public function __construct(public int|string $id, public string $path)
+    public function __construct(public int|string $id, public string $path, public ?string $hash)
     {
         $this->mime = "image/*";
         $this->pathSquareFace = $this->path . '?w=600&h=600&fit=crop&crop=faces';

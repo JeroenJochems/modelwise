@@ -21,8 +21,8 @@ class ApplyData extends Data
 
     public function __construct(
         public ?string $cover_letter,
-        public array $digitals,
-        public array $photos,
+        public ?array $digitals,
+        public ?array $photos,
         public ?array $available_dates,
 
         public ?int $height,
@@ -44,11 +44,11 @@ class ApplyData extends Data
     public static function messages(...$args): array
     {
         return [
-            'available_dates.min' => 'Without your availability, we cannot process your application.',
-            'digitals.min' => 'Upload at least three digitals.',
-            'digitals.required' => 'Upload at least three digitals.',
-            'photos.min' => 'Upload at least three photos.',
-            'photos.required' => 'Upload at least three photos.'
+//            'available_dates.min' => 'Without your availability, we cannot process your application.',
+//            'digitals.min' => 'Upload at least three digitals.',
+//            'digitals.required' => 'Upload at least three digitals.',
+//            'photos.min' => 'Upload at least three photos.',
+//            'photos.required' => 'Upload at least three photos.'
         ];
     }
 }

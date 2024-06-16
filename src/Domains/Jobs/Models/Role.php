@@ -2,13 +2,16 @@
 
 namespace Domain\Jobs\Models;
 
+use Database\Factories\RoleFactory;
 use Domain\Present\Models\Presentation;
 use Domain\Profiles\Models\Photo;
 use Domain\Work\Models\Application;
 use Domain\Work\Models\Pass;
+use Domain\Work2\RoleAggregate;
+use Domain\Work2\RoleRepository;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Kra8\Snowflake\HasShortflakePrimary;
 
 class Role extends Model
@@ -25,6 +28,20 @@ class Role extends Model
         'fields' => "array",
         'extra_fields' => "array",
     ];
+
+    protected static function booted(): void
+    {
+        static::created(function (Role $role) {
+            app(RoleRepository::class)
+                ->persist(RoleAggregate::init($role));
+        });
+    }
+
+
+    public static function newFactory(): Factory
+    {
+        return RoleFactory::new();
+    }
 
     public function job()
     {
@@ -54,13 +71,13 @@ class Role extends Model
     public function my_applications()
     {
         return $this->hasMany(Application::class)
-            ->where('model_id', auth()->id());
+            ->where('model_id', '=', auth()->id());
     }
 
     public function my_application()
     {
-        return $this->hasOne(Application::class)->latestOfMany()
-            ->where('model_id', auth()->id());
+        return $this->hasOne(Application::class)
+            ->where('model_id', '=', auth()->id());
     }
 
     public function invites()

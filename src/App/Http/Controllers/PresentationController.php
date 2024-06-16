@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ClientSubmittedPreference;
 use Domain\Jobs\Data\ApplicationData;
 use Domain\Present\Models\Presentation;
 use Domain\Work\Models\Application;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class PresentationController extends Controller
@@ -22,13 +24,31 @@ class PresentationController extends Controller
             ->with("applications", ApplicationData::collection($applications));
     }
 
-    public function shortlist(Presentation $presentation)
+    public function prelist(Presentation $presentation)
     {
-        foreach (Application::whereIn('id', request()->get("applications"))->get() as $application) {
-            $application->shortlisted_at = $application->shortlisted_at ? null : now();
+        $prelist = request()->get("prelist");
+
+        $applications = Application::whereIn('id', $presentation->applications)->get();
+        $names = $applications->pluck('model.name');
+
+        foreach ($applications as $application) {
+            if ($application->prelisted_at && !in_array($application->id, $prelist)) {
+                $application->prelisted_at = null;
+            }
+
+            if (!$application->prelisted_at && in_array($application->id, $prelist)) {
+                $application->prelisted_at = now();
+            }
+
             $application->save();
         }
 
-        return "Ok";
+        $role = $presentation->role;
+        $role->load("job");
+
+        Mail::to($role->job->responsible_user)
+            ->send(new ClientSubmittedPreference($presentation, names: $names->toArray()));
+
+        return Inertia::render('Roles/PrelistSubmitted')->with("role", $role);
     }
 }

@@ -65,6 +65,7 @@ class ModelData extends Data
         public ?string $instagram,
         public ?string $tiktok,
         public ?string $website,
+        public ?string $showreel_link,
     ) {}
 
     public static function fromModel(Model $model): self
@@ -97,6 +98,7 @@ class ModelData extends Data
             $model->instagram,
             $model->tiktok,
             $model->website,
+            $model->showreel_link
         );
     }
 }

@@ -70,6 +70,7 @@ class Role extends Resource
                 ]
             ),
             Text::make("Travel reimbursement note")->hideFromIndex(),
+            HasMany::make("Presentations"),
             Text::make('Invites', function() {
                 return '<div style="display: flex; width: 400px; height: 120px; overflow-x: scroll; overflow-y: hidden">
                     ' .implode("", $this->invites->map(function ($invite) {
@@ -79,7 +80,6 @@ class Role extends Resource
             })->asHtml()->onlyOnIndex(),
             HasMany::make("Applications"),
             HasMany::make("Invites", "open_invites"),
-            HasMany::make("Presentations"),
             Text::make('Public URL', function() {
                 return '<a href="'.route("roles.show", $this->id).'" target="_blank">'.route("roles.show", $this->id).'</a>';
             })->asHtml()->onlyOnDetail(),

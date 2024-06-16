@@ -2,10 +2,12 @@
 
 namespace Domain\Work\Models;
 
+use Database\Factories\ApplicationFactory;
 use Domain\Jobs\Models\Role;
 use Domain\Jobs\QueryBuilders\ApplicationQueryBuilder;
 use Domain\Profiles\Models\Photo;
 use Domain\Profiles\Models\Video;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kra8\Snowflake\HasShortflakePrimary;
@@ -33,6 +35,11 @@ class Application extends Model implements Sortable
         'role_id',
         'model_id'
     ];
+
+    protected static function newFactory(): Factory
+    {
+        return ApplicationFactory::new();
+    }
 
     public function getKeyName()
     {

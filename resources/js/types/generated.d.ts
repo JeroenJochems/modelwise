@@ -1,11 +1,13 @@
 export type ApplicationData = {
 is_shortlisted: boolean;
+is_prelisted: boolean;
 is_rejected: boolean;
+is_empty_admin_application: boolean;
 id: string;
 model_id: string;
-cover_letter: string;
-casting_questions: string;
-brand_conflicted: string;
+cover_letter: string | null;
+casting_questions: string | null;
+brand_conflicted: string | null;
 photos: Array<PhotoData>;
 model: ModelData;
 casting_photos: Array<PhotoData>;
@@ -111,6 +113,7 @@ cup_size: string | null;
 instagram: string | null;
 tiktok: string | null;
 website: string | null;
+showreel_link: string | null;
 };
 export type ModelDigitalData = {
 path: string | null;
@@ -141,6 +144,7 @@ pathSquareFace?: string;
 mime: string;
 id: string | number;
 path: string;
+hash: string | null;
 };
 export type ModelPhotosCollection = {
 digitals: any;
@@ -165,6 +169,7 @@ export type ModelSocialsData = {
 instagram: string | null;
 tiktok: string | null;
 website: string | null;
+showreel_link: string | null;
 };
 export type ModelVideoData = {
 id: string;
@@ -177,6 +182,7 @@ id: string;
 export type PhotoData = {
 id: number;
 path: string;
+hash: string | null;
 };
 export type ProfessionalExperienceViewModel = {
 allCategories: Array<Tag>;
@@ -220,5 +226,5 @@ slug: string;
 export type VideoData = {
 id: number;
 path: string;
-mux_id: string;
+mux_id: string | null;
 };

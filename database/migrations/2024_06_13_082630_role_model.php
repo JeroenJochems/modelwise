@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('role_model', function (Blueprint $table) {
+            $table->id();
+            $table->string('role_id');
+            $table->string('model_id');
+            $table->timestamp('applied_at')->nullable();
+            $table->timestamp('invited_at')->nullable();
+            $table->json('photos')->nullable();
+            $table->json('digitals')->nullable();
+            $table->string('cover_letter')->nullable();
+            $table->string('brand_conflicted')->nullable();
+            $table->json('available_dates')->nullable();
+            $table->json('casting_questions')->nullable();
+            $table->json('casting_photos')->nullable();
+            $table->json('casting_videos')->nullable();
+            $table->timestamps();
+            $table->unique(['role_id', 'model_id'], 'role_model_index');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('role_model');
+    }
+};

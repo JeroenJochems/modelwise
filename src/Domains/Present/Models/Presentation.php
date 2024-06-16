@@ -4,6 +4,7 @@ namespace Domain\Present\Models;
 
 use Domain\Jobs\Models\Role;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Kra8\Snowflake\HasShortflakePrimary;
 
 class Presentation extends Model
@@ -21,7 +22,7 @@ class Presentation extends Model
         "should_show_socials" => "boolean",
     ];
 
-    public function role()
+    public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
     }

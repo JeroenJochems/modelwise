@@ -30,19 +30,21 @@ class DashboardViewModel extends ViewModel
 
         $this->openInvites = RoleData::collection(
             Role::query()
-                ->whereHas("my_invites")
-                ->whereDoesntHave("my_applications")
-                ->whereRelation("job", "end_date", ">", now())
+                ->whereHas("open_invites", fn($query) => $query->where('model_id', $model->id))
+                ->whereDoesntHave("applications", fn($query) => $query->where('model_id', $model->id))
+                ->where("end_date", ">", now())
                 ->with('photos', 'public_photos', 'job.look_and_feel_photos')
                 ->get()
         );
 
         $openApplications = Role::query()
-            ->whereHas("my_applications", function ($q) {
-                $q->whereDoesntHave("hire")
+            ->whereHas("applications", function ($q) use ($model) {
+                $q
+                    ->where('model_id', $model->id)
+                    ->whereDoesntHave("hire")
                     ->whereDoesntHave("rejection");
             })
-            ->whereRelation("job", "end_date", ">", now())
+            ->where( "end_date", ">", now())
             ->with(
                 'photos',
                 'public_photos',
@@ -58,15 +60,17 @@ class DashboardViewModel extends ViewModel
 
         $this->hires = RoleData::collection(
             Role::query()
-                ->whereHas("my_applications.hire")
+                ->whereHas("applications", function($q) {
+                    $q->where('model_id', $this->model->id)
+                        ->whereHas("hire");
+                })
                 ->with('photos', 'public_photos', 'job.look_and_feel_photos')
                 ->get()
         );
 
-
         $recentlyViewed = $model->role_views()
             ->with("role",'role.photos', 'role.public_photos', 'role.job.look_and_feel_photos')
-            ->whereRelation("role.job", "end_date", ">", now())
+            ->whereRelation("role", "end_date", ">", now())
             ->orderByDesc('created_at')
             ->take(5)
             ->whereNotIn('role_id', collect($this->openApplications)->pluck('id'))

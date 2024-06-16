@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories\Domain\Jobs\Models;
+namespace Database\Factories;
 
 use Domain\Work\Models\Application;
 use Domain\Work\Models\Hire;

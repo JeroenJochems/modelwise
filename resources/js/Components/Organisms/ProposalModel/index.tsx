@@ -2,13 +2,21 @@ import MuxPlayer from "@mux/mux-player-react";
 import "@mux/mux-player/themes/minimal";
 import {TwicPicture} from "@twicpics/components/react";
 import {CheckCircleIcon} from "@heroicons/react/24/solid/index.js";
-import {ApplicationData} from "@/types/generated";
+import {ApplicationData, ModelPhotoData, PhotoData} from "@/types/generated";
+import {PlusIcon} from "@heroicons/react/24/solid";
 
 type Props = {
     presentation: any,
     application: ApplicationData,
     onSelect: (application: ApplicationData) => void,
     isSelected: boolean
+}
+
+function uniquePhotos(photos: Array<PhotoData|ModelPhotoData>) {
+    const copy = [...photos];
+    return photos.filter(
+        (v) => v.hash === null || copy.filter((cp) => cp.hash === v.hash).length === 1
+    );
 }
 
 export default function ProposalModel({ presentation, application, onSelect, isSelected }: Props) {
@@ -20,13 +28,11 @@ export default function ProposalModel({ presentation, application, onSelect, isS
     ];
 
     if (application.model.profile_picture && application.model.id) {
-        photos.unshift({ id: application.model.id, path: application.model.profile_picture, mime: "image/jpeg" });
+        photos.unshift({ id: application.model.id, path: application.model.profile_picture, mime: "image/jpeg", hash: null });
     }
 
-    const showToggle = false;
-
     return (
-        <div className={"pt-12 break-inside-avoid-page grid gap-4"}>
+        <div className={`pt-12 break-inside-avoid-page grid gap-4 border-2 rounded p-8 ${isSelected ? 'border-green' : 'border-white'}`}>
             <div className={"w-full"}>
                 <div>
                     <h1 className="flex items-center mb-4 text-3xl font-medium text-gray-900">
@@ -35,21 +41,21 @@ export default function ProposalModel({ presentation, application, onSelect, isS
                             {application.model.first_name}
 
 
-                            <span className="ml-2 inline-flex items-center rounded-md bg-green px-2 py-1 text-xs font-medium text-white">
-                                <CheckCircleIcon className={"w-4 h-4"} /> Shortlisted
-                            </span>
                         </label>
-                        { showToggle && <div className="flex h-6 items-center">
-                            <input
-                                id={`shortlist${application.id}`}
-                                aria-describedby="comments-description"
-                                name="comments"
-                                type="checkbox"
-                                defaultChecked={isSelected}
-                                onClick={() => onSelect(application)}
-                                className="h-6 w-6 p-3 rounded border-gray-500 text-green focus:ring-green"
-                            />
-                        </div> }
+                        <div className="flex h-6 items-center">
+                            <label onClick={() => onSelect(application)} htmlFor={`#shortlist${application.id}`}
+                                className={`ml-2 inline-flex gap-2 items-center rounded-md ${isSelected ? 'bg-green text-white' : 'bg-white text-green'} border border-green px-2 py-1 text-base`}>
+                                { isSelected ? <CheckCircleIcon className={"w-4 h-4"}/> : <PlusIcon className={"w-4 h-4"}/> }
+                                Favorite
+                            </label>
+
+                            {application.is_shortlisted && (
+                                <span
+                                    className="ml-2 inline-flex items-center rounded-md bg-green px-2 py-1 text-xs font-medium text-white">
+                                    <CheckCircleIcon className={"w-4 h-4"}/> Favorite
+                                </span>
+                            )}
+                        </div>
                     </h1>
 
                     {presentation.should_show_cover_letter && application.cover_letter &&
@@ -185,7 +191,7 @@ export default function ProposalModel({ presentation, application, onSelect, isS
                     </div>
                 ))}
 
-                {photos.slice(0, 8).map((photo) => (
+                {uniquePhotos(photos).slice(0, 8).map((photo) => (
                     <div className={"flex rounded-lg overflow-hidden"} key={photo.id}>
                         <TwicPicture
                             src={photo.path}
@@ -198,7 +204,7 @@ export default function ProposalModel({ presentation, application, onSelect, isS
 
             {presentation.should_show_digitals && (
                 <div className={`grid grid-cols-2 lg:grid-cols-${application.model.digitals.slice(0, 8).length} gap-4`}>
-                    {application.model.digitals.slice(0, 8).map((photo) => (
+                    {uniquePhotos(application.model.digitals).slice(0, 8).map((photo) => (
                         <div key={photo.id} className={"flex rounded-lg overflow-hidden"}>
                             <TwicPicture
                                 src={photo.path}

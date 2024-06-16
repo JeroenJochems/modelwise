@@ -3,7 +3,6 @@
 namespace Domain\Work\Actions;
 
 use Domain\Jobs\Data\ApplyData;
-use Domain\Profiles\Models\Model;
 use Domain\Profiles\Models\Photo;
 use Domain\Profiles\Repositories\PhotoRepository;
 use Domain\Work\Models\Application;
@@ -13,10 +12,11 @@ class Apply
 {
     public function __invoke(ApplyData $applyData)
     {
-
-        $application = new Application();
-        $application->role_id = $applyData->role->id;
-        $application->model_id = $applyData->model->id;
+        $application = Application::firstOrNew([
+            'role_id' => $applyData->role->id,
+            'model_id' => $applyData->model->id,
+        ]);
+        
         $application->cover_letter = $applyData->cover_letter;
         $application->brand_conflicted = $applyData->brand_conflicted;
         $application->casting_questions = $applyData->casting_questions;

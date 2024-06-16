@@ -8,7 +8,7 @@ use Domain\Work\Models\Rejection;
 
 class Reject
 {
-    public function execute(Application $application, string $message)
+    public function execute(Application $application, string $subject, string $message)
     {
         if ($application->rejection) return;
 
@@ -16,6 +16,6 @@ class Reject
         $rejection->application_id = $application->id;
         $rejection->save();
 
-        $application->model->notify(new Rejected($rejection, $message));
+        $application->model->notify(new Rejected($rejection, $subject, $message));
     }
 }

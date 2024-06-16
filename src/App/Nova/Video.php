@@ -34,11 +34,10 @@ class Video extends Resource
 
     public function fields(NovaRequest $request)
     {
-
         $resource = $this->videoable_type ?? substr($request->viaResource,0, -1);
 
         $options = match($resource) {
-            "application" => [ApplicationModel::VIDEO_FOLDER => ApplicationModel::VIDEO_FOLDER],
+            "application" => [ApplicationModel::CASTING_VIDEOS => ApplicationModel::CASTING_VIDEOS],
             null => []
         };
 

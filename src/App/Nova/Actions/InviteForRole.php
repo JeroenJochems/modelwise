@@ -2,8 +2,9 @@
 
 namespace App\Nova\Actions;
 
-use Domain\Jobs\Models\Invite;
 use Domain\Jobs\Models\Role;
+use Domain\Work2\RoleId;
+use Domain\Work2\RoleRepository;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
@@ -25,11 +26,13 @@ class InviteForRole extends Action
      */
     public function handle(ActionFields $fields, Collection $models)
     {
+        $repo = app(RoleRepository::class);
+
         foreach ($models as $model) {
-            $invite = new Invite();
-            $invite->role_id = $fields->role_id;
-            $invite->model_id = $model->id;
-            $invite->save();
+
+            $roleAgg = $repo->retrieve(RoleId::fromString($fields->role_id));
+            $roleAgg->invite($model);
+            $repo->persist($roleAgg);
 
             Action::message("Invite for role has been sent to " . $models->first()->first_name . " " . $models->first()->last_name);
         }

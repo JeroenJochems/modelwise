@@ -19,7 +19,7 @@ class User extends Authenticatable
         'password',
     ];
 
-    public function isSuperUser()
+    public function isSuperAdmin()
     {
         return str_starts_with($this->email, 'bas@') || str_starts_with($this->email, 'jeroen@');
     }

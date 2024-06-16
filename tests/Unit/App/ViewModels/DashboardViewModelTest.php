@@ -27,15 +27,15 @@ test('selects my applications', closure: function() {
 
 test('only selects my open invites', function() {
 
-    $otherModelInvite = Invite::factory()->createOne();
     $myInvite = Invite::factory()->createOne();
+    $otherInvite = Invite::factory()->createOne();
 
     $vm = new DashboardViewModel($myInvite->model);
 
     expect($vm->openInvites->count())
         ->toBe(1)
         ->and($vm->openInvites->first()->id)
-        ->toBe($myInvite->id);
+        ->toBe($myInvite->role->id);
 
     Notification::assertSentTo($myInvite->model, \App\Notifications\InviteCreated::class);
 });

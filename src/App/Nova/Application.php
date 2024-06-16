@@ -20,6 +20,7 @@ class Application extends Resource
     use HasSortableRows;
 
     public static $model = \Domain\Work\Models\Application::class;
+    public static $perPageViaRelationship = 50;
 
     public function buildSortQuery()
     {
@@ -69,7 +70,24 @@ class Application extends Resource
             Textarea::make("Cover letter")->alwaysShow(),
             Textarea::make("Brand conflicted")->alwaysShow(),
             Textarea::make("Answer to casting questions", "casting_questions")->alwaysShow(),
+            Boolean::make("Prelisted", "prelisted")
+                ->filterable(function ($request, $query, $value, $attributes) {
+                    $query->when($value, function($q) {
+                        $q->whereNotNull('prelisted_at');
+                    })->when(!$value, function($q) {
+                        $q->whereNull('prelisted_at');
+                    });
+                })
+                ->resolveUsing(fn($request, $model) => $model['prelisted_at']!==null)
+                ->fillUsing(function($request, $model) { return $model['prelisted_at'] = $request->prelisted==="1" ? now() : null; }),
             Boolean::make("Shortlisted", "shortlisted")
+                ->filterable(function ($request, $query, $value, $attributes) {
+                    $query->when($value, function($q) {
+                        $q->whereNotNull('shortlisted_at');
+                    })->when(!$value, function($q) {
+                        $q->whereNull('shortlisted_at');
+                    });
+                })
                 ->resolveUsing(fn($request, $model) => $model['shortlisted_at']!==null)
                 ->fillUsing(function($request, $model) { return $model['shortlisted_at'] = $request->shortlisted==="1" ? now() : null; }),
             MorphMany::make("Photos")->showOnIndex(true),
@@ -88,6 +106,8 @@ class Application extends Resource
 
     protected static function afterValidation(NovaRequest $request, $validator)
     {
+        if ($request->editing) return;
+
         $isDuplicate = \Domain\Work\Models\Application::query()
             ->whereModelId($request->model)
             ->whereRoleId($request->role)

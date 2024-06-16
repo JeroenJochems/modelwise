@@ -2,6 +2,7 @@
 
 namespace Domain\Work\Models;
 
+use Database\Factories\HireFactory;
 use Domain\Jobs\QueryBuilders\HireQueryBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,11 @@ class Hire extends Model
     protected $fillable = [
         'application_id',
     ];
+
+    public static function newFactory()
+    {
+        return HireFactory::new();
+    }
 
     public function newEloquentBuilder($query)
     {

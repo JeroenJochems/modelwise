@@ -10,7 +10,6 @@ use Domain\Profiles\Repositories\PhotoRepository;
 use Domain\Profiles\Repositories\VideoRepository;
 use Domain\Work\Actions\Apply;
 use Domain\Work\Models\Application;
-use Illuminate\Session\TokenMismatchException;
 use Inertia\Inertia;
 
 class ApplicationController extends Controller
@@ -22,8 +21,10 @@ class ApplicationController extends Controller
 
     public function show(Application $application)
     {
+        $role = $application->role;
+
         return Inertia::render('Roles/Show')
-            ->with("viewModel", new ModelRoleViewModel($application->role));
+            ->with("viewModel", new ModelRoleViewModel($role));
     }
 
     public function create(Role $role)

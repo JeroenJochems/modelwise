@@ -15,7 +15,7 @@ class Rejected extends Notification implements ShouldQueue, SidemailNotification
 {
     use Queueable;
 
-    public function __construct(public Rejection $rejection, public string $message) {}
+    public function __construct(public Rejection $rejection, public string $subject, public string $message) {}
 
     public function via(object $notifiable): string
     {
@@ -28,6 +28,7 @@ class Rejected extends Notification implements ShouldQueue, SidemailNotification
             recipient: SidemailRecipient::fromModel($notifiable),
             template: 'rejected',
             data: [
+                'subject' => $this->subject,
                 'role' => $this->rejection->application->role->name,
                 'job' => $this->rejection->application->role->job->title,
                 'brand' => $this->rejection->application->role->job->brand->name,

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Model;
 
-use App\Http\Controllers\Controller;
 use Domain\Profiles\Data\ModelSocialsData;
 use Inertia\Inertia;
 
@@ -22,6 +21,7 @@ class SocialsController extends BaseOnboardingController
         $model->update($data->toArray());
 
         if ($data->website == "http://") $model->website = null;
+        if ($data->showreel_link == "http://") $model->showreel_link = null;
 
         $model->has_completed_onboarding = true;
         $model->save();

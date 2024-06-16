@@ -2,7 +2,6 @@
 
 namespace Domain\Jobs\Data;
 
-use Carbon\Carbon;
 use Domain\Profiles\Data\ModelData;
 use Domain\Profiles\Data\PhotoData;
 use Domain\Profiles\Data\VideoData;
@@ -18,7 +17,13 @@ class ApplicationData extends Data
     public bool $is_shortlisted;
 
     #[Computed]
+    public bool $is_prelisted;
+
+    #[Computed]
     public bool $is_rejected;
+
+    #[Computed]
+    public bool $is_empty_admin_application;
 
     public function __construct(
         public string $id,
@@ -27,8 +32,9 @@ class ApplicationData extends Data
         public ?string $casting_questions,
         public ?string $brand_conflicted,
 
-        ?Carbon $shortlisted_at,
-        ?Carbon $rejected_at,
+        ?string $prelisted_at,
+        ?string $shortlisted_at,
+        ?string $rejected_at,
 
         #[DataCollectionOf(PhotoData::class)]
         /** @var PhotoData[] */
@@ -47,7 +53,9 @@ class ApplicationData extends Data
         public ?HireData $hire,
     )
     {
+        $this->is_prelisted = $prelisted_at !== null;
         $this->is_shortlisted = $shortlisted_at !== null;
         $this->is_rejected = $rejected_at !== null;
+        $this->is_empty_admin_application = $this->photos->count() === 0;
     }
 }

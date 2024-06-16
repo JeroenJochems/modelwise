@@ -6,20 +6,20 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Model\ActivitiesController;
-use App\Http\Controllers\Model\OnboardingController;
-use App\Http\Controllers\Model\ProfessionalExperienceController;
-use App\Http\Controllers\PassController;
-use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Model\CharacteristicsController;
 use App\Http\Controllers\Model\DigitalsController;
 use App\Http\Controllers\Model\ExclusiveCountriesController;
+use App\Http\Controllers\Model\OnboardingController;
 use App\Http\Controllers\Model\PersonalDetailsController;
 use App\Http\Controllers\Model\PortfolioController;
+use App\Http\Controllers\Model\ProfessionalExperienceController;
 use App\Http\Controllers\Model\ProfilePictureController;
 use App\Http\Controllers\Model\SocialsController;
 use App\Http\Controllers\ModelController;
+use App\Http\Controllers\PassController;
 use App\Http\Controllers\PhotosController;
 use App\Http\Controllers\PresentationController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\VaporSignedStorageUrl;
 use App\Http\Controllers\VideosController;
 use Illuminate\Support\Facades\Route;
@@ -64,6 +64,7 @@ if (!function_exists("onboardingRoutes")) {
 
 Route::get('/', [LandingController::class, "index"] )->name("landing");
 Route::get('/login', [AuthenticatedSessionController::class, "create"] )->name("login");
+Route::get('/logout', [AuthenticatedSessionController::class, "destroy"] )->name("logout");
 Route::post('/contact', [ContactController::class, "store"] )->name("contact");
 
 Route::get('favicon.png', function () {
@@ -72,11 +73,13 @@ Route::get('favicon.png', function () {
     ]);
 });
 
+Route::get("test", \App\Http\Controllers\Controller::class."@test");
+
 Route::get('about-modelwise', [OnboardingController::class, "index"])->name("onboarding.index");
 
 Route::resource('roles', RoleController::class, ["index", "view"])->name("index", "jobs");
 Route::get('presentations/{presentation}', [PresentationController::class, "show"])->name("presentations.show");
-Route::post('presentations/{presentation}/shortlist', [PresentationController::class, "shortlist"])->name("presentations.shortlist");
+Route::post('presentations/{presentation}/prelist', [PresentationController::class, "prelist"])->name("presentations.prelist");
 
 Route::middleware(['auth'])->group(callback: function () {
 
@@ -107,6 +110,7 @@ Route::middleware(['auth'])->group(callback: function () {
     Route::name("onboarding.")->prefix("onboarding")->group(function() {
         onboardingRoutes();
 
+        Route::get('first-application', [OnboardingController::class, "firstApplication"])->name("first-application");
         Route::get('thanks', [ModelController::class, "thanks"])->name("thanks");
         Route::get('not-accepted', [ModelController::class, "notAccepted"])->name("not-accepted");
         Route::post('subscribe', [ModelController::class, "subscribe"])->name("subscribe");

@@ -1,7 +1,7 @@
 import {H2} from "@/Components/Typography/H2";
 import {H1} from "@/Components/Typography/H1";
 import {Label} from "@/Components/Atoms/Label";
-import ModelRoleViewModel = App.ViewModels.ModelRoleViewModel;
+import {ModelRoleViewModel} from "@/types/generated";
 
 type Props = {
     viewModel: ModelRoleViewModel

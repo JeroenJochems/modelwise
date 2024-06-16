@@ -6,9 +6,9 @@ use Domain\Profiles\Actions\AnalysePhoto;
 use Domain\Profiles\Models\Model;
 use Domain\Profiles\Models\Photo;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Facades\Storage;
 use Support\Actions\DeletePhoto;
 use Support\Actions\MovePhoto;
+use Support\Actions\PhashPhoto;
 
 class PhotoRepository
 {
@@ -60,6 +60,7 @@ class PhotoRepository
                 if ($folder === Photo::FOLDER_ACTIVITIES || $folder === Photo::FOLDER_WORK_EXPERIENCE) {
                     app(AnalysePhoto::class)->onQueue()->execute($photoObj);
                 }
+                app(PhashPhoto::class)->onQueue()->execute($photoObj);
             }
 
             return $photoObj->id;

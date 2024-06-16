@@ -16,12 +16,6 @@ return new class extends Migration
             $table->nullableMorphs("photoable");
         });
 
-        foreach (\Domain\Profiles\Models\Photo::get() as $photo) {
-            $photo->photoable_type = "model";
-            $photo->photoable_id = $photo->model_id;
-            $photo->save();
-        }
-
         Schema::table("photos", function(Blueprint $table) {
             $table->dropColumn("model_id");
         });
@@ -35,13 +29,6 @@ return new class extends Migration
         Schema::table("photos", function(Blueprint $table) {
             $table->unsignedBigInteger("model_id")->nullable()->after("id");
         });
-
-        $photos = \Domain\Profiles\Models\Photo::get();
-
-        foreach ($photos as $photo) {
-            $photo->model_id = $photo->photoable_id;
-            $photo->save();
-        }
 
         Schema::table("photos", function(Blueprint $table) {
             $table->dropMorphs("photoable");

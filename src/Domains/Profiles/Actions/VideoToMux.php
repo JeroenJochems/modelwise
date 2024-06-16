@@ -4,10 +4,10 @@ namespace Domain\Profiles\Actions;
 
 use Domain\Profiles\Models\Video;
 use GuzzleHttp\Client;
-use MuxPhp\Configuration;
 use MuxPhp\Api\AssetsApi;
-use MuxPhp\Models\InputSettings;
+use MuxPhp\Configuration;
 use MuxPhp\Models\CreateAssetRequest;
+use MuxPhp\Models\InputSettings;
 use MuxPhp\Models\PlaybackPolicy;
 use Spatie\QueueableAction\QueueableAction;
 
@@ -27,7 +27,7 @@ class VideoToMux
         );
 
         // Create Asset Request
-        $input = new InputSettings(["url" => env("CDN_URL").$video->path]);
+        $input = new InputSettings(["url" => "https://modelwise.net/".$video->path]);
         $createAssetRequest = new CreateAssetRequest([
             "input" => $input,
             "playback_policy" => [PlaybackPolicy::_PUBLIC]

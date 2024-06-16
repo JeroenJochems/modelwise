@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories\Domain\Jobs\Models;
+namespace Database\Factories;
 
 use Carbon\Carbon;
 use Domain\Jobs\Models\Job;
@@ -18,6 +18,7 @@ class RoleFactory extends Factory
             'name' => $this->faker->jobTitle,
             'description' => $this->faker->realText,
             'start_date' => Carbon::now()->addWeek(),
+            'end_date' => Carbon::now()->addWeek()->addHour(4),
             'fee' => 150,
             'buyout' => 200,
             'fields' => [

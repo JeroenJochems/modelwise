@@ -4,8 +4,8 @@ namespace Domain\Profiles\Models;
 
 use Domain\Profiles\Collections\PhotoCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Kra8\Snowflake\HasShortflakePrimary;
-use Laravel\Scout\Searchable;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
@@ -13,10 +13,13 @@ class Photo extends \Illuminate\Database\Eloquent\Model implements Sortable
 {
     use SortableTrait;
     use HasShortflakePrimary;
+    use SoftDeletes;
 
     protected $casts = [
         'analysis' => 'object',
     ];
+
+    protected $guarded = [];
 
     public function newCollection($models = [])
     {
@@ -90,5 +93,10 @@ class Photo extends \Illuminate\Database\Eloquent\Model implements Sortable
     public function getCdnPathThumbAttribute()
     {
         return env("CDN_URL").$this->attributes['path']."?twic=v1/focus=auto/cover=1:1/resize=600";
+    }
+
+    public function getCdnPathMiniAttribute()
+    {
+        return env("CDN_URL").$this->attributes['path']."?twic=v1/focus=auto/cover=1:1/resize=100";
     }
 }

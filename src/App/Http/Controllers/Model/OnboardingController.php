@@ -11,6 +11,13 @@ final class OnboardingController extends BaseOnboardingController
         return Inertia::render("Model/Onboarding/Index");
     }
 
+    public function firstApplication()
+    {
+
+
+        return redirect()->route('onboarding.thanks');
+    }
+
     protected function nextOrReturn() {
         if (str_contains(request()->route()->uri, "onboarding")) {
 

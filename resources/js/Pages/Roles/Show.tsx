@@ -7,14 +7,14 @@ import {PhotoScroller} from "@/Components/Atoms/JobScroller";
 import {JobSpecifics} from "@/Components/Molecules/JobSpecifics";
 import {ApplyFooter} from "@/Components/Molecules/ApplyFooter";
 import {DashboardFooter} from "@/Components/Molecules/DashboardFooter";
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import {Tab, TabList, TabPanel, Tabs} from 'react-tabs';
 import {Bubbles} from "@/Components/Atoms/JobHeader/Bubbles";
 import {Bubble} from "@/Components/Atoms/JobHeader/Bubbles/Bubble";
 import {CalendarDays} from "@/Components/Icons/CalendarDays";
 import {formatDate} from "@/Utils/Dates";
 import {Globe} from "@/Components/Icons/Globe";
 import {ApplicationStatus} from "@/Components/Molecules/ApplicationStatus";
-import {CurrencyEuroIcon } from "@heroicons/react/24/outline";
+import {CurrencyEuroIcon} from "@heroicons/react/24/outline";
 import {formatCents} from "@/Utils/Money";
 import {Train} from "@/Components/Icons/Train";
 import {useCdnLink} from "@/Hooks/useCdnLink";
@@ -29,6 +29,8 @@ export default function Show({ viewModel }: Props)
     const { role, isHired, hasApplied, isInvited } = viewModel;
     const { job } = role;
     const cdnLink = useCdnLink();
+
+    console.log(viewModel);
 
     const tabClasses = "outline-none w-1/2 sm:w-1/2 text-center  cursor-pointer text-lg py-4 border-r border-white ";
 

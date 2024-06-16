@@ -3,7 +3,6 @@
 namespace App\Nova;
 
 use App\Nova\Actions\ApplyForRole;
-use App\Nova\Actions\CreateApplication;
 use App\Nova\Actions\InviteForRole;
 use App\Nova\Filters\AgeFilter;
 use Datomatic\Nova\Fields\Enum\Enum;
@@ -11,6 +10,7 @@ use Domain\Profiles\Enums\Ethnicity;
 use Domain\Profiles\Enums\EyeColor;
 use Domain\Profiles\Enums\Gender;
 use Domain\Profiles\Enums\HairColor;
+use Domain\Profiles\Models\Model as ModelClass;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
@@ -25,7 +25,6 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\VaporImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Domain\Profiles\Models\Model as ModelClass;
 use Laravel\Nova\Panel;
 use Spatie\TagsField\Tags;
 
@@ -120,6 +119,7 @@ class Model extends Resource
             Text::make('Instagram')->rules( 'max:255')->hideFromIndex()->copyable(),
             Text::make('Tiktok')->rules( 'max:255')->hideFromIndex()->copyable(),
             Text::make('Website')->rules('max:255')->hideFromIndex()->copyable(),
+            Text::make('Showreel link')->rules('max:255')->hideFromIndex()->copyable(),
             new Panel('Body Characteristics', $this->bodyFields()),
             HasMany::make("Applications")->showOnIndex(false),
             HasMany::make("Invites")->showOnIndex(false),
