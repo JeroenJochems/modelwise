@@ -9,6 +9,7 @@ use Domain\Work\Models\Application;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailable;
 use Illuminate\Notifications\Notification;
 
 class Shortlisted extends Notification implements ShouldQueue, SidemailNotification
@@ -22,7 +23,7 @@ class Shortlisted extends Notification implements ShouldQueue, SidemailNotificat
         return SidemailChannel::class;
     }
 
-    public function toSideMail(Model|Authenticatable $notifiable): SideMailMessage
+    public function toSideMail(Model|Authenticatable $notifiable): Mailable
     {
         return new SideMailMessage(
             recipient: SidemailRecipient::fromModel($notifiable),
