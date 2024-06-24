@@ -53,7 +53,6 @@ class Application extends Model implements Sortable
 
     const PHOTO_FOLDER = 'Application';
     const CASTING_PHOTO_FOLDER = 'Casting photos';
-    const VIDEO_FOLDER = 'Application';
     const CASTING_VIDEOS = 'Casting videos';
 
     public function newEloquentBuilder($query)

@@ -3,17 +3,17 @@
 namespace Domain\Work\Actions;
 
 use App\Notifications\Shortlisted;
-use Domain\Work\Models\Application;
+use Domain\Work2\Models\Listing;
 
 class Shortlist
 {
-    public function execute(Application $application)
+    public function execute(Listing $listing)
     {
-        $application->shortlisted_at = now();
-        $application->save();
+        $listing->shortlisted_at = now();
+        $listing->save();
 
-        $application->model->notify(
-            new Shortlisted($application)
+        $listing->model->notify(
+            new Shortlisted($listing)
         );
     }
 }

@@ -3,9 +3,10 @@
 namespace Domain\Work2\Models;
 
 use Domain\Jobs\Models\Role;
-use Domain\Profiles\Models\Model;
 use Domain\Profiles\Models\Photo;
+use Domain\Profiles\Models\Video;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Kra8\Snowflake\HasShortflakePrimary;
 use Spatie\EloquentSortable\SortableTrait;
@@ -18,7 +19,16 @@ class Listing extends Model
 
     protected $casts = [
         'available_dates' => 'array',
+        'invited_at' => 'datetime',
+        'rejected_at' => 'datetime',
+        'applied_at' => 'datetime',
     ];
+
+    protected $guarded = [];
+
+    const FOLDER_PHOTOS = 'Listing';
+    const FOLDER_CASTING_PHOTOS = 'Casting photos';
+    const FOLDER_CASTING_VIDEOS = 'Casting videos';
 
     public function buildSortQuery()
     {
@@ -35,13 +45,24 @@ class Listing extends Model
         return $this->belongsTo(Role::class);
     }
 
-    public function getPhotosAttribute($value)
+    public function photos()
     {
-        return Photo::whereIn('id', json_decode($value, true) ?? [])->get();
+        return $this->morphMany(Photo::class, 'photoable')
+            ->orderBy('sortable_order')
+            ->where("folder", self::FOLDER_PHOTOS);
     }
 
-    public function getDigitalsAttribute($value)
+    public function casting_photos()
     {
-        return Photo::whereIn('id', json_decode($value, true) ?? [])->get();
+        return $this->morphMany(Photo::class, 'photoable')
+            ->orderBy('sortable_order')
+            ->where("folder", self::FOLDER_CASTING_PHOTOS);
+    }
+
+    public function casting_videos()
+    {
+        return $this->morphMany(Video::class, 'videoable')
+            ->orderBy('sortable_order')
+            ->where("folder", self::FOLDER_CASTING_VIDEOS);
     }
 }

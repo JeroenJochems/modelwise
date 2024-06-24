@@ -8,7 +8,7 @@ use Domain\Profiles\Repositories\PhotoRepository;
 use Domain\Work\Models\Application;
 
 
-class Apply
+class Apply3
 {
     public function __invoke(ApplyData $applyData)
     {
@@ -16,7 +16,7 @@ class Apply
             'role_id' => $applyData->role->id,
             'model_id' => $applyData->model->id,
         ]);
-        
+
         $application->cover_letter = $applyData->cover_letter;
         $application->brand_conflicted = $applyData->brand_conflicted;
         $application->casting_questions = $applyData->casting_questions;

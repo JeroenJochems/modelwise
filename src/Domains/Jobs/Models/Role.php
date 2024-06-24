@@ -8,8 +8,6 @@ use Domain\Profiles\Models\Photo;
 use Domain\Work\Models\Application;
 use Domain\Work\Models\Pass;
 use Domain\Work2\Models\Listing;
-use Domain\Work2\RoleAggregate;
-use Domain\Work2\RoleRepository;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,13 +32,6 @@ class Role extends Model
         'extra_fields' => "array",
     ];
 
-    protected static function booted(): void
-    {
-        static::created(function (Role $role) {
-            app(RoleRepository::class)
-                ->persist(RoleAggregate::init($role));
-        });
-    }
 
     public static function newFactory(): Factory
     {

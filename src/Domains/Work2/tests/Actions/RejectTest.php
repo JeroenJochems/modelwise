@@ -16,13 +16,13 @@ class RejectTest extends TestCase
     {
         [$role, $model] = $this->init();
 
-        $modelRole = DB::table('listings')
+        $listing = DB::table('listings')
             ->where('role_id', $role->id)
             ->where('model_id', $model->id)
             ->whereNotNull('rejected_at')
             ->count();
 
-        expect($modelRole)->toBe(1);
+        expect($listing)->toBe(1);
     }
 
     public function test_it_sends_email_to_model()
@@ -40,6 +40,12 @@ class RejectTest extends TestCase
         $model = Model::factory()->createOne();
 
         Mail::fake();
+
+        $listing = DB::table('listings')->insert([
+            'role_id' => $role->id,
+            'model_id' => $model->id,
+            'rejected_at' => null,
+        ]);
 
         app(Reject::class)->execute($role, $model, 'subject', 'content');
         return [$role, $model];

@@ -2,21 +2,37 @@
 
 namespace Domain\Work2\Actions;
 
+use App\Mail\CleanMail;
 use Domain\Jobs\Models\Role;
 use Domain\Profiles\Models\Model;
-use Domain\Work2\RoleId;
-use Domain\Work2\RoleRepository;
+use Domain\Work2\Models\Listing;
+use Illuminate\Support\Facades\Mail;
 
 class Reject
 {
-    public function __construct(private readonly RoleRepository $repo) {}
-
-
     public function execute(Role $role, Model $model, string $subject, string $message)
     {
-        $agg = $this->repo->retrieve(RoleId::fromString($role->id));
-        $agg->reject($model, $subject, $message);
+        $listing = Listing::query()
+            ->where('role_id', $role->id)
+            ->where('model_id', $model->id)
+            ->first();
 
-        $this->repo->persist($agg);
+        if (!$listing) {
+            return;
+        }
+
+        $listing->rejected_at = now();
+        $listing->save();
+
+        Mail::to($model)
+            ->send(new CleanMail(
+                messageSubject: $subject,
+                messageContent: nl2br(
+                    "Hi {$model->first_name},\n\n".
+                    $message
+                ),
+                actionText: "View role details",
+                actionUrl: route('roles.show', $role->id)
+            ));
     }
 }

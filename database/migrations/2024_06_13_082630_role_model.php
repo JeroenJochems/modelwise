@@ -19,8 +19,6 @@ return new class extends Migration
             $table->timestamp('invited_at')->nullable();
             $table->timestamp('hired_at')->nullable();
             $table->timestamp('rejected_at')->nullable();
-            $table->json('photos')->nullable();
-            $table->json('digitals')->nullable();
             $table->string('cover_letter')->nullable();
             $table->string('brand_conflicted')->nullable();
             $table->json('available_dates')->nullable();

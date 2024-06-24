@@ -48,7 +48,7 @@ class AppServiceProvider extends ServiceProvider
             'client' => Client::class,
             'tag' => Tag::class,
             'presentation' => Presentation::class,
-            'model-role' => Listing::class,
+            'listing' => Listing::class,
             'presentation-listing' => PresentationListing::class,
         ]);
 

@@ -13,28 +13,12 @@ use Support\Actions\PhashPhoto;
 class PhotoRepository
 {
     /**
-     * @param Model|Authenticatable $model
-     */
-    public function getPhotos(Model $model, string $folder)
-    {
-        return $model->photos()->where('folder', $folder)->get()
-            ->map(function (Photo $photo) {
-                return [
-                    "id" => $photo->id,
-                    "path" => $photo->path,
-                    "mime" => "image/*",
-                    "deleteRoute" => route('account.photos.delete', $photo),
-                ];
-            });
-    }
-
-    /**
      * @param array{id: string, path: string, isNew: bool, mime: string, deleted: bool} $photos
      * @return array<Photo>
      */
-    public function store(Model $model, $photos): array
+    public function store(Model $model, $folder, $photos): array
     {
-        return collect($photos)->map(function($photo) use ($model) {
+        return collect($photos)->map(function($photo) use ($model, $folder) {
 
             if (!$photo['isNew']) return $photo['id'];
 
@@ -42,7 +26,7 @@ class PhotoRepository
 
             $photoObj = new Photo;
             $photoObj->photoable()->associate($model);
-            $photoObj->folder = 'Application';
+            $photoObj->folder = $folder;
             $photoObj->path = str_replace("tmp/", "photos/", $photo['path']);
             $photoObj->save();
 
@@ -59,21 +43,19 @@ class PhotoRepository
     {
         $newSort = collect($photos)->map(function($photo) use($folder, $model) {
 
-            if (!isset($photo['isNew'])) {
-                if (isset($photo['deleted']) && $photo['deleted'] != 0) {
+            if (isset($photo['deleted']) && $photo['deleted'] != 0) {
 
-                    if ($photoObj = Photo::find($photo['id'])) {
-                        app(DeletePhoto::class)->onQueue()->execute($photoObj->path);
-                        $photoObj->delete();
-                    }
-
-                    return null;
+                if ($photoObj = Photo::find($photo['id'])) {
+                    app(DeletePhoto::class)->onQueue()->execute($photoObj->path);
+                    $photoObj->delete();
                 }
 
-                return $photo['id'];
+                return null;
             }
 
-            if (isset($photo['deleted']) && $photo['deleted']!=0) return null;
+            if (!isset($photo['isNew'])) {
+                return $photo['id'];
+            }
 
             $photoObj = new Photo;
             $photoObj->photoable()->associate($model);
@@ -81,7 +63,7 @@ class PhotoRepository
             $photoObj->folder = $folder;
             $photoObj->save();
 
-            if ($photo['path'] != $photoObj->path) {
+            if ($photoObj->wasRecentlyCreated) {
                 app(MovePhoto::class)->onQueue()->execute($photo['path'], $photoObj->path);
 
                 if ($folder === Photo::FOLDER_ACTIVITIES || $folder === Photo::FOLDER_WORK_EXPERIENCE) {
@@ -95,5 +77,21 @@ class PhotoRepository
 
 
         Photo::setNewOrder($newSort->toArray());
+    }
+
+    /**
+     * @param Model|Authenticatable $model
+     */
+    public function getPhotos(Model $model, string $folder)
+    {
+        return $model->photos()->where('folder', $folder)->get()
+            ->map(function (Photo $photo) {
+                return [
+                    "id" => $photo->id,
+                    "path" => $photo->path,
+                    "mime" => "image/*",
+                    "deleteRoute" => route('account.photos.delete', $photo),
+                ];
+            });
     }
 }

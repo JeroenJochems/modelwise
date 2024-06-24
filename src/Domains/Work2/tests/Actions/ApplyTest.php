@@ -1,13 +1,16 @@
 <?php
 
-namespace Domain\tests\Actions;
+namespace Domain\Work2\Tests\Actions;
 
 use App\Mail\CleanMail;
 use Domain\Jobs\Models\Role;
 use Domain\Profiles\Models\Model;
 use Domain\Work2\Actions\Apply;
 use Domain\Work2\Data\ApplyData;
-use Illuminate\Support\Facades\DB;
+use Domain\Work2\Models\Listing;
+use Domain\Work2\Tests\Mock\AnalysePhotoMock;
+use Domain\Work2\Tests\Mock\MovePhotoMock;
+use Domain\Work2\Tests\Mock\PhashPhotoMock;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
@@ -15,19 +18,23 @@ class ApplyTest extends TestCase
 {
     public function test_it_can_apply()
     {
+
         list($role, $model, $applyData) = $this->init();
 
-        $roleModel = DB::table("listings")->where("role_id", $role->id)->where("model_id", $model->id)->first();
+        $listing = Listing::query()
+            ->where('role_id', $role->id)
+            ->where('model_id', $model->id)
+            ->first();
 
-        expect(intval($roleModel->role_id))->toBe($role->id)
-            ->and(intval($roleModel->model_id))->toBe($model->id)
-            ->and($roleModel->applied_at)->not()->toBeNull()
-            ->and(json_decode($roleModel->photos))->toBe($applyData->photos)
-            ->and(json_decode($roleModel->digitals))->toBe($applyData->digitals)
-            ->and($roleModel->cover_letter)->toBe($applyData->cover_letter)
-            ->and($roleModel->brand_conflicted)->toBe($applyData->brand_conflicted)
-            ->and(json_decode($roleModel->available_dates))->toBe($applyData->available_dates)
-            ->and($roleModel->casting_questions)->toBe($applyData->casting_questions);
+        expect(intval($listing->role_id))->toBe($role->id)
+            ->and(intval($listing->model_id))->toBe($model->id)
+            ->and($listing->applied_at)->not()->toBeNull()
+            ->and($listing->cover_letter)->toBe($applyData->cover_letter)
+            ->and($listing->brand_conflicted)->toBe($applyData->brand_conflicted)
+            ->and(json_decode($listing->available_dates))->toBe($applyData->available_dates)
+            ->and($listing->casting_questions)->toBe($applyData->casting_questions)
+            ->and($listing->photos->count())->toBe(2);
+
     }
 
     public function test_it_writes_application_data_to_model()
@@ -58,6 +65,10 @@ class ApplyTest extends TestCase
      */
     private function init(): array
     {
+        MovePhotoMock::setUp();
+        AnalysePhotoMock::setUp();
+        PhashPhotoMock::setUp();
+
         $role = Role::factory()->createOne();
         $model = Model::factory()->createOne();
 
@@ -67,8 +78,11 @@ class ApplyTest extends TestCase
 
         $applyData = new ApplyData(
             cover_letter: "I am a great model",
-            digitals: ["digital1"],
-            photos: ["photo1", "photo2"],
+            digitals: [],
+            photos: [
+                ["id" => "1", "path" => "path", "isNew" => true, "mime" => "mime"],
+                ["id" => "2", "path" => "path", "isNew" => true, "mime" => "mime"],
+            ],
             available_dates: ["2022-01-01", "2022-01-02"],
             brand_conflicted: "No",
             casting_questions: null,
