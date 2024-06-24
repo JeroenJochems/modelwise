@@ -13,10 +13,13 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
+use Outl1ne\NovaSortable\Traits\HasSortableManyToManyRows;
 use Vyuldashev\NovaMoneyField\Money;
 
 class Role extends Resource
 {
+    use HasSortableManyToManyRows;
+
     public static $model = \Domain\Jobs\Models\Role::class;
 
     public function title()
@@ -70,6 +73,7 @@ class Role extends Resource
                 ]
             ),
             Text::make("Travel reimbursement note")->hideFromIndex(),
+            HasMany::make("Listings"),
             HasMany::make("Presentations"),
             Text::make('Invites', function() {
                 return '<div style="display: flex; width: 400px; height: 120px; overflow-x: scroll; overflow-y: hidden">
@@ -78,8 +82,6 @@ class Role extends Resource
                     })->toArray())
                     . '</div>';
             })->asHtml()->onlyOnIndex(),
-            HasMany::make("Applications"),
-            HasMany::make("Invites", "open_invites"),
             Text::make('Public URL', function() {
                 return '<a href="'.route("roles.show", $this->id).'" target="_blank">'.route("roles.show", $this->id).'</a>';
             })->asHtml()->onlyOnDetail(),

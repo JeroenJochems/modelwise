@@ -2,11 +2,9 @@
 
 namespace App\Nova;
 
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -19,7 +17,7 @@ class Presentation extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'description';
 
     /**
      * The columns that should be searched.
@@ -27,7 +25,7 @@ class Presentation extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'description',
     ];
 
     /**
@@ -39,15 +37,16 @@ class Presentation extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            Text::make("Link", fn() => '<a target="_new" href="'.route('presentations.show', $this->id).'">View</a>')->asHtml()->onlyOnIndex(),
             BelongsTo::make("Role"),
-            HasMany::make("Applications"),
+            Text::make("Description"),
+            Text::make('Models', fn() => $this->presentationListings->count())->onlyOnIndex(),
+            Text::make("Link", fn() => '<a target="_new" href="'.route('presentations.show', $this->id).'">View</a>')->asHtml()->onlyOnIndex(),
+            HasMany::make("Listings", "presentationListings", PresentationListing::class),
             Boolean::make("Show casting media", "should_show_casting_media"),
             Boolean::make("Show digitals", "should_show_digitals"),
             Boolean::make("Show socials", "should_show_socials"),
             Boolean::make("Show cover letter", "should_show_cover_letter"),
             Boolean::make("Show conflicts", "should_show_conflicts"),
-            Text::make("Models", fn() => count($this->applications)),
         ];
     }
 

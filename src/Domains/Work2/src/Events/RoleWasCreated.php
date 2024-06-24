@@ -2,26 +2,25 @@
 
 namespace Domain\Work2\Events;
 
-use Domain\Jobs\Models\Role;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
 class RoleWasCreated implements SerializablePayload
 {
     public function __construct(
-        public Role $role)
+        public int $roleId)
     { }
 
     public function toPayload(): array
     {
         return [
-            'role_id' => $this->role->id,
+            'role_id' => $this->roleId,
         ];
     }
 
     public static function fromPayload(array $payload): static
     {
         return new static(
-            Role::find($payload['role_id'])
+            roleId: $payload['role_id'],
         );
     }
 }

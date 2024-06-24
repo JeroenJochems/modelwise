@@ -8,8 +8,9 @@ use Domain\Jobs\Policies\ClientPolicy;
 use Domain\Jobs\Policies\JobPolicy;
 use Domain\Profiles\Models\Model;
 use Domain\Profiles\Policies\ModelPolicy;
+use Domain\Work2\Models\Listing;
+use Domain\Work2\Policies\ListingPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 use Support\Policies\UserPolicy;
 use Support\User;
 
@@ -25,6 +26,7 @@ class AuthServiceProvider extends ServiceProvider
         Model::class => ModelPolicy::class,
         Job::class => JobPolicy::class,
         Client::class => ClientPolicy::class,
+        Listing::class => ListingPolicy::class,
     ];
 
     /**

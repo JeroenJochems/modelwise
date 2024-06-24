@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ClientSubmittedPreference;
-use Domain\Jobs\Data\ApplicationData;
 use Domain\Present\Models\Presentation;
 use Domain\Work\Models\Application;
+use Domain\Work2\Data\ModelRoleData;
+use Domain\Work2\Models\Listing;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
@@ -15,13 +16,19 @@ class PresentationController extends Controller
     {
         $role = $presentation->role;
         $role->load("job");
-        $applications = Application::whereIn("id", $presentation->applications)->orderBy('order_column')->get();
-        $applications->load("model.digitals", "casting_photos", "photos", "casting_videos", "model.portfolio");
+
+        $modelRoles = ModelRoleData::collection(
+            Listing::query()
+                ->whereIn("id", $presentation->model_roles)
+                ->orderBy('order_column')
+                ->with("model.digitals", "casting_videos", "model.portfolio")
+                ->get()
+        );
 
         return Inertia::render('Roles/Proposal')
             ->with("role", $role)
             ->with("presentation", $presentation)
-            ->with("applications", ApplicationData::collection($applications));
+            ->with("modelRoles", $modelRoles);
     }
 
     public function prelist(Presentation $presentation)

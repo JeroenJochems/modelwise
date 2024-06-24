@@ -10,11 +10,16 @@ class RoleId implements AggregateRootId
         private string $id
     ) {}
 
+    public static function create()
+    {
+        return new static(uniqid());
+    }
+
     public function toString(): string
     {
         return $this->id;
     }
-    
+
     public function __toString(): string
     {
         return $this->toString();

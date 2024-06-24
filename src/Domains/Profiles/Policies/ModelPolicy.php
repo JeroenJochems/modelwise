@@ -3,10 +3,8 @@
 namespace Domain\Profiles\Policies;
 
 
-use Domain\Jobs\Models\Job;
 use Domain\Profiles\Models\Model;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Support\User;
 
 class ModelPolicy
 {
@@ -38,6 +36,11 @@ class ModelPolicy
     public function viewAny(Authenticatable $authenticatable)
     {
         return true;
+    }
+
+    public function viewNova(Authenticatable $authenticatable)
+    {
+        return false;
     }
 
     public function uploadFiles(Model $model): bool

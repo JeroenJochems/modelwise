@@ -4,22 +4,29 @@ namespace Domain\Profiles\Models;
 
 use App\Notifications\ResetPasswordNotification;
 use Domain\Jobs\Models\Invite;
+use Domain\Jobs\Models\Role;
 use Domain\Jobs\Models\RoleView;
 use Domain\Profiles\Enums\Ethnicity;
+use Domain\Work2\Models\Listing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Kra8\Snowflake\HasShortflakePrimary;
-use Laravel\Nova\Auth\Impersonatable;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Spatie\Onboard\Concerns\GetsOnboarded;
 use Spatie\Onboard\Concerns\Onboardable;
 use Spatie\Tags\HasTags;
 
+/**
+ * Domain\Profiles\Models\Model
+ * @property string $id
+ * @property string $first_name
+ * @property string $last_name
+ */
 class Model extends Authenticatable implements Onboardable
 {
     use HasApiTokens;
@@ -29,7 +36,11 @@ class Model extends Authenticatable implements Onboardable
     use HasTags;
     use GetsOnboarded;
     use HasShortflakePrimary;
-    use Impersonatable;
+
+    public function canBeImpersonated()
+    {
+        return true;
+    }
 
     const TAG_TYPE_MODEL_EXPERIENCE = 'Modeling experience';
     const TAG_TYPE_PROFESSIONS = 'Professions';
@@ -149,6 +160,8 @@ class Model extends Authenticatable implements Onboardable
         return $this->hasMany(ExclusiveCountry::class);
     }
 
+
+
     public function photos(): MorphMany
     {
         return $this->morphMany(Photo::class, 'photoable')
@@ -171,9 +184,15 @@ class Model extends Authenticatable implements Onboardable
         return $this->photos()->where("folder", Photo::FOLDER_TATTOOS);
     }
 
-    public function roles(): HasManyThrough
+    public function roles(): BelongsToMany
     {
-        return $this->hasManyThrough(\Domain\Jobs\Models\Role::class, Invite::class);
+        return $this->belongsToMany(Role::class)
+            ->using(Listing::class);
+    }
+
+    public function listings(): HasMany
+    {
+        return $this->hasMany(Listing::class);
     }
 
     public function applications(): HasMany

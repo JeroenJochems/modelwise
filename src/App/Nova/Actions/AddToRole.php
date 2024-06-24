@@ -2,15 +2,16 @@
 
 namespace App\Nova\Actions;
 
+use Domain\Jobs\Models\Role;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class CreateApplication extends Action
+class AddToRole extends Action
 {
     use InteractsWithQueue, Queueable;
 
@@ -23,7 +24,12 @@ class CreateApplication extends Action
      */
     public function handle(ActionFields $fields, Collection $models)
     {
-        //
+        foreach ($models as $model) {
+            app()->make(\Domain\Work2\Actions\AddToRole::class)->execute(
+                Role::find($fields->role_id),
+                $model
+            );
+        }
     }
 
     /**
@@ -34,6 +40,12 @@ class CreateApplication extends Action
      */
     public function fields(NovaRequest $request)
     {
-        return [];
+        return [
+            Select::make('Role', 'role_id')
+                ->options(Role::where('start_date', '>', now())->get()->load("job")->mapWithKeys(function ($role) {
+                    return [$role->id => $role->job->title . " - " . $role->name];
+                }))
+                ->searchable(),
+        ];
     }
 }

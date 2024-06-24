@@ -28,6 +28,33 @@ class PhotoRepository
             });
     }
 
+    /**
+     * @param array{id: string, path: string, isNew: bool, mime: string, deleted: bool} $photos
+     * @return array<Photo>
+     */
+    public function store(Model $model, $photos): array
+    {
+        return collect($photos)->map(function($photo) use ($model) {
+
+            if (!$photo['isNew']) return $photo['id'];
+
+            if (isset($photo['deleted']) && $photo['deleted']===true) return null;
+
+            $photoObj = new Photo;
+            $photoObj->photoable()->associate($model);
+            $photoObj->folder = 'Application';
+            $photoObj->path = str_replace("tmp/", "photos/", $photo['path']);
+            $photoObj->save();
+
+            if ($photo['path'] != $photoObj->path) {
+                app(MovePhoto::class)->execute($photo['path'], $photoObj->path);
+                app(AnalysePhoto::class)->onQueue()->execute($photoObj);
+                app(PhashPhoto::class)->onQueue()->execute($photoObj);
+            }
+            return $photoObj->id;
+        })->toArray();
+    }
+
     public function update(\Illuminate\Database\Eloquent\Model|Authenticatable $model, string $folder, $photos)
     {
         $newSort = collect($photos)->map(function($photo) use($folder, $model) {

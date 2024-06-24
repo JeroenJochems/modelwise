@@ -2,28 +2,28 @@
 
 namespace Domain\Work2\Events;
 
-use Domain\Profiles\Models\Model;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
-use Illuminate\Database\Eloquent\Collection;
 
 class UpdatedFavorites implements SerializablePayload
 {
-
-    public function __construct(public Collection $models)
+    /**
+     * @param array<int> $modelIds
+     */
+    public function __construct(public array $modelIds)
     {
     }
 
     public function toPayload(): array
     {
         return [
-            'models' => $this->models->pluck('id')->toArray(),
+            'models' => $this->modelIds,
         ];
     }
 
     public static function fromPayload(array $payload): static
     {
         return new static(
-            Model::find($payload['models'])
+            modelIds: $payload['models'],
         );
     }
 }

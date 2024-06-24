@@ -7,6 +7,7 @@ use Domain\Present\Models\Presentation;
 use Domain\Profiles\Models\Photo;
 use Domain\Work\Models\Application;
 use Domain\Work\Models\Pass;
+use Domain\Work2\Models\Listing;
 use Domain\Work2\RoleAggregate;
 use Domain\Work2\RoleRepository;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -14,6 +15,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Kra8\Snowflake\HasShortflakePrimary;
 
+/**
+ * Domain\Jobs\Models\Role
+ * @property int $id
+ */
 class Role extends Model
 {
     use HasShortflakePrimary;
@@ -36,7 +41,6 @@ class Role extends Model
                 ->persist(RoleAggregate::init($role));
         });
     }
-
 
     public static function newFactory(): Factory
     {
@@ -61,6 +65,11 @@ class Role extends Model
             ->morphMany(Photo::class, "photoable")
             ->where('folder', self::PHOTO_FOLDER_PUBLIC)
             ->orderBy("sortable_order");
+    }
+
+    public function listings()
+    {
+        return $this->hasMany(Listing::class);
     }
 
     public function role_views()

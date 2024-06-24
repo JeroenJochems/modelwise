@@ -2,9 +2,9 @@
 
 namespace Domain\Work2;
 
-use Domain\Jobs\Data\ApplyData;
 use Domain\Jobs\Models\Role;
 use Domain\Profiles\Models\Model;
+use Domain\Work2\Data\ApplyData;
 use Domain\Work2\Events\ModelHasApplied;
 use Domain\Work2\Events\ModelHasExtendedApplication;
 use Domain\Work2\Events\ModelWasAccepted;
@@ -16,7 +16,6 @@ use Domain\Work2\Events\RoleWasCreated;
 use Domain\Work2\Events\UpdatedFavorites;
 use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\AggregateRootBehaviourWithRequiredHistory;
-use Illuminate\Database\Eloquent\Collection;
 
 class RoleAggregate implements AggregateRoot
 {
@@ -28,17 +27,18 @@ class RoleAggregate implements AggregateRoot
 
     public static function init(Role $role): self
     {
+
         $aggregate = new self(
             new RoleId($role->id)
         );
 
-        $aggregate->recordThat(new RoleWasCreated($role));
+        $aggregate->recordThat(new RoleWasCreated($role->id));
         return $aggregate;
     }
 
     public function add(Model $model): void
     {
-        $this->recordThat(new ModelWasAddedToRole($model));
+        $this->recordThat(new ModelWasAddedToRole($model->id));
     }
 
     public function shortlist(Model $model): void
@@ -48,38 +48,34 @@ class RoleAggregate implements AggregateRoot
 
     public function invite(Model $model): void
     {
-        $this->recordThat(new ModelWasInvited($model));
+        $this->recordThat(new ModelWasInvited($model->id));
     }
 
-    public function submitApplication(ApplyData $data): void
+    public function submitApplication(Model $model, ApplyData $data): void
     {
-        $this->recordThat(new ModelHasApplied(
-            $data->model,
-            $data->photos,
-            $data->digitals,
-            $data->cover_letter,
-            $data->brand_conflicted,
-            $data->available_dates,
-            $data->casting_questions,
-        ));
+        $this->recordThat(new ModelHasApplied($model->id, $data));
     }
 
     public function extendApplication(Model $model): void
     {
-        $this->recordThat(new ModelHasExtendedApplication($model));
+        $this->recordThat(new ModelHasExtendedApplication($model->id));
     }
 
     public function accept(Model $model): void
     {
-        $this->recordThat(new ModelWasAccepted($model));
+        $this->recordThat(new ModelWasAccepted($model->id));
     }
 
-    public function reject(Model $model): void
+    public function reject(Model $model, $messageSubject, $messageBody): void
     {
-        $this->recordThat(new ModelWasRejected($model));
+        $this->recordThat(new ModelWasRejected($model->id, $messageSubject, $messageBody));
     }
 
-    public function updatedFavorites(Collection $models)
+    /**
+     * @param array<int> $models
+     * @return void
+     */
+    public function updatedFavorites(array $models)
     {
         $this->recordThat(new UpdatedFavorites($models));
     }
@@ -91,8 +87,8 @@ class RoleAggregate implements AggregateRoot
 
     public function applyModelWasAddedToRole(ModelWasAddedToRole $event)
     {
-        if (!in_array($event->model->id, $this->models)) {
-            $this->models[] = $event->model->id;
+        if (!in_array($event->modelId, $this->models)) {
+            $this->models[] = $event->modelId;
         }
     }
 
@@ -105,42 +101,42 @@ class RoleAggregate implements AggregateRoot
 
     public function applyModelWasInvited(ModelWasInvited $event)
     {
-        if (!in_array($event->model->id, $this->models)) {
-            $this->models[] = $event->model->id;
+        if (!in_array($event->modelId, $this->models)) {
+            $this->models[] = $event->modelId;
         }
     }
 
     public function applyModelHasApplied(ModelHasApplied $event)
     {
-        if (!in_array($event->model->id, $this->models)) {
-            $this->models[] = $event->model->id;
+        if (!in_array($event->modelId, $this->models)) {
+            $this->models[] = $event->modelId;
         }
     }
 
     public function applyModelHasExtendedApplication(ModelHasExtendedApplication $event)
     {
-        if (!in_array($event->model->id, $this->models)) {
-            $this->models[] = $event->model->id;
+        if (!in_array($event->modelId, $this->models)) {
+            $this->models[] = $event->modelId;
         }
     }
 
     public function applyModelWasAccepted(ModelWasAccepted $event)
     {
-        if (!in_array($event->model->id, $this->models)) {
-            $this->models[] = $event->model->id;
+        if (!in_array($event->modelId, $this->models)) {
+            $this->models[] = $event->modelId;
         }
     }
 
     public function applyModelWasRejected(ModelWasRejected $event)
     {
-        if (!in_array($event->model->id, $this->rejectedModels)) {
-            $this->rejectedModels[] = $event->model->id;
+        if (!in_array($event->modelId, $this->rejectedModels)) {
+            $this->rejectedModels[] = $event->modelId;
         }
     }
 
     public function applyUpdatedFavorites(UpdatedFavorites $event)
     {
-        $this->favorites = $event->models->pluck('id')->toArray();
+        $this->favorites = $event->modelIds;
     }
 
 }

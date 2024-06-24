@@ -3,7 +3,9 @@
 namespace Domain\Work2;
 
 use App\Application;
-use Domain\Work2\Projectors\RoleModelReadModelProjector;
+use App\EventSauce\QueuedMessageDispatcher;
+use Domain\Work2\Projectors\ModelRoleReadModelProjector;
+use Domain\Work2\Reactors\UpdateModelCharacteristics;
 use EventSauce\EventSourcing\MessageDispatcherChain;
 use EventSauce\EventSourcing\Serialization\ConstructingMessageSerializer;
 use EventSauce\EventSourcing\SynchronousMessageDispatcher;
@@ -28,11 +30,15 @@ class WorkServiceProvider extends ServiceProvider
                     aggregateRootIdEncoder: new StringIdEncoder(),
                     eventIdEncoder: new StringIdEncoder(),
                 ),
-                dispatcher:
-                new MessageDispatcherChain(
+                dispatcher: new MessageDispatcherChain(
                     new SynchronousMessageDispatcher(
-                        new RoleModelReadModelProjector(),
+                        new ModelRoleReadModelProjector(),
+                        new UpdateModelCharacteristics(),
                     ),
+                    new QueuedMessageDispatcher(
+                        'default',
+//                        new MailReactor(),
+                    )
                 ),
             );
         });

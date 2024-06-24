@@ -26,4 +26,11 @@ class Presentation extends Model
     {
         return $this->belongsTo(Role::class);
     }
+
+    public function presentationListings()
+    {
+        return $this->hasMany(PresentationListing::class);
+    }
 }
+
+

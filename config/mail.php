@@ -58,6 +58,7 @@ return [
         ],
 
         'postmark' => [
+            'token' => env('MAIL_POSTMARK_TOKEN'),
             'transport' => 'postmark',
             // 'client' => [
             //     'timeout' => 5,

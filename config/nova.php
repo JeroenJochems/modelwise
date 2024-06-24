@@ -200,8 +200,8 @@ return [
 
 
     'impersonation' => [
-        'started' => '/',
-        'stopped' => '/',
+        'started' => '/dashboard',
+        'stopped' => '/admin/resources/models',
     ],
 
 ];

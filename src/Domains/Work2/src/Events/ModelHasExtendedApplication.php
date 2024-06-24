@@ -2,14 +2,13 @@
 
 namespace Domain\Work2\Events;
 
-use Domain\Profiles\Models\Model;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
 class ModelHasExtendedApplication implements SerializablePayload
 {
 
     public function __construct(
-        public Model $model
+        public int $modelId
     )
     {
     }
@@ -17,14 +16,14 @@ class ModelHasExtendedApplication implements SerializablePayload
     public function toPayload(): array
     {
         return [
-            'model_id' => $this->model->id,
+            'model_id' => $this->modelId,
         ];
     }
 
     public static function fromPayload(array $payload): static
     {
         return new static(
-            Model::find($payload['model_id'])
+            modelId: $payload['model_id'],
         );
     }
 }

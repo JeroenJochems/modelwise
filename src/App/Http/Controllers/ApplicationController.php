@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\ViewModels\ModelMeViewModel;
 use App\ViewModels\ModelRoleViewModel;
-use Domain\Jobs\Data\ApplyData;
 use Domain\Jobs\Models\Role;
+use Domain\Profiles\Models\Model;
 use Domain\Profiles\Repositories\PhotoRepository;
 use Domain\Profiles\Repositories\VideoRepository;
-use Domain\Work\Actions\Apply;
 use Domain\Work\Models\Application;
+use Domain\Work2\Actions\Apply;
+use Domain\Work2\Data\ApplyData;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ApplicationController extends Controller
@@ -38,17 +40,21 @@ class ApplicationController extends Controller
     }
 
 
-    public function store(Role $role, ApplyData $data)
+    public function store(Role $role, Request $request)
     {
-        try {
-            app(Apply::class)($data);
-        } catch (\Exception $e) {
-            if (str_contains(strtolower($e->getMessage()), 'duplicate')) {
-                return redirect()->route("roles.show", $role)->with("error", "You have already applied for this role.");
-            }
+        $this->validate($request, [
+            'cover_letter' => 'required',
+            'digitals' => 'required',
+            'photos' => 'required',
+            'available_dates' => 'required',
+            'brand_conflicted' => 'required',
+        ]);
 
-            throw $e;
-        }
+        $model = auth()->user();
+        if (!($model instanceof Model)) abort(403, "You are not a model");
+
+        $data = ApplyData::fromRequest($model, $request->all());
+        app()->make(Apply::class)($model, $role, $data);
 
         return redirect()->route("roles.show", $role);
     }

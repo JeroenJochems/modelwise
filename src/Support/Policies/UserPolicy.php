@@ -2,10 +2,8 @@
 
 namespace Support\Policies;
 
-use Domain\Jobs\Models\Job;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Support\User;
-use function Pest\Laravel\instance;
 
 class UserPolicy
 {
@@ -27,6 +25,12 @@ class UserPolicy
     public function viewAny(Authenticatable $authenticatable)
     {
         return $this->create($authenticatable);
+    }
+
+    public function viewNova()
+    {
+        return true;
+
     }
 
     public function uploadFiles(User $user): bool

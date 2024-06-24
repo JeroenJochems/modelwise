@@ -1,5 +1,6 @@
 <?php
 
+use Domain\Work2\WorkServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -168,7 +169,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\NovaServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        \Domain\Work2\WorkServiceProvider::class,
+        WorkServiceProvider::class,
     ])->toArray(),
 
     /*

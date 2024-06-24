@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\App\Controllers;
+namespace src;
 
 use Domain\Jobs\Models\Role;
 use Domain\Profiles\Models\Model;
@@ -92,7 +92,7 @@ class DashboardControllerTest extends TestCase
                 ->has('vm.hires', 1)
             );
     }
-    
+
     protected function prep(): array
     {
         $model = Model::factory()->createOne();

@@ -4,6 +4,7 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ImpersonationController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Model\ActivitiesController;
 use App\Http\Controllers\Model\CharacteristicsController;
@@ -23,14 +24,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\VaporSignedStorageUrl;
 use App\Http\Controllers\VideosController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 
-Route::get('test', function() {
-
-    $file = Storage::disk("r2")->get("tmp/fb6536da-934b-4ce3-b3ab-40405e8d28a0");
-    Storage::disk('r2')->put("profile_pictures/fb6536da-934b-4ce3-b3ab-40405e8d28a0", $file);
-    return Storage::disk('r2')->get('profile_pictures/fb6536da-934b-4ce3-b3ab-40405e8d28a0');
-});
+Route::get('/impersonation/stop', ImpersonationController::class.'@stop')->name('impersonation.stop');
 
 if (!function_exists("onboardingRoutes")) {
     function onboardingRoutes()

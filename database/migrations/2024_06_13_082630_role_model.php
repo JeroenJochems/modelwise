@@ -11,18 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('role_model', function (Blueprint $table) {
+        Schema::create('listings', function (Blueprint $table) {
             $table->id();
-            $table->string('role_id');
             $table->string('model_id');
+            $table->string('role_id');
             $table->timestamp('applied_at')->nullable();
             $table->timestamp('invited_at')->nullable();
+            $table->timestamp('hired_at')->nullable();
+            $table->timestamp('rejected_at')->nullable();
             $table->json('photos')->nullable();
             $table->json('digitals')->nullable();
             $table->string('cover_letter')->nullable();
             $table->string('brand_conflicted')->nullable();
             $table->json('available_dates')->nullable();
-            $table->json('casting_questions')->nullable();
+            $table->text('casting_questions')->nullable();
             $table->json('casting_photos')->nullable();
             $table->json('casting_videos')->nullable();
             $table->timestamps();
@@ -35,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('role_model');
+        Schema::dropIfExists('listings');
     }
 };

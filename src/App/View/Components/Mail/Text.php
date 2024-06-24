@@ -16,7 +16,7 @@ class Text extends Component
         public string $align = 'left',
         public string $color = 'black',
         public string $padding = '',
-        public int $fontSize = 18,
+        public int $fontSize = 16,
         public int $fontWeight = 300,
         public string $cssClass = ''
     ) {}
