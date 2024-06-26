@@ -4,12 +4,12 @@ import {P} from "@/Components/Typography/p";
 import {useUploadingFields} from "@/Hooks/useUploadingFields";
 import PrimaryButton from "@/Components/PrimaryButton";
 import {BaseFile, FileUploader} from "@/Components/FileUploader";
-import {ApplicationData, RoleData} from "@/types/generated";
+import {ListingData, RoleData} from "@/types/generated";
 
 
 type Props = {
     role: RoleData
-    application: ApplicationData
+    listing: ListingData
 }
 
 type Form = {
@@ -17,7 +17,7 @@ type Form = {
     casting_photos: BaseFile[];
     casting_videos: BaseFile[];
 }
-export function ExtendedApplicationForm({ application, role }: Props) {
+export function ExtendedApplicationForm({ listing, role }: Props) {
 
     const { isUploading, setUploadingField } = useUploadingFields();
 
@@ -28,7 +28,7 @@ export function ExtendedApplicationForm({ application, role }: Props) {
     });
 
     function submit() {
-        post(route('applications.update', application.id));
+        post(route('applications.update', role.id));
     }
 
     return (

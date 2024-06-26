@@ -4,12 +4,12 @@ namespace Database\Factories;
 
 use Domain\Jobs\Models\Role;
 use Domain\Profiles\Models\Model;
-use Domain\Work\Models\Pass;
+use Domain\Work2\Models\Listing;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PassFactory extends Factory
+class ListingFactory extends Factory
 {
-    protected $model = Pass::class;
+    protected $model = Listing::class;
 
     public function definition(): array
     {

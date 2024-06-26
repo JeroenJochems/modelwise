@@ -14,8 +14,8 @@ class Text extends Component
     public function __construct(
         public string $fontFamily = 'Helvetica, Arial, sans-serif',
         public string $align = 'left',
-        public string $color = 'black',
-        public string $padding = '',
+        public string $color = '#333333',
+        public string $padding = '5px',
         public int $fontSize = 16,
         public int $fontWeight = 300,
         public string $cssClass = ''

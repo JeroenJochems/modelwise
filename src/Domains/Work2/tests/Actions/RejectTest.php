@@ -47,7 +47,7 @@ class RejectTest extends TestCase
             'rejected_at' => null,
         ]);
 
-        app(Reject::class)->execute($role, $model, 'subject', 'content');
+        app(Reject::class)->execute($listing, 'subject', 'content');
         return [$role, $model];
     }
 }

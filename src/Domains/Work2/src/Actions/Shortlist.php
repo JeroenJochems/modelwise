@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Work\Actions;
+namespace Domain\Work2\Actions;
 
 use App\Notifications\Shortlisted;
 use Domain\Work2\Models\Listing;

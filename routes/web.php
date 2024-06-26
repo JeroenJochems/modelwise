@@ -68,28 +68,19 @@ Route::get('favicon.png', function () {
     ]);
 });
 
-Route::get("test", \App\Http\Controllers\Controller::class."@test");
-
 Route::get('about-modelwise', [OnboardingController::class, "index"])->name("onboarding.index");
 
 Route::resource('roles', RoleController::class, ["index", "view"])->name("index", "jobs");
-Route::get('presentations/{presentation}', [PresentationController::class, "show"])->name("presentations.show");
-Route::post('presentations/{presentation}/prelist', [PresentationController::class, "prelist"])->name("presentations.prelist");
 
 Route::middleware(['auth'])->group(callback: function () {
 
-    Route::resource("applications", ApplicationController::class)->only(["index", "show", "update"])
+    Route::resource("listings", \App\Http\Controllers\ListingController::class)->only(["index", "create", "store", "show", "update"])
         ->name("index", "applications")
-        ->name("show", "applications.show")
-        ->name("upate", "applications.update");
+        ->name("show", "applications.show");
 
-    Route::resource('roles/{role}/applications', ApplicationController::class)->only(["create", "store"])
-        ->name("create", "roles.apply")
-        ->name("store", "roles.apply.store");
-
-    Route::resource('roles/{role}/pass', PassController::class, ["store"])
-        ->name("store", "roles.pass.store");
-
+    Route::get("roles/{role}/apply", [ApplicationController::class, "create"])->name("applications.create");
+    Route::post("roles/{role}/apply", [ApplicationController::class, "store"])->name("applications.store");
+    Route::patch("roles/{role}/update", [ApplicationController::class, "update"])->name("applications.update");
 
     Route::middleware("onboarding")->group(function() {
         Route::get('dashboard', DashboardController::class)->name("dashboard");
@@ -111,6 +102,9 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::post('subscribe', [ModelController::class, "subscribe"])->name("subscribe");
     });
 });
+
+Route::get('presentations/{presentation}', [PresentationController::class, "show"])->name("presentations.show");
+Route::post('presentations/{presentation}/prelist', [PresentationController::class, "prelist"])->name("presentations.prelist");
 
 Route::middleware(['auth:admin'])->post('vapor/signed-storage-url', [VaporSignedStorageUrl::class, "store"])->name("vapor.signed-storage-url");
 

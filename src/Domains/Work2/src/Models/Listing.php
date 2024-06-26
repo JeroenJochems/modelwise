@@ -2,9 +2,11 @@
 
 namespace Domain\Work2\Models;
 
+use Database\Factories\ListingFactory;
 use Domain\Jobs\Models\Role;
 use Domain\Profiles\Models\Photo;
 use Domain\Profiles\Models\Video;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,11 +20,19 @@ class Listing extends Model
         SortableTrait;
 
     protected $casts = [
-        'available_dates' => 'array',
+        'available_dates' => 'json',
         'invited_at' => 'datetime',
+        'shortlisted_at' => 'datetime',
+        'extended_application_at' => 'datetime',
         'rejected_at' => 'datetime',
         'applied_at' => 'datetime',
+        'hired_at' => 'datetime',
     ];
+
+    public static function newFactory(): Factory
+    {
+        return ListingFactory::new();
+    }
 
     protected $guarded = [];
 
@@ -37,7 +47,7 @@ class Listing extends Model
 
     public function model(): BelongsTo
     {
-        return $this->belongsTo(Model::class);
+        return $this->belongsTo(\Domain\Profiles\Models\Model::class);
     }
 
     public function role(): BelongsTo

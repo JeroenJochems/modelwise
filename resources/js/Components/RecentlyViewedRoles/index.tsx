@@ -1,8 +1,6 @@
-import InviteData = Domain.Jobs.Data.InviteData;
 import {H2} from "@/Components/Typography/H2";
-import {P} from "@/Components/Typography/p";
 import {DashboardRole} from "../Organisms/DashboardRole";
-import RoleData = Domain.Jobs.Data.RoleData;
+import {RoleData} from "@/types/generated";
 
 type Props = {
     roles: RoleData[]

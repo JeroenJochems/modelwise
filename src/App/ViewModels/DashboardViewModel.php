@@ -2,38 +2,43 @@
 
 namespace App\ViewModels;
 
-use Domain\Jobs\Data\ApplicationData;
-use Domain\Jobs\Data\HireData;
 use Domain\Jobs\Data\ListingData;
 use Domain\Jobs\Data\RoleData;
+use Domain\Profiles\Data\ModelData;
 use Domain\Profiles\Models\Model;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Spatie\LaravelData\DataCollection;
+use Illuminate\Support\Collection;
 use Spatie\ViewModels\ViewModel;
 
 /** @typescript  */
 class DashboardViewModel extends ViewModel
 {
-    /* @var DataCollection|array<RoleData> */
-    public $openInvites;
+    /** @var array<ListingData> */
+    public Collection $listings;
 
-    /* @var DataCollection|array<ApplicationData> */
-    public $openApplications;
+    /** @var array<RoleData> */
+    public Collection $recentlyViewedRoles;
 
-    /* @var DataCollection|array<RoleData> */
-    public $recentlyViewedRoles;
+    public ?ModelData $model;
 
-    /* @var DataCollection|array<HireData> */
-    public $hires;
+    public function __construct(Model|Authenticatable $model){
 
-    public function __construct(public Model|Authenticatable $model){
+        $this->model = ModelData::from($model);
 
         $listings = $model->listings()
             ->whereNull('rejected_at')
-            ->with("role", 'role.photos', 'role.public_photos', 'role.job.look_and_feel_photos')
+            ->where(function($q) {
+                $q
+                    ->whereRelation("role", "end_date", ">", now())
+                    ->orWhereHas("role", function($q) {
+                        $q->whereNull("end_date");
+                    })
+                    ->orWhereNotNull('hired_at');
+            })
+            ->with(["model", "role.job"])
             ->get();
 
-        $this->listings = ListingData::collection($listings);
+        $this->listings = ListingData::collect($listings);
 
         $recentlyViewed = $model->role_views()
             ->with("role",'role.photos', 'role.public_photos', 'role.job.look_and_feel_photos')
@@ -44,6 +49,6 @@ class DashboardViewModel extends ViewModel
             ->get()
             ->pluck('role');
 
-        $this->recentlyViewedRoles = RoleData::collection($recentlyViewed);
+        $this->recentlyViewedRoles = RoleData::collect($recentlyViewed);
     }
 }

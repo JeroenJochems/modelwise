@@ -15,7 +15,9 @@ class Shortlisted extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(public Listing $listing) {}
+    public function __construct(public Listing $listing)
+    {
+    }
 
     public function via(object $notifiable): string
     {
@@ -24,9 +26,14 @@ class Shortlisted extends Notification implements ShouldQueue
 
     public function toMail(Model|Authenticatable $notifiable): Mailable
     {
-        return new (new CleanMail(
+        return (new CleanMail(
             'You have been shortlisted',
-            'You have been shortlisted for the role ' . $this->application->role->name . ' for ' . $this->application->role->job->title . '.'
+            [
+                "Hi {$this->listing->model->first_name},",
+                "You have been shortlisted for the role {$this->listing->role->name} for {$this->listing->role->job->title}.",
+            ],
+            'View Role',
+            route('roles.show', $this->listing->role),
         ))->to($notifiable->email);
     }
 }

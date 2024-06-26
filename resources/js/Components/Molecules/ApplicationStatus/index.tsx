@@ -10,16 +10,11 @@ type Props = {
 
 export function ApplicationStatus({ viewModel }: Props) {
 
-    const { role, my_application } = viewModel;
+    const { role, listing } = viewModel;
 
-    if (!my_application) return null;
+    if (!listing) return null;
 
-    const isShortlisted = my_application.is_shortlisted;
-    const isHired = !!my_application.hire;
-    const isRejected = my_application.is_rejected;
-    const isEmptyAdminApplication = my_application.is_empty_admin_application;
-
-    if (isHired) {
+    if (!!listing.hired_at) {
         return (
             <Content>
                 <H2>Congratulations!</H2>
@@ -28,7 +23,7 @@ export function ApplicationStatus({ viewModel }: Props) {
         )
     }
 
-    if (isRejected) {
+    if (!!listing.rejected_at) {
         return (
             <Content>
                 <H2>Missed</H2>
@@ -37,17 +32,18 @@ export function ApplicationStatus({ viewModel }: Props) {
         )
     }
 
-    if (isShortlisted) {
+    if (!!listing.shortlisted_at) {
+
         return (
             <Content>
                 <H2>You've been shortlisted!</H2>
 
-                { my_application.casting_photos.length > 0
+                { listing!.extended_application_at
                     ? <>You have provided additional casting information. This will now be presented to the client. We'll keep you posted once the client has made a decision.</>
                     : <>
                         <P>The client has requested additional information to make a hiring decision.</P>
                         <P>Please provide the information below to increase your chances of being hired.</P>
-                        <ExtendedApplicationForm application={my_application} role={role} />
+                        <ExtendedApplicationForm listing={listing} role={role} />
                     </>}
             </Content>
         )

@@ -2,8 +2,6 @@
 
 namespace Domain\Work2\Data;
 
-use Domain\Profiles\Models\Model;
-use Domain\Profiles\Repositories\PhotoRepository;
 use Spatie\LaravelData\Data;
 
 class ApplyData extends Data
@@ -45,12 +43,12 @@ class ApplyData extends Data
      *  } $request
      * @return self
      */
-    public static function fromRequest(Model $model, array $request): self
+    public static function fromRequest(array $request): self
     {
         return new self(
             cover_letter: $request['cover_letter'] ?? null,
-            digitals: app(PhotoRepository::class)->store($model, $request['digitals']),
-            photos: app(PhotoRepository::class)->store($model, $request['photos']),
+            digitals: $request['digitals'],
+            photos: $request['photos'],
             available_dates: $request['available_dates'] ?? [],
             brand_conflicted: $request['brand_conflicted'] ?? null,
             casting_questions: $request['casting_questions'] ?? null,

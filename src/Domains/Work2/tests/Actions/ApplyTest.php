@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Work2\Tests\Actions;
+namespace Tests\Work2\Actions;
 
 use App\Mail\CleanMail;
 use Domain\Jobs\Models\Role;
@@ -8,11 +8,11 @@ use Domain\Profiles\Models\Model;
 use Domain\Work2\Actions\Apply;
 use Domain\Work2\Data\ApplyData;
 use Domain\Work2\Models\Listing;
-use Domain\Work2\Tests\Mock\AnalysePhotoMock;
-use Domain\Work2\Tests\Mock\MovePhotoMock;
-use Domain\Work2\Tests\Mock\PhashPhotoMock;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
+use Tests\Work2\Mock\AnalysePhotoMock;
+use Tests\Work2\Mock\MovePhotoMock;
+use Tests\Work2\Mock\PhashPhotoMock;
 
 class ApplyTest extends TestCase
 {

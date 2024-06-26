@@ -17,7 +17,7 @@ class Apply
     {
         $listing = Listing::firstOrNew(['role_id' => $role->id, 'model_id' => $model->id]);
         $listing->applied_at = now();
-        $listing->available_dates = json_encode($applyData->available_dates);
+        $listing->available_dates = $applyData->available_dates;
         $listing->cover_letter = $applyData->cover_letter;
         $listing->brand_conflicted = $applyData->brand_conflicted;
         $listing->casting_questions = $applyData->casting_questions;
@@ -25,11 +25,6 @@ class Apply
 
         app(PhotoRepository::class)->update($listing, Listing::FOLDER_PHOTOS, $applyData->photos);
         app(PhotoRepository::class)->update($model, Photo::FOLDER_DIGITALS, $applyData->digitals);
-
-        $model
-            ->invites()
-            ->where('role_id', $role->id)
-            ->update(['application_id' => $listing->id]);
 
         $model->update(
             array_filter(

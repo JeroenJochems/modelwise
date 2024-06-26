@@ -10,29 +10,20 @@ use Illuminate\Support\Facades\Mail;
 
 class Reject
 {
-    public function execute(Role $role, Model $model, string $subject, string $message)
+    public function execute(Listing $listing, string $subject, string $message)
     {
-        $listing = Listing::query()
-            ->where('role_id', $role->id)
-            ->where('model_id', $model->id)
-            ->first();
-
-        if (!$listing) {
-            return;
-        }
-
         $listing->rejected_at = now();
         $listing->save();
 
-        Mail::to($model)
+        Mail::to($listing->model)
             ->send(new CleanMail(
                 messageSubject: $subject,
-                messageContent: nl2br(
-                    "Hi {$model->first_name},\n\n".
+                messageContent: [
+                    "Hi {$listing->model->first_name},",
                     $message
-                ),
+                ],
                 actionText: "View role details",
-                actionUrl: route('roles.show', $role->id)
+                actionUrl: route('roles.show', $listing->model->id)
             ));
     }
 }

@@ -32,6 +32,7 @@ class Role extends Model
         'extra_fields' => "array",
     ];
 
+    protected $guarded = [];
 
     public static function newFactory(): Factory
     {

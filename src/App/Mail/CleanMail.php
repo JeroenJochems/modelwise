@@ -19,7 +19,7 @@ class CleanMail extends Mailable implements ShouldQueue
      */
     public function __construct(
         public string $messageSubject,
-        public string $messageContent,
+        public string|array $messageContent,
         public ?string $actionText = null,
         public ?string $actionUrl = null,
     ) { }
@@ -43,7 +43,7 @@ class CleanMail extends Mailable implements ShouldQueue
             ->sidecar(!app()->environment('testing'))
             ->toHtml(
                 view('mail.clean-mail', [
-                    'messageContent' => $this->messageContent,
+                    'paragraphs' => is_array($this->messageContent) ? $this->messageContent : [$this->messageContent],
                     'actionText' => $this->actionText,
                     'actionUrl' => $this->actionUrl,
                 ])

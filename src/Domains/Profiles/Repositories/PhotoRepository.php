@@ -12,38 +12,11 @@ use Support\Actions\PhashPhoto;
 
 class PhotoRepository
 {
-    /**
-     * @param array{id: string, path: string, isNew: bool, mime: string, deleted: bool} $photos
-     * @return array<Photo>
-     */
-    public function store(Model $model, $folder, $photos): array
-    {
-        return collect($photos)->map(function($photo) use ($model, $folder) {
-
-            if (!$photo['isNew']) return $photo['id'];
-
-            if (isset($photo['deleted']) && $photo['deleted']===true) return null;
-
-            $photoObj = new Photo;
-            $photoObj->photoable()->associate($model);
-            $photoObj->folder = $folder;
-            $photoObj->path = str_replace("tmp/", "photos/", $photo['path']);
-            $photoObj->save();
-
-            if ($photo['path'] != $photoObj->path) {
-                app(MovePhoto::class)->execute($photo['path'], $photoObj->path);
-                app(AnalysePhoto::class)->onQueue()->execute($photoObj);
-                app(PhashPhoto::class)->onQueue()->execute($photoObj);
-            }
-            return $photoObj->id;
-        })->toArray();
-    }
-
-    public function update(\Illuminate\Database\Eloquent\Model|Authenticatable $model, string $folder, $photos)
+    public function update(\Illuminate\Database\Eloquent\Model $model, string $folder, $photos)
     {
         $newSort = collect($photos)->map(function($photo) use($folder, $model) {
 
-            if (isset($photo['deleted']) && $photo['deleted'] != 0) {
+            if (array_key_exists("deleted", $photo) && $photo['deleted']===true) {
 
                 if ($photoObj = Photo::find($photo['id'])) {
                     app(DeletePhoto::class)->onQueue()->execute($photoObj->path);
@@ -53,26 +26,27 @@ class PhotoRepository
                 return null;
             }
 
-            if (!isset($photo['isNew'])) {
-                return $photo['id'];
-            }
+            if (array_key_exists("isNew", $photo) && $photo['isNew']===true) {
 
-            $photoObj = new Photo;
-            $photoObj->photoable()->associate($model);
-            $photoObj->path = str_replace("tmp/", "photos/", $photo['path']);
-            $photoObj->folder = $folder;
-            $photoObj->save();
+                $photoObj = new Photo;
+                $photoObj->photoable()->associate($model);
+                $photoObj->path = str_replace("tmp/", "photos/", $photo['path']);
+                $photoObj->folder = $folder;
+                $photoObj->save();
 
-            if ($photoObj->wasRecentlyCreated) {
-                app(MovePhoto::class)->onQueue()->execute($photo['path'], $photoObj->path);
+                if ($photoObj->wasRecentlyCreated) {
+                    app(MovePhoto::class)->onQueue()->execute($photo['path'], $photoObj->path);
 
-                if ($folder === Photo::FOLDER_ACTIVITIES || $folder === Photo::FOLDER_WORK_EXPERIENCE) {
-                    app(AnalysePhoto::class)->onQueue()->execute($photoObj);
+                    if ($folder === Photo::FOLDER_ACTIVITIES || $folder === Photo::FOLDER_WORK_EXPERIENCE) {
+                        app(AnalysePhoto::class)->onQueue()->execute($photoObj);
+                    }
+                    app(PhashPhoto::class)->onQueue()->execute($photoObj);
                 }
-                app(PhashPhoto::class)->onQueue()->execute($photoObj);
+                return $photoObj->id;
+
             }
 
-            return $photoObj->id;
+            return $photo['id'];
         });
 
 

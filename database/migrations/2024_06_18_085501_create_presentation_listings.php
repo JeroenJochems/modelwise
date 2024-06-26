@@ -11,6 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
+        try {
+            Schema::rename("role_model", "listings");
+        } catch (Exception $e) {
+            // ignore
+        }
+
         Schema::create('presentation_listings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('presentation_id')->constrained()->cascadeOnDelete();

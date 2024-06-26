@@ -37,7 +37,9 @@ class Video extends Resource
         $resource = $this->videoable_type ?? substr($request->viaResource,0, -1);
 
         $options = match($resource) {
-            "application" => [ApplicationModel::CASTING_VIDEOS => ApplicationModel::CASTING_VIDEOS],
+            "listing" => [
+                \Domain\Work2\Models\Listing::FOLDER_CASTING_VIDEOS => \Domain\Work2\Models\Listing::FOLDER_CASTING_VIDEOS
+            ],
             null => []
         };
 

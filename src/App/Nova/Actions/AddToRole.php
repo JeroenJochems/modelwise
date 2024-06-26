@@ -3,6 +3,7 @@
 namespace App\Nova\Actions;
 
 use Domain\Jobs\Models\Role;
+use Domain\Profiles\Models\Model;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
@@ -25,6 +26,8 @@ class AddToRole extends Action
     public function handle(ActionFields $fields, Collection $models)
     {
         foreach ($models as $model) {
+            abort_unless($model instanceof Model, 400, "Apply this action to a model");
+
             app()->make(\Domain\Work2\Actions\AddToRole::class)->execute(
                 Role::find($fields->role_id),
                 $model

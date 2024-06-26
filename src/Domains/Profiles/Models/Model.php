@@ -3,7 +3,6 @@
 namespace Domain\Profiles\Models;
 
 use App\Notifications\ResetPasswordNotification;
-use Domain\Jobs\Models\Invite;
 use Domain\Jobs\Models\Role;
 use Domain\Jobs\Models\RoleView;
 use Domain\Profiles\Enums\Ethnicity;
@@ -135,11 +134,6 @@ class Model extends Authenticatable implements Onboardable
         'seen_exclusive_countries' => 'boolean',
     ];
 
-    public function invites()
-    {
-        return $this->hasMany(Invite::class);
-    }
-
     public function getProfilePictureCdnAttribute()
     {
         return $this->profile_picture ? env("CDN_URL").$this->profile_picture : null;
@@ -159,8 +153,6 @@ class Model extends Authenticatable implements Onboardable
     {
         return $this->hasMany(ExclusiveCountry::class);
     }
-
-
 
     public function photos(): MorphMany
     {
@@ -193,11 +185,6 @@ class Model extends Authenticatable implements Onboardable
     public function listings(): HasMany
     {
         return $this->hasMany(Listing::class);
-    }
-
-    public function applications(): HasMany
-    {
-        return $this->hasMany(\Domain\Work\Models\Application::class);
     }
 
     public function sendPasswordResetNotification($token)

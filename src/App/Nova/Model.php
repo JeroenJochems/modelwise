@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\AddToRole;
 use App\Nova\Actions\ApplyForRole;
 use App\Nova\Actions\InviteForRole;
 use App\Nova\Filters\AgeFilter;
@@ -124,7 +125,6 @@ class Model extends Resource
             Text::make('Showreel link')->rules('max:255')->hideFromIndex()->copyable(),
             new Panel('Body Characteristics', $this->bodyFields()),
             HasMany::make("Listings")->showOnIndex(false),
-            HasMany::make("Applications")->showOnIndex(false),
             HasMany::make("Exclusive countries")->showOnIndex(false),
             MorphMany::make("Photos", "photos", Photo::class)->showOnIndex(true),
         ];
@@ -168,7 +168,7 @@ class Model extends Resource
         return [
             new Actions\AddToRole(),
             new InviteForRole(),
-            new ApplyForRole(),
+            new AddToRole(),
         ];
     }
 }

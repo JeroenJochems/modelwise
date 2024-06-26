@@ -1,7 +1,10 @@
 @extends("mail.layout")
 
 @section("content")
-    <x-mail.text>{!! nl2br($messageContent) !!}</x-mail.text>
+
+    @foreach($paragraphs as $p)
+        <x-mail.text>{!! nl2br($p) !!}</x-mail.text>
+    @endforeach
 
     @if($actionUrl)
         <x-mail.button href="{{$actionUrl}}">

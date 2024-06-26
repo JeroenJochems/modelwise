@@ -34,7 +34,7 @@ type Form = {
     brand_conflicted: string;
 }
 
-export default function Create({viewModel, meViewModel}: Props) {
+export default function Apply({viewModel, meViewModel}: Props) {
 
     const {errors} = usePage().props
 
@@ -44,24 +44,24 @@ export default function Create({viewModel, meViewModel}: Props) {
     const me = meViewModel.me;
 
     const {post, data, setData, processing, isDirty, hasErrors, clearErrors } = useForm<Form>({
-        role_id: viewModel.role.id,
-        digitals: me.digitals,
+        role_id: role.id,
+        digitals: [],
         photos: [],
-        casting_questions: '',
-        height: me.height || '',
-        chest: me.chest || '',
-        waist: me.waist || '',
-        hips: me.hips || '',
-        shoe_size: me.shoe_size || '',
-        clothing_size_top: me.clothing_size_top || '',
-        cover_letter: '',
+        height: me.height || "",
+        casting_questions: "",
+        chest: me.chest || "",
+        waist: me.waist || "",
+        hips: me.hips || "",
+        shoe_size: me.shoe_size || "",
+        clothing_size_top: me.clothing_size_top || "",
+        cover_letter: "",
         available_dates: [],
-        brand_conflicted: ''
+        brand_conflicted: ""
     });
 
     function submit() {
         clearErrors();
-        post(route('roles.apply.store', viewModel.role.id));
+        post(route('applications.store', viewModel.role.id));
     }
 
     function handleAvailability(event: ChangeEvent<HTMLInputElement>) {
@@ -69,8 +69,6 @@ export default function Create({viewModel, meViewModel}: Props) {
             ? setData('available_dates', [...data.available_dates, event.target.value])
             : setData('available_dates', data.available_dates.filter((item) => item !== event.target.value));
     }
-
-    console.log(isDirty);
 
     return (
         <DashboardLayout>
@@ -109,6 +107,7 @@ export default function Create({viewModel, meViewModel}: Props) {
                         role.</P>
 
                     <FileUploader
+                        name={"photos"}
                         accept={"image/*"}
                         files={data.photos}
                         onAdd={(photo) => setData(data => ({...data, photos: [...data.photos, photo]}))}

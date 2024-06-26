@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\tests\Actions;
+namespace Tests\Work2\Actions;
 
 use Domain\Jobs\Models\Role;
 use Domain\Profiles\Models\Model;
@@ -8,7 +8,7 @@ use Domain\Work2\Actions\AddToRole;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
-class LongListTest extends TestCase
+class AddToRoleTest extends TestCase
 {
     public function test_it_works()
     {

@@ -10,7 +10,7 @@ type Props = {
     viewModel: ModelRoleViewModel
 }
 
-export default function Stored({ viewModel }: Props) {
+export default function Applied({ viewModel }: Props) {
     return (
         <DashboardLayout>
             <Content>

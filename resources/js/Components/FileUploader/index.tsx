@@ -24,6 +24,7 @@ type ResponseType = {
 }
 
 type Props = {
+    name?: string
     files: BaseFile[]
     cols?: number
     max?: number
@@ -36,7 +37,7 @@ type Props = {
     onToggleUploading?: (state: boolean) => void
 }
 
-export function FileUploader({ files, error, max = 99, slots = 6, cols = 6, colsOnMobile = 2, accept, onAdd, onUpdate, onToggleUploading }: Props) {
+export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6, colsOnMobile = 2, accept, onAdd, onUpdate, onToggleUploading }: Props) {
 
     const id = useId();
     const {totalProgressRatio, addFileToProgress, updateProgress} = useUploadProgress();
@@ -85,7 +86,7 @@ export function FileUploader({ files, error, max = 99, slots = 6, cols = 6, cols
 
             <InputError message={error} />
 
-            <input type="file" id={id} accept={accept} multiple className={"hidden"} onChange={handleChange}/>
+            <input name={name} type="file" id={id} accept={accept} multiple className={"hidden"} onChange={handleChange}/>
         </>
     );
 

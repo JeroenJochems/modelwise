@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('role_model', function (Blueprint $table) {
+        Schema::dropIfExists('role_model');
+
+        Schema::create('listings', function (Blueprint $table) {
             $table->id();
             $table->string('model_id');
             $table->string('role_id');
             $table->timestamp('applied_at')->nullable();
+            $table->timestamp('extended_application_at')->nullable();
             $table->timestamp('invited_at')->nullable();
             $table->timestamp('shortlisted_at')->nullable();
             $table->timestamp('hired_at')->nullable();
@@ -24,8 +27,6 @@ return new class extends Migration
             $table->string('brand_conflicted')->nullable();
             $table->json('available_dates')->nullable();
             $table->text('casting_questions')->nullable();
-            $table->json('casting_photos')->nullable();
-            $table->json('casting_videos')->nullable();
             $table->timestamps();
             $table->unique(['role_id', 'model_id'], 'role_model_index');
         });

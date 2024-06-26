@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Work2\Tests\Mock;
+namespace Tests\Work2\Mock;
 
 
 use Domain\Profiles\Models\Photo;

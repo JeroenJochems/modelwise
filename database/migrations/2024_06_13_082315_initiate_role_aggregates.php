@@ -1,6 +1,5 @@
 <?php
 
-use Domain\Jobs\Models\Role;
 use Domain\Work2\RoleAggregate;
 use Domain\Work2\RoleRepository;
 use Illuminate\Database\Migrations\Migration;
@@ -13,9 +12,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Role::all()->each(function ($role) {
-            app(RoleRepository::class)->persist(RoleAggregate::init($role));
-        });
     }
 
     /**

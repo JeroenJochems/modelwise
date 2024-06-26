@@ -4,7 +4,6 @@ namespace src;
 
 use Domain\Jobs\Models\Role;
 use Domain\Profiles\Models\Model;
-use Domain\Work\Models\Application;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -15,48 +14,47 @@ class DashboardControllerTest extends TestCase
         list($model, $role) = $this->prep();
 
         $model->role_views()->create(['role_id' => $role->id]);
-        Application::factory()->createOne(['model_id' => $model->id]);
 
         $this->get(route('dashboard'))
             ->assertInertia(fn(Assert $page) => $page
                 ->component("Dashboard")
                 ->has('vm.recentlyViewedRoles', 1)
-                ->has('vm.openApplications', 1)
-                ->has('vm.openInvites', 0)
+                ->has('vm.listings', 0)
             );
     }
-
-
-
 
     public function test_it_shows_invites()
     {
         list($model, $role) = $this->prep();
 
-        $model->invites()->create(['role_id' => $role->id]);
+        $invite = $model->listings()->create([
+            'role_id' => $role->id,
+            'invited_at' => now(),
+        ]);
 
         $this->get(route('dashboard'))
             ->assertInertia(fn(Assert $page) => $page
                 ->component("Dashboard")
                 ->has('vm.recentlyViewedRoles', 0)
-                ->has('vm.openApplications', 0)
-                ->has('vm.openInvites', 1)
+                ->has('vm.listings', 1)
             );
     }
 
     public function test_it_shows_applications()
     {
         list($model, $role) = $this->prep();
+        $role->update(['end_date' => now()->subWeek()]);
 
-        $model->applications()->create(['role_id' => $role->id]);
+        $model->listings()->create([
+            'role_id' => $role->id,
+            'hired_at' => now(),
+        ]);
 
         $this->get(route('dashboard'))
             ->assertInertia(fn(Assert $page) => $page
                 ->component("Dashboard")
                 ->has('vm.recentlyViewedRoles', 0)
-                ->has('vm.openApplications', 1)
-                ->has('vm.openInvites', 0)
-                ->has('vm.hires', 0)
+                ->has('vm.listings', 1)
             );
     }
 
@@ -64,32 +62,35 @@ class DashboardControllerTest extends TestCase
     {
         list($model, $role) = $this->prep();
 
-        $application = $model->applications()->create(['role_id' => $role->id]);
-        $application->rejection()->create();
+        $model->listings()->create([
+            'role_id' => $role->id,
+            'applied_at' => now(),
+            'rejected_at' => now(),
+        ]);
 
         $this->get(route('dashboard'))
             ->assertInertia(fn(Assert $page) => $page
                 ->component("Dashboard")
                 ->has('vm.recentlyViewedRoles', 0)
-                ->has('vm.openApplications', 0)
-                ->has('vm.openInvites', 0)
-                ->has('vm.hires', 0)
+                ->has('vm.listings', 0)
             );
     }
-    public function test_it_shows_hires()
+    public function test_it_shows_old_hires()
     {
         list($model, $role) = $this->prep();
+        $role->update(['end_date' => now()->subWeek()]);
 
-        $application = $model->applications()->create(['role_id' => $role->id]);
-        $application->hire()->create();
+        $model->listings()->create([
+            'role_id' => $role->id,
+            'hired_at' => now(),
+        ]);
+
 
         $this->get(route('dashboard'))
             ->assertInertia(fn(Assert $page) => $page
                 ->component("Dashboard")
                 ->has('vm.recentlyViewedRoles', 0)
-                ->has('vm.openApplications', 0)
-                ->has('vm.openInvites', 0)
-                ->has('vm.hires', 1)
+                ->has('vm.listings', 1)
             );
     }
 

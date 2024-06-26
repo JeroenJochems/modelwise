@@ -26,11 +26,9 @@ type Props = {
 
 export default function Show({ viewModel }: Props)
 {
-    const { role, isHired, hasApplied, isInvited } = viewModel;
+    const { role, hasApplied } = viewModel;
     const { job } = role;
     const cdnLink = useCdnLink();
-
-    console.log(viewModel);
 
     const tabClasses = "outline-none w-1/2 sm:w-1/2 text-center  cursor-pointer text-lg py-4 border-r border-white ";
 
@@ -49,7 +47,6 @@ export default function Show({ viewModel }: Props)
 
                     <TabList className={`${!hasApplied && "hidden"} border-b mb-8 flex`}>
                         { hasApplied && <Tab className={tabClasses}>Your application</Tab> }
-                        { isHired && <Tab className={tabClasses}>Your role</Tab> }
                         <Tab className={tabClasses}>Job details</Tab>
                     </TabList>
 
@@ -70,11 +67,11 @@ export default function Show({ viewModel }: Props)
                             <div className={"sm:hidden"}>
                                 <Bubbles>
                                     <Bubble className={"mr-2"}>
-                                        <CalendarDays className={"mr-1"} /> { formatDate(role.start_date) }
+                                        <CalendarDays className={"mr-1"} /> { formatDate(role.start_date!) }
                                     </Bubble>
 
                                     <Bubble>
-                                        <Globe className={"mr-1"} /> { job.location }
+                                        <Globe className={"mr-1"} /> { job?.location }
                                     </Bubble>
 
                                     <Bubble>
@@ -96,14 +93,14 @@ export default function Show({ viewModel }: Props)
                                 </div>
                             )}
 
-                            { job.look_and_feel_photos.length > 0 && (
+                            { !!job.look_and_feel_photos && job.look_and_feel_photos.length > 0 && (
                                 <div className={"mt-4 grid gap-4"}>
                                     <H3>Shoot look & feel</H3>
                                     <PhotoScroller photos={job.look_and_feel_photos.map(photo => cdnLink(photo.path))} />
                                 </div>
                             )}
 
-                            { role.public_photos.length > 0 && (
+                            { !!role.public_photos && role.public_photos.length > 0 && (
                                 <div className={"mt-4 grid gap-4"}>
                                     <H3>For this role</H3>
                                     <PhotoScroller photos={role.public_photos.map(photo => cdnLink(photo.path))} />

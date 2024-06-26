@@ -9,25 +9,27 @@ type Props = {
 
 export function JobHeader({ viewModel }: Props ) {
 
-    const { role, status } = viewModel;
+    const { role, listing, hasApplied, isHired } = viewModel;
     const { job } = role;
+
+
 
     return (
         <div className={"grid gap-8 mt-4 mb-4"}>
-            <Label>
-                { status ==="hired" && "Hired" }
-                { status ==="applied" && "Applied" }
-                { status ==="invited" && "Invited" }
-                { status ==="open" && "Open" }
-                { status ==="passed" && "Passed" }
-            </Label>
+
+            { listing ? (
+                <Label>{listing.status}</Label>
+            ) : (
+                <Label>New</Label>
+            )}
 
             <div>
                 <H2 className={"mt-4 whitespace-pre-wrap"}>
-                    {role.job.brand?.name } { "\n" }
                     {role.name}
+                    {"\n"}
+                    {job?.brand?.name }
                 </H2>
-                <H1>{job.title}</H1>
+                <H1>{job?.title}</H1>
             </div>
         </div>
     )
