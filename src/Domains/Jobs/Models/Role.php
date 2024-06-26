@@ -69,46 +69,8 @@ class Role extends Model
         return $this->hasMany(RoleView::class);
     }
 
-    public function my_applications()
-    {
-        return $this->hasMany(Application::class)
-            ->where('model_id', '=', auth()->id());
-    }
-
-    public function my_application()
-    {
-        return $this->hasOne(Application::class)
-            ->where('model_id', '=', auth()->id());
-    }
-
-    public function invites()
-    {
-        return $this->hasMany(Invite::class);
-    }
-
-    public function open_invites()
-    {
-        return $this->hasMany(Invite::class)->whereNull('application_id');
-    }
-
     public function presentations()
     {
         return $this->hasMany(Presentation::class);
-    }
-
-    public function applications()
-    {
-        return $this->hasMany(Application::class);
-    }
-
-    public function my_passes() {
-        return $this->hasMany(Pass::class)
-            ->where('model_id', auth()->id());
-    }
-
-    public function my_invites($model_id = null)
-    {
-        return $this->hasMany(Invite::class)
-            ->where('model_id', $model_id ?? auth()->id());
     }
 }

@@ -18,6 +18,8 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Listing extends Resource
 {
+    public static $perPageViaRelationship = 50;
+
     public static $model = \Domain\Work2\Models\Listing::class;
 
 

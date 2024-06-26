@@ -20,11 +20,12 @@ return new class extends Migration
             $table->timestamp('applied_at')->nullable();
             $table->timestamp('extended_application_at')->nullable();
             $table->timestamp('invited_at')->nullable();
+            $table->timestamp('favorited_at')->nullable();
             $table->timestamp('shortlisted_at')->nullable();
             $table->timestamp('hired_at')->nullable();
             $table->timestamp('rejected_at')->nullable();
-            $table->string('cover_letter')->nullable();
-            $table->string('brand_conflicted')->nullable();
+            $table->text('cover_letter')->nullable();
+            $table->text('brand_conflicted')->nullable();
             $table->json('available_dates')->nullable();
             $table->text('casting_questions')->nullable();
             $table->timestamps();
