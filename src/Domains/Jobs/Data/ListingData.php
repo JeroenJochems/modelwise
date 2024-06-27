@@ -7,42 +7,24 @@ use Domain\Profiles\Data\ModelData;
 use Domain\Profiles\Data\PhotoData;
 use Domain\Profiles\Data\VideoData;
 use Spatie\LaravelData\Data;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
-/** @typescript */
+#[TypeScript]
 class ListingData extends Data
 {
     public string $status;
-
-    /**
-     * @param string $id
-     * @param string $model_id
-     * @param Carbon|null $invited_at
-     * @param Carbon|null $applied_at
-     * @param Carbon|null $shortlisted_at
-     * @param Carbon|null $extended_application_at
-     * @param Carbon|null $hired_at
-     * @param Carbon|null $rejected_at
-     * @param string|null $cover_letter
-     * @param string|null $brand_conflicted
-     * @param string|null $casting_questions
-     * @param array|null $available_dates
-     * @param array|null $photos
-     * @param PhotoData[]|null $casting_photos
-     * @param VideoData[]|null $casting_videos
-     * @param ModelData $model
-     * @param RoleData $role
-     */
     public function __construct(
         public string $id,
         public string $model_id,
-        public ?ModelData $model,
-        public ?RoleData $role,
+        public ModelData $model,
+        public RoleData $role,
 
         public ?Carbon $invited_at,
         public ?Carbon $applied_at,
         public ?Carbon $extended_application_at,
         public ?Carbon $shortlisted_at,
         public ?Carbon $hired_at,
+        public ?Carbon $favorited_at,
         public ?Carbon $rejected_at,
 
         public ?string $cover_letter,
@@ -50,10 +32,15 @@ class ListingData extends Data
         public ?string $casting_questions,
 
         public ?array $available_dates,
-        public ?array $photos,
-        public ?array $casting_photos,
-        public ?array $casting_videos,
 
+        /** @var PhotoData[] $photos */
+        public array $photos,
+
+        /** @var PhotoData[] $casting_photos */
+        public array $casting_photos,
+
+        /** @var VideoData[] $casting_videos */
+        public array $casting_videos,
     )
     {
         if (!!$hired_at) $this->status = 'Hired';

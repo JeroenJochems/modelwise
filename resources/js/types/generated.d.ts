@@ -53,21 +53,22 @@ export type ListingData = {
 status: string;
 id: string;
 model_id: string;
-model: ModelData | null;
-role: RoleData | null;
+model: ModelData;
+role: RoleData;
 invited_at: string | null;
 applied_at: string | null;
 extended_application_at: string | null;
 shortlisted_at: string | null;
 hired_at: string | null;
+favorited_at: string | null;
 rejected_at: string | null;
 cover_letter: string | null;
 brand_conflicted: string | null;
 casting_questions: string | null;
 available_dates: Array<any> | null;
-photos: Array<any> | null;
-casting_photos: Array<any> | null;
-casting_videos: Array<any> | null;
+photos: Array<PhotoData>;
+casting_photos: Array<PhotoData>;
+casting_videos: Array<VideoData>;
 };
 export type ModelCharacteristicsData = {
 gender: string | null;
@@ -154,22 +155,6 @@ portfolio: any;
 export type ModelProfilePictureData = {
 profile_picture: string | null;
 };
-export type ModelRoleData = {
-is_shortlisted: boolean;
-is_prelisted: boolean;
-is_rejected: boolean;
-is_empty_admin_application: boolean;
-id: string;
-model_id: string;
-cover_letter: string | null;
-casting_questions: string | null;
-brand_conflicted: string | null;
-photos: Array<PhotoData>;
-model: ModelData;
-casting_photos: Array<PhotoData>;
-casting_videos: Array<VideoData>;
-hire: any | null;
-};
 export type ModelRoleViewModel = {
 role: RoleData;
 listing: ListingData | null;
@@ -192,6 +177,15 @@ export type PhotoData = {
 id: number;
 path: string;
 hash: string | null;
+};
+export type PresentationData = {
+id: string;
+role: RoleData;
+should_show_casting_media: boolean;
+should_show_digitals: boolean;
+should_show_socials: boolean;
+should_show_cover_letter: boolean;
+should_show_conflicts: boolean;
 };
 export type ProfessionalExperienceViewModel = {
 allCategories: Array<Tag>;

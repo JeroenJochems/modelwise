@@ -8,13 +8,9 @@ test('it creates nested data', function() {
 
     $listing = Listing::factory()->createOne();
 
-    $listings = Listing::query()
-        ->with(["model", "role"])
-        ->get();
+    $listings = Listing::query()->get();
 
     $data = \Domain\Jobs\Data\ListingData::collect($listings);
-
-    dd($data);
 });
 
 
@@ -26,10 +22,7 @@ test('it selects open invites', function() {
 
     $vm = new DashboardViewModel($listingInvited->model);
 
-    dd($vm->listings[0]->role);
-
-
-    expect($vm->listings->count())->toBe(1);
+    expect($vm  ->listings->count())->toBe(1);
 });
 
 test('selects my applications', closure: function() {

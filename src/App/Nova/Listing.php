@@ -67,6 +67,11 @@ class Listing extends Resource
                 ->filterable(fn ($request, $query, $value, $attributes) => $query->{$value ? "whereNotNull" : "whereNull"}('applied_at') )
                 ->resolveUsing(fn($request, $model) => $model['applied_at']!==null),
 
+            Boolean::make("Favorited")
+                ->readonly()
+                ->filterable(fn ($request, $query, $value, $attributes) => $query->{$value ? "whereNotNull" : "whereNull"}('favorited_at') )
+                ->resolveUsing(fn($request, $model) => $model['favorited_at']!==null),
+
             Boolean::make("Shortlisted", "shortlisted")
                 ->readonly()
                 ->filterable(fn ($request, $query, $value, $attributes) => $query->{$value ? "whereNotNull" : "whereNull"}('shortlisted_at') )

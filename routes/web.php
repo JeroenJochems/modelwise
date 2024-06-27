@@ -104,7 +104,7 @@ Route::middleware(['auth'])->group(callback: function () {
 });
 
 Route::get('presentations/{presentation}', [PresentationController::class, "show"])->name("presentations.show");
-Route::post('presentations/{presentation}/prelist', [PresentationController::class, "prelist"])->name("presentations.prelist");
+Route::post('presentations/{presentation}/favorite', [PresentationController::class, "favorite"])->name("presentations.favorite");
 
 Route::middleware(['auth:admin'])->post('vapor/signed-storage-url', [VaporSignedStorageUrl::class, "store"])->name("vapor.signed-storage-url");
 

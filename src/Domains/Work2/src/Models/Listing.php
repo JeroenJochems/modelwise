@@ -23,6 +23,7 @@ class Listing extends Model
         'available_dates' => 'json',
         'invited_at' => 'datetime',
         'shortlisted_at' => 'datetime',
+        'favorited_at' => 'datetime',
         'extended_application_at' => 'datetime',
         'rejected_at' => 'datetime',
         'applied_at' => 'datetime',
@@ -35,6 +36,7 @@ class Listing extends Model
     }
 
     protected $guarded = [];
+    protected $with = ['model', 'role.job', 'photos', 'casting_photos', 'casting_videos'];
 
     const FOLDER_PHOTOS = 'Listing';
     const FOLDER_CASTING_PHOTOS = 'Casting photos';

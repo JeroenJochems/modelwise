@@ -21,7 +21,7 @@ class ModelControllerTest extends TestCase
             ->actingAs($model)
             ->get(route('onboarding.thanks'));
 
-        $response->assertRedirect(route('roles.apply', $role->id));
+        $response->assertRedirect(route('applications.create', $role->id));
 
     }
 }

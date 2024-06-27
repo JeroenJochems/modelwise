@@ -22,7 +22,7 @@ test("it can apply for a role", function () {
     Mail::fake();
 
     $this->be($model)
-        ->post(route('roles.apply.store', $role), [
+        ->post(route('applications.store', $role), [
             'digitals' => [],
             'photos' => [
                 ['id' => 1, 'path' => 'tmp/path.jpg', 'isNew' => true, 'mime' => 'image/jpeg'],

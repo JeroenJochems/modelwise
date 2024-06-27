@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\CleanMail;
 use App\Mail\ClientSubmittedPreference;
+use Domain\Jobs\Data\ListingData;
+use Domain\Present\Data\PresentationData;
 use Domain\Present\Models\Presentation;
-use Domain\Work\Models\Application;
-use Domain\Work2\Data\ModelRoleData;
 use Domain\Work2\Models\Listing;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
@@ -14,48 +16,58 @@ class PresentationController extends Controller
 {
     public function show(Presentation $presentation)
     {
-        $role = $presentation->role;
-        $role->load("job");
+        $presentation->load("role.job");
 
-        $modelRoles = ModelRoleData::collection(
-            Listing::query()
-                ->whereIn("id", $presentation->model_roles)
+        $listings = $presentation->presentationListings()
                 ->orderBy('order_column')
-                ->with("model.digitals", "casting_videos", "model.portfolio")
+                ->with("listing.model.digitals", "listing.casting_videos", "listing.model.portfolio")
                 ->get()
-        );
+                ->pluck("listing");
 
-        return Inertia::render('Roles/Proposal')
-            ->with("role", $role)
-            ->with("presentation", $presentation)
-            ->with("modelRoles", $modelRoles);
+        return Inertia::render('Roles/Presentation')
+            ->with("presentation", PresentationData::from($presentation))
+            ->with("listings", ListingData::collect($listings));
     }
 
-    public function prelist(Presentation $presentation)
+    public function favorite(Presentation $presentation, Request $request)
     {
-        $prelist = request()->get("prelist");
+        $favorites = $request->get("favoriteListings");
 
-        $applications = Application::whereIn('id', $presentation->applications)->get();
-        $names = $applications->pluck('model.name');
+        $allListings = $presentation->presentationListings()
+            ->orderBy('order_column')
+            ->with("listing.model.digitals", "listing.casting_videos", "listing.model.portfolio")
+            ->get()
+            ->pluck("listing");
 
-        foreach ($applications as $application) {
-            if ($application->prelisted_at && !in_array($application->id, $prelist)) {
-                $application->prelisted_at = null;
+        $favoritedListings = $allListings->filter(function ($listing) use ($favorites) {
+            return in_array($listing->id, $favorites);
+        });
+
+        $names = $favoritedListings->pluck('model.name');
+
+        foreach ($allListings as $listing) {
+            if ($listing->favorited_at && !in_array($listing->id, $favorites)) {
+                $listing->favorited_at = null;
             }
 
-            if (!$application->prelisted_at && in_array($application->id, $prelist)) {
-                $application->prelisted_at = now();
+            if (!$listing->favorited_at && in_array($listing->id, $favorites)) {
+                $listing->favorited_at = now();
             }
 
-            $application->save();
+            $listing->save();
         }
 
-        $role = $presentation->role;
-        $role->load("job");
+        Mail::to($presentation->role->job->responsible_user)
+            ->send(new CleanMail(
+                messageSubject: "Client has submitted favorites",
+                messageContent: [
+                    "The client has submitted preferences for the following models:",
+                    ...$names
+                ],
+                actionText: "View presentation",
+                actionUrl: route("presentations.show", $presentation)
+            ));
 
-        Mail::to($role->job->responsible_user)
-            ->send(new ClientSubmittedPreference($presentation, names: $names->toArray()));
-
-        return Inertia::render('Roles/PrelistSubmitted')->with("role", $role);
+        return Inertia::render('Roles/PrelistSubmitted')->with("role", $presentation->role);
     }
 }

@@ -18,6 +18,7 @@ class ModelFactory extends Factory
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'gender' => 'Male',
+            'website' => '',
         ];
     }
 }

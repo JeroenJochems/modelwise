@@ -16,7 +16,6 @@ class RoleDataTest extends TestCase
             Role::all()
         );
 
-
         expect($data->count())->toBe(1)
             ->and($data->first()->extra_fields->casting_photos)->toBe(true)
             ->and($data->first()->extra_fields->casting_videos)->toBe(false);

@@ -25,7 +25,7 @@ class ModelController extends Controller
         $recentlyViewedRole = auth()->user()->role_views()->first();
 
         if ($recentlyViewedRole) {
-            return redirect()->route("roles.apply", $recentlyViewedRole->role_id);
+            return redirect()->route("applications.create", $recentlyViewedRole->role_id);
         }
 
         return Inertia::render("Model/Onboarding/Thanks")->with([

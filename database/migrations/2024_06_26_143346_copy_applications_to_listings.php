@@ -50,7 +50,6 @@ return new class extends Migration
                 ->get();
 
             foreach ($photos as $photo) {
-                print "Copying photo {$photo->id} to listing {$listing->id}\n";
 
                 DB::table("photos")->where('id', $photo->id)->update([
                     'photoable_id' => $listing->id,
