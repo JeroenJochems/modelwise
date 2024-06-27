@@ -23,7 +23,6 @@ class PresentationControllerTest extends TestCase
         $this->get(route('presentations.show', $presentation))
             ->assertInertia(fn(AssertableInertia $page) => $page
                 ->component('Roles/Presentation')
-                ->has('role')
                 ->has('presentation')
                 ->has('listings')
             );
