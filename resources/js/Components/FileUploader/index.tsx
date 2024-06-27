@@ -1,4 +1,4 @@
-import {FormEvent, useEffect, useId, useRef, useState} from "react";
+import {FormEvent, useEffect, useId, useState} from "react";
 import {FileEventTarget} from "@/Pages/Model/Onboarding/Portfolio";
 import {useUploadProgress} from "@/Hooks/useUploadProgress";
 import Vapor from "laravel-vapor";
@@ -6,10 +6,7 @@ import {ReactSortable} from "react-sortablejs";
 import {v4 as uuidv4} from 'uuid';
 import {ProgressBar} from "@/Components/FileUploader/ProgressBar";
 import {ExistingFile} from "@/Components/FileUploader/ExistingFile";
-import SmallButton from "@/Components/SmallButton";
 import InputError from "@/Components/InputError";
-import Resizer from "react-image-file-resizer";
-
 
 export type BaseFile = {
     muxId?: string
@@ -27,6 +24,7 @@ type ResponseType = {
 }
 
 type Props = {
+    name?: string
     files: BaseFile[]
     cols?: number
     max?: number
@@ -39,7 +37,7 @@ type Props = {
     onToggleUploading?: (state: boolean) => void
 }
 
-export function FileUploader({ files, error, max = 99, slots = 6, cols = 6, colsOnMobile = 3, accept, onAdd, onUpdate, onToggleUploading }: Props) {
+export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6, colsOnMobile = 2, accept, onAdd, onUpdate, onToggleUploading }: Props) {
 
     const id = useId();
     const {totalProgressRatio, addFileToProgress, updateProgress} = useUploadProgress();
@@ -78,38 +76,19 @@ export function FileUploader({ files, error, max = 99, slots = 6, cols = 6, cols
                 </div>
             )}
 
+            <ProgressBar progress={totalProgressRatio} />
+
             { max>1 && notDeletedFiles.length > 0 && (
-                <label htmlFor={id} className={"border border-gray-300 rounded-md p-2 mt-2 items-center inline-flex cursor-pointer "}>
-                    + Add more photos
+                <label htmlFor={id} className={"bg-gray-100 border-gray-500 rounded-md p-2 mt-2 items-center text-center cursor-pointer "}>
+                    + Add more { accept?.includes('video') ? 'videos' : 'photos' }
                 </label>
             )}
 
-            <ProgressBar progress={totalProgressRatio} />
-
             <InputError message={error} />
 
-            <input type="file" id={id} accept={accept} multiple className={"hidden"} onChange={handleChange}/>
+            <input name={name} type="file" id={id} accept={accept} multiple className={"hidden"} onChange={handleChange}/>
         </>
     );
-
-    function resizeFile(file: File): Promise<string> {
-
-        return new Promise((resolve) => {
-            Resizer.imageFileResizer(
-                file,
-                2000,
-                2000,
-                "JPEG",
-                100,
-                0,
-                (uri) => {
-                    /** @ts-ignore */
-                    resolve(uri);
-                },
-                "base64"
-            );
-        });
-    }
 
     async function handleChange(e: FormEvent<HTMLInputElement> & { target: FileEventTarget }) {
 
@@ -118,11 +97,6 @@ export function FileUploader({ files, error, max = 99, slots = 6, cols = 6, cols
         setSelectedFiles(Array.from(e.target.files));
 
         Array.from(e.target.files).map(async (file, i) => {
-
-            if (file.size > 10000000) {
-                const image = await resizeFile(file);
-                file = blobToFile(base64ToBlob(image), file.name);
-            }
 
             addFileToProgress(file.name);
 

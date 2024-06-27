@@ -3,7 +3,6 @@
 namespace App\Nova\Actions;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
@@ -25,7 +24,7 @@ class Shortlist extends Action
     {
         foreach ($collection as $application) {
 
-            app(\Domain\Work\Actions\Shortlist::class)->execute($application);
+            app(\Domain\Work2\Actions\Shortlist::class)->execute($application);
         }
     }
 

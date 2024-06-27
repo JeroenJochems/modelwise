@@ -4,33 +4,28 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ImpersonationController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Model\ActivitiesController;
-use App\Http\Controllers\Model\OnboardingController;
-use App\Http\Controllers\Model\ProfessionalExperienceController;
-use App\Http\Controllers\PassController;
-use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Model\CharacteristicsController;
 use App\Http\Controllers\Model\DigitalsController;
 use App\Http\Controllers\Model\ExclusiveCountriesController;
+use App\Http\Controllers\Model\OnboardingController;
 use App\Http\Controllers\Model\PersonalDetailsController;
 use App\Http\Controllers\Model\PortfolioController;
+use App\Http\Controllers\Model\ProfessionalExperienceController;
 use App\Http\Controllers\Model\ProfilePictureController;
 use App\Http\Controllers\Model\SocialsController;
 use App\Http\Controllers\ModelController;
+use App\Http\Controllers\PassController;
 use App\Http\Controllers\PhotosController;
 use App\Http\Controllers\PresentationController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\VaporSignedStorageUrl;
 use App\Http\Controllers\VideosController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 
-Route::get('test', function() {
-
-    $file = Storage::disk("r2")->get("tmp/fb6536da-934b-4ce3-b3ab-40405e8d28a0");
-    Storage::disk('r2')->put("profile_pictures/fb6536da-934b-4ce3-b3ab-40405e8d28a0", $file);
-    return Storage::disk('r2')->get('profile_pictures/fb6536da-934b-4ce3-b3ab-40405e8d28a0');
-});
+Route::get('/impersonation/stop', ImpersonationController::class.'@stop')->name('impersonation.stop');
 
 if (!function_exists("onboardingRoutes")) {
     function onboardingRoutes()
@@ -64,6 +59,7 @@ if (!function_exists("onboardingRoutes")) {
 
 Route::get('/', [LandingController::class, "index"] )->name("landing");
 Route::get('/login', [AuthenticatedSessionController::class, "create"] )->name("login");
+Route::get('/logout', [AuthenticatedSessionController::class, "destroy"] )->name("logout");
 Route::post('/contact', [ContactController::class, "store"] )->name("contact");
 
 Route::get('favicon.png', function () {
@@ -75,23 +71,16 @@ Route::get('favicon.png', function () {
 Route::get('about-modelwise', [OnboardingController::class, "index"])->name("onboarding.index");
 
 Route::resource('roles', RoleController::class, ["index", "view"])->name("index", "jobs");
-Route::get('presentations/{presentation}', [PresentationController::class, "show"])->name("presentations.show");
-Route::post('presentations/{presentation}/shortlist', [PresentationController::class, "shortlist"])->name("presentations.shortlist");
 
 Route::middleware(['auth'])->group(callback: function () {
 
-    Route::resource("applications", ApplicationController::class)->only(["index", "show", "update"])
+    Route::resource("listings", \App\Http\Controllers\ListingController::class)->only(["index", "create", "store", "show", "update"])
         ->name("index", "applications")
-        ->name("show", "applications.show")
-        ->name("upate", "applications.update");
+        ->name("show", "applications.show");
 
-    Route::resource('roles/{role}/applications', ApplicationController::class)->only(["create", "store"])
-        ->name("create", "roles.apply")
-        ->name("store", "roles.apply.store");
-
-    Route::resource('roles/{role}/pass', PassController::class, ["store"])
-        ->name("store", "roles.pass.store");
-
+    Route::get("roles/{role}/apply", [ApplicationController::class, "create"])->name("applications.create");
+    Route::post("roles/{role}/apply", [ApplicationController::class, "store"])->name("applications.store");
+    Route::patch("roles/{role}/update", [ApplicationController::class, "update"])->name("applications.update");
 
     Route::middleware("onboarding")->group(function() {
         Route::get('dashboard', DashboardController::class)->name("dashboard");
@@ -107,11 +96,15 @@ Route::middleware(['auth'])->group(callback: function () {
     Route::name("onboarding.")->prefix("onboarding")->group(function() {
         onboardingRoutes();
 
+        Route::get('first-application', [OnboardingController::class, "firstApplication"])->name("first-application");
         Route::get('thanks', [ModelController::class, "thanks"])->name("thanks");
         Route::get('not-accepted', [ModelController::class, "notAccepted"])->name("not-accepted");
         Route::post('subscribe', [ModelController::class, "subscribe"])->name("subscribe");
     });
 });
+
+Route::get('presentations/{presentation}', [PresentationController::class, "show"])->name("presentations.show");
+Route::post('presentations/{presentation}/favorite', [PresentationController::class, "favorite"])->name("presentations.favorite");
 
 Route::middleware(['auth:admin'])->post('vapor/signed-storage-url', [VaporSignedStorageUrl::class, "store"])->name("vapor.signed-storage-url");
 

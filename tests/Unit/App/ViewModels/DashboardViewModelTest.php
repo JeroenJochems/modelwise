@@ -1,51 +1,83 @@
 <?php
 
 use App\ViewModels\DashboardViewModel;
-use Domain\Jobs\Models\Invite;
-use Domain\Work\Models\Application;
-use Domain\Work\Models\Hire;
-use Illuminate\Support\Facades\Notification;
+use Domain\Jobs\Models\Role;
+use Domain\Work2\Models\Listing;
+
+test('it creates nested data', function() {
+
+    $listing = Listing::factory()->createOne();
+
+    $listings = Listing::query()->get();
+
+    $data = \Domain\Jobs\Data\ListingData::collect($listings);
+});
+
 
 test('it selects open invites', function() {
 
-    $invite = Invite::factory()->createOne();
+    $listingInvited = Listing::factory()->createOne([
+        'invited_at' => now(),
+    ]);
 
-    $vm = new DashboardViewModel($invite->model);
+    $vm = new DashboardViewModel($listingInvited->model);
 
-    expect($vm->openInvites->count())->toBe(1);
+    expect($vm  ->listings->count())->toBe(1);
 });
 
 test('selects my applications', closure: function() {
 
-    $application = Application::factory()->createOne();
-    $otherApplication = Application::factory()->createOne();
+    $application = Listing::factory()->createOne([
+        'applied_at' => now(),
+    ]);
+
+    $otherApplication = Listing::factory()->createOne([
+        'invited_at' => now(),
+    ]);
 
     $vm = new DashboardViewModel($application->model);
 
-    expect($vm->openApplications->count())->toBe(1);
+    expect($vm->listings->count())->toBe(1);
 });
 
-test('only selects my open invites', function() {
+test('only does not show old invites', function() {
 
-    $otherModelInvite = Invite::factory()->createOne();
-    $myInvite = Invite::factory()->createOne();
+    $listing = Listing::factory()->createOne([
+        'invited_at' => now(),
+        'role_id' => Role::factory()->createOne([
+            'end_date' => now()->subDay(),
+        ])->id,
+    ]);
 
-    $vm = new DashboardViewModel($myInvite->model);
+    $vm = new DashboardViewModel($listing->model);
 
-    expect($vm->openInvites->count())
-        ->toBe(1)
-        ->and($vm->openInvites->first()->id)
-        ->toBe($myInvite->id);
-
-    Notification::assertSentTo($myInvite->model, \App\Notifications\InviteCreated::class);
+    expect($vm->listings->count())
+        ->toBe(0);
 });
 
-test('selects my hires', function() {
+test('it also shows historic hires', function() {
 
-    $myHire = Hire::factory()->createOne();
-    $otherHire = Hire::factory()->createOne();
+    $listing = Listing::factory()->createOne([
+        'hired_at' => now(),
+        'role_id' => Role::factory()->createOne([
+            'end_date' => now()->subWeek(),
+        ])->id,
+    ]);
 
-    $vm = new DashboardViewModel($myHire->application->model);
+    $vm = new DashboardViewModel($listing->model);
 
-    expect($vm->hires->count())->toBe(1);
+    expect($vm->listings->count())->toBe(1);
+});
+
+test('it shows recently viewed roles', function() {
+    $role = Role::factory()->createOne();
+    $model = \Domain\Profiles\Models\Model::factory()->createOne();
+
+    $model->role_views()->create([
+        'role_id' => $role->id,
+    ]);
+
+    $vm = new DashboardViewModel($model);
+
+    expect($vm->recentlyViewedRoles->count())->toBe(1);
 });

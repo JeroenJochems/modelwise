@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('passes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("invite_id");
-            $table->string("reason");
+            $table->unsignedBigInteger("role_id");
+            $table->unsignedBigInteger("model_id");
             $table->timestamps();
         });
     }

@@ -10,6 +10,7 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     auth: {
         user: User;
     };
+    is_impersonating: boolean;
     cdn_url: string;
     ziggy: {
         location: string;

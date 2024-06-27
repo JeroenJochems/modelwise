@@ -3,7 +3,6 @@
 namespace App\Nova;
 
 use App\Nova\Actions\AnalysePhoto;
-use Domain\Jobs\Models\Role as RoleModel;
 use Domain\Profiles\Models\Photo as PhotoModel;
 use Domain\Work\Models\Application as ApplicationModel;
 use Laravel\Nova\Fields\Avatar;
@@ -60,7 +59,7 @@ class Photo extends Resource
             "job" => [PhotoModel::FOLDER_JOB_IMAGE => PhotoModel::FOLDER_JOB_IMAGE],
             "application" => [ApplicationModel::PHOTO_FOLDER => ApplicationModel::PHOTO_FOLDER],
             "brand" => [PhotoModel::FOLDER_BRAND_LOGO],
-            "role" => [RoleModel::PHOTO_FOLDER_PRIVATE, RoleModel::PHOTO_FOLDER_PUBLIC],
+            "role" => [\Domain\Jobs\Models\Role::PHOTO_FOLDER_PRIVATE, \Domain\Jobs\Models\Role::PHOTO_FOLDER_PUBLIC],
             "model" => [PhotoModel::FOLDER_WORK_EXPERIENCE, PhotoModel::FOLDER_DIGITALS, PhotoModel::FOLDER_TATTOOS],
             default => [],
         };

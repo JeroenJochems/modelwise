@@ -12,13 +12,12 @@ class JobData extends Data
 {
     public function __construct(
         public string $title,
-        public string $location,
         public string $description,
+        public ?string $location,
         public ?BrandData $brand,
         public ?ClientData $client,
 
-        #[DataCollectionOf(PhotoData::class)]
-        /** @var PhotoData[] */
-        public DataCollection $look_and_feel_photos,
+        /** @var null|PhotoData[] */
+        public ?array $look_and_feel_photos,
     ) { }
 }

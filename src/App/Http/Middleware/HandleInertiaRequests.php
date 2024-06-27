@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Laravel\Nova\Contracts\ImpersonatesUsers;
 use Tightenco\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
@@ -31,6 +32,7 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
+            'is_impersonating' => app()->make(ImpersonatesUsers::class)->impersonating($request),
             'cdn_url' => env("CDN_URL"),
             'auth' => [
                 'user' => $request->user(),

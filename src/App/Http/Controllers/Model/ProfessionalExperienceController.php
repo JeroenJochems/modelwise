@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers\Model;
 
-use App\Http\Controllers\Controller;
 use App\ViewModels\ProfessionalExperienceViewModel;
 use Domain\Profiles\Models\Model;
-use Domain\Profiles\Models\Photo;
-use Domain\Profiles\Repositories\PhotoRepository;
 use Inertia\Inertia;
 
 class ProfessionalExperienceController extends BaseOnboardingController
@@ -16,7 +13,6 @@ class ProfessionalExperienceController extends BaseOnboardingController
         return Inertia::render("Model/Onboarding/ProfessionalExperience")
             ->with('vm', new ProfessionalExperienceViewModel(auth()->user()));
     }
-
 
     public function store()
     {

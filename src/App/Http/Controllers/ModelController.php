@@ -22,6 +22,12 @@ class ModelController extends Controller
 
     public function thanks()
     {
+        $recentlyViewedRole = auth()->user()->role_views()->first();
+
+        if ($recentlyViewedRole) {
+            return redirect()->route("applications.create", $recentlyViewedRole->role_id);
+        }
+
         return Inertia::render("Model/Onboarding/Thanks")->with([
             'is_subscribed' => auth()->user()->is_subscribed_to_newsletter
         ]);

@@ -11,7 +11,9 @@ class DashboardController extends Controller
 
         $model = auth()->user();
 
+        $vm = new DashboardViewModel($model);
+
         return Inertia::render("Dashboard")
-            ->with('vm', new DashboardViewModel($model));
+            ->with('vm', $vm);
     }
 }

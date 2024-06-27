@@ -2,15 +2,21 @@
 
 namespace Domain\Jobs\Models;
 
+use Database\Factories\RoleFactory;
 use Domain\Present\Models\Presentation;
 use Domain\Profiles\Models\Photo;
 use Domain\Work\Models\Application;
 use Domain\Work\Models\Pass;
+use Domain\Work2\Models\Listing;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Kra8\Snowflake\HasShortflakePrimary;
 
+/**
+ * Domain\Jobs\Models\Role
+ * @property int $id
+ */
 class Role extends Model
 {
     use HasShortflakePrimary;
@@ -25,6 +31,15 @@ class Role extends Model
         'fields' => "array",
         'extra_fields' => "array",
     ];
+
+    protected $with = ['job'];
+
+    protected $guarded = [];
+
+    public static function newFactory(): Factory
+    {
+        return RoleFactory::new();
+    }
 
     public function job()
     {
@@ -46,51 +61,18 @@ class Role extends Model
             ->orderBy("sortable_order");
     }
 
+    public function listings()
+    {
+        return $this->hasMany(Listing::class);
+    }
+
     public function role_views()
     {
         return $this->hasMany(RoleView::class);
     }
 
-    public function my_applications()
-    {
-        return $this->hasMany(Application::class)
-            ->where('model_id', auth()->id());
-    }
-
-    public function my_application()
-    {
-        return $this->hasOne(Application::class)->latestOfMany()
-            ->where('model_id', auth()->id());
-    }
-
-    public function invites()
-    {
-        return $this->hasMany(Invite::class);
-    }
-
-    public function open_invites()
-    {
-        return $this->hasMany(Invite::class)->whereNull('application_id');
-    }
-
     public function presentations()
     {
         return $this->hasMany(Presentation::class);
-    }
-
-    public function applications()
-    {
-        return $this->hasMany(Application::class);
-    }
-
-    public function my_passes() {
-        return $this->hasMany(Pass::class)
-            ->where('model_id', auth()->id());
-    }
-
-    public function my_invites($model_id = null)
-    {
-        return $this->hasMany(Invite::class)
-            ->where('model_id', $model_id ?? auth()->id());
     }
 }

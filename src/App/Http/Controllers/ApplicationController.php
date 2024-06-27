@@ -4,31 +4,23 @@ namespace App\Http\Controllers;
 
 use App\ViewModels\ModelMeViewModel;
 use App\ViewModels\ModelRoleViewModel;
-use Domain\Jobs\Data\ApplyData;
 use Domain\Jobs\Models\Role;
+use Domain\Profiles\Models\Model;
 use Domain\Profiles\Repositories\PhotoRepository;
 use Domain\Profiles\Repositories\VideoRepository;
-use Domain\Work\Actions\Apply;
 use Domain\Work\Models\Application;
-use Illuminate\Session\TokenMismatchException;
+use Domain\Work2\Actions\Apply;
+use Domain\Work2\Actions\ExtendApplication;
+use Domain\Work2\Data\ApplyData;
+use Domain\Work2\Models\Listing;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ApplicationController extends Controller
 {
-    public function index()
-    {
-        return redirect()->to("/dashboard");
-    }
-
-    public function show(Application $application)
-    {
-        return Inertia::render('Roles/Show')
-            ->with("viewModel", new ModelRoleViewModel($application->role));
-    }
-
     public function create(Role $role)
     {
-        return Inertia::render('Applications/Create')
+        return Inertia::render('Roles/Listings/Apply')
             ->with("viewModel", new ModelRoleViewModel($role))
             ->with("meViewModel", new ModelMeViewModel(
                 auth()->user()
@@ -36,33 +28,31 @@ class ApplicationController extends Controller
             ));
     }
 
-
-    public function store(Role $role, ApplyData $data)
+    public function store(Role $role, Request $request)
     {
-        try {
-            app(Apply::class)($data);
-        } catch (\Exception $e) {
-            if (str_contains(strtolower($e->getMessage()), 'duplicate')) {
-                return redirect()->route("roles.show", $role)->with("error", "You have already applied for this role.");
-            }
+        $model = auth()->user();
+        if (!($model instanceof Model)) abort(403, "You are not a model");
 
-            throw $e;
-        }
+        $data = ApplyData::fromRequest($request->all());
+
+        app()->make(Apply::class)($model, $role, $data);
 
         return redirect()->route("roles.show", $role);
     }
 
-    public function update(Application $application)
+    public function update(Role $role, Request $request)
     {
-        if ($videos = request()->get("casting_videos")) {
-            app(VideoRepository::class)->update($application, Application::CASTING_VIDEOS, $videos);
-        }
+        $listing = Listing::where("role_id", $role->id)
+            ->where("model_id", auth()->id())
+            ->first();
 
-        if ($photos = request()->get("casting_photos")) {
-            app(PhotoRepository::class)->update($application, Application::CASTING_PHOTO_FOLDER, $photos);
-        }
+        app()->make(ExtendApplication::class)(
+            $listing,
+            $request->get("casting_photos"),
+            $request->get("casting_videos")
+        );
 
-        return Inertia::render('Applications/Updated')
-            ->with("viewModel", new ModelRoleViewModel($application->role));
+        return Inertia::render('Roles/Listings/Updated')
+            ->with("viewModel", new ModelRoleViewModel($listing->role, $listing));
     }
 }

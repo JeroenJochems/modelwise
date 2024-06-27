@@ -7,15 +7,11 @@ import {useForm, usePage} from '@inertiajs/react';
 import {P} from "@/Components/Typography/p";
 import {Submit} from "@/Components/Forms/Submit";
 import {PageProps} from "@/types";
+import {ModelData} from "@/types/generated";
 
-type ModelDataType = {
-    instagram: string
-    tiktok: string
-    website: string
-}
 
 type Props = {
-    modelData: ModelDataType
+    modelData: ModelData
 }
 
 export default function Socials({modelData}: Props) {
@@ -27,6 +23,7 @@ export default function Socials({modelData}: Props) {
         instagram: modelData.instagram ?? "",
         tiktok: modelData.tiktok ?? "",
         website: modelData.website ?? "http://",
+        showreel_link: modelData.showreel_link ?? "http://",
     });
 
     const submit: FormEventHandler = (e) => {
@@ -71,6 +68,14 @@ export default function Socials({modelData}: Props) {
                     error={errors.website}
                     autoComplete="website"
                     onChange={value => setData('website', value)}
+                />
+
+                <InputGroupText
+                    title="Showreel"
+                    value={data.showreel_link}
+                    error={errors.showreel_link}
+                    autoComplete="website"
+                    onChange={value => setData('showreel_link', value)}
                 />
 
                 <Submit>

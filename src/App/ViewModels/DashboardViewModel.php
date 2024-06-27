@@ -2,79 +2,53 @@
 
 namespace App\ViewModels;
 
-use Domain\Jobs\Data\ApplicationData;
-use Domain\Jobs\Data\HireData;
+use Domain\Jobs\Data\ListingData;
 use Domain\Jobs\Data\RoleData;
-use Domain\Jobs\Models\Role;
+use Domain\Profiles\Data\ModelData;
 use Domain\Profiles\Models\Model;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Spatie\LaravelData\DataCollection;
+use Illuminate\Support\Collection;
 use Spatie\ViewModels\ViewModel;
 
 /** @typescript  */
 class DashboardViewModel extends ViewModel
 {
-    /* @var DataCollection|array<RoleData> */
-    public $openInvites;
+    /** @var array<ListingData> */
+    public Collection $listings;
 
-    /* @var DataCollection|array<ApplicationData> */
-    public $openApplications;
+    /** @var array<RoleData> */
+    public Collection $recentlyViewedRoles;
 
-    /* @var DataCollection|array<RoleData> */
-    public $recentlyViewedRoles;
+    public ?ModelData $model;
 
-    /* @var DataCollection|array<HireData> */
-    public $hires;
+    public function __construct(Model|Authenticatable $model){
 
-    public function __construct(public Model|Authenticatable $model){
+        $this->model = ModelData::from($model);
 
-        $this->openInvites = RoleData::collection(
-            Role::query()
-                ->whereHas("my_invites")
-                ->whereDoesntHave("my_applications")
-                ->whereRelation("job", "end_date", ">", now())
-                ->with('photos', 'public_photos', 'job.look_and_feel_photos')
-                ->get()
-        );
-
-        $openApplications = Role::query()
-            ->whereHas("my_applications", function ($q) {
-                $q->whereDoesntHave("hire")
-                    ->whereDoesntHave("rejection");
+        $listings = $model->listings()
+            ->whereNull('rejected_at')
+            ->where(function($q) {
+                $q
+                    ->whereRelation("role", "end_date", ">", now())
+                    ->orWhereHas("role", function($q) {
+                        $q->whereNull("end_date");
+                    })
+                    ->orWhereNotNull('hired_at');
             })
-            ->whereRelation("job", "end_date", ">", now())
-            ->with(
-                'photos',
-                'public_photos',
-                'job',
-                'job.look_and_feel_photos',
-                'job.brand',
-                'job.client')
+            ->with(["model", "role.job"])
             ->get();
 
-        $this->openApplications = RoleData::collection(
-            $openApplications
-        );
-
-        $this->hires = RoleData::collection(
-            Role::query()
-                ->whereHas("my_applications.hire")
-                ->with('photos', 'public_photos', 'job.look_and_feel_photos')
-                ->get()
-        );
-
+        $this->listings = ListingData::collect($listings);
 
         $recentlyViewed = $model->role_views()
             ->with("role",'role.photos', 'role.public_photos', 'role.job.look_and_feel_photos')
-            ->whereRelation("role.job", "end_date", ">", now())
+            ->whereRelation("role", "end_date", ">", now())
             ->orderByDesc('created_at')
             ->take(5)
-            ->whereNotIn('role_id', collect($this->openApplications)->pluck('id'))
-            ->whereNotIn('role_id', collect($this->hires)->pluck('id'))
-            ->whereNotIn('role_id', collect($this->openInvites)->pluck('id'))
+            ->whereNotIn('role_id', collect($this->listings)->pluck('role_id'))
             ->get()
             ->pluck('role');
 
-        $this->recentlyViewedRoles = RoleData::collection($recentlyViewed);
+        $this->recentlyViewedRoles = RoleData::collect($recentlyViewed);
     }
 }

@@ -1,10 +1,9 @@
-import { useState, PropsWithChildren, ReactNode } from 'react';
-import ApplicationLogo from '@/Components/ApplicationLogo';
+import {PropsWithChildren, ReactNode, useState} from 'react';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link } from '@inertiajs/react';
-import { User } from '@/types';
+import {Link} from '@inertiajs/react';
+import {User} from '@/types';
 import {asset} from "laravel-vapor";
 
 export default function Authenticated({ user, header, children }: PropsWithChildren<{ user: User, header?: ReactNode }>) {
@@ -58,7 +57,7 @@ export default function Authenticated({ user, header, children }: PropsWithChild
 
                                     <Dropdown.Content>
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
-                                            Log Out
+                                            Log Out xx yt
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
@@ -108,7 +107,7 @@ export default function Authenticated({ user, header, children }: PropsWithChild
 
                         <div className="mt-3 space-y-1">
                             <ResponsiveNavLink method="post" href={route('logout')} as="button">
-                                Log Out
+                                Log Out aa
                             </ResponsiveNavLink>
                         </div>
                     </div>

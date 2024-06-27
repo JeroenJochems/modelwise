@@ -7,14 +7,14 @@ import {PhotoScroller} from "@/Components/Atoms/JobScroller";
 import {JobSpecifics} from "@/Components/Molecules/JobSpecifics";
 import {ApplyFooter} from "@/Components/Molecules/ApplyFooter";
 import {DashboardFooter} from "@/Components/Molecules/DashboardFooter";
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import {Tab, TabList, TabPanel, Tabs} from 'react-tabs';
 import {Bubbles} from "@/Components/Atoms/JobHeader/Bubbles";
 import {Bubble} from "@/Components/Atoms/JobHeader/Bubbles/Bubble";
 import {CalendarDays} from "@/Components/Icons/CalendarDays";
 import {formatDate} from "@/Utils/Dates";
 import {Globe} from "@/Components/Icons/Globe";
 import {ApplicationStatus} from "@/Components/Molecules/ApplicationStatus";
-import {CurrencyEuroIcon } from "@heroicons/react/24/outline";
+import {CurrencyEuroIcon} from "@heroicons/react/24/outline";
 import {formatCents} from "@/Utils/Money";
 import {Train} from "@/Components/Icons/Train";
 import {useCdnLink} from "@/Hooks/useCdnLink";
@@ -26,7 +26,7 @@ type Props = {
 
 export default function Show({ viewModel }: Props)
 {
-    const { role, isHired, hasApplied, isInvited } = viewModel;
+    const { role, hasApplied } = viewModel;
     const { job } = role;
     const cdnLink = useCdnLink();
 
@@ -47,7 +47,6 @@ export default function Show({ viewModel }: Props)
 
                     <TabList className={`${!hasApplied && "hidden"} border-b mb-8 flex`}>
                         { hasApplied && <Tab className={tabClasses}>Your application</Tab> }
-                        { isHired && <Tab className={tabClasses}>Your role</Tab> }
                         <Tab className={tabClasses}>Job details</Tab>
                     </TabList>
 
@@ -68,11 +67,11 @@ export default function Show({ viewModel }: Props)
                             <div className={"sm:hidden"}>
                                 <Bubbles>
                                     <Bubble className={"mr-2"}>
-                                        <CalendarDays className={"mr-1"} /> { formatDate(role.start_date) }
+                                        <CalendarDays className={"mr-1"} /> { formatDate(role.start_date!) }
                                     </Bubble>
 
                                     <Bubble>
-                                        <Globe className={"mr-1"} /> { job.location }
+                                        <Globe className={"mr-1"} /> { job?.location }
                                     </Bubble>
 
                                     <Bubble>
@@ -94,14 +93,14 @@ export default function Show({ viewModel }: Props)
                                 </div>
                             )}
 
-                            { job.look_and_feel_photos.length > 0 && (
+                            { !!job.look_and_feel_photos && job.look_and_feel_photos.length > 0 && (
                                 <div className={"mt-4 grid gap-4"}>
                                     <H3>Shoot look & feel</H3>
                                     <PhotoScroller photos={job.look_and_feel_photos.map(photo => cdnLink(photo.path))} />
                                 </div>
                             )}
 
-                            { role.public_photos.length > 0 && (
+                            { !!role.public_photos && role.public_photos.length > 0 && (
                                 <div className={"mt-4 grid gap-4"}>
                                     <H3>For this role</H3>
                                     <PhotoScroller photos={role.public_photos.map(photo => cdnLink(photo.path))} />

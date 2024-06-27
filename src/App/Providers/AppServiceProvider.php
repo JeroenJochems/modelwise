@@ -8,11 +8,12 @@ use Domain\Jobs\Models\Invite;
 use Domain\Jobs\Models\Job;
 use Domain\Jobs\Models\Role;
 use Domain\Present\Models\Presentation;
+use Domain\Present\Models\PresentationListing;
 use Domain\Profiles\Models\Model;
 use Domain\Profiles\Models\Model as ModelClass;
 use Domain\Profiles\Models\Photo;
 use Domain\Profiles\Models\Video;
-use Domain\Work\Models\Application;
+use Domain\Work2\Models\Listing;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Onboard\Facades\Onboard;
@@ -33,7 +34,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
         Relation::enforceMorphMap([
             'model' => Model::class,
             'job' => Job::class,
@@ -42,11 +42,12 @@ class AppServiceProvider extends ServiceProvider
             'role' => Role::class,
             'brand' => Brand::class,
             'user' => User::class,
-            'application' => Application::class,
             'longlist-model' => Invite::class,
             'client' => Client::class,
             'tag' => Tag::class,
             'presentation' => Presentation::class,
+            'listing' => Listing::class,
+            'presentation-listing' => PresentationListing::class,
         ]);
 
         Onboard::addStep('Personal details')

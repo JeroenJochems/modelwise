@@ -9,12 +9,12 @@ type Props = {
 
 export function ApplyFooter({viewModel}: Props) {
 
-    const { role, my_application, hasApplied, hasPassed } = viewModel;
+    const { role, hasApplied, listing } = viewModel;
 
     if (hasApplied) {
 
-        const isHired = my_application?.hire
-        const isRejected = my_application?.is_rejected
+        const isHired = !!listing?.hired_at
+        const isRejected = !!listing?.rejected_at
 
         if (hasApplied) {
             return <div className={"py-4 pb-safe"}>
@@ -26,18 +26,10 @@ export function ApplyFooter({viewModel}: Props) {
         }
     }
 
-    if (hasPassed) {
-        return null;
-    }
-
     return <>
         <div className={"flex"}>
-            <CtaLink href={route('roles.apply', role.id)} icon={<Heart/>} className={'w-4/5 mr-4'}>
+            <CtaLink id={"apply"} href={route('applications.create', role.id)} icon={<Heart/>} className={'w-full mr-4'}>
                 {"I'm interested"}
-            </CtaLink>
-
-            <CtaLink method={"post"} href={route('roles.pass.store', role.id)} icon={<Cross/>} variant={"negative"} className={'w-1/5'}>
-                <span className={"hidden sm:flex"}>Pass</span>
             </CtaLink>
         </div>
     </>

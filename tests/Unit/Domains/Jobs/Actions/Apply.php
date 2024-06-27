@@ -3,7 +3,7 @@
 use Domain\Jobs\Models\Invite;
 use Domain\Jobs\Models\Role;
 use Domain\Profiles\Models\Model;
-use Domain\Work\Actions\Apply;
+use Domain\Work2\Actions\Apply;
 use function Pest\Laravel\assertDatabaseHas;
 use function PHPUnit\Framework\assertNotNull;
 

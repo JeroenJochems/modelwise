@@ -45,12 +45,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 ])->icon('document-text')->collapsable(),
             ];
 
-            if ($request->user()->isSuperAdmin()) {
-                $menuSections[] = MenuSection::make('Admin', [
-                    MenuItem::linkToUrl('Nova', '/nova'),
-                ])->icon('lock')->collapsable();
-            }
-
             return $menuSections;
         });
 

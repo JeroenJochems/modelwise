@@ -1,9 +1,10 @@
-import { useState } from 'react'
-import { Dialog } from '@headlessui/react'
-import {ArrowLeftOnRectangleIcon, ArrowRightOnRectangleIcon, Bars3Icon, XMarkIcon} from '@heroicons/react/24/outline'
+import {useState} from 'react'
+import {Dialog} from '@headlessui/react'
+import {Bars3Icon, XMarkIcon} from '@heroicons/react/24/outline'
 import {asset} from "laravel-vapor";
 import {Link, usePage} from "@inertiajs/react";
 import {PageProps} from "@/types";
+import {FingerPrintIcon} from "@heroicons/react/24/solid";
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard' },
@@ -12,7 +13,8 @@ const navigation = [
 
 
 export default function Menu() {
-    const { auth } = usePage<PageProps>().props;
+    const { auth, is_impersonating } = usePage<PageProps>().props;
+
 
     const isLoggedIn = !!auth.user;
 
@@ -48,6 +50,12 @@ export default function Menu() {
                     <img className="h-8 w-auto" src={asset("img/logo-black.svg")} alt="Modelwise" />
                 </a>
                 <div className="flex flex-1 justify-end">
+
+                        <Link href={route("impersonation.stop")} method="get" as="button" type="button" className={"flex flex-row mr-6 items-center"}>
+                            <FingerPrintIcon className={"h-5 w-5"} />
+                            Back to admin
+                        </Link>
+
                     { isLoggedIn ? (
                         <Link href={route("logout")} method="post" as="button" type="button">
                             Log out
@@ -92,6 +100,12 @@ export default function Menu() {
                             </a>
                         ))}
                         { }
+
+                        { is_impersonating && (
+                            <Link href={route("impersonation.stop")} method="get" as="button" type="button"  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                                <FingerPrintIcon />
+                            </Link>
+                        )}
 
                         <Link href={route("logout")} method="post" as="button" type="button"  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
                             Log out

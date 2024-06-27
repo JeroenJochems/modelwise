@@ -1,17 +1,3 @@
-export type ApplicationData = {
-is_shortlisted: boolean;
-is_rejected: boolean;
-id: string;
-model_id: string;
-cover_letter: string;
-casting_questions: string;
-brand_conflicted: string;
-photos: Array<PhotoData>;
-model: ModelData;
-casting_photos: Array<PhotoData>;
-casting_videos: Array<VideoData>;
-hire: HireData | null;
-};
 export type ApplicationStatusEnum = 'pending' | 'accepted' | 'rejected' | 'cancelled';
 export type BrandData = {
 name: string;
@@ -25,11 +11,9 @@ export type CountriesViewModel = {
 countries: Array<any>;
 };
 export type DashboardViewModel = {
-openInvites: any;
-openApplications: any;
-recentlyViewedRoles: any;
-hires: any;
-model: any | any;
+listings: Array<ListingData>;
+recentlyViewedRoles: Array<RoleData>;
+model: ModelData | null;
 };
 export type Ethnicity = 'White' | 'Black' | 'Latino' | 'Asian' | 'NativeAmerican';
 export type ExtraFieldsData = {
@@ -49,9 +33,6 @@ head: boolean;
 };
 export type Gender = 'Male' | 'Female' | 'Non-binary';
 export type HairColor = 'Black' | 'Brown' | 'Blond' | 'Dark Blond' | 'White' | 'Gray' | 'Red' | 'Colored' | 'None' | 'Other';
-export type HireData = {
-id: string;
-};
 export type InviteData = {
 id: number;
 role: RoleData;
@@ -62,11 +43,32 @@ model_id: number;
 };
 export type JobData = {
 title: string;
-location: string;
 description: string;
+location: string | null;
 brand: BrandData | null;
 client: ClientData | null;
-look_and_feel_photos: Array<PhotoData>;
+look_and_feel_photos: null | Array<PhotoData>;
+};
+export type ListingData = {
+status: string;
+id: string;
+model_id: string;
+model: ModelData;
+role: RoleData;
+invited_at: string | null;
+applied_at: string | null;
+extended_application_at: string | null;
+shortlisted_at: string | null;
+hired_at: string | null;
+favorited_at: string | null;
+rejected_at: string | null;
+cover_letter: string | null;
+brand_conflicted: string | null;
+casting_questions: string | null;
+available_dates: Array<any> | null;
+photos: Array<PhotoData>;
+casting_photos: Array<PhotoData>;
+casting_videos: Array<VideoData>;
 };
 export type ModelCharacteristicsData = {
 gender: string | null;
@@ -94,10 +96,10 @@ city: string | null;
 country: string | null;
 gender: string | null;
 date_of_birth: string | null;
-portfolio: Array<ModelPhotoData>;
-digitals: Array<ModelPhotoData>;
-tattoo_photos: Array<ModelPhotoData>;
-applications: Array<ApplicationData>;
+portfolio: null | Array<ModelPhotoData>;
+digitals: null | Array<ModelPhotoData>;
+tattoo_photos: null | Array<ModelPhotoData>;
+listings: null | Array<ListingData>;
 hair_color: HairColor | null;
 eye_color: EyeColor | string | null;
 eye_color_other: string | null;
@@ -111,6 +113,7 @@ cup_size: string | null;
 instagram: string | null;
 tiktok: string | null;
 website: string | null;
+showreel_link: string | null;
 };
 export type ModelDigitalData = {
 path: string | null;
@@ -141,6 +144,7 @@ pathSquareFace?: string;
 mime: string;
 id: string | number;
 path: string;
+hash: string | null;
 };
 export type ModelPhotosCollection = {
 digitals: any;
@@ -153,30 +157,35 @@ profile_picture: string | null;
 };
 export type ModelRoleViewModel = {
 role: RoleData;
-isInvited: boolean;
+listing: ListingData | null;
+shootDates: Array<string>;
 hasApplied: boolean;
-hasPassed: boolean;
 isHired: boolean;
-shootDates: Array<any>;
-status: string;
-my_application: ApplicationData | null;
 };
 export type ModelSocialsData = {
 instagram: string | null;
 tiktok: string | null;
 website: string | null;
+showreel_link: string | null;
 };
 export type ModelVideoData = {
 id: string;
 muxId: string;
 folder: string;
 };
-export type PassData = {
-id: string;
-};
 export type PhotoData = {
 id: number;
 path: string;
+hash: string | null;
+};
+export type PresentationData = {
+id: string;
+role: RoleData;
+should_show_casting_media: boolean;
+should_show_digitals: boolean;
+should_show_socials: boolean;
+should_show_cover_letter: boolean;
+should_show_conflicts: boolean;
 };
 export type ProfessionalExperienceViewModel = {
 allCategories: Array<Tag>;
@@ -190,27 +199,24 @@ viewedRoles: Array<any>;
 email: string;
 password: string | null;
 };
-export type RejectionData = {
-id: string;
-};
 export type RoleData = {
-fields: FieldsData;
-extra_fields: ExtraFieldsData;
 id: number;
 name: string;
-description: string;
+description: string | null;
 start_date: string;
 end_date: string | null;
 fee: number;
 buyout: number;
 buyout_note: string | null;
 travel_reimbursement_note: string | null;
-photos: Array<PhotoData>;
-public_photos: Array<PhotoData>;
+photos: Array<any> | null;
+public_photos: Array<any> | null;
 job: JobData;
 casting_video_instructions: string | null;
 casting_photo_instructions: string | null;
 casting_questions: string | null;
+fields: FieldsData;
+extra_fields: ExtraFieldsData;
 };
 export type Tag = {
 id: number;
@@ -220,5 +226,5 @@ slug: string;
 export type VideoData = {
 id: number;
 path: string;
-mux_id: string;
+mux_id: string | null;
 };

@@ -1,5 +1,6 @@
 <?php
 
+use Domain\Work2\WorkServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 

@@ -8,6 +8,8 @@
 /storage/*.key
 /vendor
 .env
+.env.dusk.local
+.env.dusk.testing
 .env.backup
 .env.production
 .phpunit.result.cache
@@ -21,3 +23,5 @@ yarn-error.log
 /.vscode
 .env.staging
 .env.test
+meilisearch
+/.vapor

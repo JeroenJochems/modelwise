@@ -2,8 +2,8 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\AddToRole;
 use App\Nova\Actions\ApplyForRole;
-use App\Nova\Actions\CreateApplication;
 use App\Nova\Actions\InviteForRole;
 use App\Nova\Filters\AgeFilter;
 use Datomatic\Nova\Fields\Enum\Enum;
@@ -25,13 +25,15 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\VaporImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Domain\Profiles\Models\Model as ModelClass;
 use Laravel\Nova\Panel;
+use Outl1ne\NovaSortable\Traits\HasSortableManyToManyRows;
 use Spatie\TagsField\Tags;
 
 class Model extends Resource
 {
-    public static $model = ModelClass::class;
+    use HasSortableManyToManyRows;
+
+    public static $model = \Domain\Profiles\Models\Model::class;
 
     public function title()
     {
@@ -91,8 +93,8 @@ class Model extends Resource
             Boolean::make('Is accepted'),
             Textarea::make("Bio")->alwaysShow()->hideFromIndex(),
             Textarea::make("Admin notes")->alwaysShow()->hideFromIndex(),
-            Tags::make('Modeling experience')->type(ModelClass::TAG_TYPE_MODEL_EXPERIENCE)->withLinkToTagResource()->hideFromIndex(),
-            Tags::make('Other professions')->type(ModelClass::TAG_TYPE_PROFESSIONS)->withLinkToTagResource()->hideFromIndex(),
+            Tags::make('Modeling experience')->type(\Domain\Profiles\Models\Model::TAG_TYPE_MODEL_EXPERIENCE)->withLinkToTagResource()->hideFromIndex(),
+            Tags::make('Other professions')->type(\Domain\Profiles\Models\Model::TAG_TYPE_PROFESSIONS)->withLinkToTagResource()->hideFromIndex(),
             VaporImage::make("Profile picture", "profile_picture")
                 ->path(
                     "profile_pictures")
@@ -120,9 +122,9 @@ class Model extends Resource
             Text::make('Instagram')->rules( 'max:255')->hideFromIndex()->copyable(),
             Text::make('Tiktok')->rules( 'max:255')->hideFromIndex()->copyable(),
             Text::make('Website')->rules('max:255')->hideFromIndex()->copyable(),
+            Text::make('Showreel link')->rules('max:255')->hideFromIndex()->copyable(),
             new Panel('Body Characteristics', $this->bodyFields()),
-            HasMany::make("Applications")->showOnIndex(false),
-            HasMany::make("Invites")->showOnIndex(false),
+            HasMany::make("Listings")->showOnIndex(false),
             HasMany::make("Exclusive countries")->showOnIndex(false),
             MorphMany::make("Photos", "photos", Photo::class)->showOnIndex(true),
         ];
@@ -164,8 +166,9 @@ class Model extends Resource
     public function actions(NovaRequest $request)
     {
         return [
+            new Actions\AddToRole(),
             new InviteForRole(),
-            new ApplyForRole(),
+            new AddToRole(),
         ];
     }
 }
