@@ -57,7 +57,7 @@ jobs:
           DB_DATABASE: test_db
         run: php artisan migrate
       - name: Compile assets
-        run: npm install && npm run production
+        run: npm install && npm run build
       - name: Execute tests
         env:
           DB_HOST: 127.0.0.1
@@ -66,48 +66,6 @@ jobs:
           DB_PASSWORD: secret
           DB_DATABASE: test_db
         run: php artisan test
-  deploy-staging:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    needs: test
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-          tools: composer:v2
-          coverage: none
-      - name: Require Vapor CLI
-        run: composer global require laravel/vapor-cli
-      - name: Install Project Dependencies
-        run: |
-          composer config "http-basic.nova.laravel.com" "${{ secrets.NOVA_USERNAME }}" "${{ secrets.NOVA_PASSWORD }}"
-          composer install --no-interaction --prefer-dist --optimize-autoloader
-      - name: Deploy staging
-        run: vapor deploy staging
-        env:
-          VAPOR_API_TOKEN: ${{ secrets.VAPOR_API_TOKEN }}
-  deploy-production:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    needs: test
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-          tools: composer:v2
-          coverage: none
-      - name: Require Vapor CLI
-        run: composer global require laravel/vapor-cli
-      - name: Install Project Dependencies
-        run: |
-          composer config "http-basic.nova.laravel.com" "${{ secrets.NOVA_USERNAME }}" "${{ secrets.NOVA_PASSWORD }}"
-          composer install --no-interaction --prefer-dist --optimize-autoloader
       - name: Deploy production
         run: vapor deploy production
         env:
