@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\Nova\Actions\CreatePresentation;
+use App\Nova\Actions\DeleteListing;
 use App\Nova\Actions\Hire;
 use App\Nova\Actions\Reject;
 use App\Nova\Actions\SendInviteToListing;
@@ -160,6 +161,7 @@ class Listing extends Resource
             new CreatePresentation(),
             new SendInviteToListing(),
             new Shortlist(),
+            new DeleteListing(),
             new Reject(),
             new Hire(),
         ];

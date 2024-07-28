@@ -14,7 +14,7 @@ class ListingPolicy
 
     public function create(Authenticatable $authenticatable)
     {
-        return true;
+        return false;
     }
 
     public function update(Authenticatable $authenticatable, Listing $listing)

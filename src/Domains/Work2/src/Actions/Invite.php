@@ -10,11 +10,11 @@ use Illuminate\Support\Facades\Mail;
 
 class Invite
 {
-    public function execute(Role $role, Model $model): void
+    public function execute(Role $role, Model $model, bool $isShortlisted=false): void
     {
         $listing = Listing::firstOrNew(['role_id' => $role->id, 'model_id' => $model->id]);
         $listing->invited_at = now();
-        $listing->shortlisted_at = now();
+        $listing->shortlisted_at = $isShortlisted ? now() : null;
         $listing->save();
 
         Mail::to($model)

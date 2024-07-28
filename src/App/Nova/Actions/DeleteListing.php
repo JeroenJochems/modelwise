@@ -46,12 +46,6 @@ class DeleteListing extends Action
      */
     public function fields(NovaRequest $request)
     {
-        return [
-            Select::make('Role', 'role_id')
-                ->options(Role::where('start_date', '>', now())->get()->load("job")->mapWithKeys(function ($role) {
-                    return [$role->id => $role->job->title . " - " . $role->name];
-                }))
-                ->searchable(),
-        ];
+        return [];
     }
 }
