@@ -38,10 +38,10 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 ])->icon('user')->collapsable(),
 
                 MenuSection::make('Work', [
+                    MenuItem::resource(Brand::class),
                     MenuItem::resource(Client::class),
                     MenuItem::resource(Job::class),
                     MenuItem::resource(Role::class),
-                    MenuItem::resource(Brand::class),
                 ])->icon('document-text')->collapsable(),
             ];
 

@@ -20,7 +20,14 @@ class PresentationController extends Controller
 
         $listings = $presentation->presentationListings()
                 ->orderBy('order_column')
-                ->with("listing.model.digitals", "listing.casting_videos", "listing.model.portfolio")
+                ->with([
+                    "listing.role",
+                    "listing.photos",
+                    "listing.model.digitals",
+                    "listing.model.portfolio",
+                    "listing.casting_photos",
+                    "listing.casting_videos",
+                ])
                 ->get()
                 ->pluck("listing");
 
@@ -34,7 +41,6 @@ class PresentationController extends Controller
         $favorites = $request->get("favoriteListings");
 
         $allListings = $presentation->presentationListings()
-            ->orderBy('order_column')
             ->with("listing.model.digitals", "listing.casting_videos", "listing.model.portfolio")
             ->get()
             ->pluck("listing");

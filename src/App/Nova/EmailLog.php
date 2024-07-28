@@ -2,34 +2,52 @@
 
 namespace App\Nova;
 
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Repeater;
+use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class LonglistedJob extends Resource
+class EmailLog extends Resource
 {
-    public static $model = \Domain\Jobs\Models\Invite::class;
-    public static $title = 'id';
-    public static $displayInNavigation = false;
+    /**
+     * The model the resource corresponds to.
+     *
+     * @var class-string<\App\EmailLog>
+     */
+    public static $model = \App\EmailLog::class;
+
+    /**
+     * The single value that should be used to represent the resource when being displayed.
+     *
+     * @var string
+     */
+    public static $title = 'subject';
+
+    /**
+     * The columns that should be searched.
+     *
+     * @var array
+     */
     public static $search = [
-        'id',
+        'subject',
     ];
 
-    public function title()
-    {
-        return $this->model->first_name.' '.$this->model->last_name. ' at '.$this->role->job->title.' ('.$this->role->job->client->name.')';
-    }
-
+    /**
+     * Get the fields displayed by the resource.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return array
+     */
     public function fields(NovaRequest $request)
     {
         return [
-            BelongsTo::make('Role')->sortable()->searchable(),
+            BelongsTo::make('To', 'model', Model::class),
+            Text::make('From'),
+            Text::make('Subject'),
+            Textarea::make('Body'),
         ];
-    }
-
-    public static function createButtonLabel() {
-        return "Add +";
     }
 
     /**

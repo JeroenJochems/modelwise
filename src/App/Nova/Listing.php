@@ -7,6 +7,7 @@ use App\Nova\Actions\Hire;
 use App\Nova\Actions\Reject;
 use App\Nova\Actions\SendInviteToListing;
 use App\Nova\Actions\Shortlist;
+use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Line;
@@ -47,6 +48,9 @@ class Listing extends Resource
         return [
             BelongsTo::make("Model")->searchable(),
             BelongsTo::make("Role")->hideFromIndex(),
+            Text::make('Photo', function() {
+                return "<img src=\"{$this->model->profile_picture_cdn}?twic=v1/focus=auto/cover=120x120\" width=\"120\" height=\"120\" />";
+            })->asHtml(),
             Stack::make("Name", [
                 Line::make("Role", function () {
                     return $this->role->name;

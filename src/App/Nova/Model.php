@@ -3,18 +3,22 @@
 namespace App\Nova;
 
 use App\Nova\Actions\AddToRole;
-use App\Nova\Actions\ApplyForRole;
 use App\Nova\Actions\InviteForRole;
+use App\Nova\Actions\SendMail;
 use App\Nova\Filters\AgeFilter;
 use Datomatic\Nova\Fields\Enum\Enum;
+use Datomatic\Nova\Fields\Enum\EnumBooleanFilter;
 use Domain\Profiles\Enums\Ethnicity;
 use Domain\Profiles\Enums\EyeColor;
 use Domain\Profiles\Enums\Gender;
 use Domain\Profiles\Enums\HairColor;
+use Domain\Profiles\Enums\ModelClass;
+use KirschbaumDevelopment\Nova\InlineSelect;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Email;
+use Laravel\Nova\Fields\Filters\TextFilter;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\MorphMany;
@@ -26,6 +30,7 @@ use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\VaporImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
+use Laravel\Nova\Query\Search\SearchableRelation;
 use Outl1ne\NovaSortable\Traits\HasSortableManyToManyRows;
 use Spatie\TagsField\Tags;
 
@@ -40,11 +45,12 @@ class Model extends Resource
         return $this->first_name . ' ' . $this->last_name;
     }
 
-    public static $search = [
-        'first_name',
-        'last_name',
-    ];
+    public static function searchableColumns()
+    {
+        return ['id', 'first_name', 'last_name', 'country', new SearchableRelation('tags', 'name')];
+    }
 
+    public static $with = ['photos'];
 
     public static function perPageOptions()
     {
@@ -75,26 +81,41 @@ class Model extends Resource
                 Line::make("Phone number", function () {
                     return $this->phone_number;
                 })->asSmall(),
+                Line::make("Class", function () {
+                    return $this->model_class;
+                })->asSmall(),
                 Line::make("Whatsapp number", function () {
                     return $this->whatsapp_number;
                 })->asSmall(),
             ])->onlyOnIndex(),
 
-            Text::make('First Name')->sortable()->rules('required', 'max:255')->hideFromIndex(),
-            Text::make('Last Name')->sortable()->rules('required', 'max:255')->hideFromIndex(),
-            Text::make('Phone number')->rules('required', 'max:255')->hideFromIndex(),
+            Text::make('First Name')->sortable()->rules('max:255')->hideFromIndex(),
+            Text::make('Last Name')->sortable()->rules('max:255')->hideFromIndex(),
+            Text::make('Phone number')->rules('max:255')->hideFromIndex(),
             Text::make('WhatsApp number')->rules('max:255')->hideFromIndex(),
-            Email::make('Email')->sortable()->required()->rules('required', 'email')->hideFromIndex(),
-            Enum::make('Gender')->displayUsingLabels()->attach(Gender::class)->filterable()->rules('required', 'max:255')->hideFromIndex(),
-            Select::make('Preferred language')->options(['en' => 'English', 'nl' => 'Nederlands'])->rules('required')->hideFromIndex(),
+            Email::make('Email')->sortable()->rules('email')->hideFromIndex(),
+            Enum::make('Gender')->displayUsingLabels()->attach(Gender::class)->filterable()->rules('max:255')->hideFromIndex(),
+            Select::make('Preferred language')->options(['en' => 'English', 'nl' => 'Nederlands'])->hideFromIndex(),
             Date::make('Date of birth')->hideFromIndex(),
-            Boolean::make('Completed onboarding', 'has_completed_onboarding')->readonly(),
+            InlineSelect::make('Class', 'model_class')->options([
+                'Archived' => 'Archived',
+                'People' => 'People',
+                'Talent' => 'Talent',
+                'Top' => 'Top',
+            ])
+                ->inlineOnIndex()
+                ->enableOneStepOnIndex()
+                ->displayUsingLabels()
+                ->inlineOnDetail(),
+            Boolean::make('Completed onboarding', 'has_completed_onboarding')->hideFromIndex()->readonly(),
             Boolean::make('Newsletter', 'is_subscribed_to_newsletter')->hideFromIndex(),
-            Boolean::make('Is accepted'),
+            Boolean::make('Is accepted')->hideFromIndex(),
             Textarea::make("Bio")->alwaysShow()->hideFromIndex(),
             Textarea::make("Admin notes")->alwaysShow()->hideFromIndex(),
+            Tags::make('Skills')->type(\Domain\Profiles\Models\Model::TAG_TYPE_SKILLS)->withLinkToTagResource()->hideFromIndex()->hideFromDetail(),
             Tags::make('Modeling experience')->type(\Domain\Profiles\Models\Model::TAG_TYPE_MODEL_EXPERIENCE)->withLinkToTagResource()->hideFromIndex(),
             Tags::make('Other professions')->type(\Domain\Profiles\Models\Model::TAG_TYPE_PROFESSIONS)->withLinkToTagResource()->hideFromIndex(),
+            Text::make('Country')->sortable()->hideFromIndex()->filterable(),
             VaporImage::make("Profile picture", "profile_picture")
                 ->path(
                     "profile_pictures")
@@ -126,6 +147,7 @@ class Model extends Resource
             new Panel('Body Characteristics', $this->bodyFields()),
             HasMany::make("Listings")->showOnIndex(false),
             HasMany::make("Exclusive countries")->showOnIndex(false),
+            HasMany::make("Email Logs")->showOnIndex(false),
             MorphMany::make("Photos", "photos", Photo::class)->showOnIndex(true),
         ];
     }
@@ -133,7 +155,6 @@ class Model extends Resource
     public function bodyFields()
     {
         return [
-            Enum::make('Ethnicity')->attach(Ethnicity::class)->nullable()->filterable()->hideFromIndex(),
             Enum::make('Eye color')->attach(EyeColor::class)->nullable()->filterable()->hideFromIndex(),
             Enum::make('Hair color')->attach(HairColor::class)->nullable()->filterable()->hideFromIndex(),
             Number::make("Shoe size")->help("EU format")->nullable()->filterable()->hideFromIndex(),
@@ -154,7 +175,9 @@ class Model extends Resource
     public function filters(NovaRequest $request)
     {
         return [
-            AgeFilter::make()->range(0,75),
+            AgeFilter::make()->range(0,100),
+            EnumBooleanFilter::make('model_class', ModelClass::class)
+                ->name("Class"),
         ];
     }
 
@@ -166,9 +189,9 @@ class Model extends Resource
     public function actions(NovaRequest $request)
     {
         return [
-            new Actions\AddToRole(),
             new InviteForRole(),
             new AddToRole(),
+            new SendMail(),
         ];
     }
 }

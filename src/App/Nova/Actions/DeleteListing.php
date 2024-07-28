@@ -3,17 +3,18 @@
 namespace App\Nova\Actions;
 
 use Domain\Jobs\Models\Role;
-use Domain\Work2\Actions\Invite;
+use Domain\Profiles\Models\Model;
+use Domain\Work2\Models\Listing;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
-use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class InviteForRole extends Action
+class DeleteListing extends Action
 {
     use InteractsWithQueue, Queueable;
 
@@ -24,18 +25,17 @@ class InviteForRole extends Action
      * @param  \Illuminate\Support\Collection  $models
      * @return mixed
      */
-    public function handle(ActionFields $fields, Collection $models)
+    public function handle(ActionFields $fields, Collection $listings)
     {
-        foreach ($models as $model) {
+        DB::transaction(function () use ($fields, $listings) {
+            foreach ($listings as $listing) {
+                abort_unless($listing instanceof Listing, 400, "Apply this action to a model");
+                abort_unless(!$listing->applied_at, 400, "Listing has been applied to");
+                abort_unless(!$listing->hired_at, 400, "Listing has been hired");
 
-            app(Invite::class)->execute(
-                Role::find($fields->role_id),
-                $model,
-                $fields->get('is_shortlisted')
-            );
-
-            Action::message("Invite for role has been sent to " . $model->name);
-        }
+                $listing->delete();
+            }
+        });
     }
 
     /**
@@ -52,7 +52,6 @@ class InviteForRole extends Action
                     return [$role->id => $role->job->title . " - " . $role->name];
                 }))
                 ->searchable(),
-            Boolean::make('Immediately shortlist', 'is_shortlisted')
         ];
     }
 }

@@ -3,7 +3,8 @@ import "@mux/mux-player/themes/minimal";
 import {TwicPicture} from "@twicpics/components/react";
 import {CheckCircleIcon} from "@heroicons/react/24/solid/index.js";
 import {ListingData, ModelPhotoData, PhotoData, PresentationData} from "@/types/generated";
-import {PlusIcon} from "@heroicons/react/24/solid";
+import {ArrowDownIcon, PlusIcon} from "@heroicons/react/24/solid";
+import {Link} from "@inertiajs/react";
 
 type Props = {
     presentation: PresentationData,
@@ -185,9 +186,15 @@ export default function PresentationListing({ presentation, listing, onSelect, i
             <div className={"mt-4 grid grid-cols-1 lg:grid-cols-4 gap-4"}>
 
                 {presentation.should_show_casting_media && listing.casting_videos.map((video) => (
-                    <div key={video.mux_id} className={"aspect-square rounded-lg overflow-hidden"}>
-                        <MuxPlayer theme="minimal" poster="/img/poster-casting-video.png" playbackId={video.mux_id ?? ""}
-                                   className={"object-fit aspect-square rounded-lg"}/>
+                    <div key={video.mux_id} className={"aspect-square relative rounded-lg overflow-hidden"}>
+                        <div className={"absolute inset-0"}>
+                            <MuxPlayer theme="minimal" poster="https://modelwise.net/poster-casting-video.png" playbackId={video.mux_id ?? ""}
+                                       className={"object-fit aspect-square rounded-lg"}/>
+                        </div>
+                        <a href={`https://stream.mux.com/${video.mux_id}.m3u8`} target={"_blank"}
+                           className={"absolute z-2 top-0 left-0 w-10 h-10 bg-gray-100"}>
+                            <ArrowDownIcon className={"w-6 h-6 m-auto mt-2"}/>
+                        </a>
                     </div>
                 ))}
 

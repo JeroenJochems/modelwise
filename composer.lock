@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4dea73c1e91fcbba639ad89f6a58ba05",
+    "content-hash": "c49bd28ea924ce5d95041b05eef6cdfb",
     "packages": [
         {
             "name": "algolia/algoliasearch-client-php",
@@ -3685,6 +3685,64 @@
                 "source": "https://github.com/kelunik/certificate/tree/v1.1.3"
             },
             "time": "2023-02-03T21:26:53+00:00"
+        },
+        {
+            "name": "kirschbaum-development/nova-inline-select",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kirschbaum-development/nova-inline-select.git",
+                "reference": "6c5d33d6a5a6e03a3c0210b89df497e94c3bd095"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kirschbaum-development/nova-inline-select/zipball/6c5d33d6a5a6e03a3c0210b89df497e94c3bd095",
+                "reference": "6c5d33d6a5a6e03a3c0210b89df497e94c3bd095",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "laravel/nova": "^4.2",
+                "orchestra/testbench": "^7.4",
+                "phpunit/phpunit": "^9.5.10"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "KirschbaumDevelopment\\Nova\\InlineSelectFieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "KirschbaumDevelopment\\Nova\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brandon Ferens",
+                    "email": "brandon@kirschbaumdevelopment.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "An inline select field for Laravel Nova apps.",
+            "homepage": "https://github.com/kirschbaum-development/nova-inline-select",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/kirschbaum-development/nova-inline-select/issues",
+                "source": "https://github.com/kirschbaum-development/nova-inline-select/tree/2.0.1"
+            },
+            "time": "2022-05-23T17:05:49+00:00"
         },
         {
             "name": "kra8/laravel-snowflake",

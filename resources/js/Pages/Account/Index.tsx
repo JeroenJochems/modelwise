@@ -1,7 +1,5 @@
-import CleanLayout from "@/Layouts/CleanLayout";
-import {Head, Link} from "@inertiajs/react";
-import {H1} from "@/Components/Typography/H1";
-import {BackLink} from "@/Components/BackLink";
+import { Link } from "@inertiajs/react";
+import { H1 } from "@/Components/Typography/H1";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 
 export function link(route: string, title: string, as: string = "a", method: "get" | "post" = "get") {
@@ -22,7 +20,7 @@ export default function Index() {
             {link(route('account.personal-details'), 'Personal Details')}
             {link(route('account.profile-picture'), 'Profile picture')}
             {link(route('account.portfolio'), 'Portfolio')}
-            {link(route('account.activities'), 'Activities & Skills')}
+            {link(route('account.skills'), 'Skills')}
             {link(route('account.digitals'), 'Digitals')}
             {link(route('account.socials'), 'Socials')}
             {link(route('account.characteristics'), 'Characteristics')}

@@ -2,16 +2,27 @@ import CleanLayout from "@/Layouts/CleanLayout";
 import {H1} from "@/Components/Typography/H1";
 import {P} from "@/Components/Typography/p";
 import {Header} from "@/Components/Onboarding/Header";
-import {router, useForm, usePage} from "@inertiajs/react";
+import {useForm, usePage} from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import {PageProps} from "@/types";
 import {useState} from "react";
 import {BaseFile, FileUploader} from "@/Components/FileUploader";
+import {TagCloud} from "@/Components/TagCloud";
+import {SkillsViewModel} from "@/types/generated";
 
+type Props = {
+    vm: SkillsViewModel,
+    modelPhotos: BaseFile[]
+}
 
 export type FileEventTarget = EventTarget & { files: FileList|null };
 
-export default function Portfolio({modelPhotos}: {modelPhotos: BaseFile[] }) {
+type FormType = {
+    skills: string[],
+    photos: BaseFile[]
+}
+
+export default function Portfolio({vm, modelPhotos}: Props) {
 
     const { props } = usePage<PageProps>()
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -20,7 +31,8 @@ export default function Portfolio({modelPhotos}: {modelPhotos: BaseFile[] }) {
 
     const [isUploading, setIsUploading] = useState<boolean>(false);
 
-    const { post, data, progress, setData } = useForm({
+    const { post, data, setData } = useForm<FormType>({
+        skills: vm.selectedSkills,
         photos: modelPhotos
     });
 
@@ -33,6 +45,14 @@ export default function Portfolio({modelPhotos}: {modelPhotos: BaseFile[] }) {
         });
     }
 
+    function toggleActivity(slug: string) {
+        if (data.skills.includes(slug)) {
+            setData("skills", [...data.skills.filter(item => item !== slug)]);
+        } else {
+            setData("skills", [...data.skills, slug]);
+        }
+    }
+
     return (
         <CleanLayout header={
             <Header step={4} isOnboarding={isOnboarding}>
@@ -40,12 +60,18 @@ export default function Portfolio({modelPhotos}: {modelPhotos: BaseFile[] }) {
             </Header>
         } photos={["https://modelwise.imgix.net/assets/3.png?w=1200&fm=auto"]}>
 
-                <P>
-                    Horse riding, yoga, surfing, slacklining, you name it. Show us all your skills so we can better match you to new shoots.
-                </P>
+                <P>Which relevant skills do you want to receive jobs for?</P>
+
+                <TagCloud tags={vm.allSkills}
+                      includeOther={false}
+                      selected={data.skills}
+                      onToggle={toggleActivity}/>
+
+                <P>Do you have photos of yourself performing relevant skills? Upload as many as you want.</P>
 
                 <FileUploader
-                    cols={3}
+                    cols={6}
+                    colsOnMobile={3}
                     accept={"image/*"}
                     files={data.photos}
                     onToggleUploading={setIsUploading}

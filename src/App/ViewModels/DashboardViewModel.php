@@ -35,7 +35,7 @@ class DashboardViewModel extends ViewModel
                     })
                     ->orWhereNotNull('hired_at');
             })
-            ->with(["model", "role.job"])
+            ->with(["model", "role.job", "photos", "casting_photos", "casting_videos"])
             ->get();
 
         $this->listings = ListingData::collect($listings);

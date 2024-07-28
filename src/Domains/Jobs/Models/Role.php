@@ -75,4 +75,9 @@ class Role extends Model
     {
         return $this->hasMany(Presentation::class);
     }
+
+    public function getCanShortlistAttribute()
+    {
+        return $this->extra_fields['casting_photos'] || $this->extra_fields['casting_videos'];
+    }
 }

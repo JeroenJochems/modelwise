@@ -57,7 +57,10 @@ class Photo extends Resource
 
         $options = match($resource) {
             "job" => [PhotoModel::FOLDER_JOB_IMAGE => PhotoModel::FOLDER_JOB_IMAGE],
-            "application" => [ApplicationModel::PHOTO_FOLDER => ApplicationModel::PHOTO_FOLDER],
+            "application" => [
+                \Domain\Work2\Models\Listing::FOLDER_PHOTOS => \Domain\Work2\Models\Listing::FOLDER_PHOTOS,
+                \Domain\Work2\Models\Listing::FOLDER_CASTING_PHOTOS => \Domain\Work2\Models\Listing::FOLDER_CASTING_PHOTOS,
+            ],
             "brand" => [PhotoModel::FOLDER_BRAND_LOGO],
             "role" => [\Domain\Jobs\Models\Role::PHOTO_FOLDER_PRIVATE, \Domain\Jobs\Models\Role::PHOTO_FOLDER_PUBLIC],
             "model" => [PhotoModel::FOLDER_WORK_EXPERIENCE, PhotoModel::FOLDER_DIGITALS, PhotoModel::FOLDER_TATTOOS],
@@ -69,17 +72,6 @@ class Photo extends Resource
         })->toArray();
 
         return [
-            Avatar::make('Profile picture', 'path')
-                ->thumbnail(function ($value, $disk) {
-                    // @phpstan-ignore-next-line
-                    return $value ? env("CDN_URL") . $this->path . "?w=600&h=600&fit=crop&crop=faces" : null;
-                })
-                ->path("profile_pictures")
-                ->preview(function ($value, $disk) {
-                    // @phpstan-ignore-next-line
-                    return $value ? env("CDN_URL") . $this->path : null;
-                })
-                ->hideFromIndex()->hideFromDetail()->readonly(true)->showOnUpdating(false),
             MorphTo::make("Photoable")->onlyOnDetail(),
             Select::make("Folder")->options($options),
             Text::make("Analysis")->onlyOnDetail(),

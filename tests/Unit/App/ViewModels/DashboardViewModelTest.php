@@ -8,7 +8,7 @@ test('it creates nested data', function() {
 
     $listing = Listing::factory()->createOne();
 
-    $listings = Listing::query()->get();
+    $listings = Listing::query()->with(["model", "role.job", "photos", "casting_photos", "casting_videos"])->get();
 
     $data = \Domain\Jobs\Data\ListingData::collect($listings);
 });

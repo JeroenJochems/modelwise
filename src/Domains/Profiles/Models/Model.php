@@ -2,10 +2,14 @@
 
 namespace Domain\Profiles\Models;
 
+use App\EmailLog;
 use App\Notifications\ResetPasswordNotification;
+use Djokicpn\LaravelEmailAuditLog\Models\EmailAudit;
 use Domain\Jobs\Models\Role;
 use Domain\Jobs\Models\RoleView;
 use Domain\Profiles\Enums\Ethnicity;
+use Domain\Profiles\Enums\Gender;
+use Domain\Profiles\Enums\ModelClass;
 use Domain\Work2\Models\Listing;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -43,9 +47,11 @@ class Model extends Authenticatable implements Onboardable
 
     const TAG_TYPE_MODEL_EXPERIENCE = 'Modeling experience';
     const TAG_TYPE_PROFESSIONS = 'Professions';
+    const TAG_TYPE_SKILLS = 'Skills';
 
     const TAG_TYPES = [
         self::TAG_TYPE_MODEL_EXPERIENCE => self::TAG_TYPE_MODEL_EXPERIENCE,
+        self::TAG_TYPE_SKILLS => self::TAG_TYPE_SKILLS,
         self::TAG_TYPE_PROFESSIONS => self::TAG_TYPE_PROFESSIONS,
     ];
 
@@ -125,6 +131,8 @@ class Model extends Authenticatable implements Onboardable
     protected $casts = [
         "height" => "float",
         'ethnicity' => Ethnicity::class,
+        'gender' => Gender::class,
+        'model_class' => ModelClass::class,
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'is_subscribed_to_newsletter' => 'boolean',
@@ -133,6 +141,10 @@ class Model extends Authenticatable implements Onboardable
         'date_of_birth' => 'date',
         'seen_exclusive_countries' => 'boolean',
     ];
+
+    public function emailLogs() {
+        return $this->hasMany(EmailLog::class, 'to', 'email');
+    }
 
     public function getProfilePictureCdnAttribute()
     {

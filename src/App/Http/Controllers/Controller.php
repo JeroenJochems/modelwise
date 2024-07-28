@@ -15,7 +15,9 @@ class Controller extends BaseController
 
     public function test()
     {
-        $photos = Photo::whereNull('hash')->limit(10000)->get();
+        $photos = Photo::whereNull('hash')
+            ->limit(10000)
+            ->get();
 
         foreach ($photos as $photo) {
 

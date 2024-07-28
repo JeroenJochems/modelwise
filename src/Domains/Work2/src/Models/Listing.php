@@ -36,7 +36,7 @@ class Listing extends Model
     }
 
     protected $guarded = [];
-    protected $with = ['model', 'role.job', 'photos', 'casting_photos', 'casting_videos'];
+    protected $with = [];
 
     const FOLDER_PHOTOS = 'Listing';
     const FOLDER_CASTING_PHOTOS = 'Casting photos';

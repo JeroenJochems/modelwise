@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Notifications\ModelCreated;
 use Domain\Profiles\Actions\RegisterModel;
 use Domain\Profiles\Data\RegisterModelData;
 use Illuminate\Http\RedirectResponse;
@@ -23,8 +22,6 @@ class RegisterModelController extends Controller
         $data->viewedRoles = request()->session()->get('viewed_roles', []);
 
         $model = (new RegisterModel())($data);
-
-        $model->notify(new ModelCreated());
 
         Auth::login($model);
         return redirect(route('onboarding.personal-details'));

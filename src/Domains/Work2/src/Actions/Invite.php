@@ -14,6 +14,7 @@ class Invite
     {
         $listing = Listing::firstOrNew(['role_id' => $role->id, 'model_id' => $model->id]);
         $listing->invited_at = now();
+        $listing->shortlisted_at = now();
         $listing->save();
 
         Mail::to($model)
@@ -22,6 +23,7 @@ class Invite
                 messageContent: "Hi {$model->first_name}\n\n" .
                 "We believe you might be a great fit for this role.\n\n" .
                 "{$listing->role->job->title} - {$listing->role->name}\n\n" .
+                $listing->role->job->description . "\n\n" .
                 "Are you interested?\n\n",
                 actionText: "View role details",
                 actionUrl: route('roles.show', $listing->role_id)

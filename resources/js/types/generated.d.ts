@@ -218,6 +218,10 @@ casting_questions: string | null;
 fields: FieldsData;
 extra_fields: ExtraFieldsData;
 };
+export type SkillsViewModel = {
+allSkills: Array<Tag>;
+selectedSkills: Array<string>;
+};
 export type Tag = {
 id: number;
 name: string;

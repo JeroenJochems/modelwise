@@ -19,7 +19,7 @@ abstract class BaseOnboardingController extends Controller
 
                 $recentlyViewedRole = auth()->user()->role_views()->latest()->first();
                 if ($recentlyViewedRole) {
-                    return redirect()->route("roles.apply", $recentlyViewedRole->role);
+                    return redirect()->route("applications.create", $recentlyViewedRole->role);
                 }
 
                 return redirect()->route("onboarding.thanks");

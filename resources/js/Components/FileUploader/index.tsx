@@ -76,15 +76,17 @@ export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6
                 </div>
             )}
 
-            <ProgressBar progress={totalProgressRatio} />
+            { totalProgressRatio > 0 && totalProgressRatio < 1 && (
+                <ProgressBar progress={totalProgressRatio} />
+            )}
 
             { max>1 && notDeletedFiles.length > 0 && (
-                <label htmlFor={id} className={"bg-gray-100 border-gray-500 rounded-md p-2 mt-2 items-center text-center cursor-pointer "}>
+                <label htmlFor={id} className={"bg-teal-100 border border-gray-400 rounded text-teal p-2 mt-2 items-center text-center cursor-pointer "}>
                     + Add more { accept?.includes('video') ? 'videos' : 'photos' }
                 </label>
             )}
 
-            <InputError message={error} />
+            { !!error && <InputError message={error} /> }
 
             <input name={name} type="file" id={id} accept={accept} multiple className={"hidden"} onChange={handleChange}/>
         </>
@@ -120,24 +122,6 @@ export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6
 
                 });
         });
-    }
-
-    function base64ToBlob(base64Data: string) {
-        const parts = base64Data.split(';base64,');
-        const imageType = parts[0].split(':')[1];
-        const base64 = parts[1];
-        const byteCharacters = atob(base64);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-
-        return new Blob([byteArray], { type: imageType });
-    }
-
-    function blobToFile(blob: Blob, fileName: string) {
-        return new File([blob], fileName, { type: blob.type });
     }
 
     function handleDelete({ id }: BaseFile) {

@@ -46,7 +46,7 @@ export default function Dashboard(props: Props) {
                         console.log(listing.role.job!);
 
                         return (
-                            <li key={listing.id} className={"block bg-white/95 shadow-outline overflow-hidden rounded-lg"}>
+                            <li key={listing.id} className={"flex bg-white/95 shadow-outline overflow-hidden rounded-lg"}>
                                 <div className={"w-2/3 grid gap-4 p-4 my-4 flex-grow"}>
 
                                     <Label>{listing.status}</Label>

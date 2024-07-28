@@ -32,27 +32,33 @@ export function ApplicationStatus({ viewModel }: Props) {
         )
     }
 
-    if (!!listing.shortlisted_at) {
-
+    if (!!listing.extended_application_at) {
         return (
             <Content>
-                <H2>You've been shortlisted!</H2>
+                <H2>Waiting for the client response</H2>
+                <>You have provided additional casting information. This will now be presented to the client. We'll keep you posted once the client has made a decision.</>
+            </Content>
+        )
+    }
 
-                { listing!.extended_application_at
-                    ? <>You have provided additional casting information. This will now be presented to the client. We'll keep you posted once the client has made a decision.</>
-                    : <>
-                        <P>The client has requested additional information to make a hiring decision.</P>
-                        <P>Please provide the information below to increase your chances of being hired.</P>
-                        <ExtendedApplicationForm listing={listing} role={role} />
-                    </>}
+    if (!!listing.shortlisted_at) {
+        return (
+            <Content>
+                <H2>You've been shortlisted</H2>
+
+                <>
+                    <P>The client has requested additional information to make a hiring decision.</P>
+                    <P>Please provide the information below to increase your chances of being hired.</P>
+                    <ExtendedApplicationForm listing={listing} role={role} />
+                </>
             </Content>
         )
     }
 
     return (<Content>
-                <P>Thank you for applying to this job!</P>
-                <P>We will review your application and get back to you as soon as possible.</P>
-                <P>Good luck!</P>
-            </Content>
-        )
+            <P>Thank you for applying to this job!</P>
+            <P>We will review your application and get back to you as soon as possible.</P>
+            <P>Good luck!</P>
+        </Content>
+    )
 }

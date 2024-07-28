@@ -12,7 +12,7 @@
 
         <mj-section>
             <mj-column>
-                <mj-image width="200px" src="https://mdlws.twic.pics/logo-black.png?twic=v1/resize=400"></mj-image>
+                <mj-image width="150px" src="https://mdlws.twic.pics/logo-black.png?twic=v1/resize=300" alt="Modelwise"></mj-image>
             </mj-column>
         </mj-section>
 

@@ -2,15 +2,18 @@
 
 namespace App\Notifications;
 
+use App\Mail\CleanMail;
 use App\Notifications\SidemailData\SidemailNotification;
 use App\Notifications\SidemailData\SidemailRecipient;
 use Domain\Profiles\Models\Model;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailable;
 use Illuminate\Notifications\Notification;
+use Support\User;
 
-class ResetPasswordNotification extends Notification implements ShouldQueue, SidemailNotification
+class ResetPasswordNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -21,14 +24,15 @@ class ResetPasswordNotification extends Notification implements ShouldQueue, Sid
         return SidemailChannel::class;
     }
 
-    public function toSideMail(Model|Authenticatable $notifiable): SideMailMessage
+    public function toMail(Model|User $notifiable): Mailable
     {
-        return new SideMailMessage(
-            recipient: SidemailRecipient::fromModel($notifiable),
-            template: 'reset-password',
-            data: [
-                'reset_password_url' => route("password.reset", ['email' => urlencode($notifiable->email), 'token' => $this->token]),
-            ]
-        );
+        return (new CleanMail(
+            'Password reset',
+            [
+                "You are receiving this email because we received a password reset request for your account.",
+            ],
+            'Reset password',
+            route("password.reset", ['email' => urlencode($notifiable->email), 'token' => $this->token]),
+        ))->to($notifiable->email);
     }
 }

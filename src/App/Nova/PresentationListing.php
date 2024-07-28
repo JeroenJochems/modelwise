@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -10,6 +11,8 @@ use Outl1ne\NovaSortable\Traits\HasSortableRows;
 class PresentationListing extends Resource
 {
     use HasSortableRows;
+
+    public static $perPageViaRelationship = 500;
 
     public static $model = \Domain\Present\Models\PresentationListing::class;
 
@@ -34,6 +37,9 @@ class PresentationListing extends Resource
     public function fields(NovaRequest $request)
     {
         return [
+            Text::make('Photo', function() {
+                return "<img src=\"{$this->listing->model->profile_picture_cdn}?twic=v1/focus=auto/cover=120x120\" />";
+            })->asHtml(),
             Text::make('Model', function() {
                 return $this->listing->model->name;
             })->onlyOnIndex(),

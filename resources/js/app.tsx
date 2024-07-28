@@ -16,7 +16,7 @@ installTwicpics( {
 } );
 
 if (process.env.NODE_ENV === 'production') {
-    flare.light();
+    flare.light('5fidD5ZckQKP2DVYtjzfXF7gDZAV5ylS');
 }
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Modelwise';

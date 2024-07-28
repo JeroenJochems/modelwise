@@ -6,9 +6,10 @@ use Domain\Work2\Models\Listing;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Kra8\Snowflake\HasShortflakePrimary;
+use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
-class PresentationListing extends Model
+class PresentationListing extends Model implements Sortable
 {
     use HasShortflakePrimary,
         SortableTrait;

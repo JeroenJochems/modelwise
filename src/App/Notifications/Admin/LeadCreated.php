@@ -2,15 +2,13 @@
 
 namespace App\Notifications\Admin;
 
-use App\Notifications\SidemailChannel;
-use App\Notifications\SidemailData\SidemailNotification;
-use App\Notifications\SidemailData\SidemailRecipient;
-use App\Notifications\SideMailMessage;
+use App\Mail\CleanMail;
 use Domain\Leads\Models\Lead;
 use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
 use Illuminate\Notifications\Notification;
 
-class LeadCreated extends Notification implements SidemailNotification
+class LeadCreated extends Notification
 {
     use Queueable;
 
@@ -19,23 +17,18 @@ class LeadCreated extends Notification implements SidemailNotification
 
     public function via(object $notifiable): string
     {
-        return SidemailChannel::class;
+        return 'mail';
     }
 
-    public function toSidemail(object $notifiable): SideMailMessage
+    public function toMail(object $notifiable): Mailable
     {
-        return new SideMailMessage(
-            recipient: new SidemailRecipient(
-                $notifiable->email,
-                $notifiable->name,
-                'en'),
-            template: 'lead-created',
-            data: [
-                'first_name' => $this->lead->first_name,
-                'last_name' => $this->lead->last_name,
-                'email' => $this->lead->email,
-                'phone' => $this->lead->phone,
-            ],
-        );
+        return (new CleanMail(
+            'New lead was created',
+            [
+                $this->lead->first_name." ".$this->lead->last_name,
+                $this->lead->email,
+                $this->lead->phone,
+            ]
+        ))->to($notifiable->email);
     }
 }

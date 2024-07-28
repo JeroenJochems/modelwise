@@ -5,11 +5,9 @@ import {H1} from "@/Components/Typography/H1";
 import InputGroupText from "@/Components/Forms/InputGroupText";
 import {useForm, usePage} from '@inertiajs/react';
 import {PageProps} from "@/types";
-import CountriesViewModel = App.ViewModels.CountriesViewModel;
 import PrimaryButton from "@/Components/PrimaryButton";
 import {BaseFile} from "@/Components/FileUploader";
-import Checkbox from "@/Components/Checkbox";
-import {Label} from "@/Components/Atoms/Label";
+import {CountriesViewModel} from "@/types/generated";
 
 type ModelDataType = {
     first_name: string

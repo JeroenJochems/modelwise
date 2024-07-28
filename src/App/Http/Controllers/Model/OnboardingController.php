@@ -13,8 +13,6 @@ final class OnboardingController extends BaseOnboardingController
 
     public function firstApplication()
     {
-
-
         return redirect()->route('onboarding.thanks');
     }
 

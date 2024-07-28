@@ -66,7 +66,7 @@ export function ExtendedApplicationForm({ listing, role }: Props) {
             )}
 
             <PrimaryButton onClick={submit} className={"mb-8 w-ful"} disabled={isUploading || processing}>
-                { processing ? "Please wait..." : "Submit application"}
+                { processing ? "Please wait..." : "Submit"}
             </PrimaryButton>
 
         </div>

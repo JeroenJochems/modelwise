@@ -1,5 +1,6 @@
 <?php
 
+use Domain\Work2\Models\Listing;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -29,9 +30,12 @@ return new class extends Migration
                 ->where('model_id', $application->model_id)
                 ->first();
 
-            $listing = \Domain\Work2\Models\Listing::create([
+            $listing = Listing::firstOrCreate([
                 'model_id' => $application->model_id,
                 'role_id' => $application->role_id,
+                ]);
+
+            $listing->update([
                 'rejected_at' => $rejection ? $rejection->created_at : null,
                 'hired_at' => $hire ? $hire->created_at : null,
                 'favorited_at' => $application->prelisted_at,

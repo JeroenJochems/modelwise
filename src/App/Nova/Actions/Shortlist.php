@@ -22,9 +22,9 @@ class Shortlist extends Action
      */
     public function handle(ActionFields $fields, Collection $collection)
     {
-        foreach ($collection as $application) {
+        foreach ($collection as $listing) {
 
-            app(\Domain\Work2\Actions\Shortlist::class)->execute($application);
+            app(\Domain\Work2\Actions\Shortlist::class)->execute($listing);
         }
     }
 

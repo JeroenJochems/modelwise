@@ -3,10 +3,10 @@ import {Header} from "@/Components/Onboarding/Header";
 import {H1} from "@/Components/Typography/H1";
 import {useForm, usePage} from '@inertiajs/react';
 import {PageProps} from "@/types";
-import ProfessionalExperienceViewModel = App.ViewModels.ProfessionalExperienceViewModel;
 import {P} from "@/Components/Typography/p";
 import {TagCloud} from "@/Components/TagCloud";
 import PrimaryButton from "@/Components/PrimaryButton";
+import {ProfessionalExperienceViewModel} from "@/types/generated";
 
 type Props = {
     vm: ProfessionalExperienceViewModel,

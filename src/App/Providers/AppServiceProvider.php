@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use Domain\Jobs\Models\Brand;
 use Domain\Jobs\Models\Client;
-use Domain\Jobs\Models\Invite;
 use Domain\Jobs\Models\Job;
 use Domain\Jobs\Models\Role;
 use Domain\Present\Models\Presentation;
@@ -42,7 +41,6 @@ class AppServiceProvider extends ServiceProvider
             'role' => Role::class,
             'brand' => Brand::class,
             'user' => User::class,
-            'longlist-model' => Invite::class,
             'client' => Client::class,
             'tag' => Tag::class,
             'presentation' => Presentation::class,
@@ -69,8 +67,8 @@ class AppServiceProvider extends ServiceProvider
                 return !!$model->photos()->count();
             });
 
-        Onboard::addStep('Activities')
-            ->link("onboarding/activities")
+        Onboard::addStep('Skills')
+            ->link("onboarding/skills")
             ->completeIf(function (Model $model) {
                 return $model->photos()->where('folder', Photo::FOLDER_ACTIVITIES)->count() > 0;
             });
