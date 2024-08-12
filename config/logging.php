@@ -60,7 +60,7 @@ return [
 
         'flare' => [
             'driver' => 'flare',
-            'level' => 'debug',
+            'level' => 'error',
         ],
 
         'vapor' => [

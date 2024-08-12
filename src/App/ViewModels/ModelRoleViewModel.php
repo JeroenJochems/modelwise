@@ -24,7 +24,7 @@ class ModelRoleViewModel extends ViewModel
 
     public function __construct(Role $role, Listing $listing = null)
     {
-        $this->role = RoleData::from($role->load(["job", "public_photos"]));
+        $this->role = RoleData::from($role->load(["job", "job.brand", "job.client", "public_photos"]));
 
         if ($listing) {
             $listing->load(["casting_photos", "casting_videos", "model", "role", "photos"]);

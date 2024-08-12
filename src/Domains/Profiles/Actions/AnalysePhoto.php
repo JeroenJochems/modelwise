@@ -54,8 +54,6 @@ class AnalysePhoto
             $json = str_replace("```json\n", "", $json);
             $json = str_replace("\n```", "", $json);
 
-            ray($json);
-
             $photo->analysis = json_decode($json);
             $photo->save();
 
@@ -63,7 +61,7 @@ class AnalysePhoto
                 $photo->photoable->searchable();
             }
         } catch (\Exception $e) {
-            Log::info($e->getMessage());
+            Log::error("Analyse photo {$photo->id}: {$e->getMessage()}");
         }
     }
 }

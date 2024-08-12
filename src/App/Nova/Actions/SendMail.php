@@ -2,19 +2,20 @@
 
 namespace App\Nova\Actions;
 
-use Domain\Jobs\Models\Role;
+use App\Mail\CleanMail;
 use Domain\Profiles\Models\Model;
-use Domain\Work2\Models\Listing;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
-use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class DeleteListing extends Action
+class SendMail extends Action
 {
     use InteractsWithQueue, Queueable;
 
@@ -25,17 +26,20 @@ class DeleteListing extends Action
      * @param  \Illuminate\Support\Collection  $models
      * @return mixed
      */
-    public function handle(ActionFields $fields, Collection $listings)
+    public function handle(ActionFields $fields, Collection $models)
     {
-        DB::transaction(function () use ($fields, $listings) {
-            foreach ($listings as $listing) {
-                abort_unless($listing instanceof Listing, 400, "Apply this action to a model");
-                abort_if($listing->applied_at, 400, "Listing has been applied to");
-                abort_if($listing->hired_at, 400, "Listing has been hired");
+        foreach ($models as $model) {
 
-                $listing->delete();
+            if ($model instanceof Model) {
+                Mail::to($model)
+                    ->queue(new CleanMail(
+                        messageSubject: $fields->get('subject'),
+                        messageContent: $fields->get('content'),
+                    ));
             }
-        });
+        }
+
+        return Action::message('Mail sent!');
     }
 
     /**
@@ -46,6 +50,9 @@ class DeleteListing extends Action
      */
     public function fields(NovaRequest $request)
     {
-        return [];
+        return [
+            Text::make('Subject', 'subject'),
+            Textarea::make('Content', 'content'),
+        ];
     }
 }

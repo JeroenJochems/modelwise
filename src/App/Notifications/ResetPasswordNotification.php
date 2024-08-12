@@ -3,11 +3,8 @@
 namespace App\Notifications;
 
 use App\Mail\CleanMail;
-use App\Notifications\SidemailData\SidemailNotification;
-use App\Notifications\SidemailData\SidemailRecipient;
 use Domain\Profiles\Models\Model;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Notifications\Notification;
@@ -21,7 +18,7 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
 
     public function via(object $notifiable): string
     {
-        return SidemailChannel::class;
+        return 'mail';
     }
 
     public function toMail(Model|User $notifiable): Mailable
