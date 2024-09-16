@@ -15,7 +15,7 @@ listings: Array<ListingData>;
 recentlyViewedRoles: Array<RoleData>;
 model: ModelData | null;
 };
-export type Ethnicity = 'White' | 'Black' | 'Latino' | 'Asian' | 'NativeAmerican';
+export type Ethnicity = 'asian' | 'black' | 'hispanic' | 'indigenous' | 'middle-eastern' | 'mixed' | 'native-american' | 'pacific-islander' | 'white' | 'other';
 export type ExtraFieldsData = {
 casting_photos: boolean;
 casting_videos: boolean;
@@ -73,6 +73,8 @@ casting_videos: Array<VideoData>;
 export type ModelCharacteristicsData = {
 gender: string | null;
 hair_color: HairColor | null;
+ethnicity: Ethnicity | null;
+ethnicity_other: string | null;
 hair_color_other: string | null;
 eye_color: EyeColor | null;
 eye_color_other: string | null;
@@ -85,7 +87,7 @@ cup_size: string | null;
 tattoos: boolean | null;
 piercings: boolean | null;
 };
-export type ModelClass = 'AAA - €2000/day+' | 'A - €1000-€2000/day' | 'B - ~€600/day' | 'C - ~€400/day' | 'D - ~€200/day';
+export type ModelClass = 'Archived' | 'People' | 'Talent' | 'Top';
 export type ModelData = {
 id: string | null;
 profile_picture: string | null;

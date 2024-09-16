@@ -9,7 +9,6 @@ use Domain\Jobs\Models\Role;
 use Domain\Present\Models\Presentation;
 use Domain\Present\Models\PresentationListing;
 use Domain\Profiles\Models\Model;
-use Domain\Profiles\Models\Model as ModelClass;
 use Domain\Profiles\Models\Photo;
 use Domain\Profiles\Models\Video;
 use Domain\Work2\Models\Listing;
@@ -54,7 +53,6 @@ class AppServiceProvider extends ServiceProvider
                 return !!$model->first_name;
             });
 
-
         Onboard::addStep('Profile picture')
             ->link("onboarding/profile-picture")
             ->completeIf(function (Model $model) {
@@ -70,7 +68,10 @@ class AppServiceProvider extends ServiceProvider
         Onboard::addStep('Skills')
             ->link("onboarding/skills")
             ->completeIf(function (Model $model) {
-                return $model->photos()->where('folder', Photo::FOLDER_ACTIVITIES)->count() > 0;
+                return $model->photos()->where('folder', Photo::FOLDER_ACTIVITIES)->count() > 0
+                    || $model
+                        ->tagsWithType(Model::TAG_TYPE_SKILLS)
+                        ->count() > 0;
             });
 
         Onboard::addStep('Socials')
@@ -95,7 +96,7 @@ class AppServiceProvider extends ServiceProvider
             ->link("onboarding/professional-experience")
             ->completeIf(function (Model $model) {
                 return $model
-                        ->tagsWithType(ModelClass::TAG_TYPE_MODEL_EXPERIENCE)
+                        ->tagsWithType(Model::TAG_TYPE_MODEL_EXPERIENCE)
                         ->count() > 0;
             });
     }

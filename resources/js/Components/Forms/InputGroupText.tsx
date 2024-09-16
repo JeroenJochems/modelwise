@@ -24,7 +24,7 @@ export default function InputGroupText(props: Props) {
     const value = props.value ?? "";
     const name = props.name ?? props.title.toLowerCase().replace(' ', '_');
 
-    const shouldShowSelect = props.options && props.options.length > 0;
+    const shouldShowSelect = props.options;
 
     return (
         <div>
@@ -32,13 +32,16 @@ export default function InputGroupText(props: Props) {
 
             {props.multiline && <TextArea defaultValue={value} onChange={(e) => props.onChange(e.target.value)}/>}
 
-            {!props.multiline && shouldShowSelect && !!props.options &&
+            {!props.multiline && shouldShowSelect && props.options!==null &&
                 <select id={name}
                         className="border-gray-300 focus:border-green focus:ring-green rounded-sm shadow-sm block mt-1 w-full"
                         value={value}
                         onChange={(e) => props.onChange(e.target.value)}>
-                    {props.options.map((option: any) =>
+                    {props.options.constructor.name === 'Array' && props.options.map((option: any) =>
                         <option key={option} value={option}>{option}</option>
+                    )}
+                    {props.options.constructor.name === 'Object' && Object.keys(props.options).map((option: any) =>
+                        <option key={option} value={option}>{props.options[option]}</option>
                     )}
                 </select>
             }

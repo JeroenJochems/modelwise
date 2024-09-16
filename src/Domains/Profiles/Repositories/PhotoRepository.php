@@ -19,7 +19,7 @@ class PhotoRepository
             if (array_key_exists("deleted", $photo) && $photo['deleted']===true) {
 
                 if ($photoObj = Photo::find($photo['id'])) {
-                    app(DeletePhoto::class)->onQueue()->execute($photoObj->path);
+                    app(DeletePhoto::class)->onQueue()->execute($photoObj);
                     $photoObj->delete();
                 }
 
@@ -28,20 +28,21 @@ class PhotoRepository
 
             if (array_key_exists("isNew", $photo) && $photo['isNew']===true) {
 
+                $newPath = str_replace("tmp/", "photos/", $photo['path']);
+
+                app(MovePhoto::class)->execute($photo['path'], $newPath);
+
                 $photoObj = new Photo;
                 $photoObj->photoable()->associate($model);
-                $photoObj->path = str_replace("tmp/", "photos/", $photo['path']);
+                $photoObj->path = $newPath;
                 $photoObj->folder = $folder;
                 $photoObj->save();
 
-                if ($photoObj->wasRecentlyCreated) {
-                    app(MovePhoto::class)->onQueue()->execute($photo['path'], $photoObj->path);
-
-                    if ($folder === Photo::FOLDER_ACTIVITIES || $folder === Photo::FOLDER_WORK_EXPERIENCE) {
-                        app(AnalysePhoto::class)->onQueue()->execute($photoObj);
-                    }
-                    app(PhashPhoto::class)->onQueue()->execute($photoObj);
+                if ($folder === Photo::FOLDER_ACTIVITIES || $folder === Photo::FOLDER_WORK_EXPERIENCE) {
+                    app(AnalysePhoto::class)->onQueue()->execute($photoObj);
                 }
+                app(PhashPhoto::class)->onQueue()->execute($photoObj);
+
                 return $photoObj->id;
 
             }

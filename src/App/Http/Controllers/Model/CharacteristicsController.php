@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Model;
 
 use App\Http\Controllers\Controller;
 use Domain\Profiles\Data\ModelCharacteristicsData;
+use Domain\Profiles\Enums\Ethnicity;
 use Domain\Profiles\Enums\EyeColor;
 use Domain\Profiles\Enums\HairColor;
 use Domain\Profiles\Models\Photo;
@@ -18,6 +19,7 @@ class CharacteristicsController extends BaseOnboardingController
             ->with([
                 'modelData' => ModelCharacteristicsData::from(auth()->user())->toArray(),
                 'eyeColors' => EyeColor::cases(),
+                'ethnicities' => Ethnicity::toArray(),
                 'hairColors' => HairColor::cases(),
                 'tattooPhotos' => $photoRepository->getPhotos(auth()->user(), Photo::FOLDER_TATTOOS),
                 'piercingPhotos' => $photoRepository->getPhotos(auth()->user(), Photo::FOLDER_PIERCINGS)

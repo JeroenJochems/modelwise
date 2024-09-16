@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
 use Inertia\Middleware;
 use Laravel\Nova\Contracts\ImpersonatesUsers;
 use Tightenco\Ziggy\Ziggy;
@@ -37,6 +39,15 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'translations' => function () {
+                return collect(File::allFiles(base_path('lang/' . app()->getLocale())))
+                    ->flatMap(function ($file) {
+                        return Arr::dot(
+                            File::getRequire($file->getRealPath()),
+                            $file->getBasename('.' . $file->getExtension()) . '.'
+                        );
+                    });
+            },
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy())->toArray(), [
                     'location' => $request->url(),

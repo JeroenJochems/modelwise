@@ -6,6 +6,7 @@ use App\Nova\Actions\AddToRole;
 use App\Nova\Actions\InviteForRole;
 use App\Nova\Actions\SendMail;
 use App\Nova\Filters\AgeFilter;
+use App\Nova\Filters\EthnicityFilter;
 use Datomatic\Nova\Fields\Enum\Enum;
 use Datomatic\Nova\Fields\Enum\EnumBooleanFilter;
 use Domain\Profiles\Enums\Ethnicity;
@@ -107,6 +108,12 @@ class Model extends Resource
                 ->enableOneStepOnIndex()
                 ->displayUsingLabels()
                 ->inlineOnDetail(),
+            InlineSelect::make('Ethnicity', 'ethnicity')->options(Ethnicity::toArray())
+                ->inlineOnIndex()
+                ->enableOneStepOnIndex()
+                ->displayUsingLabels()
+                ->inlineOnDetail(),
+            Text::make("Ethnicity other"),
             Boolean::make('Completed onboarding', 'has_completed_onboarding')->hideFromIndex()->readonly(),
             Boolean::make('Newsletter', 'is_subscribed_to_newsletter')->hideFromIndex(),
             Boolean::make('Is accepted')->hideFromIndex(),
@@ -175,9 +182,12 @@ class Model extends Resource
     public function filters(NovaRequest $request)
     {
         return [
+            EthnicityFilter::make(),
             AgeFilter::make()->range(0,100),
             EnumBooleanFilter::make('model_class', ModelClass::class)
                 ->name("Class"),
+            EnumBooleanFilter::make('ethnicity', Ethnicity::class)
+                ->name("Appearance"),
         ];
     }
 

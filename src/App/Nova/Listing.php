@@ -7,6 +7,7 @@ use App\Nova\Actions\DeleteListing;
 use App\Nova\Actions\Hire;
 use App\Nova\Actions\Reject;
 use App\Nova\Actions\SendInviteToListing;
+use App\Nova\Actions\SendMail;
 use App\Nova\Actions\Shortlist;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsTo;
@@ -158,6 +159,7 @@ class Listing extends Resource
     public function actions(NovaRequest $request)
     {
         return [
+            new SendMail(),
             new CreatePresentation(),
             new SendInviteToListing(),
             new Shortlist(),

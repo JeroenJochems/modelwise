@@ -2,6 +2,7 @@
 
 namespace Domain\Profiles\Data;
 
+use Domain\Profiles\Enums\Ethnicity;
 use Domain\Profiles\Enums\EyeColor;
 use Domain\Profiles\Enums\HairColor;
 use Spatie\LaravelData\Attributes\Validation\Rule;
@@ -13,6 +14,8 @@ class ModelCharacteristicsData extends Data
     public function __construct(
         public ?string $gender,
         public ?HairColor $hair_color,
+        public ?Ethnicity $ethnicity,
+        public ?string $ethnicity_other,
         public ?string $hair_color_other,
         public ?EyeColor $eye_color,
         public ?string $eye_color_other,

@@ -4,7 +4,6 @@ namespace Domain\Profiles\Models;
 
 use App\EmailLog;
 use App\Notifications\ResetPasswordNotification;
-use Djokicpn\LaravelEmailAuditLog\Models\EmailAudit;
 use Domain\Jobs\Models\Role;
 use Domain\Jobs\Models\RoleView;
 use Domain\Profiles\Enums\Ethnicity;

@@ -3,6 +3,7 @@
 namespace App\Nova\Actions;
 
 use App\Mail\CleanMail;
+use App\Nova\Listing;
 use Domain\Profiles\Models\Model;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -28,10 +29,19 @@ class SendMail extends Action
      */
     public function handle(ActionFields $fields, Collection $models)
     {
-        foreach ($models as $model) {
+        foreach ($models as $object) {
 
-            if ($model instanceof Model) {
-                Mail::to($model)
+            if ($object instanceof Listing) {
+
+                Mail::to($object->model)
+                    ->queue(new CleanMail(
+                        messageSubject: $fields->get('subject'),
+                        messageContent: $fields->get('content'),
+                    ));
+            }
+
+            if ($object instanceof Model) {
+                Mail::to($object)
                     ->queue(new CleanMail(
                         messageSubject: $fields->get('subject'),
                         messageContent: $fields->get('content'),

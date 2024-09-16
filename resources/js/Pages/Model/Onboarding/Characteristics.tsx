@@ -11,7 +11,7 @@ import {Header} from "@/Components/Onboarding/Header";
 import {PageProps} from "@/types";
 import PrimaryButton from "@/Components/PrimaryButton";
 import {BaseFile, FileUploader} from "@/Components/FileUploader";
-import {EyeColor, HairColor} from "@/types/generated";
+import {Ethnicity, EyeColor, HairColor} from "@/types/generated";
 
 type ModelDataType = {
     gender?: string
@@ -22,6 +22,8 @@ type ModelDataType = {
     chest: string
     waist: string
     hips: string
+    ethnicity: string
+    ethnicity_other: string
     shoe_size: string
     tattoos: boolean
     piercings: boolean
@@ -29,18 +31,20 @@ type ModelDataType = {
     tattoo_photos?: BaseFile[]
 }
 
-
 type Props = {
     modelData: ModelDataType
     hairColors: HairColor[],
     eyeColors: EyeColor[],
+    ethnicities: Ethnicity[],
     tattooPhotos: BaseFile[],
     piercingPhotos: BaseFile[],
 }
 
-export default function Characteristics({modelData, tattooPhotos, piercingPhotos, hairColors, eyeColors}: Props) {
+export default function Characteristics({modelData, tattooPhotos, piercingPhotos, hairColors, ethnicities, eyeColors}: Props) {
 
     const { ziggy } = usePage<PageProps>().props
+
+
 
     const isOnboarding = ziggy.location.includes("onboarding");
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -80,7 +84,6 @@ export default function Characteristics({modelData, tattooPhotos, piercingPhotos
                             {["", ...hairColors].map((option: any) =>
                                 <option key={option} value={option}>{option}</option>
                             )}
-
                     </select>
 
                     { data.hair_color === "Other" && (
@@ -94,7 +97,6 @@ export default function Characteristics({modelData, tattooPhotos, piercingPhotos
                     {!! errors.hair_color_other && <InputError message={errors.hair_color_other} className="mt-2"/>}
                 </div>
 
-
                 <InputGroupText
                     title="Eye color"
                     value={data.eye_color ?? ""}
@@ -103,6 +105,24 @@ export default function Characteristics({modelData, tattooPhotos, piercingPhotos
                     onChange={value => setData('eye_color', value)}
                 />
 
+                <div>
+                    <InputGroupText
+                        title={"Appearance / Ethnic features"}
+                        name={"ethnicity"}
+                        value={data.ethnicity ?? ""}
+                        error={errors.ethnicity}
+                        options={ethnicities}
+                        onChange={value => setData('ethnicity', value)}
+                    />
+
+                    { data.ethnicity === "Other" && (
+                        <TextInput id="ethnicity_other" className="block mt-1 w-full"
+                                   value={data.ethnicity_other ?? ""}
+                                   placeholder={"Please specify"}
+                                   onChange={e => setData('ethnicity_other', e.target.value)} />
+                    )}
+
+                </div>
                 <div className={"grid grid-cols-2 gap-4"}>
 
                     <InputGroupText

@@ -79,7 +79,7 @@ export default function Portfolio({vm, modelPhotos}: Props) {
                     onUpdate={(photos) => { setData(data => ({...data, photos})) }}
                 />
 
-                <PrimaryButton onClick={submit} disabled={isSubmitting || isUploading || ( isOnboarding && data.photos.length < 1)}>
+                <PrimaryButton onClick={submit} disabled={isSubmitting || isUploading || ( isOnboarding && !data.skills.length)}>
                     { isSubmitting ? `Please wait...` : isOnboarding ? 'Continue' : 'Save' }
                 </PrimaryButton>
         </CleanLayout>

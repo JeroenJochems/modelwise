@@ -29,7 +29,7 @@ class Shortlisted extends Notification implements ShouldQueue
             'You have been shortlisted',
             [
                 "Hi {$this->listing->model->first_name},",
-                "Good news: you've been shortlisted for the role {$this->listing->role->name} for {$this->listing->role->job->title} ({$this->listing->job->brand->name}).",
+                "Good news: you've been shortlisted for the role {$this->listing->role->name} for {$this->listing->role->job->title} ({$this->listing->role->job->brand?->name}).",
                 "The client has requested some additional information from you. Please log in to your account to provide this.",
             ],
             'View additional questions',
