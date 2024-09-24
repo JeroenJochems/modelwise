@@ -6,7 +6,9 @@ use App\Nova\Actions\AddToRole;
 use App\Nova\Actions\InviteForRole;
 use App\Nova\Actions\SendMail;
 use App\Nova\Filters\AgeFilter;
+use App\Nova\Filters\ClassFilter;
 use App\Nova\Filters\EthnicityFilter;
+use App\Nova\Filters\WithExternalModels;
 use Datomatic\Nova\Fields\Enum\Enum;
 use Datomatic\Nova\Fields\Enum\EnumBooleanFilter;
 use Domain\Profiles\Enums\Ethnicity;
@@ -77,7 +79,7 @@ class Model extends Resource
                     return $this->first_name . " " . $this->last_name;
                 })->asHeading(),
                 Line::make("Location", function () {
-                    return $this->city . ", " . $this->country;
+                    return strlen($this->city.$this->country)>0 ? $this->city . ", " . $this->country : "";
                 })->asSmall(),
                 Line::make("Phone number", function () {
                     return $this->phone_number;
@@ -98,6 +100,7 @@ class Model extends Resource
             Enum::make('Gender')->displayUsingLabels()->attach(Gender::class)->filterable()->rules('max:255')->hideFromIndex(),
             Select::make('Preferred language')->options(['en' => 'English', 'nl' => 'Nederlands'])->hideFromIndex(),
             Date::make('Date of birth')->hideFromIndex(),
+            Text::make('External ID')->sortable()->rules('max:255')->hideFromIndex(),
             InlineSelect::make('Class', 'model_class')->options([
                 'Archived' => 'Archived',
                 'People' => 'People',
@@ -113,7 +116,7 @@ class Model extends Resource
                 ->enableOneStepOnIndex()
                 ->displayUsingLabels()
                 ->inlineOnDetail(),
-            Text::make("Ethnicity other"),
+            Text::make("Ethnicity other")->hideFromIndex(),
             Boolean::make('Completed onboarding', 'has_completed_onboarding')->hideFromIndex()->readonly(),
             Boolean::make('Newsletter', 'is_subscribed_to_newsletter')->hideFromIndex(),
             Boolean::make('Is accepted')->hideFromIndex(),
@@ -182,10 +185,10 @@ class Model extends Resource
     public function filters(NovaRequest $request)
     {
         return [
+            WithExternalModels::make(),
             EthnicityFilter::make(),
+            ClassFilter::make(),
             AgeFilter::make()->range(0,100),
-            EnumBooleanFilter::make('model_class', ModelClass::class)
-                ->name("Class"),
             EnumBooleanFilter::make('ethnicity', Ethnicity::class)
                 ->name("Appearance"),
         ];

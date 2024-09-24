@@ -75,16 +75,13 @@ export default function Characteristics({modelData, tattooPhotos, piercingPhotos
             <div className="grid gap-4">
 
                 <div>
-                    <InputLabel htmlFor="hair_color" value="Hair color" />
-
-                    <select id="hair_color"
-                            className="border-gray-300 focus:border-green focus:ring-green rounded-sm shadow-sm block mt-1 w-full"
-                            value={data.hair_color ?? ""}
-                            onChange={e => setData('hair_color', e.target.value) }>
-                            {["", ...hairColors].map((option: any) =>
-                                <option key={option} value={option}>{option}</option>
-                            )}
-                    </select>
+                    <InputGroupText
+                        title="Eye color"
+                        value={data.hair_color ?? ""}
+                        error={errors.hair_color}
+                        options={hairColors}
+                        onChange={value => setData('hair_color', value)}
+                    />
 
                     { data.hair_color === "Other" && (
                         <TextInput id="hair_color_other" className="block mt-1 w-full"
@@ -101,7 +98,7 @@ export default function Characteristics({modelData, tattooPhotos, piercingPhotos
                     title="Eye color"
                     value={data.eye_color ?? ""}
                     error={errors.eye_color}
-                    options={["", ...eyeColors]}
+                    options={eyeColors}
                     onChange={value => setData('eye_color', value)}
                 />
 

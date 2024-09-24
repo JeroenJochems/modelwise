@@ -49,10 +49,12 @@ export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6
     }, [totalProgressRatio]);
 
     const notDeletedFiles = files.filter((file) => {
-
         if (file.deleted === undefined) return true;
-
         return !file.deleted;
+    });
+
+    const newFiles = files.filter((file) => {
+        return file.isNew;
     });
 
     const emptySlots = slots - notDeletedFiles.length > 0
@@ -96,9 +98,12 @@ export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6
 
         if (e.target.files === null || !e.target.files[0]) return;
 
-        setSelectedFiles(Array.from(e.target.files));
+        // load a maximum of 20 files to prevent timeout
+        const files = Array.from(e.target.files).slice(0,20);
 
-        Array.from(e.target.files).map(async (file, i) => {
+        setSelectedFiles(files);
+
+        files.map(async (file) => {
 
             addFileToProgress(file.name);
 

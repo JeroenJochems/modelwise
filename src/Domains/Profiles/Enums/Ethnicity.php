@@ -16,10 +16,12 @@ enum Ethnicity: string
     }
 
     case Asian = 'asian';
+    case MiddleEastern = 'middle-eastern';
     case Black = 'black';
+    case Caribbean = 'caribbean';
     case Hispanic = 'hispanic';
     case Indigenous = 'indigenous';
-    case MiddleEastern = 'middle-eastern';
+    case Indian = 'indian';
     case Mixed = 'mixed';
     case NativeAmerican = 'native-american';
     case Pacific = 'pacific-islander';

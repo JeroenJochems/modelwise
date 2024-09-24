@@ -23,7 +23,9 @@ class ContactController extends Controller
         $lead->last_name = request()->get("last_name");
         $lead->save();
 
-        foreach(User::get() as $user) {
+        foreach(User::query()
+                    ->where('email', 'LIKE', '%modelwise.agency')
+                    ->get() as $user) {
             $user->notify(new \App\Notifications\Admin\LeadCreated($lead));
         }
 

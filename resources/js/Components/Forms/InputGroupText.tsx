@@ -37,6 +37,8 @@ export default function InputGroupText(props: Props) {
                         className="border-gray-300 focus:border-green focus:ring-green rounded-sm shadow-sm block mt-1 w-full"
                         value={value}
                         onChange={(e) => props.onChange(e.target.value)}>
+
+                    {!value && <option value=""> - select an option -</option>}
                     {props.options.constructor.name === 'Array' && props.options.map((option: any) =>
                         <option key={option} value={option}>{option}</option>
                     )}

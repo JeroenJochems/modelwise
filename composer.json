@@ -58,6 +58,7 @@
         "spatie/mjml-sidecar": "^1.0",
         "spatie/nova-tags-field": "^4.0",
         "spatie/typescript-transformer": "^2.2",
+        "spekulatius/phpscraper": "^3.0",
         "symfony/http-client": "^7.1",
         "symfony/postmark-mailer": "^7.1",
         "tightenco/ziggy": "^1.0",
