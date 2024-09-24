@@ -18,6 +18,7 @@ class PortfolioController extends BaseOnboardingController
 
     public function store(PhotoRepository $photoRepository)
     {
+
         $photoRepository->update(auth()->user(), Photo::FOLDER_WORK_EXPERIENCE, request()->get("photos"));
 
         return $this->nextOrReturn();

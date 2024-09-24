@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Spatie\Mjml\Mjml;
+use Illuminate\Support\Facades\Http;
 
 class CleanMail extends Mailable implements ShouldQueue
 {
@@ -18,11 +18,13 @@ class CleanMail extends Mailable implements ShouldQueue
      * Create a new message instance.
      */
     public function __construct(
-        public string $messageSubject,
+        public string       $messageSubject,
         public string|array $messageContent,
-        public ?string $actionText = null,
-        public ?string $actionUrl = null,
-    ) { }
+        public ?string      $actionText = null,
+        public ?string      $actionUrl = null,
+    )
+    {
+    }
 
     /**
      * Get the message envelope.
@@ -39,16 +41,17 @@ class CleanMail extends Mailable implements ShouldQueue
      */
     public function content(): Content
     {
-        return new Content(htmlString: Mjml::new()
-            ->sidecar(!app()->environment('testing'))
-            ->toHtml(
-                view('mail.clean-mail', [
+        $response = Http::retry(3, 200)
+            ->withBasicAuth(config('services.mjml.app_id'), config('services.mjml.secret'))
+            ->post('https://api.mjml.io/v1/render', [
+                'mjml' => view('mail.clean-mail', [
                     'paragraphs' => is_array($this->messageContent) ? $this->messageContent : [$this->messageContent],
                     'actionText' => $this->actionText,
                     'actionUrl' => $this->actionUrl,
-                ])
-            )
-        );
+                ])->render(),
+            ]);
+
+        return new Content(htmlString: $response->json('html'));
     }
 
     /**

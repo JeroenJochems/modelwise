@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'mjml' => [
+        'app_id' => env('MJML_API_APPLICATION_ID'),
+        'secret' => env('MJML_API_SECRET_KEY'),
+    ],
+
 ];

@@ -25,7 +25,7 @@
         <env name="DB_HOST" value="127.0.0.1"/>
         <env name="DB_USERNAME" value="root"/>
         <env name="DB_PASSWORD" value=""/>
-        <env name="DB_DATABASE" value="testing_modelwise"/>
+        <env name="DB_DATABASE" value="modelwise_testing"/>
         <env name="MYSQL_ATTR_SSL_CA" value="" />
 
         <env name="MAIL_MAILER" value="array"/>

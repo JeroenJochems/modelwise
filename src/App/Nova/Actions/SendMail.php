@@ -37,6 +37,8 @@ class SendMail extends Action
                     ->queue(new CleanMail(
                         messageSubject: $fields->get('subject'),
                         messageContent: $fields->get('content'),
+                        actionText: 'View Listing',
+                        actionUrl: 'blabla'
                     ));
             }
 

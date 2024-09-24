@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Mail\CleanMail;
-use App\Mail\ClientSubmittedPreference;
 use Domain\Jobs\Data\ListingData;
 use Domain\Present\Data\PresentationData;
 use Domain\Present\Models\Presentation;
-use Domain\Work2\Models\Listing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
