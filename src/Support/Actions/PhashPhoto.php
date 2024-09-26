@@ -14,9 +14,9 @@ class PhashPhoto
     public function execute(Photo $photo, $deleteIfNotFound = false)
     {
         try {
-            $photo->hash = (new PHash())->getHash(
-                Storage::temporaryUrl($photo->path, now()->addMinutes(5)),
-            );
+            $tempUrl = $photo->cdn_path;
+
+            $photo->hash = (new PHash())->getHash($tempUrl);
             $photo->save();
         } catch (\Exception $e) {
             if ($deleteIfNotFound && str_contains($e->getMessage(), "404 Not Found")) {

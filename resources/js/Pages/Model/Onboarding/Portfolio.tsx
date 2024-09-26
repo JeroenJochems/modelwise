@@ -53,7 +53,7 @@ export default function Portfolio({modelPhotos}: {modelPhotos: BaseFile[] }) {
 
                 { data.photos.length > 5 && data.photos.length <= 12 && <P>You can add as many photos as you like!</P> }
 
-                <PrimaryButton onClick={submit} disabled={isSubmitting || isUploading || ( isOnboarding && data.photos.length < 3)}>
+                <PrimaryButton className={"mb-8"} onClick={submit} disabled={isSubmitting || isUploading || ( isOnboarding && data.photos.length < 3)}>
                     { isSubmitting ? `Please wait...` : isOnboarding ? 'Continue' : 'Save' }
                 </PrimaryButton>
         </CleanLayout>

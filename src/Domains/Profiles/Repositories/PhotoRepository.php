@@ -30,7 +30,7 @@ class PhotoRepository
 
                 $newPath = str_replace("tmp/", "photos/", $photo['path']);
 
-                app(MovePhoto::class)->execute($photo['path'], $newPath);
+                app(MovePhoto::class)->onQueue()->execute($photo['path'], $newPath);
 
                 $photoObj = new Photo;
                 $photoObj->photoable()->associate($model);

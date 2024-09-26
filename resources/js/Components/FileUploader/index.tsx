@@ -44,6 +44,10 @@ export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6
 
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
+    if (accept==="image/*") {
+        accept = "image/avif,image/gif,image/heif,image/heic,image/jpeg,image/png,image/webp"
+    }
+
     useEffect(() => {
         onToggleUploading && selectedFiles.length>0 && totalProgressRatio % 1 === 0 && onToggleUploading(totalProgressRatio === 0);
     }, [totalProgressRatio]);
@@ -98,8 +102,8 @@ export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6
 
         if (e.target.files === null || !e.target.files[0]) return;
 
-        // load a maximum of 20 files to prevent timeout
-        const files = Array.from(e.target.files).slice(0,20);
+        // load a maximum # files to prevent timeout
+        const files = Array.from(e.target.files).slice(0,25);
 
         setSelectedFiles(files);
 

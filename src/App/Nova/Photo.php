@@ -79,6 +79,10 @@ class Photo extends Resource
                 ->path("photos")
                 ->indexWidth(200)
                 ->detailWidth(500)
+                ->thumbnail(function ($value, $disk) {
+                    // @phpstan-ignore-next-line
+                    return $value ? $this->cdn_path : null;
+                })
                 ->preview(function ($value, $disk) {
                     // @phpstan-ignore-next-line
                     return $value ? $this->cdn_path : null;

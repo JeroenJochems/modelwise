@@ -106,7 +106,7 @@ class Listing extends Resource
                 . '</div>')
                 ->asHtml()->hideFromIndex(),
 
-            MorphMany::make("Photos")->showOnIndex(true),
+            MorphMany::make("Photos")->showOnIndex(false),
             MorphMany::make("Casting photos", "casting_photos", Photo::class)->showOnIndex(true),
             MorphMany::make("Casting videos", "casting_videos", Video::class)->showOnIndex(true),
 
