@@ -3,21 +3,20 @@ import {Cross} from "@/Components/Icons/Cross";
 import {BaseFile } from "@/Components/FileUploader";
 import {useCdnLink} from "@/Hooks/useCdnLink";
 import {LoadingFile} from "@/Components/FileUploader/ExistingFile/LoadingFile";
+import clsx from "clsx";
 
 type Props = {
     file: BaseFile;
     onDelete: (file: BaseFile) => void
+    className: string
 }
 
-export function ExistingFile({ file, onDelete }: Props) {
+export function ExistingFile({ file, onDelete, className }: Props) {
 
     const cdnLink = useCdnLink();
 
-    console.log(cdnLink(file.path));
-
-
     return (
-        <div className={`relative aspect-square`}>
+        <div className={clsx(className, `relative aspect-square`)}>
 
             { file.mime.includes("video") && (
                 <>

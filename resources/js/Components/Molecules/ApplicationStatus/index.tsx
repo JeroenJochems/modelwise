@@ -56,9 +56,8 @@ export function ApplicationStatus({ viewModel }: Props) {
     }
 
     return (<Content>
-            <P>Thank you for applying to this job!</P>
+            <P>Thank you for applying to this role!</P>
             <P>We will review your application and get back to you as soon as possible.</P>
-            <P>Good luck!</P>
         </Content>
     )
 }

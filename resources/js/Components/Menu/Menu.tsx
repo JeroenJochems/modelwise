@@ -51,10 +51,12 @@ export default function Menu() {
                 </a>
                 <div className="flex flex-1 justify-end">
 
+                    { is_impersonating && (
                         <Link href={route("impersonation.stop")} method="get" as="button" type="button" className={"flex flex-row mr-6 items-center"}>
                             <FingerPrintIcon className={"h-5 w-5"} />
                             Back to admin
                         </Link>
+                    )}
 
                     { isLoggedIn ? (
                         <Link href={route("logout")} method="post" as="button" type="button">

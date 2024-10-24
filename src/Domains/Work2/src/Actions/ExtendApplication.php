@@ -21,7 +21,7 @@ class ExtendApplication
      * @param array{id: string, path: string, isNew: bool, mime: string, deleted: bool} $videos
      * @return void
      */
-    public function __invoke(Listing $listing, array $photos, array $videos): void
+    public function execute(Listing $listing, array $photos, array $videos): void
     {
         DB::beginTransaction();
 

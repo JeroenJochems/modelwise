@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Mail;
 
 class Apply
 {
-    public function __invoke(Model $model, Role $role, ApplyData $applyData): void
+    public function execute(Model $model, Role $role, ApplyData $applyData): void
     {
         $listing = Listing::firstOrNew(['role_id' => $role->id, 'model_id' => $model->id]);
         $listing->applied_at = now();
@@ -22,6 +22,7 @@ class Apply
         $listing->brand_conflicted = $applyData->brand_conflicted;
         $listing->casting_questions = $applyData->casting_questions;
         $listing->save();
+
 
         app(PhotoRepository::class)->update($listing, Listing::FOLDER_PHOTOS, $applyData->photos);
         app(PhotoRepository::class)->update($model, Photo::FOLDER_DIGITALS, $applyData->digitals);

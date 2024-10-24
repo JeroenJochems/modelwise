@@ -12,7 +12,6 @@ export default function DashboardLayout({ children, header, footer, footerClasse
 
     return (
         <div className={"flex h-screen-safe flex-col overflow-hidden relative"}>
-            {/*<img src="https://tailwindui.com/img/beams-home@95.jpg" alt="" className="absolute -top-[1rem] left-1/2 -ml-[40rem] w-[163.125rem] max-w-none sm:-ml-[67.5rem]" />*/}
 
             <div className={"overflow-scroll flex-grow"}>
                 <div className={"relative"}>

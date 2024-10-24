@@ -7,7 +7,7 @@ import {HTMLAttributes} from "react";
 type Props = {
     name?: string,
     type?: string,
-    value?: string | number,
+    value?: string | number | null,
     options?: Array<string>,
     title: string,
     autoComplete?: string,
@@ -22,6 +22,7 @@ export default function InputGroupText(props: Props) {
 
     const type = props.type ?? 'text';
     const value = props.value ?? "";
+    const options = props.options ?? null;
     const name = props.name ?? props.title.toLowerCase().replace(' ', '_');
 
     const shouldShowSelect = props.options;
@@ -32,18 +33,18 @@ export default function InputGroupText(props: Props) {
 
             {props.multiline && <TextArea defaultValue={value} onChange={(e) => props.onChange(e.target.value)}/>}
 
-            {!props.multiline && shouldShowSelect && props.options!==null &&
+            {!props.multiline && shouldShowSelect && options!==null &&
                 <select id={name}
-                        className="border-gray-300 focus:border-green focus:ring-green rounded-sm shadow-sm block mt-1 w-full"
                         value={value}
+                        className="border-gray-300 focus:border-green focus:ring-green rounded-sm shadow-sm block mt-1 w-full"
                         onChange={(e) => props.onChange(e.target.value)}>
 
                     {!value && <option value=""> - select an option -</option>}
-                    {props.options.constructor.name === 'Array' && props.options.map((option: any) =>
+                    {options.constructor.name === 'Array' && options.map((option: any) =>
                         <option key={option} value={option}>{option}</option>
                     )}
-                    {props.options.constructor.name === 'Object' && Object.keys(props.options).map((option: any) =>
-                        <option key={option} value={option}>{props.options[option]}</option>
+                    {options.constructor.name === 'Object' && Object.keys(options).map((option: any) =>
+                        <option key={option} value={option}>{options[option]}</option>
                     )}
                 </select>
             }

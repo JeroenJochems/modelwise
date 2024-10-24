@@ -94,7 +94,7 @@ class ApplyTest extends TestCase
             clothing_size_top: "M"
         );
 
-        app()->make(Apply::class)($model, $role, $applyData);
+        app()->make(Apply::class)->execute($model, $role, $applyData);
         return array($role, $model, $applyData);
     }
 }

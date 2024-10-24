@@ -13,7 +13,9 @@ class PhotoData extends Data
     public function __construct(
         public int $id,
         public string $path,
-        public ?string $hash
+        public string $mime,
+        public bool $isNew = false,
+        public ?string $hash = null,
     )
     { }
 }

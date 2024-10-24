@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\ViewModels\ModelMeViewModel;
 use App\ViewModels\ModelRoleViewModel;
+use Domain\Jobs\Data\RoleData;
 use Domain\Jobs\Models\Role;
 use Domain\Profiles\Models\Model;
-use Domain\Profiles\Repositories\PhotoRepository;
-use Domain\Profiles\Repositories\VideoRepository;
-use Domain\Work\Models\Application;
 use Domain\Work2\Actions\Apply;
 use Domain\Work2\Actions\ExtendApplication;
 use Domain\Work2\Data\ApplyData;
@@ -18,24 +16,27 @@ use Inertia\Inertia;
 
 class ApplicationController extends Controller
 {
+    public function __construct(
+        public Apply $apply,
+        public ExtendApplication $extendApplicationAction,
+    ) {}
+
     public function create(Role $role)
     {
         return Inertia::render('Roles/Listings/Apply')
             ->with("viewModel", new ModelRoleViewModel($role))
             ->with("meViewModel", new ModelMeViewModel(
                 auth()->user()
+                    ->load("portfolio")
                     ->load("digitals")
             ));
     }
 
     public function store(Role $role, Request $request)
     {
-        $model = auth()->user();
-        if (!($model instanceof Model)) abort(403, "You are not a model");
+        $applyData = ApplyData::fromRequest($request->all());
 
-        $data = ApplyData::fromRequest($request->all());
-
-        app()->make(Apply::class)($model, $role, $data);
+        $this->apply->execute($request->user(), $role, $applyData);
 
         return redirect()->route("roles.show", $role);
     }
@@ -46,7 +47,7 @@ class ApplicationController extends Controller
             ->where("model_id", auth()->id())
             ->first();
 
-        app()->make(ExtendApplication::class)(
+        $this->extendApplicationAction->execute(
             $listing,
             $request->get("casting_photos"),
             $request->get("casting_videos")

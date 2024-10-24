@@ -1,4 +1,19 @@
 export type ApplicationStatusEnum = 'pending' | 'accepted' | 'rejected' | 'cancelled';
+export type ApplyData = {
+role_id: number;
+cover_letter: any | string;
+digitals: any | Array<PhotoData> | null;
+photos: any | Array<PhotoData> | null;
+available_dates: Array<string>;
+brand_conflicted: string | null;
+casting_questions: string;
+height: number | null;
+chest: number | null;
+waist: number | null;
+hips: number | null;
+shoe_size: number | null;
+clothing_size_top: string | null;
+};
 export type BrandData = {
 name: string;
 logo: string | null;
@@ -15,7 +30,7 @@ listings: Array<ListingData>;
 recentlyViewedRoles: Array<RoleData>;
 model: ModelData | null;
 };
-export type Ethnicity = 'asian' | 'black' | 'hispanic' | 'indigenous' | 'middle-eastern' | 'mixed' | 'native-american' | 'pacific-islander' | 'white' | 'other';
+export type Ethnicity = 'asian' | 'middle-eastern' | 'black' | 'caribbean' | 'hispanic' | 'indigenous' | 'indian' | 'mixed' | 'native-american' | 'pacific-islander' | 'white' | 'other';
 export type ExtraFieldsData = {
 casting_photos: boolean;
 casting_videos: boolean;
@@ -178,6 +193,8 @@ folder: string;
 export type PhotoData = {
 id: number;
 path: string;
+mime: string;
+isNew: boolean;
 hash: string | null;
 };
 export type PresentationData = {

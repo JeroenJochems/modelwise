@@ -10,29 +10,15 @@ import {Content} from "@/Layouts/DashboardLayout/Content";
 import InputError from "@/Components/InputError";
 import {H1} from "@/Components/Typography/H1";
 import {useUploadingFields} from "@/Hooks/useUploadingFields";
-import {BaseFile, FileUploader} from "@/Components/FileUploader";
-import {ModelMeViewModel, ModelRoleViewModel} from "@/types/generated";
+import {FileUploader} from "@/Components/FileUploader";
+import {ApplyData, ModelMeViewModel, ModelRoleViewModel} from "@/types/generated";
 
 type Props = {
     viewModel: ModelRoleViewModel;
     meViewModel: ModelMeViewModel;
 }
 
-type Form = {
-    role_id: number | string;
-    digitals: Array<BaseFile>;
-    photos: Array<BaseFile>;
-    height: number | string;
-    casting_questions: string;
-    chest: number | string;
-    waist: number | string;
-    hips: number | string;
-    shoe_size: number | string;
-    clothing_size_top: string;
-    cover_letter: string;
-    available_dates: Array<string>;
-    brand_conflicted: string;
-}
+type Form = { role_id: number | string } & ApplyData
 
 export default function Apply({viewModel, meViewModel}: Props) {
 
@@ -43,17 +29,19 @@ export default function Apply({viewModel, meViewModel}: Props) {
     const {role, shootDates} = viewModel;
     const me = meViewModel.me;
 
-    const {post, data, setData, processing, isDirty, hasErrors, clearErrors } = useForm<Form>({
+    const askForSizes = role.fields.height || role.fields.chest || role.fields.waist || role.fields.hips || role.fields.shoe_size || role.fields.clothing_size_top;
+
+    const {post, data, setData, processing, hasErrors, clearErrors } = useForm<Form>({
         role_id: role.id,
-        digitals: [],
-        photos: [],
-        height: me.height || "",
+        digitals: me.digitals,
+        photos: me.portfolio,
+        height: me.height,
         casting_questions: "",
-        chest: me.chest || "",
-        waist: me.waist || "",
-        hips: me.hips || "",
-        shoe_size: me.shoe_size || "",
-        clothing_size_top: me.clothing_size_top || "",
+        chest: me.chest,
+        waist: me.waist,
+        hips: me.hips,
+        shoe_size: me.shoe_size,
+        clothing_size_top: me.clothing_size_top,
         cover_letter: "",
         available_dates: [],
         brand_conflicted: ""
@@ -72,18 +60,19 @@ export default function Apply({viewModel, meViewModel}: Props) {
 
     return (
         <DashboardLayout>
-            <JobHeader viewModel={viewModel}/>
-
             <Content>
-                <H1 className={"mt-8"}>Apply for this role</H1>
+                <div>
+                    <H2 className={"text-gray-600"}>{viewModel.role.job.title}</H2>
+                    <H1>Apply for: {viewModel.role.name}</H1>
+                </div>
 
                 {role.fields.digitals && (
                     <div>
-                        <H2>Digitals</H2>
+                        <H2>Digitals / Polaroids</H2>
                         <P className={"mb-2"}>
                             {data.digitals.length >= 3
-                                ? "Are your digitals up-to-date and relevant for this role?"
-                                : "Upload at least 3 recent digitals"
+                                ? "Are your polaroids up-to-date?"
+                                : "Upload at least 3 recent polaroids"
                             }
                         </P>
 
@@ -102,9 +91,8 @@ export default function Apply({viewModel, meViewModel}: Props) {
                 )}
 
                 <div>
-                    <H2>Relevant photos</H2>
-                    <P className={`mb-2`}>Select and sort your most relevant photos that will get you hired for this
-                        role.</P>
+                    <H2>Portfolio photos</H2>
+                    <P className={`mb-2`}>The first 8 photos will be shown with your application.</P>
 
                     <FileUploader
                         name={"photos"}
@@ -113,15 +101,15 @@ export default function Apply({viewModel, meViewModel}: Props) {
                         onAdd={(photo) => setData(data => ({...data, photos: [...data.photos, photo]}))}
                         onUpdate={(photos) => setData(data => ({...data, photos}))}
                         onToggleUploading={(state) => setUploadingField('photos', state)}
+                        cols={8}
+                        colsOnMobile={4}
                     />
                     <InputError message={errors.photos}/>
                 </div>
 
-                {(role.fields.height || role.fields.chest || role.fields.waist || role.fields.hips || role.fields.shoe_size || role.fields.clothing_size_top) && (
+                {askForSizes && (
                     <div>
-                        <H2>Sizes</H2>
-                        <P className={"mb-2"}>The following sizes are relevant for this job. Is everything still up to
-                            date?</P>
+                        <H2 className={"pb-2"}>Are your sizes up to date?</H2>
 
                         <div className={"grid grid-cols-2 md:grid-cols-3 gap-4"}>
                             {role.fields.height && (
@@ -195,11 +183,14 @@ export default function Apply({viewModel, meViewModel}: Props) {
                 }
 
 
-                <div>
-                    <H2>Availability</H2>
-                    <P className={"mb-2"}>
-                        Please confirm your availability for the following shoot dates. If not all are available we will
-                        contact you to discuss.</P>
+                <div className={"grid gap-4"}>
+                    <div>
+                        <H2>Availability</H2>
+                        <P className={"mb-2"}>
+                            Please confirm your availability for the following shoot dates. If not all are available we will
+                            contact you to discuss.</P>
+                    </div>
+
                     {shootDates.map((shootDate) => (
                         <label className={"flex flex-row text-teal items-center mb-2"} key={shootDate}>
                             <input type="checkbox" onChange={handleAvailability} name={"available"} value={shootDate}
@@ -209,19 +200,19 @@ export default function Apply({viewModel, meViewModel}: Props) {
                     ))
                     }
                     <InputError message={errors.available_dates}/>
+
+                    <InputGroupText
+                        title="Have you worked with a competing brand in the last 3 years?"
+                        multiline={true}
+                        onChange={value => setData('brand_conflicted', value)}
+                    />
+
+                    <InputGroupText
+                        title="Is there anything you'd like to add to your application?"
+                        multiline={true}
+                        onChange={value => setData('cover_letter', value)}
+                    />
                 </div>
-
-                <InputGroupText
-                    title="Have you worked with a competing brand in the last 3 years? If so, please describe."
-                    multiline={true}
-                    onChange={value => setData('brand_conflicted', value)}
-                />
-
-                <InputGroupText
-                    title="Is there anything you'd like to add to your application?"
-                    multiline={true}
-                    onChange={value => setData('cover_letter', value)}
-                />
 
 
                 { hasErrors && <InputError message="Please review the errors in the form above."/> }

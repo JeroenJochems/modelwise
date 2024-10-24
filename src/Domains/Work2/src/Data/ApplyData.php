@@ -2,20 +2,28 @@
 
 namespace Domain\Work2\Data;
 
+use Domain\Profiles\Data\PhotoData;
+use PhpOption\Option;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Optional;
 
+/** @typescript */
 class ApplyData extends Data
 {
     public function __construct(
+        public int $role_id,
         public ?string $cover_letter,
 
-        /** @var array{id: string, path: string, isNew: bool, mime: string} $photos */
-        public ?array $digitals,
+        /** @var Optional|PhotoData[]|null */
+        public Optional|array $digitals,
 
-        /** @var array{id: string, path: string, isNew: bool, mime: string} $photos */
+        /** @var Optional|PhotoData[]|null $photos */
         public ?array $photos,
-        public ?array $available_dates,
+
+        /** @var array<string> */
+        public array $available_dates,
         public ?string $brand_conflicted,
+
         public ?string $casting_questions,
 
         public ?int $height = null,
@@ -46,6 +54,7 @@ class ApplyData extends Data
     public static function fromRequest(array $request): self
     {
         return new self(
+            role_id: $request['role_id'],
             cover_letter: $request['cover_letter'] ?? null,
             digitals: $request['digitals'],
             photos: $request['photos'],
