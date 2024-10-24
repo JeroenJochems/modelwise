@@ -67,6 +67,6 @@ jobs:
           DB_DATABASE: test_db
         run: php artisan test
       - name: Deploy production
-        run: vapor deploy production
+        run: vapor deploy prod
         env:
           VAPOR_API_TOKEN: ${{ secrets.VAPOR_API_TOKEN }}
