@@ -66,6 +66,8 @@ jobs:
           DB_PASSWORD: secret
           DB_DATABASE: test_db
         run: php artisan test
+      - name: Require Vapor CLI
+        run: composer global require laravel/vapor-cli
       - name: Deploy production
         run: vapor deploy prod
         env:
