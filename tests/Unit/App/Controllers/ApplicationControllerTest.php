@@ -23,6 +23,7 @@ test("it can apply for a role", function () {
 
     $this->be($model)
         ->post(route('applications.store', $role), [
+            'role_id' => $role->id,
             'digitals' => [],
             'photos' => [
                 ['id' => 1, 'path' => 'tmp/path.jpg', 'isNew' => true, 'mime' => 'image/jpeg'],
