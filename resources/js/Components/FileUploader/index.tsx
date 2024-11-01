@@ -70,9 +70,20 @@ export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6
         <>
             <ReactSortable tag={"div"} list={files} setList={onUpdate} className={`grid mb-4 gap-2 grid-cols-${colsOnMobile} sm:grid-cols-${cols}`}>
                 {notDeletedFiles.map((file, index) => {
-                    return <ExistingFile className={index >= 8 ? "opacity-20" : ""} key={file.id ?? file.path} onDelete={handleDelete} file={file}/>
+                    return <ExistingFile key={file.id ?? file.path} onDelete={handleDelete} file={file}/>
                 })}
             </ReactSortable>
+
+            { notDeletedFiles.length==0 && (
+                <div className={`grid gap-2 grid-cols-${colsOnMobile} sm:grid-cols-${cols}`}>
+                    {emptySlots.map((slot, i) => (
+                        <label key={i} htmlFor={id} className={"static flex rounded text-teal text-2xl cursor-pointer justify-center items-center aspect-[1/1] bg-teal-100 border border-gray-400"}>
+                            +
+                        </label>)
+                    )}
+                </div>
+            )}
+
 
             { max>1 && notDeletedFiles.length > 0 && (
                 <div className={"text-center mb-2"}>

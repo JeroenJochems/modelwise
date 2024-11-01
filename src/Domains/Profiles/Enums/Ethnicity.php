@@ -22,6 +22,7 @@ enum Ethnicity: string
     case Hispanic = 'hispanic';
     case Indigenous = 'indigenous';
     case Indian = 'indian';
+    case Mediterranean = 'mediterranean';
     case Mixed = 'mixed';
     case NativeAmerican = 'native-american';
     case Pacific = 'pacific-islander';

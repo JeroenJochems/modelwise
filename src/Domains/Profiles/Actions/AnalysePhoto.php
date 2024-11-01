@@ -34,7 +34,7 @@ class AnalysePhoto
 
         $prompt = $prompt . " Do not mention posing, smiling. Be super brief, just use keywords. Return JSON format with only root level keys with corresponding values. All values should be plain strings. If any of the values is 'ambiguous', 'none', or other non descriptive value, remove the key from the json response.";
 
-        $path = $photo->cdn_path."?w=1200&fm=jpg&q=80";
+        $path = $photo->cdn_path;
 
         try {
             ray($path, $prompt);

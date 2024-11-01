@@ -8,10 +8,10 @@ import clsx from "clsx";
 type Props = {
     file: BaseFile;
     onDelete: (file: BaseFile) => void
-    className: string
+    className?: string
 }
 
-export function ExistingFile({ file, onDelete, className }: Props) {
+export function ExistingFile({ file, onDelete, className='' }: Props) {
 
     const cdnLink = useCdnLink();
 
