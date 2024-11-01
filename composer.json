@@ -42,6 +42,7 @@
         "predis/predis": "^2.2",
         "prinsfrank/standards": "^2.1",
         "raiym/instagram-php-scraper": "^0.12.9",
+        "sentry/sentry-laravel": "^4.9",
         "spatie/eloquent-sortable": "^4.0",
         "spatie/enum": "^3.13",
         "spatie/laravel-data": "^4",

@@ -35,9 +35,10 @@ type Props = {
     accept?: string
     onUpdate: (videos: BaseFile[]) => void
     onToggleUploading?: (state: boolean) => void
+    opaqueAfter?: number
 }
 
-export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6, colsOnMobile = 2, accept, onAdd, onUpdate, onToggleUploading }: Props) {
+export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6, colsOnMobile = 2, accept, onAdd, onUpdate, onToggleUploading, opaqueAfter=undefined }: Props) {
 
     const id = useId();
     const {totalProgressRatio, addFileToProgress, updateProgress} = useUploadProgress();
@@ -70,7 +71,7 @@ export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6
         <>
             <ReactSortable tag={"div"} list={files} setList={onUpdate} className={`grid mb-4 gap-2 grid-cols-${colsOnMobile} sm:grid-cols-${cols}`}>
                 {notDeletedFiles.map((file, index) => {
-                    return <ExistingFile key={file.id ?? file.path} onDelete={handleDelete} file={file}/>
+                    return <ExistingFile className={(opaqueAfter!==undefined && index>=opaqueAfter) ? 'opacity-25' : ''} key={file.id ?? file.path} onDelete={handleDelete} file={file}/>
                 })}
             </ReactSortable>
 

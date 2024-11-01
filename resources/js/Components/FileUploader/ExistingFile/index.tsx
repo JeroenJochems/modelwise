@@ -11,7 +11,7 @@ type Props = {
     className?: string
 }
 
-export function ExistingFile({ file, onDelete, className='' }: Props) {
+export function ExistingFile({ file, onDelete, className=''}: Props) {
 
     const cdnLink = useCdnLink();
 

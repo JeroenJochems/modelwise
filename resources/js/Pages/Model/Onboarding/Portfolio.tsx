@@ -43,7 +43,7 @@ export default function Portfolio({modelPhotos}: {modelPhotos: BaseFile[] }) {
                 <P>Upload your best portfolio photos</P>
 
                 <FileUploader
-                    cols={3}
+                    cols={4}
                     accept={"image/*"}
                     files={data.photos}
                     onToggleUploading={setIsUploading}

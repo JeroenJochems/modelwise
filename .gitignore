@@ -26,3 +26,6 @@ yarn-error.log
 meilisearch
 /.vapor
 .env.prod
+
+# Sentry Config File
+.env.sentry-build-plugin

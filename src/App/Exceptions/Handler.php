@@ -2,8 +2,14 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 use League\Flysystem\UnableToCopyFile;
+use Sentry\Laravel\Integration;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -33,7 +39,13 @@ class Handler extends ExceptionHandler
     public function register(): void
     {
         $this->reportable(function (Throwable $e) {
-            //
+            if ($e instanceof AuthorizationException ||
+                $e instanceof ValidationException ||
+                $e instanceof AuthenticationException ||
+                $e instanceof NotFoundHttpException ||
+                $e instanceof ModelNotFoundException) return;
+
+            Integration::captureUnhandledException($e);
         });
     }
 }

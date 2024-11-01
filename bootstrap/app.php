@@ -12,12 +12,6 @@
 */
 
 use App\Application;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Validation\ValidationException;
-use Spatie\LaravelIgnition\Facades\Flare;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 $app = (new Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)

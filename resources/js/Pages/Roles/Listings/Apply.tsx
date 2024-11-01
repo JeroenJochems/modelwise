@@ -78,8 +78,9 @@ export default function Apply({viewModel, meViewModel}: Props) {
 
                         <FileUploader
                             accept="image/*"
-                            colsOnMobile={3}
-                            cols={6}
+                            colsOnMobile={4}
+                            cols={4}
+                            opaqueAfter={4}
                             files={data.digitals}
                             onAdd={(file) => setData(data => ({...data, digitals: [...data.digitals, file]}))}
                             onToggleUploading={(state) => setUploadingField('digitals', state)}
@@ -98,6 +99,7 @@ export default function Apply({viewModel, meViewModel}: Props) {
                         name={"photos"}
                         accept={"image/*"}
                         files={data.photos}
+                        opaqueAfter={8}
                         onAdd={(photo) => setData(data => ({...data, photos: [...data.photos, photo]}))}
                         onUpdate={(photos) => setData(data => ({...data, photos}))}
                         onToggleUploading={(state) => setUploadingField('photos', state)}

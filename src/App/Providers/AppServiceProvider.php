@@ -12,18 +12,11 @@ use Domain\Profiles\Models\Model;
 use Domain\Profiles\Models\Photo;
 use Domain\Profiles\Models\Video;
 use Domain\Work2\Models\Listing;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Validation\ValidationException;
-use Spatie\LaravelIgnition\Facades\Flare;
 use Spatie\Onboard\Facades\Onboard;
 use Spatie\Tags\Tag;
 use Support\User;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -39,16 +32,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Flare::filterExceptionsUsing(
-            fn(Throwable $throwable) =>  (
-                !$throwable instanceof AuthorizationException ||
-                !$throwable instanceof ValidationException ||
-                !$throwable instanceof AuthenticationException ||
-                !$throwable instanceof NotFoundHttpException ||
-                !$throwable instanceof ModelNotFoundException
-            )
-        );
-
         Relation::enforceMorphMap([
             'model' => Model::class,
             'job' => Job::class,
