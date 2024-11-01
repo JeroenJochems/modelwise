@@ -33,8 +33,8 @@ export default function Apply({viewModel, meViewModel}: Props) {
 
     const {post, data, setData, processing, hasErrors, clearErrors } = useForm<Form>({
         role_id: role.id,
-        digitals: me.digitals,
-        photos: me.portfolio,
+        digitals: [],
+        photos: [],
         height: me.height,
         casting_questions: "",
         chest: me.chest,

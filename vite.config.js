@@ -5,7 +5,7 @@ import { sentryVitePlugin } from "@sentry/vite-plugin";
 
 export default defineConfig({
     build: {
-        sourcemap: true, // Source map generation must be turned on
+        sourcemap: true,
     },
     plugins: [
         sentryVitePlugin({

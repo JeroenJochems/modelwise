@@ -23,7 +23,6 @@ class Apply
         $listing->casting_questions = $applyData->casting_questions;
         $listing->save();
 
-
         app(PhotoRepository::class)->update($listing, Listing::FOLDER_PHOTOS, $applyData->photos);
         app(PhotoRepository::class)->update($model, Photo::FOLDER_DIGITALS, $applyData->digitals);
 
