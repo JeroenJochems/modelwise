@@ -42,7 +42,7 @@ class Role extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            BelongsTo::make("Job")->hideFromIndex(),
+            BelongsTo::make("Job"),
             Text::make("Name"),
             Date::make("Start date")->hideFromIndex(),
             Date::make("End date")->nullable(true)->hideFromIndex(),

@@ -4,6 +4,7 @@ namespace App\Nova;
 
 use App\Nova\Actions\AddTagsToModels;
 use App\Nova\Actions\AddToRole;
+use App\Nova\Actions\EditModelClass;
 use App\Nova\Actions\InviteForRole;
 use App\Nova\Actions\SendMail;
 use App\Nova\Filters\AgeFilter;
@@ -110,16 +111,7 @@ class Model extends Resource
             Select::make('Preferred language')->options(['en' => 'English', 'nl' => 'Nederlands'])->hideFromIndex(),
             Date::make('Date of birth')->hideFromIndex(),
             Text::make('External ID')->sortable()->rules('max:255')->hideFromIndex(),
-            InlineSelect::make('Class', 'model_class')->options([
-                'Archived' => 'Archived',
-                'People' => 'People',
-                'Talent' => 'Talent',
-                'Top' => 'Top',
-            ])
-                ->inlineOnIndex()
-                ->enableOneStepOnIndex()
-                ->displayUsingLabels()
-                ->inlineOnDetail(),
+            Select::make('Class', 'model_class')->options(ModelClass::toArray())->hideFromIndex(),
             Boolean::make('Completed onboarding', 'has_completed_onboarding')->hideFromIndex()->readonly(),
             Boolean::make('Newsletter', 'is_subscribed_to_newsletter')->hideFromIndex(),
             Boolean::make('Is accepted')->hideFromIndex(),
@@ -140,19 +132,15 @@ class Model extends Resource
                 ->detailWidth(300)
                 ->disableDownload(),
             Text::make('Photos', function () {
-                return '<div style="display: flex; width: 600px; height: 120px; overflow-x: scroll; overflow-y: hidden">
-                        <img src="' . $this->profile_picture_cdn . '" height="120" />
-                        ' . implode("", $this->photos->map(function ($photo) {
-                        return '<img src="' . $photo->cdn_path_thumb . '" height="120" />';
-                    })->toArray())
+                return '<div style="display: flex; max-width: 800px; min-width: 400px; height: 120px; overflow-x: scroll; overflow-y: hidden">
+                        <img src="' . $this->profile_picture_cdn . '" height="150" />
+                        ' . implode("", $this->photos->map(fn ($photo) => '<img src="' . $photo->cdn_path_thumb . '" height="150" />')->toArray())
                     . '</div>';
             })->asHtml()->onlyOnIndex(),
             Text::make('Photo preview', function () {
                 return '<div style="display: flex; height: 400px; overflow-x: scroll; overflow-y: hidden">
-                        <img src="' . $this->profile_picture_cdn_thumb . '" height="120" />
-                        ' . implode("", $this->photos->map(function ($photo) {
-                        return '<img src="' . $photo->cdn_path_thumb . '" height="120" />';
-                    })->toArray())
+                        <img src="' . $this->profile_picture_cdn_thumb . '" height="150" />
+                        ' . implode("", $this->photos->map(fn($photo) => '<img src="' . $photo->cdn_path_thumb . '" height="120" />')->toArray())
                     . '</div>';
             })->asHtml()->hideFromIndex(),
             Text::make('Instagram')->rules( 'max:255')->hideFromIndex()->copyable(),
@@ -211,6 +199,7 @@ class Model extends Resource
             new AddToRole(),
             new SendMail(),
             new AddTagsToModels(),
+            new EditModelClass(),
         ];
     }
 }

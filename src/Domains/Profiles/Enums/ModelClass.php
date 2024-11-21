@@ -6,10 +6,10 @@ enum ModelClass: string
 {
     public static function toArray(): array
     {
-        foreach (self::cases() as $case) {
-            $array[$case->name] = $case->value;
-        }
-        return $array;
+        return array_combine(
+            array_column(ModelClass::cases(), "name"),
+            array_column(ModelClass::cases(), "value")
+        );
     }
 
     case Archived = "Archived";

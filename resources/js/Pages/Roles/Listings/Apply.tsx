@@ -195,15 +195,17 @@ export default function Apply({viewModel, meViewModel}: Props) {
                             contact you to discuss.</P>
                     </div>
 
-                    {shootDates.map((shootDate) => (
-                        <label className={"flex flex-row text-teal items-center mb-2"} key={shootDate}>
-                            <input type="checkbox" onChange={handleAvailability} name={"available"} value={shootDate}
-                                   className={"mr-2"}/>
-                            <span>{new Date(shootDate).toLocaleDateString()}</span>
-                        </label>
-                    ))
-                    }
-                    <InputError message={errors.available_dates}/>
+                    <div>
+                        {shootDates.map((shootDate) => (
+                            <label className={"flex flex-row text-teal items-center mb-2"} key={shootDate}>
+                                <input type="checkbox" onChange={handleAvailability} name={"available"} value={shootDate}
+                                       className={"mr-2"}/>
+                                <span>{new Date(shootDate).toLocaleDateString()}</span>
+                            </label>
+                        ))
+                        }
+                        <InputError message={errors.available_dates}/>
+                    </div>
 
                     <InputGroupText
                         title="Have you worked with a competing brand in the last 3 years?"
