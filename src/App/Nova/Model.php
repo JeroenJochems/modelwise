@@ -84,6 +84,7 @@ class Model extends Resource
                     return $value ? $this->profile_picture_cdn : null;
                 })
                 ->hideFromIndex()->hideFromDetail()->readonly(true)->showOnUpdating(false),
+
             Stack::make("Name", [
                 Line::make("Name", function () {
                     return $this->first_name . " " . $this->last_name;
@@ -91,38 +92,34 @@ class Model extends Resource
                 Line::make("Location", function () {
                     return strlen($this->city.$this->country)>0 ? $this->city . ", " . $this->country : "";
                 })->asSmall(),
-                Line::make("Phone number", function () {
-                    return $this->phone_number;
+                Line::make("Phone", function () {
+                    return implode(", ", array_unique([$this->phone_number, $this->whatsapp_number]));
                 })->asSmall(),
-                Line::make("Class", function () {
-                    return $this->model_class;
-                })->asSmall(),
-                Line::make("Whatsapp number", function () {
-                    return $this->whatsapp_number;
-                })->asSmall(),
-            ])->onlyOnIndex(),
+                Line::make("Photos", function() {
+                    return '<div style="display: flex; height: 400px; overflow-x: scroll; overflow-y: hidden">
+                        <img src="' . $this->profile_picture_cdn . '" height="150" />
+                        ' . implode("", $this->photos->map(fn($photo) => '<img src="' . $photo->cdn_path_thumb . '" height="120" />')->toArray())
+                        . '</div>';
+                })->asHtml(),
+            ])->exceptOnForms(),
 
-            Text::make('First Name')->sortable()->rules('max:255')->hideFromIndex(),
-            Text::make('Last Name')->sortable()->rules('max:255')->hideFromIndex(),
-            Text::make('Phone number')->rules('max:255')->hideFromIndex(),
-            Text::make('WhatsApp number')->rules('max:255')->hideFromIndex(),
-            Email::make('Email')->sortable()->rules('email')->hideFromIndex(),
-            Enum::make('Gender')->displayUsingLabels()->attach(Gender::class)->filterable()->rules('max:255')->hideFromIndex(),
-            Select::make('Preferred language')->options(['en' => 'English', 'nl' => 'Nederlands'])->hideFromIndex(),
-            Date::make('Date of birth')->hideFromIndex(),
-            Text::make('External ID')->sortable()->rules('max:255')->hideFromIndex(),
-            Select::make('Class', 'model_class')->options(ModelClass::toArray())->hideFromIndex(),
-            Boolean::make('Completed onboarding', 'has_completed_onboarding')->hideFromIndex()->readonly(),
-            Boolean::make('Newsletter', 'is_subscribed_to_newsletter')->hideFromIndex(),
-            Boolean::make('Is accepted')->hideFromIndex(),
-            Textarea::make("Bio")->alwaysShow()->hideFromIndex(),
-            Textarea::make("Admin notes")->alwaysShow()->hideFromIndex(),
+            Text::make('Instagram')->rules( 'max:255')->hideFromIndex()->copyable(),
+            Text::make('Tiktok')->rules( 'max:255')->hideFromIndex()->copyable(),
+            Text::make('Website')->rules('max:255')->hideFromIndex()->copyable(),
+            Text::make('Showreel link')->rules('max:255')->hideFromIndex()->copyable(),
+
+            Text::make('First Name')->sortable()->rules('max:255')->hideFromIndex()->onlyOnForms(),
+            Text::make('Last Name')->sortable()->rules('max:255')->hideFromIndex()->onlyOnForms(),
+            Text::make('Phone number')->rules('max:255')->hideFromIndex()->onlyOnForms(),
+            Text::make('WhatsApp number')->rules('max:255')->hideFromIndex()->onlyOnForms(),
+            Email::make('Email')->sortable()->rules('email')->hideFromIndex()->onlyOnForms(),
+            Enum::make('Gender')->displayUsingLabels()->attach(Gender::class)->filterable()->rules('max:255')->onlyOnForms(),
+            Date::make('Date of birth')->hideFromIndex()->onlyOnForms(),
+            Text::make('Country')->sortable()->hideFromIndex()->filterable()->onlyOnForms(),
             Tags::make("Looks")->type(ResourceObject::TAG_TYPE_LOOKS)->hideFromIndex(),
             Tags::make('Skills')->type(ResourceObject::TAG_TYPE_SKILLS)->withLinkToTagResource()->hideFromIndex(),
             Tags::make('Modeling experience')->type(ResourceObject::TAG_TYPE_MODEL_EXPERIENCE)->withLinkToTagResource()->hideFromIndex(),
             Tags::make('Other professions')->type(ResourceObject::TAG_TYPE_PROFESSIONS)->withLinkToTagResource()->hideFromIndex(),
-            Tags::make('Internal Tags')->type(ResourceObject::TAG_TYPE_INTERNAL)->withLinkToTagResource()->hideFromIndex(),
-            Text::make('Country')->sortable()->hideFromIndex()->filterable(),
             VaporImage::make("Profile picture", "profile_picture")
                 ->path(
                     "profile_pictures")
@@ -132,26 +129,33 @@ class Model extends Resource
                 ->detailWidth(300)
                 ->disableDownload(),
             Text::make('Photos', function () {
-                return '<div style="display: flex; max-width: 800px; min-width: 400px; height: 120px; overflow-x: scroll; overflow-y: hidden">
+                return '<div style="display: flex; max-width: 800px; min-width: 400px; height: 150px; overflow-x: scroll; overflow-y: hidden">
                         <img src="' . $this->profile_picture_cdn . '" height="150" />
                         ' . implode("", $this->photos->map(fn ($photo) => '<img src="' . $photo->cdn_path_thumb . '" height="150" />')->toArray())
                     . '</div>';
             })->asHtml()->onlyOnIndex(),
-            Text::make('Photo preview', function () {
-                return '<div style="display: flex; height: 400px; overflow-x: scroll; overflow-y: hidden">
-                        <img src="' . $this->profile_picture_cdn_thumb . '" height="150" />
-                        ' . implode("", $this->photos->map(fn($photo) => '<img src="' . $photo->cdn_path_thumb . '" height="120" />')->toArray())
-                    . '</div>';
-            })->asHtml()->hideFromIndex(),
-            Text::make('Instagram')->rules( 'max:255')->hideFromIndex()->copyable(),
-            Text::make('Tiktok')->rules( 'max:255')->hideFromIndex()->copyable(),
-            Text::make('Website')->rules('max:255')->hideFromIndex()->copyable(),
-            Text::make('Showreel link')->rules('max:255')->hideFromIndex()->copyable(),
             new Panel('Body Characteristics', $this->bodyFields()),
+            (new Panel("The boring stuff", $this->boringFields()))->collapsedByDefault(),
             HasMany::make("Listings")->showOnIndex(false),
             HasMany::make("Exclusive countries")->showOnIndex(false),
             HasMany::make("Email Logs")->showOnIndex(false),
             MorphMany::make("Photos", "photos", Photo::class)->showOnIndex(true),
+        ];
+    }
+
+    public function boringFields()
+    {
+        return [
+            Textarea::make("Admin notes")->alwaysShow()->hideFromIndex(),
+
+            Select::make('Preferred language')->options(['en' => 'English', 'nl' => 'Nederlands'])->hideFromIndex(),
+            Text::make('External ID')->sortable()->rules('max:255')->hideFromIndex(),
+            Select::make('Class', 'model_class')->options(ModelClass::toArray())->onlyOnForms(),
+            Boolean::make('Completed onboarding', 'has_completed_onboarding')->hideFromIndex()->readonly(),
+            Boolean::make('Newsletter', 'is_subscribed_to_newsletter')->hideFromIndex(),
+            Boolean::make('Is accepted')->hideFromIndex(),
+            Tags::make('Internal Tags')->type(ResourceObject::TAG_TYPE_INTERNAL)->withLinkToTagResource()->hideFromIndex(),
+
         ];
     }
 
