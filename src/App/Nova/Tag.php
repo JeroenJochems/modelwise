@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Domain\Profiles\Models\Model as ModelAlias;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -21,7 +22,7 @@ class Tag extends Resource
     {
         return [
             Select::make('Type')->sortable()
-                ->options(\Domain\Profiles\Models\Model::TAG_TYPES)->required(),
+                ->options(\Domain\Profiles\Models\Model::TAG_TYPES)->required()->filterable(),
             Text::make('Name')->sortable(),
         ];
     }

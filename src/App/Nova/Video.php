@@ -51,7 +51,9 @@ class Video extends Resource
             MorphTo::make("Videoable")->onlyOnDetail(),
             Select::make("Folder")->options($options),
             Text::make("Video", fn() => '<video src="'.$this->cdn_path.'" style="height: 300px;" controls="true" />')->hideWhenUpdating()->hideWhenCreating()->asHtml(),
-            VaporFile::make('Video', 'path')->path("videos")->onlyOnForms(),
+            VaporFile::make('Video', 'path')
+                ->path("videos")
+                ->onlyOnForms(),
             Number::make("Order", "sortable_order")->hideWhenCreating(),
         ];
     }

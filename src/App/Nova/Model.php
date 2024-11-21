@@ -16,6 +16,7 @@ use Domain\Profiles\Enums\EyeColor;
 use Domain\Profiles\Enums\Gender;
 use Domain\Profiles\Enums\HairColor;
 use Domain\Profiles\Enums\ModelClass;
+use Domain\Profiles\Models\Model as ResourceObject;
 use KirschbaumDevelopment\Nova\InlineSelect;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\Boolean;
@@ -38,11 +39,12 @@ use Laravel\Nova\Query\Search\SearchableRelation;
 use Outl1ne\NovaSortable\Traits\HasSortableManyToManyRows;
 use Spatie\TagsField\Tags;
 
+
 class Model extends Resource
 {
     use HasSortableManyToManyRows;
 
-    public static $model = \Domain\Profiles\Models\Model::class;
+    public static $model = ResourceObject::class;
 
     public function title()
     {
@@ -112,20 +114,16 @@ class Model extends Resource
                 ->enableOneStepOnIndex()
                 ->displayUsingLabels()
                 ->inlineOnDetail(),
-            InlineSelect::make('Ethnicity', 'ethnicity')->options(Ethnicity::toArray())
-                ->inlineOnIndex()
-                ->enableOneStepOnIndex()
-                ->displayUsingLabels()
-                ->inlineOnDetail(),
-            Text::make("Ethnicity other")->hideFromIndex(),
             Boolean::make('Completed onboarding', 'has_completed_onboarding')->hideFromIndex()->readonly(),
             Boolean::make('Newsletter', 'is_subscribed_to_newsletter')->hideFromIndex(),
             Boolean::make('Is accepted')->hideFromIndex(),
             Textarea::make("Bio")->alwaysShow()->hideFromIndex(),
             Textarea::make("Admin notes")->alwaysShow()->hideFromIndex(),
-            Tags::make('Skills')->type(\Domain\Profiles\Models\Model::TAG_TYPE_SKILLS)->withLinkToTagResource()->hideFromIndex()->hideFromDetail(),
-            Tags::make('Modeling experience')->type(\Domain\Profiles\Models\Model::TAG_TYPE_MODEL_EXPERIENCE)->withLinkToTagResource()->hideFromIndex(),
-            Tags::make('Other professions')->type(\Domain\Profiles\Models\Model::TAG_TYPE_PROFESSIONS)->withLinkToTagResource()->hideFromIndex(),
+            Tags::make("Looks")->type(ResourceObject::TAG_TYPE_LOOKS)->hideFromIndex(),
+            Tags::make('Skills')->type(ResourceObject::TAG_TYPE_SKILLS)->withLinkToTagResource()->hideFromIndex(),
+            Tags::make('Modeling experience')->type(ResourceObject::TAG_TYPE_MODEL_EXPERIENCE)->withLinkToTagResource(),
+            Tags::make('Other professions')->type(ResourceObject::TAG_TYPE_PROFESSIONS)->withLinkToTagResource()->hideFromIndex(),
+            Tags::make('Internal Tags')->type(ResourceObject::TAG_TYPE_INTERNAL)->withLinkToTagResource()->hideFromIndex(),
             Text::make('Country')->sortable()->hideFromIndex()->filterable(),
             VaporImage::make("Profile picture", "profile_picture")
                 ->path(

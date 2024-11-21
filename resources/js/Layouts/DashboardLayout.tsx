@@ -17,7 +17,7 @@ export default function DashboardLayout({ children, header, footer, footerClasse
                 <div className={"relative"}>
                     <Menu />
                 </div>
-                <div className="relative justify-center p-4 mx-auto max-w-7xl py-4">
+                <div className="relative justify-center p-4 mx-auto max-w-7xl">
                     { children }
                 </div>
             </div>

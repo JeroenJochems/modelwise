@@ -6,10 +6,10 @@ export function useUploadingFields() {
 
     function setUploadingField(field: string, isActive: boolean) {
         if (isActive) {
-            setUploadingFields([...uploadingFields, field]);
+            setUploadingFields((state) => [...state, field]);
         }
         else {
-            setUploadingFields(uploadingFields.filter((item) => item !== field));
+            setUploadingFields((state) => [...state].filter((item) => item !== field));
         }
     }
 

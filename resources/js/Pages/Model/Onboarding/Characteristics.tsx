@@ -11,7 +11,8 @@ import {Header} from "@/Components/Onboarding/Header";
 import {PageProps} from "@/types";
 import PrimaryButton from "@/Components/PrimaryButton";
 import {BaseFile, FileUploader} from "@/Components/FileUploader";
-import {Ethnicity, EyeColor, HairColor} from "@/types/generated";
+import {Ethnicity, EyeColor, HairColor, ModelTagsViewModel} from "@/types/generated";
+import {TagCloud} from "@/Components/TagCloud";
 
 type ModelDataType = {
     gender?: string
@@ -22,8 +23,6 @@ type ModelDataType = {
     chest: string
     waist: string
     hips: string
-    ethnicity: string
-    ethnicity_other: string
     shoe_size: string
     tattoos: boolean
     piercings: boolean
@@ -32,19 +31,17 @@ type ModelDataType = {
 }
 
 type Props = {
-    modelData: ModelDataType
+    modelTagsViewModel: ModelTagsViewModel,
+    modelData: ModelDataType,
     hairColors: HairColor[],
     eyeColors: EyeColor[],
-    ethnicities: Ethnicity[],
     tattooPhotos: BaseFile[],
     piercingPhotos: BaseFile[],
 }
 
-export default function Characteristics({modelData, tattooPhotos, piercingPhotos, hairColors, ethnicities, eyeColors}: Props) {
+export default function Characteristics({modelTagsViewModel, modelData, tattooPhotos, piercingPhotos, hairColors, eyeColors}: Props) {
 
     const { ziggy } = usePage<PageProps>().props
-
-
 
     const isOnboarding = ziggy.location.includes("onboarding");
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -52,6 +49,7 @@ export default function Characteristics({modelData, tattooPhotos, piercingPhotos
 
     const {data, setData, post, errors } = useForm({
         ...modelData,
+        looks: modelTagsViewModel.selectedLooks,
         tattoo_photos: tattooPhotos ?? [],
         piercing_photos: piercingPhotos ?? [],
     });
@@ -65,6 +63,14 @@ export default function Characteristics({modelData, tattooPhotos, piercingPhotos
         });
     }
 
+    function toggleLooks(slug: string) {
+        if (data.looks.includes(slug)) {
+            setData("looks", [...data.looks.filter(item => item !== slug)]);
+        } else {
+            setData("looks", [...data.looks, slug]);
+        }
+    }
+
     return (
         <CleanLayout header={
             <Header step={7} isOnboarding={isOnboarding}>
@@ -74,6 +80,12 @@ export default function Characteristics({modelData, tattooPhotos, piercingPhotos
 
             <div className="grid gap-4">
 
+                <div>
+                    <P>Which looks describe you best?</P>
+                    <TagCloud tags={modelTagsViewModel.allLooks}
+                              selected={data.looks}
+                              onToggle={toggleLooks}/>
+                </div>
                 <div>
                     <InputGroupText
                         title="Eye color"
@@ -102,24 +114,6 @@ export default function Characteristics({modelData, tattooPhotos, piercingPhotos
                     onChange={value => setData('eye_color', value)}
                 />
 
-                <div>
-                    <InputGroupText
-                        title={"Appearance / Ethnic features"}
-                        name={"ethnicity"}
-                        value={data.ethnicity ?? ""}
-                        error={errors.ethnicity}
-                        options={ethnicities}
-                        onChange={value => setData('ethnicity', value)}
-                    />
-
-                    { data.ethnicity === "Other" && (
-                        <TextInput id="ethnicity_other" className="block mt-1 w-full"
-                                   value={data.ethnicity_other ?? ""}
-                                   placeholder={"Please specify"}
-                                   onChange={e => setData('ethnicity_other', e.target.value)} />
-                    )}
-
-                </div>
                 <div className={"grid grid-cols-2 gap-4"}>
 
                     <InputGroupText

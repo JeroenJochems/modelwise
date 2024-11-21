@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Model;
 
 use App\Http\Controllers\Controller;
+use App\ViewModels\ModelTagsViewModel;
 use Domain\Profiles\Data\ModelCharacteristicsData;
 use Domain\Profiles\Enums\Ethnicity;
 use Domain\Profiles\Enums\EyeColor;
 use Domain\Profiles\Enums\HairColor;
+use Domain\Profiles\Models\Model;
 use Domain\Profiles\Models\Photo;
 use Domain\Profiles\Repositories\PhotoRepository;
 use Inertia\Inertia;
@@ -15,14 +17,17 @@ class CharacteristicsController extends BaseOnboardingController
 {
     public function index(PhotoRepository $photoRepository)
     {
+        $user = auth()->user();
+
         return Inertia::render("Model/Onboarding/Characteristics")
             ->with([
-                'modelData' => ModelCharacteristicsData::from(auth()->user())->toArray(),
+                'modelTagsViewModel' => new ModelTagsViewModel($user),
+                'modelData' => ModelCharacteristicsData::from($user)->toArray(),
                 'eyeColors' => EyeColor::cases(),
                 'ethnicities' => Ethnicity::toArray(),
                 'hairColors' => HairColor::cases(),
-                'tattooPhotos' => $photoRepository->getPhotos(auth()->user(), Photo::FOLDER_TATTOOS),
-                'piercingPhotos' => $photoRepository->getPhotos(auth()->user(), Photo::FOLDER_PIERCINGS)
+                'tattooPhotos' => $photoRepository->getPhotos($user, Photo::FOLDER_TATTOOS),
+                'piercingPhotos' => $photoRepository->getPhotos($user, Photo::FOLDER_PIERCINGS)
             ]);
     }
 
@@ -30,6 +35,8 @@ class CharacteristicsController extends BaseOnboardingController
     {
         $model = auth()->user();
         $model->update($data->toArray());
+        $model->syncTagsWithType(request()->input('looks'), Model::TAG_TYPE_LOOKS);
+
         $model->save();
 
         if (request()->has("tattoo_photos")) {

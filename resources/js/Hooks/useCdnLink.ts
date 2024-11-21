@@ -12,7 +12,7 @@ export function useCdnLink() {
 
     function cdnLink(path: string, style: "face_square" | "original" = "original") {
 
-        let format = "?twic=v1/cover=1:1/resize=600/focus=auto";
+        let format = "?twic=v1/focus=faces/cover=1:1/resize=600";
 
         return `${cdn_url}${path}${format}`;
     }

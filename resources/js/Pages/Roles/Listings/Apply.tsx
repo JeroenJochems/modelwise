@@ -1,5 +1,5 @@
 import {P} from "@/Components/Typography/p";
-import {ChangeEvent } from "react";
+import {ChangeEvent, useState} from "react";
 import {useForm, usePage} from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import {H2} from "@/Components/Typography/H2";
@@ -24,7 +24,7 @@ export default function Apply({viewModel, meViewModel}: Props) {
 
     const {errors} = usePage().props
 
-    const {isUploading, setUploadingField} = useUploadingFields();
+    const [isUploading, setIsUploading] = useState(false);
 
     const {role, shootDates} = viewModel;
     const me = meViewModel.me;
@@ -78,12 +78,13 @@ export default function Apply({viewModel, meViewModel}: Props) {
 
                         <FileUploader
                             accept="image/*"
+                            slots={4}
                             colsOnMobile={4}
                             cols={4}
                             opaqueAfter={4}
                             files={data.digitals}
                             onAdd={(file) => setData(data => ({...data, digitals: [...data.digitals, file]}))}
-                            onToggleUploading={(state) => setUploadingField('digitals', state)}
+                            onToggleUploading={setIsUploading}
                             onUpdate={(digitals) => setData(data => ({...data, digitals}))}
                         />
 
@@ -99,10 +100,11 @@ export default function Apply({viewModel, meViewModel}: Props) {
                         name={"photos"}
                         accept={"image/*"}
                         files={data.photos}
+                        slots={8}
                         opaqueAfter={8}
                         onAdd={(photo) => setData(data => ({...data, photos: [...data.photos, photo]}))}
                         onUpdate={(photos) => setData(data => ({...data, photos}))}
-                        onToggleUploading={(state) => setUploadingField('photos', state)}
+                        onToggleUploading={setIsUploading}
                         cols={8}
                         colsOnMobile={4}
                     />

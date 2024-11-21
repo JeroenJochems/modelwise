@@ -57,7 +57,7 @@ class Photo extends Resource
 
         $options = match($resource) {
             "job" => [PhotoModel::FOLDER_JOB_IMAGE => PhotoModel::FOLDER_JOB_IMAGE],
-            "application" => [
+            "listing" => [
                 \Domain\Work2\Models\Listing::FOLDER_PHOTOS => \Domain\Work2\Models\Listing::FOLDER_PHOTOS,
                 \Domain\Work2\Models\Listing::FOLDER_CASTING_PHOTOS => \Domain\Work2\Models\Listing::FOLDER_CASTING_PHOTOS,
             ],

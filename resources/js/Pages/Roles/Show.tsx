@@ -41,89 +41,83 @@ export default function Show({ viewModel }: Props)
         }>
             <div className={"flex-grow"}>
 
-                <JobHeader viewModel={viewModel} />
+                <div className={""}>
+                    <JobHeader viewModel={viewModel} />
 
-                <Tabs selectedTabClassName={"border-b-4 border-b-teal border-r-0"}>
+                    <Tabs selectedTabClassName={"border-b-4 border-b-teal border-r-0"}>
 
-                    <TabList className={`${!hasApplied && "hidden"} border-b mb-8 flex`}>
-                        { hasApplied && <Tab className={tabClasses}>Your application</Tab> }
-                        <Tab className={tabClasses}>Job details</Tab>
-                    </TabList>
+                        <TabList className={`${!hasApplied && "hidden"} border-b mb-8 flex`}>
+                            { hasApplied && <Tab className={tabClasses}>Your application</Tab> }
+                            <Tab className={tabClasses}>Job details</Tab>
+                        </TabList>
 
-                    { hasApplied && (
                         <TabPanel>
-                            <ApplicationStatus viewModel={viewModel} />
-                        </TabPanel>
-                    )}
+                            <Content>
+                                <div className={"grid gap-4"}>
+                                <P className={"whitespace-pre-wrap"} lineClamp={10}>{ role.description }</P>
 
-                    <TabPanel>
-                        <Content>
-                            <P className={"whitespace-pre-wrap"} lineClamp={10}>{ role.description }</P>
-
-                            <div className={"hidden sm:block"}>
-                                <JobSpecifics role={role} />
-                            </div>
-
-                            <div className={"sm:hidden"}>
-                                <Bubbles>
-                                    <Bubble className={"mr-2"}>
-                                        <CalendarDays className={"mr-1"} /> { formatDate(role.start_date!) }
-                                    </Bubble>
-
-                                    <Bubble>
-                                        <Globe className={"mr-1"} /> { job?.location }
-                                    </Bubble>
-
-                                    <Bubble>
-                                        <CurrencyEuroIcon className={"h-6 w-6 mr-1"} />
-                                        {`${formatCents(role.fee)}`} + {`${formatCents(role.buyout)}`}
-                                    </Bubble>
-
-                                    <Bubble>
-                                        <Train className={"h-5 w-5 m-1 mr-1"} />
-                                        { role.travel_reimbursement_note }
-                                    </Bubble>
-                                </Bubbles>
-                            </div>
-
-                            { !!role.buyout_note && (
                                 <div>
-                                    <H3>Usage</H3>
-                                    <P className={"whitespace-pre-wrap"}>{ role.buyout_note }</P>
+                                    <H3>Fee</H3>
+                                    <P>{`${formatCents(role.fee)}`} + {`${formatCents(role.buyout)}`} buyout</P>
                                 </div>
-                            )}
 
-                            { !!job.look_and_feel_photos && job.look_and_feel_photos.length > 0 && (
-                                <div className={"mt-4 grid gap-4"}>
-                                    <H3>Shoot look & feel</H3>
-                                    <PhotoScroller photos={job.look_and_feel_photos.map(photo => cdnLink(photo.path))} />
+                                {!!role.travel_reimbursement_note && (
+                                    <div>
+                                        <H3>Travel reimbursement</H3>
+                                        <P>{ role.travel_reimbursement_note }</P>
+                                    </div>
+                                )}
+
+                                {!! role.start_date && (
+                                    <div>
+                                        <H3>Shoot</H3>
+                                        <P>
+                                            { formatDate(role.start_date!) }<br />
+                                            { job?.location }
+                                        </P>
+                                    </div>
+                                )}
+
+                                { !!role.buyout_note && (
+                                    <div>
+                                        <H3>Usage</H3>
+                                        <P className={"whitespace-pre-wrap"}>{ role.buyout_note }</P>
+                                    </div>
+                                )}
+
+                                { !!job.look_and_feel_photos && job.look_and_feel_photos.length > 0 && (
+                                    <div className={"grid gap-4"}>
+                                        <H3>Shoot look & feel</H3>
+                                        <PhotoScroller photos={job.look_and_feel_photos.map(photo => cdnLink(photo.path))} />
+                                    </div>
+                                )}
+
+                                { !!role.public_photos && role.public_photos.length > 0 && (
+                                    <div className={"grid gap-4"}>
+                                        <H3>For this role</H3>
+                                        <PhotoScroller photos={role.public_photos.map(photo => cdnLink(photo.path))} />
+                                    </div>
+                                )}
+
+                                <div>
+                                    <H3>About the job</H3>
+                                    <P>{ job.description }</P>
                                 </div>
-                            )}
 
-                            { !!role.public_photos && role.public_photos.length > 0 && (
-                                <div className={"mt-4 grid gap-4"}>
-                                    <H3>For this role</H3>
-                                    <PhotoScroller photos={role.public_photos.map(photo => cdnLink(photo.path))} />
+                                { !!job.brand?.name && !!job.brand?.description && (
+                                    <div className={"w-full mb-8"}>
+                                        <H3>About { job.brand.name }</H3>
+                                        <P className={"w-full"}>
+                                            { !!job.brand?.logo && <img className={"ml-4 mb-4 rounded-lg float-right"} src={`${job.brand.logo}?h=120`} /> }
+                                            { job.brand.description }
+                                        </P>
+                                    </div>
+                                )}
                                 </div>
-                            )}
-
-                            <div className={"mt-4"}>
-                                <H3>About the job</H3>
-                                <P>{ job.description }</P>
-                            </div>
-
-                            { !!job.brand?.name && !!job.brand?.description && (
-                                <div className={"w-full mt-4 mb-8"}>
-                                    <H3>About { job.brand.name }</H3>
-                                    <P className={"w-full"}>
-                                        { !!job.brand?.logo && <img className={"ml-4 mb-4 rounded-lg float-right"} src={`${job.brand.logo}?h=120`} /> }
-                                        { job.brand.description }
-                                    </P>
-                                </div>
-                            )}
-                        </Content>
-                    </TabPanel>
-                </Tabs>
+                            </Content>
+                        </TabPanel>
+                    </Tabs>
+                </div>
             </div>
         </DashboardLayout>
     )

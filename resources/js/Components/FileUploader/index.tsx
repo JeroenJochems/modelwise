@@ -7,6 +7,7 @@ import {v4 as uuidv4} from 'uuid';
 import {ProgressBar} from "@/Components/FileUploader/ProgressBar";
 import {ExistingFile} from "@/Components/FileUploader/ExistingFile";
 import InputError from "@/Components/InputError";
+import {useUploadingFields} from "@/Hooks/useUploadingFields";
 
 export type BaseFile = {
     muxId?: string
@@ -41,6 +42,7 @@ type Props = {
 export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6, colsOnMobile = 2, accept, onAdd, onUpdate, onToggleUploading, opaqueAfter=undefined }: Props) {
 
     const id = useId();
+
     const {totalProgressRatio, addFileToProgress, updateProgress} = useUploadProgress();
 
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -50,7 +52,13 @@ export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6
     }
 
     useEffect(() => {
-        onToggleUploading && selectedFiles.length>0 && totalProgressRatio % 1 === 0 && onToggleUploading(totalProgressRatio === 0);
+        console.log(selectedFiles);
+    }, [selectedFiles])
+
+    useEffect(() => {
+        console.log(totalProgressRatio);
+
+        onToggleUploading && onToggleUploading(totalProgressRatio > 0 && totalProgressRatio < 1);
     }, [totalProgressRatio]);
 
     const notDeletedFiles = files.filter((file) => {
@@ -65,7 +73,6 @@ export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6
     const emptySlots = slots - notDeletedFiles.length > 0
         ? Array(slots - notDeletedFiles.length).fill('')
         : [];
-
 
     return (
         <>
@@ -85,18 +92,18 @@ export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6
                 </div>
             )}
 
+            { totalProgressRatio > 0 && totalProgressRatio < 1 && (
+                <ProgressBar progress={totalProgressRatio} />
+            )}
 
             { max>1 && notDeletedFiles.length > 0 && (
-                <div className={"text-center mb-2"}>
+                <div className={"my-2 text-center"}>
                     <label htmlFor={id} className={"text-gray-800 rounded p-2 border border-gray-600 items-center text-center cursor-pointer "}>
                         + add { accept?.includes('video') ? 'videos' : 'photos' }
                     </label>
                 </div>
             )}
 
-            { totalProgressRatio > 0 && totalProgressRatio < 1 && (
-                <ProgressBar progress={totalProgressRatio} />
-            )}
 
             { !!error && <InputError message={error} /> }
 

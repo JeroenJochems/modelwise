@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Model;
 
-use App\ViewModels\ProfessionalExperienceViewModel;
+use App\ViewModels\ModelTagsViewModel;
 use Domain\Profiles\Models\Model;
 use Inertia\Inertia;
 
@@ -11,7 +11,7 @@ class ProfessionalExperienceController extends BaseOnboardingController
     public function index()
     {
         return Inertia::render("Model/Onboarding/ProfessionalExperience")
-            ->with('vm', new ProfessionalExperienceViewModel(auth()->user()));
+            ->with('vm', new ModelTagsViewModel(auth()->user()));
     }
 
     public function store()

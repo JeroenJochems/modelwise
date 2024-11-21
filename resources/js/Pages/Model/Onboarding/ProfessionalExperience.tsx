@@ -6,16 +6,16 @@ import {PageProps} from "@/types";
 import {P} from "@/Components/Typography/p";
 import {TagCloud} from "@/Components/TagCloud";
 import PrimaryButton from "@/Components/PrimaryButton";
-import {ProfessionalExperienceViewModel} from "@/types/generated";
+import {ModelTagsViewModel } from "@/types/generated";
 
 type Props = {
-    vm: ProfessionalExperienceViewModel,
+    vm: ModelTagsViewModel,
 }
 
 type FormData = {
     categories: string[],
-    professions: string[],
     otherCategories: string | null
+    professions: string[],
 }
 
 export default function ProfessionalExperience({vm}: Props) {
@@ -52,7 +52,7 @@ export default function ProfessionalExperience({vm}: Props) {
         <CleanLayout
             header={
                 <Header step={9} isOnboarding={isOnboarding}>
-                    <H1>Professional experience</H1>
+                    <H1>Professional Experience</H1>
                 </Header>
             }
             photos={["https://modelwise.imgix.net/assets/7.4.jpg?w=1200&fm=auto"]}>

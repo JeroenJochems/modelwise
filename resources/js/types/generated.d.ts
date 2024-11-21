@@ -1,12 +1,12 @@
 export type ApplicationStatusEnum = 'pending' | 'accepted' | 'rejected' | 'cancelled';
 export type ApplyData = {
 role_id: number;
-cover_letter: any | string;
+cover_letter: string | null;
 digitals: any | Array<PhotoData> | null;
 photos: any | Array<PhotoData> | null;
 available_dates: Array<string>;
 brand_conflicted: string | null;
-casting_questions: string;
+casting_questions: string | null;
 height: number | null;
 chest: number | null;
 waist: number | null;
@@ -30,7 +30,7 @@ listings: Array<ListingData>;
 recentlyViewedRoles: Array<RoleData>;
 model: ModelData | null;
 };
-export type Ethnicity = 'asian' | 'middle-eastern' | 'black' | 'caribbean' | 'hispanic' | 'indigenous' | 'indian' | 'mixed' | 'native-american' | 'pacific-islander' | 'white' | 'other';
+export type Ethnicity = 'asian' | 'middle-eastern' | 'black' | 'caribbean' | 'hispanic' | 'indigenous' | 'indian' | 'mediterranean' | 'mixed' | 'native-american' | 'pacific-islander' | 'white' | 'other';
 export type ExtraFieldsData = {
 casting_photos: boolean;
 casting_videos: boolean;
@@ -185,6 +185,15 @@ tiktok: string | null;
 website: string | null;
 showreel_link: string | null;
 };
+export type ModelTagsViewModel = {
+allCategories: Array<Tag>;
+allLooks: Array<Tag>;
+allProfessions: Array<Tag>;
+selectedCategories: Array<string>;
+selectedLooks: Array<string>;
+selectedProfessions: Array<string>;
+otherCategories: string | null;
+};
 export type ModelVideoData = {
 id: string;
 muxId: string;
@@ -193,7 +202,7 @@ folder: string;
 export type PhotoData = {
 id: number;
 path: string;
-mime: string;
+mime: string | null;
 isNew: boolean;
 hash: string | null;
 };
@@ -205,13 +214,6 @@ should_show_digitals: boolean;
 should_show_socials: boolean;
 should_show_cover_letter: boolean;
 should_show_conflicts: boolean;
-};
-export type ProfessionalExperienceViewModel = {
-allCategories: Array<Tag>;
-allProfessions: Array<Tag>;
-selectedCategories: Array<string>;
-selectedProfessions: Array<string>;
-otherCategories: string | null;
 };
 export type RegisterModelData = {
 viewedRoles: Array<any>;

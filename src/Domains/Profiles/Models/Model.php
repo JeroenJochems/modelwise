@@ -48,11 +48,15 @@ class Model extends Authenticatable implements Onboardable
     const TAG_TYPE_MODEL_EXPERIENCE = 'Modeling experience';
     const TAG_TYPE_PROFESSIONS = 'Professions';
     const TAG_TYPE_SKILLS = 'Skills';
+    const TAG_TYPE_LOOKS = 'Looks';
+    const TAG_TYPE_INTERNAL = 'Internal';
 
     const TAG_TYPES = [
         self::TAG_TYPE_MODEL_EXPERIENCE => self::TAG_TYPE_MODEL_EXPERIENCE,
         self::TAG_TYPE_SKILLS => self::TAG_TYPE_SKILLS,
         self::TAG_TYPE_PROFESSIONS => self::TAG_TYPE_PROFESSIONS,
+        self::TAG_TYPE_LOOKS => self::TAG_TYPE_LOOKS,
+        self::TAG_TYPE_INTERNAL => self::TAG_TYPE_INTERNAL,
     ];
 
     protected $guarded = ['password'];

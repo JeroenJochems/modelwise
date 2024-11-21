@@ -25,6 +25,7 @@ class Listing extends Resource
 
     public static $model = \Domain\Work2\Models\Listing::class;
 
+    public static $with = ['model', 'role', 'photos', 'casting_photos', 'casting_videos'];
 
     public function title() {
         return $this->model->name .' at '. $this->role->name;
@@ -51,7 +52,7 @@ class Listing extends Resource
             BelongsTo::make("Model")->searchable(),
             BelongsTo::make("Role")->hideFromIndex(),
             Text::make('Photo', function() {
-                return "<img src=\"{$this->model->profile_picture_cdn}?twic=v1/focus=auto/cover=120x120\" width=\"120\" height=\"120\" />";
+                return "<img src=\"{$this->model->profile_picture_cdn}?twic=v1/focus=faces/cover=120x120\" width=\"120\" height=\"120\" />";
             })->asHtml(),
             Stack::make("Name", [
                 Line::make("Role", function () {
@@ -109,7 +110,6 @@ class Listing extends Resource
             MorphMany::make("Photos")->showOnIndex(false),
             MorphMany::make("Casting photos", "casting_photos", Photo::class)->showOnIndex(true),
             MorphMany::make("Casting videos", "casting_videos", Video::class)->showOnIndex(true),
-
 
             Textarea::make('Cover letter'),
             Textarea::make('Brand conflicted'),

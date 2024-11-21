@@ -8,6 +8,7 @@ return [
         'hispanic' => 'Hispanic / Latin America',
         'indigenous' => 'Indigenous /  Native American',
         'middle-eastern' => 'Middle Eastern',
+        'mediterranean' => 'Mediterranean',
         'indian' => 'Indian / South Asian',
         'mixed' => 'Mixed / Multiracial',
         'native-american' => 'Native American',

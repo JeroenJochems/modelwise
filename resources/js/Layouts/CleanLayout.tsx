@@ -29,7 +29,7 @@ export default function CleanLayout({
                     </div>
 
                     <div className="p-4 flex-grow">
-                        <div className={"grid gap-4"}>
+                        <div className={"grid gap-4 mb-16"}>
                             {children}
                         </div>
                     </div>

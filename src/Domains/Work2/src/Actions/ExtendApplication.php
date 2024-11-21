@@ -23,14 +23,10 @@ class ExtendApplication
      */
     public function execute(Listing $listing, array $photos, array $videos): void
     {
-        DB::beginTransaction();
-
         app()->make(PhotoRepository::class)->update($listing, Listing::FOLDER_CASTING_PHOTOS, $photos);
         app()->make(VideoRepository::class)->update($listing, Listing::FOLDER_CASTING_VIDEOS, $videos);
 
         $listing->extended_application_at = now();
         $listing->save();
-
-        DB::commit();
     }
 }

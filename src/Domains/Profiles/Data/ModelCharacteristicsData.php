@@ -2,11 +2,16 @@
 
 namespace Domain\Profiles\Data;
 
+use App\ViewModels\Tag;
 use Domain\Profiles\Enums\Ethnicity;
 use Domain\Profiles\Enums\EyeColor;
 use Domain\Profiles\Enums\HairColor;
+use Domain\Profiles\Models\Model;
+use Illuminate\Support\Collection;
+use Livewire\Attributes\Computed;
 use Spatie\LaravelData\Attributes\Validation\Rule;
 use Spatie\LaravelData\Data;
+use Spatie\Tags\Tag as TagModel;
 
 /** @typescript */
 class ModelCharacteristicsData extends Data
@@ -33,6 +38,5 @@ class ModelCharacteristicsData extends Data
         public ?string $cup_size,
         public ?bool $tattoos,
         public ?bool $piercings
-    ) {
-    }
+    ) { }
 }

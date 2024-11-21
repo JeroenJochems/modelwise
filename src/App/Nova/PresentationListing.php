@@ -38,7 +38,7 @@ class PresentationListing extends Resource
     {
         return [
             Text::make('Photo', function() {
-                return "<img src=\"{$this->listing->model->profile_picture_cdn}?twic=v1/focus=auto/cover=120x120\" />";
+                return "<img src=\"{$this->listing->model->profile_picture_cdn}?twic=v1/focus=faces/cover=120x120\" />";
             })->asHtml(),
             Text::make('Model', function() {
                 return $this->listing->model->name;

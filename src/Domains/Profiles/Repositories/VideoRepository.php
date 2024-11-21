@@ -47,9 +47,6 @@ class VideoRepository
             return $videoObj->id;
         });
 
-
-
-
         Video::setNewOrder($newSort->toArray());
     }
 }
