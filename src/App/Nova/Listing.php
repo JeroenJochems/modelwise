@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\AddTagsToModels;
 use App\Nova\Actions\CreatePresentation;
 use App\Nova\Actions\DeleteListing;
 use App\Nova\Actions\Hire;
@@ -166,6 +167,7 @@ class Listing extends Resource
             new DeleteListing(),
             new Reject(),
             new Hire(),
+            new AddTagsToModels(),
         ];
     }
 }

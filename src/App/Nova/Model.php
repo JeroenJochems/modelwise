@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\AddTagsToModels;
 use App\Nova\Actions\AddToRole;
 use App\Nova\Actions\InviteForRole;
 use App\Nova\Actions\SendMail;
@@ -204,6 +205,7 @@ class Model extends Resource
             new InviteForRole(),
             new AddToRole(),
             new SendMail(),
+            new AddTagsToModels(),
         ];
     }
 }
