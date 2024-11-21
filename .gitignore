@@ -8,6 +8,7 @@
 /storage/*.key
 /vendor
 .env
+**/.DS_Store
 .env.dusk.local
 .env.dusk.testing
 .env.backup
