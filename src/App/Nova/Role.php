@@ -31,6 +31,8 @@ class Role extends Resource
         'name', 'description'
     ];
 
+    public static $with = ['listings.model'];
+
     /**
      * Get the fields displayed by the resource.
      *
