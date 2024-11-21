@@ -101,7 +101,19 @@ class Model extends Resource
                         ' . implode("", $this->photos->map(fn($photo) => '<img src="' . $photo->cdn_path_thumb . '" height="120" />')->toArray())
                         . '</div>';
                 })->asHtml(),
-            ])->exceptOnForms(),
+            ])->onlyOnDetail(),
+
+            Stack::make("Name", [
+                Line::make("Name", function () {
+                    return $this->first_name . " " . $this->last_name;
+                })->asHeading(),
+                Line::make("Location", function () {
+                    return strlen($this->city.$this->country)>0 ? $this->city . ", " . $this->country : "";
+                })->asSmall(),
+                Line::make("Phone", function () {
+                    return implode(", ", array_unique([$this->phone_number, $this->whatsapp_number]));
+                })->asSmall(),
+            ])->onlyOnIndex(),
 
             Text::make('Instagram')->rules( 'max:255')->hideFromIndex()->copyable(),
             Text::make('Tiktok')->rules( 'max:255')->hideFromIndex()->copyable(),
