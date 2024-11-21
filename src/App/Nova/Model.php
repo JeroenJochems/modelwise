@@ -122,7 +122,7 @@ class Model extends Resource
             Textarea::make("Admin notes")->alwaysShow()->hideFromIndex(),
             Tags::make("Looks")->type(ResourceObject::TAG_TYPE_LOOKS)->hideFromIndex(),
             Tags::make('Skills')->type(ResourceObject::TAG_TYPE_SKILLS)->withLinkToTagResource()->hideFromIndex(),
-            Tags::make('Modeling experience')->type(ResourceObject::TAG_TYPE_MODEL_EXPERIENCE)->withLinkToTagResource(),
+            Tags::make('Modeling experience')->type(ResourceObject::TAG_TYPE_MODEL_EXPERIENCE)->withLinkToTagResource()->hideFromIndex(),
             Tags::make('Other professions')->type(ResourceObject::TAG_TYPE_PROFESSIONS)->withLinkToTagResource()->hideFromIndex(),
             Tags::make('Internal Tags')->type(ResourceObject::TAG_TYPE_INTERNAL)->withLinkToTagResource()->hideFromIndex(),
             Text::make('Country')->sortable()->hideFromIndex()->filterable(),
