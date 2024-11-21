@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "535223f468bd6b57a4bb20baa1e84bc7",
+    "content-hash": "d2f53b0157875a9841f5c909f05e8673",
     "packages": [
         {
             "name": "algolia/algoliasearch-client-php",
@@ -5500,6 +5500,67 @@
                 }
             ],
             "time": "2024-07-15T18:27:32+00:00"
+        },
+        {
+            "name": "mahi/spatie-tags-nova-filter",
+            "version": "0.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Mahi-Mahi/SpatieTagsNovaFilter.git",
+                "reference": "273070c97a94640df3e894c1957467a1f928aaed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Mahi-Mahi/SpatieTagsNovaFilter/zipball/273070c97a94640df3e894c1957467a1f928aaed",
+                "reference": "273070c97a94640df3e894c1957467a1f928aaed",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0",
+                "spatie/laravel-tags": "^2.3|^3.0|^4.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.0",
+                "pestphp/pest": "^1.20"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Mahi\\SpatieTagsNovaFilter\\FilterServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mahi\\SpatieTagsNovaFilter\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Olivier Mourlevat",
+                    "email": "olivier.mourlevat@bronx.fr",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A Laravel Nova filter for Spatie/Laravel-Tags.",
+            "homepage": "https://github.com/Mahi-Mahi/SpatieTagsNovaFilter",
+            "keywords": [
+                "filter",
+                "laravel",
+                "nova",
+                "spatie",
+                "tags"
+            ],
+            "support": {
+                "issues": "https://github.com/Mahi-Mahi/SpatieTagsNovaFilter/issues",
+                "source": "https://github.com/Mahi-Mahi/SpatieTagsNovaFilter/tree/0.0.8"
+            },
+            "time": "2022-08-22T14:18:03+00:00"
         },
         {
             "name": "masterminds/html5",

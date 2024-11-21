@@ -9,6 +9,10 @@ use App\Nova\Actions\SendMail;
 use App\Nova\Filters\AgeFilter;
 use App\Nova\Filters\ClassFilter;
 use App\Nova\Filters\EthnicityFilter;
+use App\Nova\Filters\InternalTagsFilter;
+use App\Nova\Filters\LooksFilter;
+use App\Nova\Filters\SkillsFilter;
+use App\Nova\Filters\TagFilter;
 use App\Nova\Filters\WithExternalModels;
 use Datomatic\Nova\Fields\Enum\Enum;
 use Datomatic\Nova\Fields\Enum\EnumBooleanFilter;
@@ -37,6 +41,7 @@ use Laravel\Nova\Fields\VaporImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use Laravel\Nova\Query\Search\SearchableRelation;
+use Mahi\SpatieTagsNovaFilter\SpatieTagsNovaFilter;
 use Outl1ne\NovaSortable\Traits\HasSortableManyToManyRows;
 use Spatie\TagsField\Tags;
 
@@ -186,11 +191,11 @@ class Model extends Resource
     {
         return [
             WithExternalModels::make(),
-            EthnicityFilter::make(),
             ClassFilter::make(),
             AgeFilter::make()->range(0,100),
-            EnumBooleanFilter::make('ethnicity', Ethnicity::class)
-                ->name("Appearance"),
+            LooksFilter::make(),
+            SkillsFilter::make(),
+            InternalTagsFilter::make()
         ];
     }
 

@@ -34,6 +34,7 @@
         "league/flysystem-aws-s3-v3": "dev-r2patch",
         "league/flysystem-path-prefixing": "^3.0",
         "livewire/livewire": "^3.4",
+        "mahi/spatie-tags-nova-filter": "^0.0.8",
         "muxinc/mux-php": "^3.11",
         "nrml-co/nova-big-filter": "^1.0",
         "openai-php/laravel": "^0.8.1",
