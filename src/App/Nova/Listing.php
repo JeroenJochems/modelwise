@@ -53,9 +53,7 @@ class Listing extends Resource
         return [
             BelongsTo::make("Model")->searchable(),
             BelongsTo::make("Role")->hideFromIndex(),
-            Text::make('Photo', function() {
-                return "<img src=\"{$this->model->profile_picture_cdn}?twic=v1/focus=faces/cover=120x120\" width=\"120\" height=\"120\" />";
-            })->asHtml(),
+            Text::make('Photo', fn() => '<img src="'.$this->model->profile_picture_cdn.'" height="120" />')->asHtml(),
             Stack::make("Name", [
                 Line::make("Role", function () {
                     return $this->role->name;
