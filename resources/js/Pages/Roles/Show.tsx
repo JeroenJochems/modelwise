@@ -108,7 +108,7 @@ export default function Show({ viewModel }: Props)
                                     <div className={"w-full mb-8"}>
                                         <H3>About { job.brand.name }</H3>
                                         <P className={"w-full"}>
-                                            { !!job.brand?.logo && <img className={"ml-4 mb-4 rounded-lg float-right"} src={`${job.brand.logo}?h=120`} /> }
+                                            { !!job.brand?.logo && <img className={"ml-4 mb-4 float-right"} src={`${job.brand.logo}?twic=v1/resize=120`} /> }
                                             { job.brand.description }
                                         </P>
                                     </div>
