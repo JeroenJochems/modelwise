@@ -80,7 +80,7 @@ class Role extends Resource
             Text::make('Listings', function() {
                 return '<div style="display: flex; width: 400px; height: 120px; overflow-x: scroll; overflow-y: hidden">
                     ' .implode("", $this->listings->map(function ($listing) {
-                        return '<img src="'.$listing->model->profile_picture_cdn.'?w=720&h=960&fit=crop&fm=auto&crop=faces" title="'.$listing->model->name.'" width="90" height="120" />';
+                        return '<img src="'.$listing->model->profile_picture_cdn.'" title="'.$listing->model->name.'" width="90" height="120" />';
                     })->toArray())
                     . '</div>';
             })->asHtml()->onlyOnIndex(),
