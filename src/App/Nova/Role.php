@@ -5,10 +5,13 @@ namespace App\Nova;
 use App\Nova\Filters\RoleUpcoming;
 use Fourstacks\NovaCheckboxes\Checkboxes;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\BooleanGroup;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\MorphMany;
+use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -42,10 +45,20 @@ class Role extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            BelongsTo::make("Job"),
-            Text::make("Name"),
+
+            Stack::make("Role", [
+                Line::make("Role", fn() => $this->name)->asHeading(),
+                Line::make("Job", fn() => $this->job->title),
+                Line::make("Dates", fn() => (!$this->end_date || $this->start_date->is($this->end_date))
+                    ? $this->start_date?->format("d-m-Y")
+                    : $this->start_date?->format("d-m") . ' till ' . $this->end_date?->format("d-m-Y")
+                )
+            ])->onlyOnIndex(),
+            BelongsTo::make("Job")->hideFromIndex(),
+            Text::make("Name")->hideFromIndex(),
             Date::make("Start date")->hideFromIndex(),
             Date::make("End date")->nullable(true)->hideFromIndex(),
+            Boolean::make("Is active"),
             Textarea::make("Description")->alwaysShow()->hideFromIndex(),
             Money::make("Fee", "EUR")
                 ->storedInMinorUnits(),
@@ -78,7 +91,7 @@ class Role extends Resource
             HasMany::make("Listings"),
             HasMany::make("Presentations"),
             Text::make('Listings', function() {
-                return '<div style="display: flex; width: 400px; height: 120px; overflow-x: scroll; overflow-y: hidden">
+                return '<div style="display: flex; width: 600px; height: 120px; overflow-x: scroll; overflow-y: hidden">
                     ' .implode("", $this->listings->map(function ($listing) {
                         return '<img src="'.$listing->model->profile_picture_cdn.'" title="'.$listing->model->name.'" height="120" />';
                     })->toArray())

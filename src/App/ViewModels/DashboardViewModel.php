@@ -42,7 +42,7 @@ class DashboardViewModel extends ViewModel
 
         $recentlyViewed = $model->role_views()
             ->with("role",'role.photos', 'role.public_photos', 'role.job.look_and_feel_photos')
-            ->whereRelation("role", "end_date", ">", now())
+            ->whereRelation("role", "is_active", "=", true)
             ->orderByDesc('created_at')
             ->take(5)
             ->whereNotIn('role_id', collect($this->listings)->pluck('role_id'))
