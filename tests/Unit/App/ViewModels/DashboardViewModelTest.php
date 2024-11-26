@@ -11,6 +11,8 @@ test('it creates nested data', function() {
     $listings = Listing::query()->with(["model", "role.job", "photos", "casting_photos", "casting_videos"])->get();
 
     $data = \Domain\Jobs\Data\ListingData::collect($listings);
+
+    $this->assertNotEmpty($data);
 });
 
 
