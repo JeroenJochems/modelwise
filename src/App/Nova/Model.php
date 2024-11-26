@@ -126,7 +126,7 @@ class Model extends Resource
             Text::make('WhatsApp number')->rules('max:255')->hideFromIndex()->onlyOnForms(),
             Email::make('Email')->sortable()->rules('email')->hideFromIndex()->onlyOnForms(),
             Enum::make('Gender')->displayUsingLabels()->attach(Gender::class)->filterable()->rules('max:255')->onlyOnForms(),
-            Date::make('Date of birth')->hideFromIndex()->onlyOnForms(),
+            Date::make('Date of birth')->hideFromIndex(),
             Text::make('Country')->sortable()->hideFromIndex()->filterable()->onlyOnForms(),
             Tags::make("Looks")->type(ResourceObject::TAG_TYPE_LOOKS)->hideFromIndex(),
             Tags::make('Skills')->type(ResourceObject::TAG_TYPE_SKILLS)->withLinkToTagResource()->hideFromIndex(),
