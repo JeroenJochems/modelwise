@@ -14,7 +14,6 @@ export type BaseFile = {
     id: number|string
     mime: string
     path: string
-    tmpLocalFile?: File
     isNew?: boolean
     deleted?: boolean
 }

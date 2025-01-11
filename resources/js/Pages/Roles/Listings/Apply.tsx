@@ -3,14 +3,12 @@ import {ChangeEvent, useState} from "react";
 import {useForm, usePage} from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import {H2} from "@/Components/Typography/H2";
-import {JobHeader} from "@/Components/JobHeader";
 import InputGroupText from "@/Components/Forms/InputGroupText";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import {Content} from "@/Layouts/DashboardLayout/Content";
 import InputError from "@/Components/InputError";
 import {H1} from "@/Components/Typography/H1";
-import {useUploadingFields} from "@/Hooks/useUploadingFields";
-import {FileUploader} from "@/Components/FileUploader";
+import {FileUploader2} from "@/Components/FileUploader2";
 import {ApplyData, ModelMeViewModel, ModelRoleViewModel} from "@/types/generated";
 
 type Props = {
@@ -76,11 +74,9 @@ export default function Apply({viewModel, meViewModel}: Props) {
                             }
                         </P>
 
-                        <FileUploader
+                        <FileUploader2
                             accept="image/*"
                             slots={4}
-                            colsOnMobile={4}
-                            cols={4}
                             opaqueAfter={4}
                             files={data.digitals}
                             onAdd={(file) => setData(data => ({...data, digitals: [...data.digitals, file]}))}
@@ -96,7 +92,7 @@ export default function Apply({viewModel, meViewModel}: Props) {
                     <H2>Portfolio photos</H2>
                     <P className={`mb-2`}>The first 8 photos will be shown with your application.</P>
 
-                    <FileUploader
+                    <FileUploader2
                         name={"photos"}
                         accept={"image/*"}
                         files={data.photos}
@@ -104,7 +100,7 @@ export default function Apply({viewModel, meViewModel}: Props) {
                         opaqueAfter={8}
                         onAdd={(photo) => setData(data => ({...data, photos: [...data.photos, photo]}))}
                         onUpdate={(photos) => setData(data => ({...data, photos}))}
-                        onToggleUploading={setIsUploading}
+                        onToggleUploading={alert}
                         cols={8}
                         colsOnMobile={4}
                     />

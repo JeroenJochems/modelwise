@@ -51,6 +51,7 @@
         "clsx": "^2.1.1",
         "logrocket": "^5.0.1",
         "react-image-file-resizer": "^0.4.8",
+        "react-responsive": "^10.0.0",
         "react-scroll-parallax": "^3.4.2",
         "react-sortablejs": "^6.1.4",
         "react-tabs": "^6.0.2",
