@@ -1,14 +1,19 @@
-@extends("mail.layout")
+@extends('mail.layout')
 
 @section("content")
-
-    @foreach($paragraphs as $p)
-        <x-mail.text>{!! nl2br($p) !!}</x-mail.text>
+    @foreach($messageContent as $p)
+    {!! nl2br($p) !!}<br /><br />
     @endforeach
 
-    @if($actionUrl)
-        <x-mail.button href="{{$actionUrl}}">
+    @if(strlen($actionUrl))
+        <a style="font-weight: bold;" href="{{$actionUrl}}">
             {{$actionText}}
-        </x-mail.button>
+        </a>
     @endif
+    <br /><br />
+    <img src="{{$message->embed(public_path('img/logo-black.png'))}}" />
+
+    @isset($code)
+        <br /><br /><span style="font-size:13px; color: #ccc">{{$code}}</span>
+    @endisset
 @endsection

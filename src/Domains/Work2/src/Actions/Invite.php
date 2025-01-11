@@ -20,11 +20,13 @@ class Invite
         Mail::to($model)
             ->queue(new CleanMail(
                 messageSubject: "Are you available for this job?",
-                messageContent: "Hi {$model->first_name}\n\n" .
-                "We believe you might be a great fit for this role.\n\n" .
-                "{$listing->role->job->title} - {$listing->role->name}\n\n" .
-                $listing->role->job->description . "\n\n" .
-                "Are you interested?\n\n",
+                messageContent: [
+                    "Hi {$model->first_name}",
+                    "We believe you might be a great fit for this role.",
+                    "{$listing->role->job->title} - {$listing->role->name}",
+                    $listing->role->job->description,
+                    "Are you interested?"
+                ],
                 actionText: "View role details",
                 actionUrl: route('roles.show', $listing->role_id)
             ));
