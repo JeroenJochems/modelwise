@@ -5,6 +5,7 @@ import {CheckCircleIcon} from "@heroicons/react/24/solid/index.js";
 import {ListingData, ModelPhotoData, PhotoData, PresentationData} from "@/types/generated";
 import {ArrowDownIcon, PlusIcon} from "@heroicons/react/24/solid";
 import {Link} from "@inertiajs/react";
+import {useCdnLink} from "@/Hooks/useCdnLink";
 
 type Props = {
     presentation: PresentationData,
@@ -21,6 +22,8 @@ function uniquePhotos(photos: Array<PhotoData|ModelPhotoData>) {
 }
 
 export default function PresentationListing({ presentation, listing, onSelect, isSelected }: Props) {
+
+    const cdnLink = useCdnLink();
 
     const photos = [
         ...listing.photos,
@@ -200,11 +203,7 @@ export default function PresentationListing({ presentation, listing, onSelect, i
 
                 {uniquePhotos(photos).slice(0, 8).map((photo) => (
                     <div className={"flex rounded-lg overflow-hidden"} key={photo.id}>
-                        <TwicPicture
-                            src={photo.path}
-                            ratio="1:1"
-                            focus="auto"
-                        />
+                        <img src={cdnLink(photo.path, "large")} alt="" />
                     </div>
                 ))}
             </div>
@@ -213,11 +212,7 @@ export default function PresentationListing({ presentation, listing, onSelect, i
                 <div className={`grid grid-cols-2 lg:grid-cols-${listing.model.digitals.slice(0, 8).length} gap-4`}>
                     {uniquePhotos(listing.model.digitals).slice(0, 8).map((photo) => (
                         <div key={photo.id} className={"flex rounded-lg overflow-hidden"}>
-                            <TwicPicture
-                                src={photo.path}
-                                ratio="1:1"
-                                focus="auto"
-                            />
+                            <img src={cdnLink(photo.path, "large")} alt=""/>
                         </div>
                     ))}
                 </div>
