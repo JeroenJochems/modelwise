@@ -124,7 +124,7 @@ class Model extends Resource
             Text::make('Last Name')->sortable()->rules('max:255')->hideFromIndex()->onlyOnForms(),
             Text::make('Phone number')->rules('max:255')->hideFromIndex()->onlyOnForms(),
             Text::make('WhatsApp number')->rules('max:255')->hideFromIndex()->onlyOnForms(),
-            Email::make('Email')->sortable()->rules('email')->hideFromIndex()->onlyOnForms(),
+            Email::make('Email')->sortable()->rules('email')->hideFromIndex(),
             Enum::make('Gender')->displayUsingLabels()->attach(Gender::class)->filterable()->rules('max:255')->onlyOnForms(),
             Date::make('Date of birth')->hideFromIndex(),
             Text::make('Country')->sortable()->hideFromIndex()->filterable()->onlyOnForms(),

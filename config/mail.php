@@ -100,8 +100,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@modelwise.agency'),
-        'name' => env('MAIL_FROM_NAME', 'Modelwise'),
+        'address' => env('MAIL_FROM_ADDRESS', 'info@modelwise.agency'),
+        'name' => env('MAIL_FROM_NAME', 'Bas Gerritsen | Modelwise'),
     ],
 
     /*

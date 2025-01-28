@@ -11,7 +11,7 @@
         </a>
     @endif
     <br /><br />
-    <img src="{{$message->embed(public_path('img/logo-black.png'))}}" />
+    <img src="{{$message->embed(resource_path('static/logo-black.png'))}}" />
 
     @isset($code)
         <br /><br /><span style="font-size:13px; color: #ccc">{{$code}}</span>
