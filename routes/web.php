@@ -83,6 +83,7 @@ Route::middleware(['auth'])->group(callback: function () {
 
     Route::get("roles/{role}/apply", [ApplicationController::class, "create"])->name("applications.create");
     Route::post("roles/{role}/apply", [ApplicationController::class, "store"])->name("applications.store");
+    Route::get("roles/{role}/pass", [PassController::class, "toggle"])->name("role.toggle-pass");
     Route::patch("roles/{role}/update", [ApplicationController::class, "update"])->name("applications.update");
 
     Route::middleware("onboarding")->group(function() {

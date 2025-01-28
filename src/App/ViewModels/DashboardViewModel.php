@@ -6,6 +6,7 @@ use Domain\Jobs\Data\ListingData;
 use Domain\Jobs\Data\RoleData;
 use Domain\Profiles\Data\ModelData;
 use Domain\Profiles\Models\Model;
+use Domain\Work2\Models\Pass;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Collection;
 use Spatie\ViewModels\ViewModel;
@@ -20,6 +21,9 @@ class DashboardViewModel extends ViewModel
     public Collection $recentlyViewedRoles;
 
     public ?ModelData $model;
+
+    /** @var Array<int>  */
+    public array $passedRoles;
 
     public function __construct(Model|Authenticatable $model){
 
@@ -42,7 +46,6 @@ class DashboardViewModel extends ViewModel
 
         $recentlyViewed = $model->role_views()
             ->with("role",'role.photos', 'role.public_photos', 'role.job.look_and_feel_photos')
-            ->whereRelation("role", "is_active", "=", true)
             ->orderByDesc('created_at')
             ->take(5)
             ->whereNotIn('role_id', collect($this->listings)->pluck('role_id'))
@@ -50,5 +53,7 @@ class DashboardViewModel extends ViewModel
             ->pluck('role');
 
         $this->recentlyViewedRoles = RoleData::collect($recentlyViewed);
+
+        $this->passedRoles = Pass::whereModelId($model->id)->pluck('role_id')->toArray();
     }
 }

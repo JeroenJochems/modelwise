@@ -20,6 +20,7 @@ class RoleControllerTest extends TestCase
             ->assertInertia(fn(AssertableInertia $page) => $page
                 ->component('Roles/Show')
                 ->has("viewModel", fn(AssertableInertia $page) => $page
+                    ->has('hasPassed')
                     ->has('role')
                     ->whereType('listing', 'null')
                     ->has('shootDates')
@@ -44,6 +45,7 @@ class RoleControllerTest extends TestCase
             ->assertInertia(fn(AssertableInertia $page) => $page
                 ->component('Roles/Show')
                 ->has("viewModel", fn(AssertableInertia $page) => $page
+                    ->has('hasPassed')
                     ->has('role')
                     ->where('listing.status', 'New')
                     ->has('shootDates')
@@ -69,6 +71,7 @@ class RoleControllerTest extends TestCase
             ->assertInertia(fn(AssertableInertia $page) => $page
                 ->component('Roles/Show')
                 ->has("viewModel", fn(AssertableInertia $page) => $page
+                    ->has('hasPassed')
                     ->has('role')
                     ->where('listing.status', 'Applied')
                     ->has('shootDates')
@@ -97,6 +100,7 @@ class RoleControllerTest extends TestCase
             ->assertInertia(fn(AssertableInertia $page) => $page
                 ->component('Roles/Show')
                 ->has("viewModel", fn(AssertableInertia $page) => $page
+                    ->has('hasPassed')
                     ->has('role')
                     ->where('listing.status', 'Hired')
                     ->has('shootDates')

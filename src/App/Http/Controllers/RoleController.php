@@ -16,11 +16,13 @@ class RoleController extends Controller
 
     public function show(Role $role)
     {
+        $modelId = auth()->id();
         Session::put('viewed_roles', array_unique([$role->id, ...Session::get('viewed_roles', [])]));
 
-        $listing = $role->listings()->where('model_id', auth()->id())->first();
+        $listing = $role->listings()->where('model_id', $modelId)->first();
+        $pass = $role->passes()->where('model_id', $modelId)->first();
 
         return Inertia::render('Roles/Show')
-            ->with("viewModel", new ModelRoleViewModel($role, $listing));
+            ->with("viewModel", new ModelRoleViewModel($role, $listing, $pass));
     }
 }

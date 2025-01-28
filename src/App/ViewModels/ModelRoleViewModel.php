@@ -8,6 +8,7 @@ use Domain\Jobs\Data\ListingData;
 use Domain\Jobs\Data\RoleData;
 use Domain\Jobs\Models\Role;
 use Domain\Work2\Models\Listing;
+use Domain\Work2\Models\Pass;
 use Spatie\ViewModels\ViewModel;
 
 /** @typescript */
@@ -20,9 +21,11 @@ class ModelRoleViewModel extends ViewModel
     public array $shootDates;
 
     public bool $hasApplied;
+    public bool $hasPassed;
+
     public bool $isHired;
 
-    public function __construct(Role $role, Listing $listing = null)
+    public function __construct(Role $role, Listing $listing = null, Pass $pass = null)
     {
         $this->role = RoleData::from($role->load(["job", "job.brand", "job.client", "public_photos"]));
 
@@ -30,6 +33,9 @@ class ModelRoleViewModel extends ViewModel
             $listing->load(["casting_photos", "casting_videos", "model", "role", "photos"]);
             $this->listing = ListingData::from($listing);
         }
+
+
+        $this->hasPassed = $pass!==null;
 
         $period = new DatePeriod(
             $role->start_date,
