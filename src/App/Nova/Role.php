@@ -89,6 +89,7 @@ class Role extends Resource
             ),
             Text::make("Travel reimbursement note")->hideFromIndex(),
             HasMany::make("Listings"),
+            HasMany::make("Passes"),
             HasMany::make("Presentations"),
             Text::make('Listings', function() {
                 return '<div style="display: flex; width: 600px; height: 120px; overflow-x: scroll; overflow-y: hidden">

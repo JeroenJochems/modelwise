@@ -12,6 +12,7 @@ use Domain\Profiles\Models\Model;
 use Domain\Profiles\Models\Photo;
 use Domain\Profiles\Models\Video;
 use Domain\Work2\Models\Listing;
+use Domain\Work2\Models\Pass;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Onboard\Facades\Onboard;
@@ -34,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Relation::enforceMorphMap([
             'model' => Model::class,
+            'pass' => Pass::class,
             'job' => Job::class,
             'photo' => Photo::class,
             'video' => Video::class,
