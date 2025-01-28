@@ -35,6 +35,7 @@ class ModelCharacteristicsData extends Data
         public ?string $hips,
         #[Rule(['numeric', 'max:55'])]
         public ?string $shoe_size,
+        public ?string $clothing_size_top,
         public ?string $cup_size,
         public ?bool $tattoos,
         public ?bool $piercings

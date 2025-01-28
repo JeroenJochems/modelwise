@@ -182,6 +182,7 @@ class Model extends Resource
             Number::make("Hips")->help("in cm")->filterable()->hideFromIndex(),
             Number::make("Height")->help("in cm")->filterable()->hideFromIndex(),
             Text::make("Cup size")->hideFromIndex()->filterable(),
+            Select::make("Tshirt size", "clothing_size_top")->options(["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", '5XL'])->hideFromIndex()->filterable(),
         ];
     }
 
