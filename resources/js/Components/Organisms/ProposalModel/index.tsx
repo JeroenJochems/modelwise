@@ -1,5 +1,5 @@
 import MuxPlayer from "@mux/mux-player-react";
-import "@mux/mux-player/themes/minimal";
+import "@mux/mux-player-react/themes/minimal";
 import {TwicPicture} from "@twicpics/components/react";
 import {CheckCircleIcon} from "@heroicons/react/24/solid/index.js";
 import {ListingData, ModelPhotoData, PhotoData, PresentationData} from "@/types/generated";
