@@ -11,6 +11,7 @@ import {formatDate} from "@/Utils/Dates";
 import {formatCents} from "@/Utils/Money";
 import {useCdnLink} from "@/Hooks/useCdnLink";
 import {ModelRoleViewModel} from "@/types/generated";
+import {ApplicationStatus} from "@/Components/Molecules/ApplicationStatus";
 
 type Props = {
     viewModel: ModelRoleViewModel
@@ -42,6 +43,12 @@ export default function Show({ viewModel }: Props)
                             { hasApplied && <Tab className={tabClasses}>Your application</Tab> }
                             <Tab className={tabClasses}>Job details</Tab>
                         </TabList>
+
+                        { hasApplied && (
+                            <TabPanel>
+                                <ApplicationStatus viewModel={viewModel} />
+                            </TabPanel>
+                        )}
 
                         <TabPanel>
                             <Content>

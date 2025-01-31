@@ -36,7 +36,7 @@ export default function PresentationListing({ presentation, listing, onSelect, i
     }
 
     return (
-        <div className={`pt-12 break-inside-avoid-page grid gap-4 border-2 rounded p-8 ${isSelected ? 'border-green' : 'border-white'}`}>
+        <div className={`pt-12 break-inside-avoid-page grid gap-4 border-2 rounded p-8 ${isSelected ? 'border-green' : 'border-gray-300'}`}>
             <div className={"w-full"}>
                 <div>
                     <h1 className="flex items-center mb-4 text-3xl font-medium text-gray-900">
@@ -48,7 +48,7 @@ export default function PresentationListing({ presentation, listing, onSelect, i
                         </label>
                         <div className="flex h-6 items-center">
                             <label onClick={() => onSelect(listing)} htmlFor={`#shortlist${listing.id}`}
-                                className={`ml-2 inline-flex gap-2 items-center rounded-md ${isSelected ? 'bg-green text-white' : 'bg-white text-green'} border border-green px-2 py-1 text-base`}>
+                                className={`cursor-pointer ml-2 inline-flex gap-2 items-center rounded-md ${isSelected ? 'bg-green text-white' : 'bg-white text-green'} border border-green px-2 py-1 text-base`}>
                                 { isSelected ? <CheckCircleIcon className={"w-4 h-4"}/> : <PlusIcon className={"w-4 h-4"}/> }
                                 Favorite
                             </label>
@@ -194,7 +194,7 @@ export default function PresentationListing({ presentation, listing, onSelect, i
                             <MuxPlayer theme="minimal" poster="https://modelwise.net/poster-casting-video.png" playbackId={video.mux_id ?? ""}
                                        className={"object-fit aspect-square rounded-lg"}/>
                         </div>
-                        <a href={`https://stream.mux.com/${video.mux_id}.m3u8`} target={"_blank"}
+                        <a href={`https://stream.mux.com/${video.mux_id}/capped-1080p.mp4`} target={"_blank"}
                            className={"absolute z-2 top-0 left-0 w-10 h-10 bg-gray-100"}>
                             <ArrowDownIcon className={"w-6 h-6 m-auto mt-2"}/>
                         </a>
