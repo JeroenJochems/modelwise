@@ -97,7 +97,7 @@ class AppServiceProvider extends ServiceProvider
         Onboard::addStep('Professional background')
             ->link("onboarding/professional-experience")
             ->completeIf(function (Model $model) {
-                return $model
+                return strlen($model->other_categories)>0 || $model
                         ->tagsWithType(Model::TAG_TYPE_MODEL_EXPERIENCE)
                         ->count() > 0;
             });

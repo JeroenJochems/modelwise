@@ -19,10 +19,10 @@ class Invite
 
         Mail::to($model)
             ->queue(new CleanMail(
-                messageSubject: "Are you available for this job?",
+                messageSubject: "Casting invite: {$listing->role->job->title} ({$listing->role->start_date->format('M j')})",
                 messageContent: [
                     "Hi {$model->first_name}",
-                    "We believe you might be a great fit for this role.",
+                    "We believe you might be a great fit for this casting.",
                     "{$listing->role->job->title} - {$listing->role->name}",
                     $listing->role->job->description,
                     "Are you interested?"

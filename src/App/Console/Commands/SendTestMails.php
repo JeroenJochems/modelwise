@@ -39,7 +39,7 @@ class SendTestMails extends Command
                 messageSubject: 'You have been shortlisted',
                 messageContent: [
                     "Hi Jeroen,",
-                    "Good news: you've been shortlisted for a role.",
+                    "You've been shortlisted for a shoot at Modelwise.",
                     "Please log in to your account to provide additional information requested by the client.",
                 ],
                 actionText: 'View additional questions',
