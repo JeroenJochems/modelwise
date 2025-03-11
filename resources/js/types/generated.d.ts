@@ -29,6 +29,7 @@ export type DashboardViewModel = {
 listings: Array<ListingData>;
 recentlyViewedRoles: Array<RoleData>;
 model: ModelData | null;
+passedRoles: Array<number>;
 };
 export type Ethnicity = 'asian' | 'middle-eastern' | 'black' | 'caribbean' | 'hispanic' | 'indigenous' | 'indian' | 'mediterranean' | 'mixed' | 'native-american' | 'pacific-islander' | 'white' | 'other';
 export type ExtraFieldsData = {
@@ -98,11 +99,12 @@ chest: string | null;
 waist: string | null;
 hips: string | null;
 shoe_size: string | null;
+clothing_size_top: string | null;
 cup_size: string | null;
 tattoos: boolean | null;
 piercings: boolean | null;
 };
-export type ModelClass = 'Archived' | 'People' | 'Talent' | 'Top';
+export type ModelClass = 'Archived' | 'People' | 'People+' | 'Talent' | 'Top';
 export type ModelData = {
 id: string | null;
 profile_picture: string | null;
@@ -177,6 +179,7 @@ role: RoleData;
 listing: ListingData | null;
 shootDates: Array<string>;
 hasApplied: boolean;
+hasPassed: boolean;
 isHired: boolean;
 };
 export type ModelSocialsData = {
@@ -198,6 +201,11 @@ export type ModelVideoData = {
 id: string;
 muxId: string;
 folder: string;
+};
+export type PassData = {
+id: number;
+model_id: string;
+role_id: string;
 };
 export type PhotoData = {
 id: number;

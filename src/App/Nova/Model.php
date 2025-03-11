@@ -124,7 +124,7 @@ class Model extends Resource
             Text::make('Last Name')->sortable()->rules('max:255')->hideFromIndex()->onlyOnForms(),
             Text::make('Phone number')->rules('max:255')->hideFromIndex()->onlyOnForms(),
             Text::make('WhatsApp number')->rules('max:255')->hideFromIndex()->onlyOnForms(),
-            Email::make('Email')->sortable()->rules('email')->hideFromIndex()->onlyOnForms(),
+            Email::make('Email')->sortable()->rules('email')->hideFromIndex(),
             Enum::make('Gender')->displayUsingLabels()->attach(Gender::class)->filterable()->rules('max:255')->onlyOnForms(),
             Date::make('Date of birth')->hideFromIndex(),
             Text::make('Country')->sortable()->hideFromIndex()->filterable()->onlyOnForms(),
@@ -182,6 +182,7 @@ class Model extends Resource
             Number::make("Hips")->help("in cm")->filterable()->hideFromIndex(),
             Number::make("Height")->help("in cm")->filterable()->hideFromIndex(),
             Text::make("Cup size")->hideFromIndex()->filterable(),
+            Select::make("Tshirt size", "clothing_size_top")->options(["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", '5XL'])->hideFromIndex()->filterable(),
         ];
     }
 

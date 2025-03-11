@@ -27,6 +27,7 @@ type ModelDataType = {
     tattoos: boolean
     piercings: boolean
     cup_size?: string
+    clothing_size_top?: string
     tattoo_photos?: BaseFile[]
 }
 
@@ -88,7 +89,7 @@ export default function Characteristics({modelTagsViewModel, modelData, tattooPh
                 </div>
                 <div>
                     <InputGroupText
-                        title="Eye color"
+                        title="Hair color"
                         value={data.hair_color ?? ""}
                         error={errors.hair_color}
                         options={hairColors}
@@ -164,6 +165,13 @@ export default function Characteristics({modelTagsViewModel, modelData, tattooPh
                             onChange={value => setData('cup_size', value)}
                         />
                     )}
+                    <InputGroupText
+                        title="Shirt size"
+                        options={["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", '5XL']}
+                        value={data.clothing_size_top ?? ""}
+                        error={errors.clothing_size_top}
+                        onChange={value => setData('clothing_size_top', value)}
+                    />
                 </div>
 
                 <div>

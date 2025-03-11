@@ -46,6 +46,11 @@ class Role extends Model
         return $this->belongsTo(Job::class);
     }
 
+    public function passes()
+    {
+        return $this->hasMany(\Domain\Work2\Models\Pass::class);
+    }
+
     public function photos()
     {
         return $this

@@ -11,7 +11,6 @@ use App\Nova\Actions\Reject;
 use App\Nova\Actions\SendInviteToListing;
 use App\Nova\Actions\SendMail;
 use App\Nova\Actions\Shortlist;
-use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Line;
@@ -23,7 +22,7 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Listing extends Resource
 {
-    public static $perPageViaRelationship = 50;
+    public static $perPageViaRelationship = 200;
 
     public static $model = \Domain\Work2\Models\Listing::class;
 

@@ -3,10 +3,8 @@
 namespace App\Nova\Actions;
 
 use App\Mail\CleanMail;
-use App\Nova\Listing;
-use Domain\Profiles\Models\Model;
+use Domain\Work2\Models\Listing;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
@@ -31,22 +29,13 @@ class SendMail extends Action
     {
         foreach ($models as $object) {
 
-            if ($object instanceof Listing) {
+            $to = $object instanceof Listing ? $object->model : $object;
 
-                Mail::to($object->model)
-                    ->queue(new CleanMail(
-                        messageSubject: $fields->get('subject'),
-                        messageContent: $fields->get('content'),
-                    ));
-            }
-
-            if ($object instanceof Model) {
-                Mail::to($object)
-                    ->queue(new CleanMail(
-                        messageSubject: $fields->get('subject'),
-                        messageContent: $fields->get('content'),
-                    ));
-            }
+            Mail::to($to)
+                ->queue(new CleanMail(
+                    messageSubject: $fields->get('subject'),
+                    messageContent: [$fields->get('content')],
+                ));
         }
 
         return Action::message('Mail sent!');

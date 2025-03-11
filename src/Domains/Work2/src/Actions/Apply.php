@@ -35,7 +35,7 @@ class Apply
         Mail::to($role->job->responsible_user)
             ->send(new CleanMail(
                 'New application for ' . $role->job->title,
-                $model->name . ' has applied for the role ' . $role->name . ' for ' . $role->job->title . '.'
+                [$model->name . ' has applied for the role ' . $role->name . ' for ' . $role->job->title . '.']
             ));
     }
 }

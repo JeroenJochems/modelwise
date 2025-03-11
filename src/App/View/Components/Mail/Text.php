@@ -12,11 +12,11 @@ class Text extends Component
      * Create a new component instance.
      */
     public function __construct(
-        public string $fontFamily = 'Helvetica, Arial, sans-serif',
+        public string $fontFamily = 'Arial, Helvetica, sans-serif',
         public string $align = 'left',
         public string $color = '#333333',
         public string $padding = '5px',
-        public int $fontSize = 16,
+        public int $fontSize = 13,
         public int $fontWeight = 300,
         public string $cssClass = ''
     ) {}

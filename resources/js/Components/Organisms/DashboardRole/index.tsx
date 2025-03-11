@@ -4,21 +4,24 @@ import {JobSpecifics} from "@/Components/Molecules/JobSpecifics";
 import {CtaLink} from "@/Components/CtaLink";
 import {useCdnLink} from "@/Hooks/useCdnLink";
 import {RoleData} from "@/types/generated";
+import {Label} from "@/Components/Atoms/Label";
 
 type Props = {
     role: RoleData
+    hasPassed: boolean
 }
 
-export function DashboardRole({ role }: Props) {
+export function DashboardRole({ hasPassed, role }: Props) {
 
     const cdnLink = useCdnLink()
     const photos = [...role.public_photos, ...role.job.look_and_feel_photos];
 
     return (
-        <li className={"block bg-white/95 shadow-outline overflow-hidden rounded-lg flex"}>
+        <li className={"bg-white/95 shadow-outline overflow-hidden rounded-lg flex"}>
             <div className={"w-2/3 grid gap-4 p-4 my-4 flex-grow"}>
 
-                <H2 className={"font-bold"}>{ role.job.title}</H2>
+                {hasPassed && <Label>You've Passed</Label>}
+                <H2 className={"font-bold"}> { role.job.title}</H2>
                 <P lineClamp={3}>{ role.job.description}</P>
 
                 <JobSpecifics role={ role}/>

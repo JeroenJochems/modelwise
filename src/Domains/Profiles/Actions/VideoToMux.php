@@ -30,6 +30,7 @@ class VideoToMux
         $input = new InputSettings(["url" => "https://modelwise.net/".$video->path]);
         $createAssetRequest = new CreateAssetRequest([
             "input" => $input,
+            'mp4_support' => 'capped-1080p',
             "playback_policy" => [PlaybackPolicy::_PUBLIC]
         ]);
 

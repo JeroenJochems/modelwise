@@ -44,7 +44,7 @@ export default function Show({ presentation, listings}: Props)
 
     return (
         <div className={"flex h-screen-safe flex-col overflow-hidden relative"}>
-            <div className="overflow-scroll flex-grow mt-8 px-4 py-12 sm:px-6 lg:px-8">
+            <div className="overflow-scroll flex-grow mt-8 px-4 py-12">
 
                 <div className={"mx-auto max-w-2xl  lg:max-w-7xl"}>
                     <h1 className={"font-bold text-2xl sm:text-4xl mt-4"}>Proposal</h1>

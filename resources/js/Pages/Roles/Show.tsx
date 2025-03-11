@@ -4,21 +4,14 @@ import {JobHeader} from "@/Components/JobHeader";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import {Content} from "@/Layouts/DashboardLayout/Content";
 import {PhotoScroller} from "@/Components/Atoms/JobScroller";
-import {JobSpecifics} from "@/Components/Molecules/JobSpecifics";
 import {ApplyFooter} from "@/Components/Molecules/ApplyFooter";
 import {DashboardFooter} from "@/Components/Molecules/DashboardFooter";
 import {Tab, TabList, TabPanel, Tabs} from 'react-tabs';
-import {Bubbles} from "@/Components/Atoms/JobHeader/Bubbles";
-import {Bubble} from "@/Components/Atoms/JobHeader/Bubbles/Bubble";
-import {CalendarDays} from "@/Components/Icons/CalendarDays";
 import {formatDate} from "@/Utils/Dates";
-import {Globe} from "@/Components/Icons/Globe";
-import {ApplicationStatus} from "@/Components/Molecules/ApplicationStatus";
-import {CurrencyEuroIcon} from "@heroicons/react/24/outline";
 import {formatCents} from "@/Utils/Money";
-import {Train} from "@/Components/Icons/Train";
 import {useCdnLink} from "@/Hooks/useCdnLink";
 import {ModelRoleViewModel} from "@/types/generated";
+import {ApplicationStatus} from "@/Components/Molecules/ApplicationStatus";
 
 type Props = {
     viewModel: ModelRoleViewModel
@@ -50,6 +43,12 @@ export default function Show({ viewModel }: Props)
                             { hasApplied && <Tab className={tabClasses}>Your application</Tab> }
                             <Tab className={tabClasses}>Job details</Tab>
                         </TabList>
+
+                        { hasApplied && (
+                            <TabPanel>
+                                <ApplicationStatus viewModel={viewModel} />
+                            </TabPanel>
+                        )}
 
                         <TabPanel>
                             <Content>

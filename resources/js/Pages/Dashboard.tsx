@@ -27,7 +27,7 @@ type Props = { vm: DashboardViewModel } & PageProps
 export default function Dashboard(props: Props) {
 
     const cdnLink = useCdnLink()
-    const {listings, recentlyViewedRoles} = props.vm;
+    const {listings, recentlyViewedRoles, passedRoles} = props.vm;
     const isEmpty = (listings.length + recentlyViewedRoles.length) === 0
 
     return (
@@ -37,13 +37,11 @@ export default function Dashboard(props: Props) {
                 {isEmpty && <div
                     className={"p-12 sm:p-16 text-center border-dashed border-[6px] rounded-lg border-gray-300"}>This
                     is where you'll find your job invites and applications.</div>}
-                <RecentlyViewedRoles roles={recentlyViewedRoles}/>
+                <RecentlyViewedRoles passedRoles={passedRoles} roles={recentlyViewedRoles}/>
 
                 {listings.map((listing) =>
                     {
                         const hasPhotos = listing.photos !== null && listing.photos.length > 0;
-
-                        console.log(listing.role.job!);
 
                         return (
                             <li key={listing.id} className={"flex bg-white/95 shadow-outline overflow-hidden rounded-lg"}>
