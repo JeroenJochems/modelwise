@@ -14,7 +14,7 @@ export function JobSpecifics({ role, className='grid grid-cols-2 gap-4 sm:grid-c
         <dl className={className}>
             <Item title={'Fee'} val={`${formatCents(role.fee)}`}/>
             <Item title={'Buyout'} val={formatCents(role.buyout)} />
-            <Item title={'Shoot'} val={ formatDate(role.start_date) } />
+            <Item title={'Shoot'} val={ formatDate(role.start_date) + (!!role.end_date ? ` till ${formatDate(role.end_date)}` : '') } />
             { !!role.job.location && <Item title={'Location'} val={ role.job.location } /> }
             <Item title={'Travel reimbursement'} val={role.travel_reimbursement_note ?? ""} className={"col-span-2"} />
         </dl>

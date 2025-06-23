@@ -9,6 +9,8 @@ use App\Nova\Model;
 use App\Nova\Photo;
 use App\Nova\Role;
 use App\Nova\Tag;
+use DB;
+use Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
@@ -16,6 +18,7 @@ use Laravel\Nova\Menu\MenuItem;
 use Laravel\Nova\Menu\MenuSection;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
+use Log;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
@@ -27,7 +30,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function boot()
     {
         parent::boot();
-
         Nova::mainMenu(function (Request $request) {
 
             $menuSections = [

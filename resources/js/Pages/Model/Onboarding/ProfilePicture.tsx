@@ -16,7 +16,7 @@ export default function ProfilePicture(props: ModelDataType) {
     const { profile_picture } = props;
     const { location } = usePage<PageProps>().props.ziggy
 
-    const { data, setData, post } = useForm<ModelDataType>({
+    const { data, setData, post, processing } = useForm<ModelDataType>({
         profile_picture: profile_picture
     });
 
@@ -26,6 +26,8 @@ export default function ProfilePicture(props: ModelDataType) {
     };
 
     const isOnboarding = location.includes("onboarding");
+
+    console.log(data);
 
     return (
         <CleanLayout header={
@@ -49,8 +51,8 @@ export default function ProfilePicture(props: ModelDataType) {
                     />
                 </div>
 
-                <PrimaryButton onClick={submit}>
-                    { isOnboarding ? "Continue" : "Save" }
+                <PrimaryButton onClick={submit} disabled={processing} className={"mb-8"}>
+                    { processing ? 'Please wait...' : isOnboarding ? 'Continue' : 'Save' }
                 </PrimaryButton>
             </form>
         </CleanLayout>

@@ -33,7 +33,7 @@ class DashboardViewModel extends ViewModel
             ->whereNull('rejected_at')
             ->where(function($q) {
                 $q
-                    ->whereRelation("role", "end_date", ">", now())
+                    ->whereRelation("role", "is_active", "=", 1)
                     ->orWhereHas("role", function($q) {
                         $q->whereNull("end_date");
                     })
@@ -52,7 +52,7 @@ class DashboardViewModel extends ViewModel
             ->get()
             ->pluck('role');
 
-        $this->recentlyViewedRoles = RoleData::collect($recentlyViewed);
+        $this->recentlyViewedRoles = RoleData::collect($recentlyViewed->filter(fn($role) => $role->is_active));
 
         $this->passedRoles = Pass::whereModelId($model->id)->pluck('role_id')->toArray();
     }

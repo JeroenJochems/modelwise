@@ -15,6 +15,7 @@ enum ModelClass: string
     case Archived = "Archived";
     case People = "People";
     case PeoplePlus = "People+";
+    case Fashion = "Fashion";
     case Talent = "Talent";
     case Top = "Top";
 }

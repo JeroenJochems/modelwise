@@ -8,7 +8,7 @@ import DashboardLayout from "@/Layouts/DashboardLayout";
 import {Content} from "@/Layouts/DashboardLayout/Content";
 import InputError from "@/Components/InputError";
 import {H1} from "@/Components/Typography/H1";
-import {FileUploader2} from "@/Components/FileUploader2";
+import {FileUploader} from "@/Components/FileUploader";
 import {ApplyData, ModelMeViewModel, ModelRoleViewModel} from "@/types/generated";
 
 type Props = {
@@ -74,7 +74,7 @@ export default function Apply({viewModel, meViewModel}: Props) {
                             }
                         </P>
 
-                        <FileUploader2
+                        <FileUploader
                             accept="image/*"
                             slots={4}
                             opaqueAfter={4}
@@ -92,7 +92,7 @@ export default function Apply({viewModel, meViewModel}: Props) {
                     <H2>Portfolio photos</H2>
                     <P className={`mb-2`}>The first 8 photos will be shown with your application.</P>
 
-                    <FileUploader2
+                    <FileUploader
                         name={"photos"}
                         accept={"image/*"}
                         files={data.photos}

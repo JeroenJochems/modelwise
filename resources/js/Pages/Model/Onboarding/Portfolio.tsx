@@ -2,14 +2,12 @@ import CleanLayout from "@/Layouts/CleanLayout";
 import {H1} from "@/Components/Typography/H1";
 import {P} from "@/Components/Typography/p";
 import {Header} from "@/Components/Onboarding/Header";
-import {router, useForm, usePage} from "@inertiajs/react";
+import {useForm, usePage} from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
 import {PageProps} from "@/types";
 import {useState} from "react";
 import {BaseFile, FileUploader} from "@/Components/FileUploader";
 
-
-export type FileEventTarget = EventTarget & { files: FileList|null };
 
 export default function Portfolio({modelPhotos}: {modelPhotos: BaseFile[] }) {
 
@@ -51,9 +49,7 @@ export default function Portfolio({modelPhotos}: {modelPhotos: BaseFile[] }) {
                     onUpdate={(photos) => { setData(data => ({...data, photos})) }}
                 />
 
-                { data.photos.length > 5 && data.photos.length <= 12 && <P>You can add as many photos as you like!</P> }
-
-                <PrimaryButton className={"mb-8"} onClick={submit} disabled={isSubmitting || isUploading || ( isOnboarding && data.photos.length < 3)}>
+                <PrimaryButton className={"mb-8"} onClick={submit} disabled={isSubmitting || ( isOnboarding && data.photos.length < 3)}>
                     { isSubmitting ? `Please wait...` : isOnboarding ? 'Continue' : 'Save' }
                 </PrimaryButton>
         </CleanLayout>

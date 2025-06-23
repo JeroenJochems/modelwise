@@ -28,6 +28,7 @@ class CreatePresentation extends Action
         $presentation = new Presentation();
         $presentation->description = $fields->description;
         $presentation->role_id = $listings->first()->role_id;
+        $presentation->should_show_name = $fields->should_show_name;
         $presentation->should_show_casting_media = $fields->should_show_casting_media;
         $presentation->should_show_conflicts = $fields->should_show_conflicts;
         $presentation->should_show_cover_letter = $fields->should_show_cover_letter;
@@ -52,6 +53,8 @@ class CreatePresentation extends Action
     {
         return [
             Text::make('Description')->help('Only for internal usage'),
+
+            Boolean::make('Show name', 'should_show_name')->default(true),
             Boolean::make('Show casting media', 'should_show_casting_media')->default(true),
             Boolean::make('Show digitals', 'should_show_digitals')->default(true),
             Boolean::make('Show cover letter', 'should_show_cover_letter')->default(true),

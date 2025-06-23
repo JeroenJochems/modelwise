@@ -10,6 +10,7 @@ use App\Nova\Actions\Hire;
 use App\Nova\Actions\Reject;
 use App\Nova\Actions\SendInviteToListing;
 use App\Nova\Actions\SendMail;
+use App\Nova\Actions\SendSms;
 use App\Nova\Actions\Shortlist;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
@@ -167,6 +168,7 @@ class Listing extends Resource
             new Hire(),
             new AddTagsToModels(),
             new EditModelClass(),
+            new SendSms(),
         ];
     }
 }

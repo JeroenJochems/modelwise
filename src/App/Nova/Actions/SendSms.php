@@ -3,10 +3,14 @@
 namespace App\Nova\Actions;
 
 use App\Mail\CleanMail;
+use App\Notifications\SmsMessage;
+use Domain\Profiles\Models\Model;
 use Domain\Work2\Models\Listing;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
@@ -14,7 +18,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class SendMail extends Action
+class SendSms extends Action
 {
     use InteractsWithQueue, Queueable;
 
@@ -30,18 +34,13 @@ class SendMail extends Action
         foreach ($models as $object) {
 
             $to = $object instanceof Listing ? $object->model : $object;
-
             $content = $fields->get('content');
             $content = str_replace("{{firstName}}", $to->first_name, $content);
 
-            Mail::to($to)
-                ->queue(new CleanMail(
-                    messageSubject: $fields->get('subject'),
-                    messageContent: [$content],
-                ));
+            $to->notify(new SmsMessage($content));
         }
 
-        return Action::message('Mail sent!');
+        return Action::message('Messages sent');
     }
 
     /**
@@ -53,7 +52,6 @@ class SendMail extends Action
     public function fields(NovaRequest $request)
     {
         return [
-            Text::make('Subject', 'subject'),
             Textarea::make('Content', 'content')->default("Hi {{firstName}},\n\n"),
         ];
     }

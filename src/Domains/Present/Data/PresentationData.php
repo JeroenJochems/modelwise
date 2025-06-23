@@ -12,6 +12,7 @@ class PresentationData extends Data
     public function __construct(
         public string $id,
         public RoleData $role,
+        public bool $should_show_name,
         public bool $should_show_casting_media,
         public bool $should_show_digitals,
         public bool $should_show_socials,

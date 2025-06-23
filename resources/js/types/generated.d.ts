@@ -104,7 +104,7 @@ cup_size: string | null;
 tattoos: boolean | null;
 piercings: boolean | null;
 };
-export type ModelClass = 'Archived' | 'People' | 'People+' | 'Talent' | 'Top';
+export type ModelClass = 'Archived' | 'People' | 'People+' | 'Fashion' | 'Talent' | 'Top';
 export type ModelData = {
 id: string | null;
 profile_picture: string | null;
@@ -217,6 +217,7 @@ hash: string | null;
 export type PresentationData = {
 id: string;
 role: RoleData;
+should_show_name: boolean;
 should_show_casting_media: boolean;
 should_show_digitals: boolean;
 should_show_socials: boolean;
