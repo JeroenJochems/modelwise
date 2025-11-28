@@ -1,14 +1,11 @@
 import './bootstrap';
 import '../css/app.css';
-import LogRocket from 'logrocket';
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { installTwicpics } from "@twicpics/components/react";
 import "@twicpics/components/style.css";
 import * as Sentry from "@sentry/react";
-
-LogRocket.init('ovxwul/modelwise');
 
 installTwicpics( {
     "domain": "https://mdlws.twic.pics"

@@ -14,7 +14,7 @@ class UserPolicy
 
     public function create(Authenticatable $authenticatable)
     {
-        return $authenticatable instanceof User && $authenticatable->email === "jeroen@joche.ms";
+        return $authenticatable instanceof User && $authenticatable->email === "jeroen@modelwise.agency";
     }
 
     public function update(Authenticatable $authenticatable, User $user)

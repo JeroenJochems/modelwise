@@ -42,11 +42,13 @@ class Presentation extends Resource
             Text::make('Models', fn() => $this->presentationListings->count())->onlyOnIndex(),
             Text::make("Link", fn() => '<a target="_new" href="'.route('presentations.show', $this->id).'">View</a>')->asHtml()->onlyOnIndex(),
             HasMany::make("Listings", "presentationListings", PresentationListing::class),
+            Boolean::make("Show name", "should_show_name")->default(true),
             Boolean::make("Show casting media", "should_show_casting_media"),
             Boolean::make("Show digitals", "should_show_digitals"),
             Boolean::make("Show socials", "should_show_socials"),
             Boolean::make("Show cover letter", "should_show_cover_letter"),
             Boolean::make("Show conflicts", "should_show_conflicts"),
+            Boolean::make("Show age", "should_show_age"),
         ];
     }
 

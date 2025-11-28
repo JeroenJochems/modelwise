@@ -42,9 +42,7 @@ export default function PresentationListing({ presentation, listing, onSelect, i
                     <h1 className="flex items-center mb-4 text-3xl font-medium text-gray-900">
                         <label htmlFor={`shortlist${listing.id}`}
                                className="flex flex-grow items-center cursor-pointer font-medium text-gray-900">
-                            {listing.model.first_name}
-
-
+                            { presentation.should_show_name ? listing.model.first_name : listing.model.id }
                         </label>
                         <div className="flex h-6 items-center">
                             <label onClick={() => onSelect(listing)} htmlFor={`#shortlist${listing.id}`}

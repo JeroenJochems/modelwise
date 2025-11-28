@@ -70,10 +70,9 @@ export default function Show({ viewModel }: Props)
                                 {!! role.start_date && (
                                     <div>
                                         <H3>Shoot</H3>
-                                        <P>
-                                            { formatDate(role.start_date!) }<br />
-                                            { job?.location }
-                                        </P>
+                                        <P>{ formatDate(role.start_date) }</P>
+                                        { !!role.end_date && <P>till {formatDate(role.end_date)}</P> }
+                                        { job?.location && <P>{ job.location }</P> }
                                     </div>
                                 )}
 

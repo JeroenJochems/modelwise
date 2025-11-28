@@ -4,11 +4,12 @@ environments:
     prod:
         runtime: 'php-8.3:al2'
         storage: modelwise-production
+        timeout: 30
         memory: 1024
         database: modelwise-production
         queues: events-production
         domain: modelwise.agency
-        queue-concurrency: 10
+        queue-concurrency: 2
         cli-memory: 512
         build:
           - 'COMPOSER_MIRROR_PATH_REPOS=1 composer install --no-dev'

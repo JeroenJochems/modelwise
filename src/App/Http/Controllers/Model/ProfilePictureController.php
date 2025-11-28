@@ -16,7 +16,10 @@ class ProfilePictureController extends BaseOnboardingController
         $profilePicture = $model->profile_picture;
 
         return Inertia::render("Model/Onboarding/ProfilePicture")
-            ->with(['profile_picture' => $profilePicture ? ["path" => $model->profile_picture, "mime" => "image/*"] : null]);
+            ->with(['profile_picture' => $profilePicture ? [
+                "path" => $model->profile_picture,
+                "mime" => "image/*"
+            ] : null]);
     }
 
     public function store()

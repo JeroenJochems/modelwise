@@ -11,7 +11,7 @@ import {Header} from "@/Components/Onboarding/Header";
 import {PageProps} from "@/types";
 import PrimaryButton from "@/Components/PrimaryButton";
 import {BaseFile, FileUploader} from "@/Components/FileUploader";
-import {Ethnicity, EyeColor, HairColor, ModelTagsViewModel} from "@/types/generated";
+import {EyeColor, HairColor, ModelTagsViewModel} from "@/types/generated";
 import {TagCloud} from "@/Components/TagCloud";
 
 type ModelDataType = {

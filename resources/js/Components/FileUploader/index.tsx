@@ -1,27 +1,35 @@
-import {FormEvent, useEffect, useId, useState} from "react";
-import {FileEventTarget} from "@/Pages/Model/Onboarding/Portfolio";
-import {useUploadProgress} from "@/Hooks/useUploadProgress";
-import Vapor from "laravel-vapor";
-import {ReactSortable} from "react-sortablejs";
+import {useEffect, useId, useRef, useState} from "react";
 import {v4 as uuidv4} from 'uuid';
 import {ProgressBar} from "@/Components/FileUploader/ProgressBar";
 import {ExistingFile} from "@/Components/FileUploader/ExistingFile";
 import InputError from "@/Components/InputError";
-import {useUploadingFields} from "@/Hooks/useUploadingFields";
+import {move} from '@dnd-kit/helpers';
+import axios from "axios";
+import {
+    DndContext,
+    closestCenter,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors,
+    DragEndEvent
+} from '@dnd-kit/core';
+import {
+    arrayMove,
+    SortableContext,
+    sortableKeyboardCoordinates,
+    useSortable,
+    rectSortingStrategy
+} from '@dnd-kit/sortable';
+import clsx from "clsx";
 
 export type BaseFile = {
     muxId?: string
     id: number|string
     mime: string
     path: string
-    tmpLocalFile?: File
     isNew?: boolean
     deleted?: boolean
-}
-
-type ResponseType = {
-    uuid: string
-    key: string
 }
 
 type Props = {
@@ -39,118 +47,120 @@ type Props = {
     opaqueAfter?: number
 }
 
-export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6, colsOnMobile = 2, accept, onAdd, onUpdate, onToggleUploading, opaqueAfter=undefined }: Props) {
+export function FileUploader({ name, files: filesWithTrashed, error, max = 99, slots = 6, cols = 6, colsOnMobile = 3, accept, onAdd, onUpdate, onToggleUploading, opaqueAfter=undefined }: Props) {
 
     const id = useId();
-
-    const {totalProgressRatio, addFileToProgress, updateProgress} = useUploadProgress();
-
-    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const ref = useRef<HTMLInputElement>(null);
+    const [progress, setProgress] = useState(0)
+    const [uploadingFiles, setUploadingFiles] = useState<FileData[]>([]);
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
 
     if (accept==="image/*") {
         accept = "image/avif,image/gif,image/heif,image/heic,image/jpeg,image/png,image/webp"
     }
 
     useEffect(() => {
-        console.log(selectedFiles);
-    }, [selectedFiles])
+        let totalSize = 0;
+        let totalUploadedSize = 0;
 
-    useEffect(() => {
-        console.log(totalProgressRatio);
+        uploadingFiles
+            .forEach(file => {
+                totalSize += file.size;
+                totalUploadedSize += file.uploadedSize;
+            });
 
-        onToggleUploading && onToggleUploading(totalProgressRatio > 0 && totalProgressRatio < 1);
-    }, [totalProgressRatio]);
+        setProgress(totalUploadedSize / totalSize);
+    }, [uploadingFiles]);
 
-    const notDeletedFiles = files.filter((file) => {
+    const files = filesWithTrashed.filter((file) => {
         if (file.deleted === undefined) return true;
         return !file.deleted;
     });
 
-    const newFiles = files.filter((file) => {
-        return file.isNew;
-    });
+    function calcEmptySlots() {
+        let empty = slots - files.length;
 
-    const emptySlots = slots - notDeletedFiles.length > 0
-        ? Array(slots - notDeletedFiles.length).fill('')
-        : [];
+        while (empty <= 0) {
+            empty += slots;
+        }
 
-    return (
-        <>
-            <ReactSortable tag={"div"} list={files} setList={onUpdate} className={`grid mb-4 gap-2 grid-cols-${colsOnMobile} sm:grid-cols-${cols}`}>
-                {notDeletedFiles.map((file, index) => {
-                    return <ExistingFile className={(opaqueAfter!==undefined && index>=opaqueAfter) ? 'opacity-25' : ''} key={file.id ?? file.path} onDelete={handleDelete} file={file}/>
-                })}
-            </ReactSortable>
+        if (files.length >= max) {
+            empty = 0;
+        }
 
-            { notDeletedFiles.length==0 && (
-                <div className={`grid gap-2 grid-cols-${colsOnMobile} sm:grid-cols-${cols}`}>
-                    {emptySlots.map((slot, i) => (
-                        <label key={i} htmlFor={id} className={"static flex rounded text-teal text-2xl cursor-pointer justify-center items-center aspect-[1/1] bg-teal-100 border border-gray-400"}>
-                            +
-                        </label>)
-                    )}
-                </div>
-            )}
+        return Array(empty).fill('');
+    }
 
-            { totalProgressRatio > 0 && totalProgressRatio < 1 && (
-                <ProgressBar progress={totalProgressRatio} />
-            )}
+    const handleFileSelect = () => {
 
-            { max>1 && notDeletedFiles.length > 0 && (
-                <div className={"my-2 text-center"}>
-                    <label htmlFor={id} className={"text-gray-800 rounded p-2 border border-gray-600 items-center text-center cursor-pointer "}>
-                        + add { accept?.includes('video') ? 'videos' : 'photos' }
-                    </label>
-                </div>
-            )}
+        if (!ref.current?.files) return;
 
+        const newFiles = Array.from(ref.current.files).map((file) => ({
+            file,
+            id: `${file.name}-${file.size}-${Date.now()}`,
+            abortController: new AbortController(),
+            size: file.size,
+            uploadedSize: 0,
+        }));
 
-            { !!error && <InputError message={error} /> }
+        newFiles.forEach(file => uploadFile(file));
 
-            <input name={name} type="file" id={id} accept={accept} multiple className={"hidden"} onChange={handleChange}/>
-        </>
-    );
+        setUploadingFiles((prev) => [...prev, ...newFiles]);
+    };
 
-    async function handleChange(e: FormEvent<HTMLInputElement> & { target: FileEventTarget }) {
+    function updateUploadedFile(file: FileData, properties: Partial<FileData>) {
+        setUploadingFiles(prev =>
+            prev.map(f =>
+                f.id === file.id
+                    ? {...f, ...properties}
+                    : f
+            )
+        );
+    }
 
-        if (e.target.files === null || !e.target.files[0]) return;
+    async function uploadFile (fileData: FileData) {
 
-        // load a maximum # files to prevent timeout
-        const files = Array.from(e.target.files).slice(0,25);
+        const response: { data: ResponseType } = await axios.post('/signed-url');
 
-        setSelectedFiles(files);
+        let headers = response.data.headers;
 
-        files.map(async (file) => {
+        if ('Host' in headers) {
+            delete headers.Host;
+        }
 
-            addFileToProgress(file.name);
+        try {
+            await axios.put(response.data.url, fileData.file, {
+                signal: fileData.abortController.signal,
+                headers,
+                onUploadProgress: (progressEvent) => {
+                    updateUploadedFile(fileData, { uploadedSize: progressEvent.loaded})
+                }
+            });
 
-            Vapor
-                .store(file, {
-                    // @ts-ignore
-                    signedStorageUrl: '/signed-url',
-                    progress: progress => updateProgress(file.name, progress)
-                })
-                .then(function (response: ResponseType) {
+            updateUploadedFile(fileData, { success: true });
+            onAdd({
+                id: uuidv4(),
+                path: response.data.key,
+                isNew: true,
+                mime: fileData.file.type,
+                deleted: false,
+            });
 
-                    setSelectedFiles(s => [...s].filter(f => f.name !== file.name));
-
-                    onAdd({
-                        id: uuidv4(),
-                        path: response.key,
-                        isNew: true,
-                        mime: file.type,
-                        deleted: false,
-                    });
-
-                });
-        });
+        } catch (error) {
+            updateUploadedFile(fileData, { success: false })
+        }
     }
 
     function handleDelete({ id }: BaseFile) {
-
+        console.log('delete me');
         if (!onUpdate) return;
 
-        onUpdate(files.map((file) => {
+        onUpdate(filesWithTrashed.map((file) => {
             if (file.id === id) {
                 file.deleted = true;
             }
@@ -158,5 +168,87 @@ export function FileUploader({ name, files, error, max = 99, slots = 6, cols = 6
         }));
     }
 
+    function handleDragEnd(event: DragEndEvent) {
+        const { active, over } = event;
 
+        if (over && active.id !== over.id) {
+            const oldIndex = files.findIndex(file => file.id.toString() === active.id);
+            const newIndex = files.findIndex(file => file.id.toString() === over.id);
+
+            if (oldIndex !== -1 && newIndex !== -1) {
+                const newFiles = arrayMove([...files], oldIndex, newIndex);
+                const updatedFilesWithTrashed = [...filesWithTrashed];
+
+                // Remove all non-deleted files
+                const nonDeletedIds = new Set(files.map(file => file.id));
+                const remainingFiles = updatedFilesWithTrashed.filter(file => {
+                    return file.deleted || !nonDeletedIds.has(file.id);
+                });
+
+                // Add reordered files
+                updatedFilesWithTrashed.length = 0;
+                updatedFilesWithTrashed.push(...remainingFiles, ...newFiles);
+
+                onUpdate(updatedFilesWithTrashed);
+            }
+        }
+    }
+
+    return (
+        <>
+            <div className={`grid mb-4 gap-2 grid-cols-${colsOnMobile} sm:grid-cols-${cols}`}>
+                <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                >
+                    <SortableContext
+                        items={files.filter(file => !!file.id).map(file => file.id.toString())}
+                        strategy={rectSortingStrategy}
+                    >
+                        {files.map((file, index) => (
+                            <ExistingFile
+                                key={file.id?.toString()}
+                                className={clsx((opaqueAfter!==undefined && index>=opaqueAfter) ? 'opacity-25' : '') }
+                                file={file}
+                                onDelete={handleDelete}
+                            />
+                        ))}
+
+                        {calcEmptySlots().map((slot, i) => (
+                            <label key={i} htmlFor={id} className={"static flex rounded text-teal text-2xl cursor-pointer justify-center items-center aspect-[1/1] bg-teal-100 border border-gray-400"}>
+                                +
+                            </label>)
+                        )}
+                    </SortableContext>
+                </DndContext>
+            </div>
+
+            { uploadingFiles.length > 0 && progress < 1 && (
+                <ProgressBar progress={progress} />
+            )}
+
+            { !!error && <InputError message={error} /> }
+
+            <input name={name} type="file" ref={ref} id={id} accept={accept} multiple className={"hidden"} onChange={handleFileSelect}/>
+        </>
+    );
+}
+
+type ResponseType = {
+    uuid: string
+    url: string
+    key: string
+    headers: {
+        [key: string]: string
+    }
+}
+
+interface FileData {
+    id: string;
+    file: File;
+    size: number;
+    uploadedSize: number;
+    success?: boolean;
+    abortController: AbortController
 }

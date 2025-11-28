@@ -7,32 +7,26 @@ use App\Nova\Actions\AddToRole;
 use App\Nova\Actions\EditModelClass;
 use App\Nova\Actions\InviteForRole;
 use App\Nova\Actions\SendMail;
+use App\Nova\Actions\SendSms;
 use App\Nova\Filters\AgeFilter;
 use App\Nova\Filters\ClassFilter;
-use App\Nova\Filters\EthnicityFilter;
 use App\Nova\Filters\InternalTagsFilter;
 use App\Nova\Filters\LooksFilter;
 use App\Nova\Filters\SkillsFilter;
-use App\Nova\Filters\TagFilter;
 use App\Nova\Filters\WithExternalModels;
 use Datomatic\Nova\Fields\Enum\Enum;
-use Datomatic\Nova\Fields\Enum\EnumBooleanFilter;
-use Domain\Profiles\Enums\Ethnicity;
 use Domain\Profiles\Enums\EyeColor;
 use Domain\Profiles\Enums\Gender;
 use Domain\Profiles\Enums\HairColor;
 use Domain\Profiles\Enums\ModelClass;
 use Domain\Profiles\Models\Model as ResourceObject;
-use KirschbaumDevelopment\Nova\InlineSelect;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Email;
-use Laravel\Nova\Fields\Filters\TextFilter;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Line;
 use Laravel\Nova\Fields\MorphMany;
-use Laravel\Nova\Fields\MorphOne;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Stack;
@@ -42,7 +36,6 @@ use Laravel\Nova\Fields\VaporImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use Laravel\Nova\Query\Search\SearchableRelation;
-use Mahi\SpatieTagsNovaFilter\SpatieTagsNovaFilter;
 use Outl1ne\NovaSortable\Traits\HasSortableManyToManyRows;
 use Spatie\TagsField\Tags;
 
@@ -217,6 +210,7 @@ class Model extends Resource
             new SendMail(),
             new AddTagsToModels(),
             new EditModelClass(),
+            new SendSms(),
         ];
     }
 }

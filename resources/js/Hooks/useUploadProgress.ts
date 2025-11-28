@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 
 type UseUploadProgress = {
     id: string
@@ -8,12 +8,7 @@ type UseUploadProgress = {
 export function useUploadProgress() {
 
     const [uploadingFiles, setUploadingFiles] = useState<UseUploadProgress[]>([]);
-
-    const totalProgressRatio = uploadingFiles.length
-        ? (uploadingFiles.reduce(function (sum, item) {
-                return sum + item.progress;
-            }, 0) / uploadingFiles.length)
-        : 0;
+    const [totalProgressRatio, setTotalProgressRatio] = useState(0.0);
 
     function addFileToProgress(id: string) {
         setUploadingFiles((uploadingFiles) => [
@@ -28,9 +23,28 @@ export function useUploadProgress() {
             uploadingFiles[fileIndex].progress = progress;
             return [...uploadingFiles];
         });
+
+        setTotalProgressRatio(
+            uploadingFiles.length
+            ? (uploadingFiles.reduce(function (sum, item) {
+                return sum + item.progress;
+            }, 0) / uploadingFiles.length)
+            : 0
+        );
     }
 
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            if (totalProgressRatio > 0) {
+                setTotalProgressRatio(1);
+            }
+        }, 5000);
+
+        return () => clearTimeout(timeout);
+    }, [totalProgressRatio]);
+
     return {
+        uploadingFiles,
         updateProgress,
         totalProgressRatio,
         addFileToProgress,
