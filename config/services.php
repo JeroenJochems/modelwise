@@ -42,4 +42,8 @@ return [
         'secret' => env('MJML_API_SECRET_KEY'),
     ],
 
+    'modelwise' => [
+        'api_key' => env('MODELS_API_KEY'),
+    ],
+
 ];
