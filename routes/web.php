@@ -92,6 +92,9 @@ Route::middleware(['auth'])->group(callback: function () {
         Route::get('dashboard', DashboardController::class)->name("dashboard");
         Route::get('new-dashboard', NewDashboardController::class)->name("new-dashboard");
         Route::get('new-roles/{role}', [NewRoleController::class, 'show'])->name("new-roles.show");
+        Route::get('new-roles/{role}/apply', [NewRoleController::class, 'apply'])->name("new-roles.apply");
+        Route::post('new-roles/{role}/apply', [NewRoleController::class, 'submitApplication'])->name("new-roles.submit-application");
+        Route::get('new-roles/{role}/pass', [NewRoleController::class, 'togglePass'])->name("new-roles.toggle-pass");
         Route::get('account', [ModelController::class, "index"])->name("account.index");
     });
 

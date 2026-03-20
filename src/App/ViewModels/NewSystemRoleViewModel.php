@@ -8,7 +8,6 @@ use Domain\Jobs\Data\ListingData;
 use Domain\Jobs\Data\RoleData;
 use Domain\Profiles\Data\ModelData;
 use Domain\Profiles\Models\Model;
-use Domain\Work2\Models\Pass;
 use Spatie\ViewModels\ViewModel;
 
 /** @typescript ModelRoleViewModel */
@@ -36,9 +35,7 @@ class NewSystemRoleViewModel extends ViewModel
             $this->listing = ListingData::from($listingArray);
         }
 
-        $this->hasPassed = Pass::where('model_id', $modelId)
-            ->where('role_id', $roleArray['id'])
-            ->exists();
+        $this->hasPassed = !empty($apiData['passed']);
 
         $startDate = isset($roleArray['start_date'])
             ? new \DateTime($roleArray['start_date'])
