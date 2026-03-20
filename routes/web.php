@@ -5,6 +5,8 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NewDashboardController;
+use App\Http\Controllers\NewRoleController;
 use App\Http\Controllers\ImpersonationController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Model\SkillsController;
@@ -88,6 +90,8 @@ Route::middleware(['auth'])->group(callback: function () {
 
     Route::middleware("onboarding")->group(function() {
         Route::get('dashboard', DashboardController::class)->name("dashboard");
+        Route::get('new-dashboard', NewDashboardController::class)->name("new-dashboard");
+        Route::get('new-roles/{role}', [NewRoleController::class, 'show'])->name("new-roles.show");
         Route::get('account', [ModelController::class, "index"])->name("account.index");
     });
 

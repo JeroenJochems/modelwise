@@ -31,6 +31,12 @@ recentlyViewedRoles: Array<RoleData>;
 model: ModelData | null;
 passedRoles: Array<number>;
 };
+export type NewDashboardViewModel = {
+listings: Array<ListingData>;
+recentlyViewedRoles: Array<RoleData>;
+model: ModelData | null;
+passedRoles: Array<number>;
+};
 export type Ethnicity = 'asian' | 'middle-eastern' | 'black' | 'caribbean' | 'hispanic' | 'indigenous' | 'indian' | 'mediterranean' | 'mixed' | 'native-american' | 'pacific-islander' | 'white' | 'other';
 export type ExtraFieldsData = {
 casting_photos: boolean;

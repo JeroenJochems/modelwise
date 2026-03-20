@@ -44,6 +44,7 @@ return [
 
     'modelwise' => [
         'api_key' => env('MODELS_API_KEY'),
+        'api_url' => env('MODELWISE_NEW_API_URL'),
     ],
 
 ];
