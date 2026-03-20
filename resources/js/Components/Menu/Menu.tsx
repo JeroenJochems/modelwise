@@ -64,9 +64,9 @@ export default function Menu() {
                             Log out
                         </Link>
                     ) : (
-                        <Link href={route("login")} type="button">
+                        <a href="/admin/login" type="button">
                             Log in
-                        </Link>
+                        </a>
                     )}
                 </div>
             </nav>
