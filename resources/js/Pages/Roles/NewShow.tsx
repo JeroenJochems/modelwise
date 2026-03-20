@@ -4,8 +4,10 @@ import {JobHeader} from "@/Components/JobHeader";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import {Content} from "@/Layouts/DashboardLayout/Content";
 import {PhotoScroller} from "@/Components/Atoms/JobScroller";
-import {ApplyFooter} from "@/Components/Molecules/ApplyFooter";
 import {DashboardFooter} from "@/Components/Molecules/DashboardFooter";
+import {CtaLink} from "@/Components/CtaLink";
+import {Heart} from "@/Components/Icons/Heart";
+import {Cross} from "@/Components/Icons/Cross";
 import {Tab, TabList, TabPanel, Tabs} from 'react-tabs';
 import {formatDate} from "@/Utils/Dates";
 import {formatCents} from "@/Utils/Money";
@@ -29,7 +31,7 @@ export default function NewShow({ viewModel }: Props)
         <DashboardLayout footer={
             !hasApplied &&
                 <DashboardFooter>
-                    <ApplyFooter viewModel={viewModel}/>
+                    <NewApplyFooter viewModel={viewModel}/>
                 </DashboardFooter>
         }>
             <div className={"flex-grow"}>
@@ -119,4 +121,40 @@ export default function NewShow({ viewModel }: Props)
             </div>
         </DashboardLayout>
     )
+}
+
+function NewApplyFooter({viewModel}: {viewModel: ModelRoleViewModel}) {
+    const { role, hasApplied, listing, hasPassed } = viewModel;
+
+    if (hasApplied) {
+        const isHired = !!listing?.hired_at;
+        const isRejected = !!listing?.rejected_at;
+
+        return <div className={"py-4 pb-safe"}>
+            {isHired && <p>Congratulations! You have been hired for this role.</p>}
+            {isRejected && <p>Unfortunately you have not been selected for this role.</p>}
+            {!isHired && !isRejected &&
+                <p>You have applied for this role. We will let you know if you are selected.</p>}
+        </div>;
+    }
+
+    return <>
+        <div className={"flex gap-4"}>
+            { hasPassed ? (
+                <CtaLink id={"apply"} href={route('new-roles.toggle-pass', role.id)} icon={<Cross/>} className={'w-full'}>
+                    {"You have passed on this role."}
+                </CtaLink>
+            ) : (
+                <>
+                    <CtaLink id={"apply"} href={route('new-roles.apply', role.id)} icon={<Heart/>} className={'w-3/4'}>
+                        {"I'm interested"}
+                    </CtaLink>
+                    <CtaLink id={"reject"} href={route('new-roles.toggle-pass', role.id)} icon={<Cross />} className={'w-1/4'}>
+                        {"Pass"}
+                    </CtaLink>
+                </>
+                )
+            }
+        </div>
+    </>;
 }
