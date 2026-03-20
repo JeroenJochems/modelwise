@@ -8,6 +8,7 @@ import {FingerPrintIcon} from "@heroicons/react/24/solid";
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard' },
+    { name: 'New Dashboard', href: '/new-dashboard' },
     { name: 'Profile', href: '/account' },
 ]
 
