@@ -17,7 +17,6 @@ export default defineConfig({
             input: 'resources/js/app.tsx',
             ssr: 'resources/js/ssr.tsx',
             refresh: true,
-            valetTls: 'modelwise.test',
         }),
         react(),
     ],
