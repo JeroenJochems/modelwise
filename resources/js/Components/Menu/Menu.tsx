@@ -6,15 +6,17 @@ import {Link, usePage} from "@inertiajs/react";
 import {PageProps} from "@/types";
 import {FingerPrintIcon} from "@heroicons/react/24/solid";
 
-const navigation = [
+const baseNavigation = [
     { name: 'Dashboard', href: '/dashboard' },
-    { name: 'New Dashboard', href: '/new-dashboard' },
     { name: 'Profile', href: '/account' },
 ]
 
-
 export default function Menu() {
     const { auth, is_impersonating } = usePage<PageProps>().props;
+
+    const navigation = is_impersonating
+        ? [{ name: 'Dashboard', href: '/dashboard' }, { name: 'New Dashboard', href: '/new-dashboard' }, { name: 'Profile', href: '/account' }]
+        : baseNavigation;
 
 
     const isLoggedIn = !!auth.user;
@@ -64,9 +66,9 @@ export default function Menu() {
                             Log out
                         </Link>
                     ) : (
-                        <Link href={route("login")} type="button">
+                        <a href="/admin/login" type="button">
                             Log in
-                        </Link>
+                        </a>
                     )}
                 </div>
             </nav>
