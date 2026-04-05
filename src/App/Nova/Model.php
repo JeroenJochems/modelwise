@@ -10,8 +10,11 @@ use App\Nova\Actions\SendMail;
 use App\Nova\Actions\SendSms;
 use App\Nova\Filters\AgeFilter;
 use App\Nova\Filters\ClassFilter;
+use App\Nova\Filters\HasShowreelFilter;
 use App\Nova\Filters\InternalTagsFilter;
 use App\Nova\Filters\LooksFilter;
+use App\Nova\Filters\ModelingExperienceFilter;
+use App\Nova\Filters\ProfessionsFilter;
 use App\Nova\Filters\SkillsFilter;
 use App\Nova\Filters\WithExternalModels;
 use Datomatic\Nova\Fields\Enum\Enum;
@@ -191,8 +194,11 @@ class Model extends Resource
             WithExternalModels::make(),
             ClassFilter::make(),
             AgeFilter::make()->range(0,100),
+            HasShowreelFilter::make(),
             LooksFilter::make(),
             SkillsFilter::make(),
+            ModelingExperienceFilter::make(),
+            ProfessionsFilter::make(),
             InternalTagsFilter::make()
         ];
     }
