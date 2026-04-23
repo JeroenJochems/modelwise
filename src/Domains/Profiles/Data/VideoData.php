@@ -11,6 +11,7 @@ class VideoData extends Data
         public int $id,
         public string $path,
         public ?string $mux_id,
+        public ?string $master_url,
     )
     { }
 }

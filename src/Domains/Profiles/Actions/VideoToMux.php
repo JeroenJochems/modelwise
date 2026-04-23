@@ -31,6 +31,8 @@ class VideoToMux
         $createAssetRequest = new CreateAssetRequest([
             "input" => $input,
             'mp4_support' => 'capped-1080p',
+            'max_resolution_tier' => '2160p',
+            'master_access' => 'temporary',
             "playback_policy" => [PlaybackPolicy::_PUBLIC]
         ]);
 
@@ -38,6 +40,7 @@ class VideoToMux
         $result = $assetsApi->createAsset($createAssetRequest);
 
         $video->mux_id = $result->getData()->getPlaybackIds()[0]->getId();
+        $video->mux_asset_id = $result->getData()->getId();
         $video->save();
     }
 }

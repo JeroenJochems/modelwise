@@ -192,7 +192,7 @@ export default function PresentationListing({ presentation, listing, onSelect, i
                             <MuxPlayer theme="minimal" poster="https://modelwise.net/poster-casting-video.png" playbackId={video.mux_id ?? ""}
                                        className={"object-fit aspect-square rounded-lg"}/>
                         </div>
-                        <a href={`https://stream.mux.com/${video.mux_id}/capped-1080p.mp4`} target={"_blank"}
+                        <a href={video.master_url ?? `https://stream.mux.com/${video.mux_id}/capped-1080p.mp4`} target={"_blank"}
                            className={"absolute z-2 top-0 left-0 w-10 h-10 bg-gray-100"}>
                             <ArrowDownIcon className={"w-6 h-6 m-auto mt-2"}/>
                         </a>

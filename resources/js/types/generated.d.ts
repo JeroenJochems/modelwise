@@ -274,4 +274,5 @@ export type VideoData = {
 id: number;
 path: string;
 mux_id: string | null;
+master_url: string | null;
 };

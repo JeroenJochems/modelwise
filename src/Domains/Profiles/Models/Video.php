@@ -4,8 +4,12 @@ namespace Domain\Profiles\Models;
 
 use Domain\Profiles\Actions\VideoToMux;
 use Domain\Profiles\Collections\VideoCollection;
+use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Cache;
 use Kra8\Snowflake\HasShortflakePrimary;
+use MuxPhp\Api\AssetsApi;
+use MuxPhp\Configuration;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
@@ -74,5 +78,36 @@ class Video extends \Illuminate\Database\Eloquent\Model implements Sortable
         return $this->mux_id
             ? "https://images.mux.com/".$this->mux_id."/animated.gif"
             : null;
+    }
+
+    public function getMasterUrlAttribute(): ?string
+    {
+        if (!$this->mux_asset_id) {
+            return null;
+        }
+
+        return Cache::remember(
+            "video:{$this->id}:master_url",
+            now()->addHour(),
+            function () {
+                $config = Configuration::getDefaultConfiguration()
+                    ->setUsername(env('MUX_TOKEN_ID'))
+                    ->setPassword(env('MUX_TOKEN_SECRET'));
+
+                $assetsApi = new AssetsApi(new Client(), $config);
+
+                try {
+                    $asset = $assetsApi->getAsset($this->mux_asset_id)->getData();
+                    $master = $asset->getMaster();
+
+                    if ($master && $master->getStatus() === 'ready') {
+                        return $master->getUrl();
+                    }
+                } catch (\Throwable) {
+                }
+
+                return null;
+            }
+        );
     }
 }
