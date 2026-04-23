@@ -4,6 +4,7 @@ namespace Domain\Jobs\Models;
 
 use Database\Factories\RoleFactory;
 use Domain\Present\Models\Presentation;
+use Domain\Profiles\Models\Document;
 use Domain\Profiles\Models\Photo;
 use Domain\Work\Models\Application;
 use Domain\Work\Models\Pass;
@@ -63,6 +64,13 @@ class Role extends Model
         return $this
             ->morphMany(Photo::class, "photoable")
             ->where('folder', self::PHOTO_FOLDER_PUBLIC)
+            ->orderBy("sortable_order");
+    }
+
+    public function documents()
+    {
+        return $this
+            ->morphMany(Document::class, "documentable")
             ->orderBy("sortable_order");
     }
 

@@ -33,6 +33,26 @@ export function ExtendedApplicationForm({ listing, role }: Props) {
 
     return (
         <div className={"grid gap-4"}>
+            { !!role.documents && role.documents.length > 0 && (
+                <div>
+                    <H2>Briefing documents</H2>
+                    <ul className={"list-disc pl-5"}>
+                        { role.documents.map(doc => (
+                            <li key={doc.id}>
+                                <a
+                                    href={doc.url}
+                                    target={"_blank"}
+                                    rel={"noopener"}
+                                    className={"underline"}
+                                >
+                                    { doc.filename ?? 'Download PDF' }
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
             { role.extra_fields.casting_photos && (
                 <div>
                     <H2>Casting photos</H2>

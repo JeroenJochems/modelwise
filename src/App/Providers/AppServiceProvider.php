@@ -8,6 +8,7 @@ use Domain\Jobs\Models\Job;
 use Domain\Jobs\Models\Role;
 use Domain\Present\Models\Presentation;
 use Domain\Present\Models\PresentationListing;
+use Domain\Profiles\Models\Document;
 use Domain\Profiles\Models\Model;
 use Domain\Profiles\Models\Photo;
 use Domain\Profiles\Models\Video;
@@ -39,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
             'job' => Job::class,
             'photo' => Photo::class,
             'video' => Video::class,
+            'document' => Document::class,
             'role' => Role::class,
             'brand' => Brand::class,
             'user' => User::class,

@@ -220,6 +220,12 @@ mime: string | null;
 isNew: boolean;
 hash: string | null;
 };
+export type DocumentData = {
+id: number;
+path: string;
+url: string;
+filename: string | null;
+};
 export type PresentationData = {
 id: string;
 role: RoleData;
@@ -247,6 +253,7 @@ buyout_note: string | null;
 travel_reimbursement_note: string | null;
 photos: Array<any> | null;
 public_photos: Array<any> | null;
+documents: Array<DocumentData> | null;
 job: JobData;
 casting_video_instructions: string | null;
 casting_photo_instructions: string | null;

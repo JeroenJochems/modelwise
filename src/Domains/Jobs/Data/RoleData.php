@@ -4,6 +4,7 @@ namespace Domain\Jobs\Data;
 
 use Carbon\Carbon;
 use DateTime;
+use Domain\Profiles\Data\DocumentData;
 use Domain\Profiles\Data\PhotoData;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Attributes\WithTransformer;
@@ -26,6 +27,7 @@ class RoleData extends Data
      * @param string|null $travel_reimbursement_note
      * @param null|PhotoData[] $photos
      * @param null|PhotoData[] $public_photos
+     * @param null|DocumentData[] $documents
      * @param JobData|null $job
      * @param string|null $casting_video_instructions
      * @param string|null $casting_photo_instructions
@@ -52,6 +54,7 @@ class RoleData extends Data
 
         public ?array $photos,
         public ?array $public_photos,
+        public ?array $documents,
         public JobData $job,
 
         public ?string $casting_video_instructions,

@@ -102,6 +102,7 @@ class Role extends Resource
                 return '<a href="'.route("roles.show", $this->id).'" target="_blank">'.route("roles.show", $this->id).'</a>';
             })->asHtml()->onlyOnDetail(),
             MorphMany::make("Photos", "photos", Photo::class)->showOnIndex(true),
+            MorphMany::make("Briefing PDFs", "documents", Document::class),
         ];
     }
 
