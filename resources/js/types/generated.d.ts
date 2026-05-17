@@ -235,6 +235,7 @@ should_show_digitals: boolean;
 should_show_socials: boolean;
 should_show_cover_letter: boolean;
 should_show_conflicts: boolean;
+should_show_age: boolean;
 };
 export type RegisterModelData = {
 viewedRoles: Array<any>;

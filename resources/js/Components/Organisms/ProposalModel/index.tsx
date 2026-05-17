@@ -6,6 +6,7 @@ import {ListingData, ModelPhotoData, PhotoData, PresentationData} from "@/types/
 import {ArrowDownIcon, PlusIcon} from "@heroicons/react/24/solid";
 import {Link} from "@inertiajs/react";
 import {useCdnLink} from "@/Hooks/useCdnLink";
+import {calculateAge} from "@/Utils/Dates";
 
 type Props = {
     presentation: PresentationData,
@@ -43,6 +44,11 @@ export default function PresentationListing({ presentation, listing, onSelect, i
                         <label htmlFor={`shortlist${listing.id}`}
                                className="flex flex-grow items-center cursor-pointer font-medium text-gray-900">
                             { presentation.should_show_name ? listing.model.first_name : listing.model.id }
+                            { presentation.should_show_age && !!listing.model.date_of_birth &&
+                                <span className={"ml-2 font-light text-gray-500"}>
+                                    { calculateAge(listing.model.date_of_birth) }
+                                </span>
+                            }
                         </label>
                         <div className="flex h-6 items-center">
                             <label onClick={() => onSelect(listing)} htmlFor={`#shortlist${listing.id}`}

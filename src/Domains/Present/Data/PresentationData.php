@@ -17,7 +17,8 @@ class PresentationData extends Data
         public bool $should_show_digitals,
         public bool $should_show_socials,
         public bool $should_show_cover_letter,
-        public bool $should_show_conflicts
+        public bool $should_show_conflicts,
+        public bool $should_show_age,
     )
     { }
 }

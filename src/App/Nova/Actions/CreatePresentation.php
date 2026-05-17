@@ -34,6 +34,7 @@ class CreatePresentation extends Action
         $presentation->should_show_cover_letter = $fields->should_show_cover_letter;
         $presentation->should_show_socials = $fields->should_show_socials;
         $presentation->should_show_digitals = $fields->should_show_digitals;
+        $presentation->should_show_age = $fields->should_show_age;
         $presentation->save();
 
         foreach ($listings as $listing) {
@@ -60,6 +61,7 @@ class CreatePresentation extends Action
             Boolean::make('Show cover letter', 'should_show_cover_letter')->default(true),
             Boolean::make('Show socials', 'should_show_socials')->default(true),
             Boolean::make('Show conflicts', 'should_show_conflicts')->default(true),
+            Boolean::make('Show age', 'should_show_age')->default(false),
         ];
     }
 }
