@@ -47,4 +47,10 @@ return [
         'api_url' => env('MODELWISE_NEW_API_URL'),
     ],
 
+    'mux' => [
+        'token_id' => env('MUX_TOKEN_ID'),
+        'token_secret' => env('MUX_TOKEN_SECRET'),
+        'webhook_secret' => env('MUX_WEBHOOK_SECRET'),
+    ],
+
 ];

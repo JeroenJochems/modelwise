@@ -12,6 +12,9 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     };
     is_impersonating: boolean;
     cdn_url: string;
+    features: {
+        mux_direct_uploads: boolean;
+    };
     translations: Record<string, string>;
     ziggy: {
         location: string;

@@ -8,7 +8,7 @@ import DashboardLayout from "@/Layouts/DashboardLayout";
 import {Content} from "@/Layouts/DashboardLayout/Content";
 import InputError from "@/Components/InputError";
 import {H1} from "@/Components/Typography/H1";
-import {FileUploader} from "@/Components/FileUploader";
+import {BaseFile, FileUploader} from "@/Components/FileUploader";
 import {ApplyData, ModelMeViewModel, ModelRoleViewModel} from "@/types/generated";
 
 type Props = {
@@ -16,7 +16,7 @@ type Props = {
     meViewModel: ModelMeViewModel;
 }
 
-type Form = { role_id: number | string } & ApplyData
+type Form = { role_id: number | string; casting_videos: BaseFile[] } & ApplyData
 
 export default function NewApply({viewModel, meViewModel}: Props) {
 
@@ -33,6 +33,7 @@ export default function NewApply({viewModel, meViewModel}: Props) {
         role_id: role.id,
         digitals: [],
         photos: [],
+        casting_videos: [],
         height: me.height,
         casting_questions: "",
         chest: me.chest,
@@ -100,12 +101,31 @@ export default function NewApply({viewModel, meViewModel}: Props) {
                         opaqueAfter={8}
                         onAdd={(photo) => setData(data => ({...data, photos: [...data.photos, photo]}))}
                         onUpdate={(photos) => setData(data => ({...data, photos}))}
-                        onToggleUploading={alert}
+                        onToggleUploading={setIsUploading}
                         cols={8}
                         colsOnMobile={4}
                     />
                     <InputError message={errors.photos}/>
                 </div>
+
+                {role.extra_fields?.casting_videos && (
+                    <div>
+                        <H2>Casting video</H2>
+                        <P className={"mb-2 whitespace-pre-wrap"}>{role.casting_video_instructions}</P>
+
+                        <FileUploader
+                            accept={"video/*"}
+                            files={data.casting_videos}
+                            slots={2}
+                            cols={4}
+                            colsOnMobile={2}
+                            onAdd={(file) => setData(data => ({...data, casting_videos: [...data.casting_videos, file]}))}
+                            onUpdate={(casting_videos) => setData(data => ({...data, casting_videos}))}
+                            onToggleUploading={setIsUploading}
+                        />
+                        <InputError message={errors.casting_videos}/>
+                    </div>
+                )}
 
                 {askForSizes && (
                     <div>

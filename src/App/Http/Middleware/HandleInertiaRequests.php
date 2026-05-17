@@ -36,6 +36,9 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'is_impersonating' => app()->make(ImpersonatesUsers::class)->impersonating($request),
             'cdn_url' => env("CDN_URL"),
+            'features' => [
+                'mux_direct_uploads' => (bool) config('features.mux_direct_uploads'),
+            ],
             'auth' => [
                 'user' => $request->user(),
             ],

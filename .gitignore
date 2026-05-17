@@ -31,3 +31,6 @@ meilisearch
 
 # Sentry Config File
 .env.sentry-build-plugin
+.playwright-mcp
+plans
+/storage/logs

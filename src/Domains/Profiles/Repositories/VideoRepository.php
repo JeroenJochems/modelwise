@@ -37,16 +37,40 @@ class VideoRepository
                 return null;
             }
 
-            $videoObj = new Video();
-            $videoObj->videoable()->associate($model);
-            $videoObj->path = str_replace("tmp/", "videos/", $video['path']);
-            $videoObj->folder = $folder;
-            Storage::move($video['path'], $videoObj->path);
-            $videoObj->save();
+            if (!empty($video['muxUploadId'])) {
+                return $this->createFromMuxUpload($model, $folder, $video)->id;
+            }
 
-            return $videoObj->id;
+            return $this->createFromR2Path($model, $folder, $video)->id;
         });
 
         Video::setNewOrder($newSort->toArray());
+    }
+
+    private function createFromR2Path(\Illuminate\Database\Eloquent\Model $model, string $folder, array $video): Video
+    {
+        $videoObj = new Video();
+        $videoObj->videoable()->associate($model);
+        $videoObj->path = str_replace("tmp/", "videos/", $video['path']);
+        $videoObj->folder = $folder;
+        Storage::move($video['path'], $videoObj->path);
+        $videoObj->save();
+
+        return $videoObj;
+    }
+
+    private function createFromMuxUpload(\Illuminate\Database\Eloquent\Model $model, string $folder, array $video): Video
+    {
+        $videoObj = Video::where('mux_upload_id', $video['muxUploadId'])->first() ?? new Video();
+        $videoObj->setAttribute('mux_upload_id', $video['muxUploadId']);
+        $videoObj->videoable()->associate($model);
+        $videoObj->folder = $folder;
+        $videoObj->path = '';
+        if (!$videoObj->mux_status || $videoObj->mux_status === 'pending') {
+            $videoObj->setAttribute('mux_status', 'processing');
+        }
+        $videoObj->save();
+
+        return $videoObj;
     }
 }

@@ -12,6 +12,8 @@ use Domain\Profiles\Models\Document;
 use Domain\Profiles\Models\Model;
 use Domain\Profiles\Models\Photo;
 use Domain\Profiles\Models\Video;
+use Domain\Profiles\Services\Mux\MuxClient;
+use Domain\Profiles\Services\Mux\SdkMuxClient;
 use Domain\Work2\Models\Listing;
 use Domain\Work2\Models\Pass;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -27,6 +29,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(MuxClient::class, fn () => new SdkMuxClient(
+            tokenId: (string) env('MUX_TOKEN_ID'),
+            tokenSecret: (string) env('MUX_TOKEN_SECRET'),
+        ));
     }
 
     /**

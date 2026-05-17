@@ -19,6 +19,8 @@ class Video extends \Illuminate\Database\Eloquent\Model implements Sortable
 
     use HasShortflakePrimary;
 
+    public const FOLDER_DRAFT = '__draft__';
+
     public function newCollection($models = [])
     {
         return new VideoCollection($models);
@@ -32,6 +34,9 @@ class Video extends \Illuminate\Database\Eloquent\Model implements Sortable
     protected static function booted()
     {
         static::created(function (Video $video) {
+            if ($video->mux_upload_id) {
+                return;
+            }
             app(VideoToMux::class)->onQueue()->execute($video);
         });
     }
@@ -86,28 +91,29 @@ class Video extends \Illuminate\Database\Eloquent\Model implements Sortable
             return null;
         }
 
-        return Cache::remember(
-            "video:{$this->id}:master_url",
-            now()->addHour(),
-            function () {
-                $config = Configuration::getDefaultConfiguration()
-                    ->setUsername(env('MUX_TOKEN_ID'))
-                    ->setPassword(env('MUX_TOKEN_SECRET'));
+        $cacheKey = "video:{$this->id}:master_url";
 
-                $assetsApi = new AssetsApi(new Client(), $config);
+        if ($cached = Cache::get($cacheKey)) {
+            return $cached;
+        }
 
-                try {
-                    $asset = $assetsApi->getAsset($this->mux_asset_id)->getData();
-                    $master = $asset->getMaster();
+        $config = Configuration::getDefaultConfiguration()
+            ->setUsername(env('MUX_TOKEN_ID'))
+            ->setPassword(env('MUX_TOKEN_SECRET'));
 
-                    if ($master && $master->getStatus() === 'ready') {
-                        return $master->getUrl();
-                    }
-                } catch (\Throwable) {
-                }
+        $assetsApi = new AssetsApi(new Client(), $config);
 
-                return null;
+        try {
+            $asset = $assetsApi->getAsset($this->mux_asset_id)->getData();
+            $master = $asset->getMaster();
+
+            if ($master && $master->getStatus() === 'ready' && $master->getUrl()) {
+                Cache::put($cacheKey, $master->getUrl(), now()->addHour());
+                return $master->getUrl();
             }
-        );
+        } catch (\Throwable) {
+        }
+
+        return null;
     }
 }

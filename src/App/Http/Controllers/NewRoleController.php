@@ -61,6 +61,7 @@ class NewRoleController extends Controller
                 'casting_questions' => $request->input('casting_questions'),
                 'available_dates' => $request->input('available_dates'),
                 'photo_paths' => $this->extractPhotoPaths($request->input('photos')),
+                'casting_videos' => $this->extractVideoReferences($request->input('casting_videos')),
                 'measurements' => [
                     'height' => $request->input('height'),
                     'chest' => $request->input('chest'),
@@ -126,6 +127,30 @@ class NewRoleController extends Controller
         return collect($photos)
             ->filter(fn ($photo) => !empty($photo['path']))
             ->pluck('path')
+            ->values()
+            ->all() ?: null;
+    }
+
+    /**
+     * Map BaseFile[] from the frontend to a video reference shape the external API can use.
+     * Direct-upload videos carry mux_upload_id; legacy R2 uploads carry path.
+     *
+     * @return array<int, array{mux_upload_id: ?string, path: ?string, mime: ?string}>|null
+     */
+    private function extractVideoReferences(?array $videos): ?array
+    {
+        if (empty($videos)) {
+            return null;
+        }
+
+        return collect($videos)
+            ->reject(fn ($v) => !empty($v['deleted']))
+            ->map(fn ($v) => [
+                'mux_upload_id' => $v['muxUploadId'] ?? null,
+                'path' => !empty($v['path']) ? $v['path'] : null,
+                'mime' => $v['mime'] ?? null,
+            ])
+            ->filter(fn ($v) => $v['mux_upload_id'] || $v['path'])
             ->values()
             ->all() ?: null;
     }

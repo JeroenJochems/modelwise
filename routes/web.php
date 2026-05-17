@@ -4,6 +4,10 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\CreateMuxDirectUploadController;
+use App\Http\Controllers\MuxWebhookController;
+use App\Http\Controllers\SyncMuxUploadController;
+use App\Http\Middleware\VerifyMuxSignature;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NewDashboardController;
 use App\Http\Controllers\NewRoleController;
@@ -99,6 +103,12 @@ Route::middleware(['auth'])->group(callback: function () {
     });
 
     Route::post('signed-url', VaporSignedStorageUrl::class.'@store');
+    Route::post('mux/direct-upload', CreateMuxDirectUploadController::class)
+        ->middleware('throttle:30,1')
+        ->name('mux.direct-upload');
+    Route::get('mux/uploads/{uploadId}/sync', SyncMuxUploadController::class)
+        ->middleware('throttle:120,1')
+        ->name('mux.upload.sync');
 
     Route::name("account.")->prefix("account")->group(function() {
         onboardingRoutes();
@@ -118,6 +128,10 @@ Route::get('presentations/{presentation}', [PresentationController::class, "show
 Route::post('presentations/{presentation}/favorite', [PresentationController::class, "favorite"])->name("presentations.favorite");
 
 Route::middleware(['auth:admin'])->post('vapor/signed-storage-url', [VaporSignedStorageUrl::class, "store"])->name("vapor.signed-storage-url");
+
+Route::post('webhooks/mux', MuxWebhookController::class)
+    ->middleware(VerifyMuxSignature::class)
+    ->name('webhooks.mux');
 
 
 require __DIR__.'/auth.php';

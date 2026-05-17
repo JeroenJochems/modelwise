@@ -5,6 +5,9 @@ import {ExistingFile} from "@/Components/FileUploader/ExistingFile";
 import InputError from "@/Components/InputError";
 import {move} from '@dnd-kit/helpers';
 import axios from "axios";
+import * as UpChunk from "@mux/upchunk";
+import {usePage} from "@inertiajs/react";
+import {PageProps} from "@/types";
 import {
     DndContext,
     closestCenter,
@@ -25,6 +28,9 @@ import clsx from "clsx";
 
 export type BaseFile = {
     muxId?: string
+    muxUploadId?: string
+    muxStatus?: 'pending' | 'processing' | 'ready' | 'errored'
+    muxError?: string | null
     id: number|string
     mime: string
     path: string
@@ -49,12 +55,15 @@ type Props = {
 
 export function FileUploader({ name, files: filesWithTrashed, error, max = 99, slots = 6, cols = 6, colsOnMobile = 3, accept, onAdd, onUpdate, onToggleUploading, opaqueAfter=undefined }: Props) {
 
+    const muxDirectUploadsEnabled = usePage<PageProps>().props.features?.mux_direct_uploads ?? false;
     const id = useId();
     const ref = useRef<HTMLInputElement>(null);
     const [progress, setProgress] = useState(0)
     const [uploadingFiles, setUploadingFiles] = useState<FileData[]>([]);
     const sensors = useSensors(
-        useSensor(PointerSensor),
+        useSensor(PointerSensor, {
+            activationConstraint: { distance: 8 },
+        }),
         useSensor(KeyboardSensor, {
             coordinateGetter: sortableKeyboardCoordinates,
         })
@@ -76,6 +85,50 @@ export function FileUploader({ name, files: filesWithTrashed, error, max = 99, s
 
         setProgress(totalUploadedSize / totalSize);
     }, [uploadingFiles]);
+
+    const lastEmittedUploadingRef = useRef<boolean | null>(null);
+    useEffect(() => {
+        if (!onToggleUploading) return;
+        const inFlight = uploadingFiles.some(f => f.success === undefined);
+        if (lastEmittedUploadingRef.current !== inFlight) {
+            lastEmittedUploadingRef.current = inFlight;
+            onToggleUploading(inFlight);
+        }
+    }, [uploadingFiles, onToggleUploading]);
+
+    const processingUploadIds = filesWithTrashed
+        .filter(f => f.muxUploadId && f.muxStatus !== 'ready' && f.muxStatus !== 'errored' && !f.deleted)
+        .map(f => f.muxUploadId as string);
+
+    useEffect(() => {
+        if (processingUploadIds.length === 0) return;
+
+        let cancelled = false;
+        const handle = setInterval(async () => {
+            for (const uploadId of processingUploadIds) {
+                if (cancelled) return;
+                try {
+                    const { data } = await axios.get<{ status: string; mux_id: string | null; mux_error: string | null }>(
+                        `/mux/uploads/${uploadId}/sync`
+                    );
+                    if (data.status === 'ready' || data.status === 'errored') {
+                        onUpdate(filesWithTrashed.map(f =>
+                            f.muxUploadId === uploadId
+                                ? { ...f, muxStatus: data.status as BaseFile['muxStatus'], muxId: data.mux_id ?? f.muxId, muxError: data.mux_error }
+                                : f
+                        ));
+                    }
+                } catch {
+                    // swallow — next tick retries
+                }
+            }
+        }, 4000);
+
+        return () => {
+            cancelled = true;
+            clearInterval(handle);
+        };
+    }, [processingUploadIds.join('|')]);
 
     const files = filesWithTrashed.filter((file) => {
         if (file.deleted === undefined) return true;
@@ -123,7 +176,14 @@ export function FileUploader({ name, files: filesWithTrashed, error, max = 99, s
         );
     }
 
-    async function uploadFile (fileData: FileData) {
+    async function uploadFile(fileData: FileData) {
+        if (muxDirectUploadsEnabled && fileData.file.type.startsWith('video/')) {
+            return uploadVideoToMux(fileData);
+        }
+        return uploadFileToR2(fileData);
+    }
+
+    async function uploadFileToR2(fileData: FileData) {
 
         const response: { data: ResponseType } = await axios.post('/signed-url');
 
@@ -153,6 +213,44 @@ export function FileUploader({ name, files: filesWithTrashed, error, max = 99, s
 
         } catch (error) {
             updateUploadedFile(fileData, { success: false })
+        }
+    }
+
+    async function uploadVideoToMux(fileData: FileData) {
+        try {
+            const { data } = await axios.post<MuxDirectUploadResponse>('/mux/direct-upload');
+
+            const upload = UpChunk.createUpload({
+                endpoint: data.url,
+                file: fileData.file,
+                chunkSize: 30720,
+            });
+
+            upload.on('progress', (event: any) => {
+                const percent = Number(event.detail ?? 0);
+                updateUploadedFile(fileData, { uploadedSize: (percent / 100) * fileData.size });
+            });
+
+            upload.on('error', (event: any) => {
+                console.error('UpChunk error', event.detail);
+                updateUploadedFile(fileData, { success: false });
+            });
+
+            upload.on('success', () => {
+                updateUploadedFile(fileData, { success: true, uploadedSize: fileData.size });
+                onAdd({
+                    id: uuidv4(),
+                    muxUploadId: data.upload_id,
+                    muxStatus: 'processing',
+                    path: '',
+                    isNew: true,
+                    mime: fileData.file.type,
+                    deleted: false,
+                });
+            });
+        } catch (error) {
+            console.error('Mux direct upload init failed', error);
+            updateUploadedFile(fileData, { success: false });
         }
     }
 
@@ -242,6 +340,11 @@ type ResponseType = {
     headers: {
         [key: string]: string
     }
+}
+
+type MuxDirectUploadResponse = {
+    upload_id: string
+    url: string
 }
 
 interface FileData {
