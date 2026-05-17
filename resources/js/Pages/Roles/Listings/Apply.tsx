@@ -100,7 +100,7 @@ export default function Apply({viewModel, meViewModel}: Props) {
                         opaqueAfter={8}
                         onAdd={(photo) => setData(data => ({...data, photos: [...data.photos, photo]}))}
                         onUpdate={(photos) => setData(data => ({...data, photos}))}
-                        onToggleUploading={alert}
+                        onToggleUploading={setIsUploading}
                         cols={8}
                         colsOnMobile={4}
                     />

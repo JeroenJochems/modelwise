@@ -23,6 +23,7 @@ class Listing extends Model
         'available_dates' => 'json',
         'invited_at' => 'datetime',
         'shortlisted_at' => 'datetime',
+        'brief_acknowledged_at' => 'datetime',
         'favorited_at' => 'datetime',
         'extended_application_at' => 'datetime',
         'rejected_at' => 'datetime',

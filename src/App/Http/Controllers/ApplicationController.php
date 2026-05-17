@@ -32,6 +32,18 @@ class ApplicationController extends Controller
             ));
     }
 
+    public function casting(Role $role)
+    {
+        $listing = Listing::where("role_id", $role->id)
+            ->where("model_id", auth()->id())
+            ->whereNotNull("shortlisted_at")
+            ->whereNull("extended_application_at")
+            ->firstOrFail();
+
+        return Inertia::render('Roles/Casting')
+            ->with("viewModel", new ModelRoleViewModel($role, $listing));
+    }
+
     public function store(Role $role, Request $request)
     {
         $applyData = ApplyData::fromRequest($request->all());
@@ -53,7 +65,6 @@ class ApplicationController extends Controller
             $request->get("casting_videos")
         );
 
-        return Inertia::render('Roles/Listings/Updated')
-            ->with("viewModel", new ModelRoleViewModel($listing->role, $listing));
+        return redirect()->route('roles.show', $role);
     }
 }

@@ -1,63 +1,78 @@
 import {H2} from "@/Components/Typography/H2";
 import {P} from "@/Components/Typography/p";
 import {Content} from "@/Layouts/DashboardLayout/Content";
-import {ExtendedApplicationForm} from "@/Components/Molecules/ApplicationStatus/ExtendedApplicationForm";
+import {Link} from "@inertiajs/react";
+import {ArrowRightIcon} from "@heroicons/react/24/solid";
+import {ApplicationProgress} from "@/Components/Molecules/ApplicationStatus/ApplicationProgress";
 import {ModelRoleViewModel} from "@/types/generated";
 
 type Props = {
     viewModel: ModelRoleViewModel;
 }
 
-export function ApplicationStatus({ viewModel }: Props) {
-
-    const { role, listing } = viewModel;
+export function ApplicationStatus({viewModel}: Props) {
+    const {role, listing} = viewModel;
 
     if (!listing) return null;
 
+    return (
+        <Content>
+            <div className="grid gap-6">
+                <ApplicationProgress listing={listing} />
+                <Banner listing={listing} role={role} />
+            </div>
+        </Content>
+    );
+}
+
+function Banner({listing, role}: {listing: NonNullable<ModelRoleViewModel['listing']>; role: ModelRoleViewModel['role']}) {
     if (!!listing.hired_at) {
         return (
-            <Content>
+            <div>
                 <H2>Congratulations!</H2>
-                <P>You've been hired for this job!</P>
-            </Content>
-        )
+                <P>You've been hired for this job.</P>
+            </div>
+        );
     }
 
     if (!!listing.rejected_at) {
         return (
-            <Content>
-                <H2>Missed</H2>
-                <P>Sorry, you were not hired for this role. Better luck next time!</P>
-            </Content>
-        )
+            <div>
+                <H2>Not selected this time</H2>
+                <P>The client picked someone else. Better luck on the next role.</P>
+            </div>
+        );
     }
 
     if (!!listing.extended_application_at) {
         return (
-            <Content>
-                <H2>Waiting for the client response</H2>
-                <>You have provided additional casting information. This will now be presented to the client. We'll keep you posted once the client has made a decision.</>
-            </Content>
-        )
+            <div>
+                <H2>Sent to the client</H2>
+                <P>You've provided the casting materials. We'll let you know as soon as the client decides.</P>
+            </div>
+        );
     }
 
     if (!!listing.shortlisted_at) {
         return (
-            <Content>
+            <div className="rounded-lg border border-amber-300 bg-amber-50 p-4">
                 <H2>You've been shortlisted</H2>
-
-                <>
-                    <P>The client has requested additional information to make a hiring decision.</P>
-                    <P>Please provide the information below to increase your chances of being hired.</P>
-                    <ExtendedApplicationForm listing={listing} role={role} />
-                </>
-            </Content>
-        )
+                <P className="mb-3">The client wants to see more before deciding.</P>
+                <Link
+                    href={route('applications.casting', role.id)}
+                    className="inline-flex items-center gap-2 bg-teal text-white px-4 py-2 rounded font-medium hover:bg-teal-700 transition"
+                >
+                    Send casting materials
+                    <ArrowRightIcon className="h-4 w-4" />
+                </Link>
+            </div>
+        );
     }
 
-    return (<Content>
-            <P>Thank you for applying to this role!</P>
-            <P>We will review your application and get back to you as soon as possible.</P>
-        </Content>
-    )
+    return (
+        <div>
+            <H2>Application sent</H2>
+            <P>We're reviewing your application. You'll hear from us as soon as there's news.</P>
+        </div>
+    );
 }

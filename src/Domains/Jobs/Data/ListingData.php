@@ -23,6 +23,7 @@ class ListingData extends Data
         public ?Carbon $applied_at,
         public ?Carbon $extended_application_at,
         public ?Carbon $shortlisted_at,
+        public ?Carbon $brief_acknowledged_at,
         public ?Carbon $hired_at,
         public ?Carbon $favorited_at,
         public ?Carbon $rejected_at,

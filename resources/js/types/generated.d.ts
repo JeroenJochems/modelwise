@@ -81,6 +81,7 @@ invited_at: string | null;
 applied_at: string | null;
 extended_application_at: string | null;
 shortlisted_at: string | null;
+brief_acknowledged_at: string | null;
 hired_at: string | null;
 favorited_at: string | null;
 rejected_at: string | null;

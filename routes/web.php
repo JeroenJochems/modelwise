@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AcknowledgeBriefController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ContactController;
@@ -89,8 +90,10 @@ Route::middleware(['auth'])->group(callback: function () {
 
     Route::get("roles/{role}/apply", [ApplicationController::class, "create"])->name("applications.create");
     Route::post("roles/{role}/apply", [ApplicationController::class, "store"])->name("applications.store");
+    Route::get("roles/{role}/casting", [ApplicationController::class, "casting"])->name("applications.casting");
     Route::get("roles/{role}/pass", [PassController::class, "toggle"])->name("role.toggle-pass");
     Route::patch("roles/{role}/update", [ApplicationController::class, "update"])->name("applications.update");
+    Route::post("roles/{role}/acknowledge-brief", AcknowledgeBriefController::class)->name("applications.acknowledge-brief");
 
     Route::middleware("onboarding")->group(function() {
         Route::get('dashboard', DashboardController::class)->name("dashboard");
