@@ -21,6 +21,15 @@ class Presentation extends Model
         "should_show_conflicts" => "boolean",
         "should_show_socials" => "boolean",
         "should_show_age" => "boolean",
+        "should_show_city" => "boolean",
+        "should_show_height" => "boolean",
+        "should_show_waist" => "boolean",
+        "should_show_hips" => "boolean",
+        "should_show_hair_color" => "boolean",
+        "should_show_eye_color" => "boolean",
+        "should_show_clothing_size" => "boolean",
+        "should_show_shoe_size" => "boolean",
+        "should_show_cup_size" => "boolean",
     ];
 
     public function role(): BelongsTo

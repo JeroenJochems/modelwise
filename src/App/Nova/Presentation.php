@@ -49,6 +49,15 @@ class Presentation extends Resource
             Boolean::make("Show cover letter", "should_show_cover_letter"),
             Boolean::make("Show conflicts", "should_show_conflicts"),
             Boolean::make("Show age", "should_show_age"),
+            Boolean::make("Show city", "should_show_city"),
+            Boolean::make("Show height", "should_show_height")->default(true),
+            Boolean::make("Show waist", "should_show_waist")->default(true),
+            Boolean::make("Show hips", "should_show_hips")->default(true),
+            Boolean::make("Show hair color", "should_show_hair_color")->default(true),
+            Boolean::make("Show eye color", "should_show_eye_color")->default(true),
+            Boolean::make("Show clothing size", "should_show_clothing_size")->default(true),
+            Boolean::make("Show shoe size", "should_show_shoe_size")->default(true),
+            Boolean::make("Show cup size", "should_show_cup_size")->default(true),
         ];
     }
 

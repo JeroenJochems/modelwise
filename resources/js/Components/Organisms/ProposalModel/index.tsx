@@ -40,31 +40,31 @@ export default function PresentationListing({ presentation, listing, onSelect, i
         <div className={`pt-12 break-inside-avoid-page grid gap-4 border-2 rounded p-8 ${isSelected ? 'border-green' : 'border-gray-300'}`}>
             <div className={"w-full"}>
                 <div>
-                    <h1 className="flex items-center mb-4 text-3xl font-medium text-gray-900">
-                        <label htmlFor={`shortlist${listing.id}`}
-                               className="flex flex-grow items-center cursor-pointer font-medium text-gray-900">
-                            { presentation.should_show_name ? listing.model.first_name : listing.model.id }
-                            { presentation.should_show_age && !!listing.model.date_of_birth &&
-                                <span className={"ml-2 font-light text-gray-500"}>
-                                    { calculateAge(listing.model.date_of_birth) }
-                                </span>
-                            }
-                        </label>
-                        <div className="flex h-6 items-center">
-                            <label onClick={() => onSelect(listing)} htmlFor={`#shortlist${listing.id}`}
-                                className={`cursor-pointer ml-2 inline-flex gap-2 items-center rounded-md ${isSelected ? 'bg-green text-white' : 'bg-white text-green'} border border-green px-2 py-1 text-base`}>
-                                { isSelected ? <CheckCircleIcon className={"w-4 h-4"}/> : <PlusIcon className={"w-4 h-4"}/> }
-                                Favorite
+                    <div className="mb-4">
+                        <h1 className="flex items-center text-3xl font-medium text-gray-900">
+                            <label htmlFor={`shortlist${listing.id}`}
+                                   className="flex flex-grow items-center cursor-pointer font-medium text-gray-900">
+                                { presentation.should_show_name ? listing.model.first_name : listing.model.id }
+                                { presentation.should_show_age && !!listing.model.date_of_birth &&
+                                    <span className={"ml-2 font-light text-gray-500"}>
+                                        { calculateAge(listing.model.date_of_birth) }
+                                    </span>
+                                }
                             </label>
-
-                            {!!listing.shortlisted_at && (
-                                <span
-                                    className="ml-2 inline-flex items-center rounded-md bg-green px-2 py-1 text-xs font-medium text-white">
-                                    <CheckCircleIcon className={"w-4 h-4"}/> Favorite
-                                </span>
-                            )}
-                        </div>
-                    </h1>
+                            <div className="flex h-6 items-center">
+                                <label onClick={() => onSelect(listing)} htmlFor={`#shortlist${listing.id}`}
+                                    className={`cursor-pointer ml-2 inline-flex gap-2 items-center rounded-md ${isSelected ? 'bg-green text-white' : 'bg-white text-green'} border border-green px-2 py-1 text-base`}>
+                                    { isSelected ? <CheckCircleIcon className={"w-4 h-4"}/> : <PlusIcon className={"w-4 h-4"}/> }
+                                    Favorite
+                                </label>
+                            </div>
+                        </h1>
+                        { presentation.should_show_city && !!listing.model.city &&
+                            <div className={"text-lg font-light text-gray-500"}>
+                                { listing.model.city }
+                            </div>
+                        }
+                    </div>
 
                     {presentation.should_show_cover_letter && !!listing.cover_letter &&
                         <div className="mb-4 prose prose-sm">{listing.cover_letter}</div>}
@@ -115,31 +115,37 @@ export default function PresentationListing({ presentation, listing, onSelect, i
                             </div>
                         </div>
                     }
-                    <div>
-                        <div className={"font-semibold"}>
-                            Height
+                    {presentation.should_show_height &&
+                        <div>
+                            <div className={"font-semibold"}>
+                                Height
+                            </div>
+                            <div className={"mb-4"}>
+                                {listing.model.height && listing.model.height > 10 ? Math.round(listing.model.height) : "unknown"}
+                            </div>
                         </div>
-                        <div className={"mb-4"}>
-                            {listing.model.height && listing.model.height > 10 ? Math.round(listing.model.height) : "unknown"}
+                    }
+                    {presentation.should_show_waist &&
+                        <div>
+                            <div className={"font-semibold"}>
+                                Waist
+                            </div>
+                            <div className={"mb-4"}>
+                                {listing.model.waist && listing.model.waist > 10 ? Math.round(listing.model.waist) : "unknown"}
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <div className={"font-semibold"}>
-                            Waist
+                    }
+                    {presentation.should_show_hips &&
+                        <div>
+                            <div className={"font-semibold"}>
+                                Hips
+                            </div>
+                            <div className={"mb-4"}>
+                                {listing.model.hips && listing.model.hips > 10 ? Math.round(listing.model.hips) : "unknown"}
+                            </div>
                         </div>
-                        <div className={"mb-4"}>
-                            {listing.model.waist && listing.model.waist > 10 ? Math.round(listing.model.waist) : "unknown"}
-                        </div>
-                    </div>
-                    <div>
-                        <div className={"font-semibold"}>
-                            Hips
-                        </div>
-                        <div className={"mb-4"}>
-                            {listing.model.hips && listing.model.hips > 10 ? Math.round(listing.model.hips) : "unknown"}
-                        </div>
-                    </div>
-                    {!!listing.model.hair_color &&
+                    }
+                    {presentation.should_show_hair_color && !!listing.model.hair_color &&
                         <div>
                             <div className={"font-semibold"}>
                                 Hair color
@@ -150,7 +156,7 @@ export default function PresentationListing({ presentation, listing, onSelect, i
                         </div>
                     }
 
-                    {!!listing.model.eye_color &&
+                    {presentation.should_show_eye_color && !!listing.model.eye_color &&
                         <div>
                             <div className={"font-semibold"}>
                                 Eye color
@@ -160,7 +166,7 @@ export default function PresentationListing({ presentation, listing, onSelect, i
                             </div>
                         </div>
                     }
-                    {!!listing.model.clothing_size_top &&
+                    {presentation.should_show_clothing_size && !!listing.model.clothing_size_top &&
                         <div>
                             <div className={"font-semibold"}>
                                 Clothing size
@@ -171,22 +177,25 @@ export default function PresentationListing({ presentation, listing, onSelect, i
                         </div>
                     }
 
-                    <div>
-                        <div className={"font-semibold"}>
-                            Shoe size
+                    {presentation.should_show_shoe_size &&
+                        <div>
+                            <div className={"font-semibold"}>
+                                Shoe size
+                            </div>
+                            <div className={"mb-4"}>
+                                {listing.model.shoe_size && listing.model.shoe_size > 10 ? Math.round(listing.model.shoe_size) : "unknown"}
+                            </div>
                         </div>
-                        <div className={"mb-4"}>
-                            {listing.model.shoe_size && listing.model.shoe_size > 10 ? Math.round(listing.model.shoe_size) : "unknown"}
+                    }
+                    {presentation.should_show_cup_size && !!listing.model.cup_size &&
+                        <div>
+                            <div className={"font-semibold"}>
+                                Cup size
+                            </div>
+                            <div className={"mb-4"}>
+                                {listing.model.cup_size}
+                            </div>
                         </div>
-                    </div>
-                    {listing.model.cup_size && <div>
-                        <div className={"font-semibold"}>
-                            Cup size
-                        </div>
-                        <div className={"mb-4"}>
-                            {listing.model.cup_size}
-                        </div>
-                    </div>
                     }
                 </div>
             </div>

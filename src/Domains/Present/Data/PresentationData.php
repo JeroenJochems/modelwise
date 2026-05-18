@@ -19,6 +19,15 @@ class PresentationData extends Data
         public bool $should_show_cover_letter,
         public bool $should_show_conflicts,
         public bool $should_show_age,
+        public bool $should_show_city,
+        public bool $should_show_height,
+        public bool $should_show_waist,
+        public bool $should_show_hips,
+        public bool $should_show_hair_color,
+        public bool $should_show_eye_color,
+        public bool $should_show_clothing_size,
+        public bool $should_show_shoe_size,
+        public bool $should_show_cup_size,
     )
     { }
 }
