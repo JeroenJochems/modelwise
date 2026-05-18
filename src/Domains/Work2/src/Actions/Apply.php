@@ -17,7 +17,7 @@ class Apply
     {
         $listing = Listing::firstOrNew(['role_id' => $role->id, 'model_id' => $model->id]);
         $listing->applied_at = now();
-        $listing->available_dates = $applyData->available_dates;
+        $listing->available_dates = collect($applyData->available_dates)->sort()->values()->all();
         $listing->cover_letter = $applyData->cover_letter;
         $listing->brand_conflicted = $applyData->brand_conflicted;
         $listing->casting_questions = $applyData->casting_questions;

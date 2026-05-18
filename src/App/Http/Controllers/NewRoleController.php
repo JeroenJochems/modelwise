@@ -59,7 +59,7 @@ class NewRoleController extends Controller
                 'cover_letter' => $request->input('cover_letter'),
                 'brand_conflicted' => $request->input('brand_conflicted'),
                 'casting_questions' => $request->input('casting_questions'),
-                'available_dates' => $request->input('available_dates'),
+                'available_dates' => collect($request->input('available_dates', []))->sort()->values()->all(),
                 'photo_paths' => $this->extractPhotoPaths($request->input('photos')),
                 'casting_videos' => $this->extractVideoReferences($request->input('casting_videos')),
                 'measurements' => [

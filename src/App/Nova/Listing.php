@@ -113,7 +113,7 @@ class Listing extends Resource
 
             Textarea::make('Cover letter'),
             Textarea::make('Brand conflicted'),
-            Text::make('Available dates', fn() => implode(", ", $this->available_dates ?? [])),
+            Text::make('Available dates', fn() => implode(", ", collect($this->available_dates ?? [])->sort()->values()->all())),
         ];
     }
 
