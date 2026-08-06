@@ -3,7 +3,6 @@
 use App\Http\Controllers\AcknowledgeBriefController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\CreateMuxDirectUploadController;
 use App\Http\Controllers\MuxWebhookController;
@@ -68,9 +67,11 @@ if (!function_exists("onboardingRoutes")) {
 }
 
 Route::get('/', [LandingController::class, "index"] )->name("landing");
+Route::get('/faq', [LandingController::class, "faq"] )->name("faq");
+Route::get('/{locale}', [LandingController::class, "index"])->whereIn("locale", ["en", "fr", "de", "es"])->name("landing.localized");
+Route::get('/{locale}/faq', [LandingController::class, "faq"])->whereIn("locale", ["en", "fr", "de", "es"])->name("faq.localized");
 Route::get('/login', [AuthenticatedSessionController::class, "create"] )->name("login");
 Route::get('/logout', [AuthenticatedSessionController::class, "destroy"] )->name("logout");
-Route::post('/contact', [ContactController::class, "store"] )->name("contact");
 
 Route::get('favicon.png', function () {
     return response()->redirectTo(asset('img/favicon.png'), 302, [
