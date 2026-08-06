@@ -22,6 +22,10 @@ class LandingController extends Controller
 
         app()->setLocale($locale);
 
-        return response()->file(resource_path("landing/{$locale}/{$page}.html"));
+        $html = file_get_contents(resource_path("landing/{$locale}/{$page}.html"));
+
+        $html = str_replace('"/landing/assets/', '"'.asset('landing/assets').'/', $html);
+
+        return response($html)->header('Content-Type', 'text/html; charset=UTF-8');
     }
 }

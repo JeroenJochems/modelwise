@@ -1,5 +1,10 @@
 id: 48620
 name: modelwise
+ignore:
+  - .playwright-mcp
+  - docs
+  - plans
+  - tests
 environments:
     prod:
         runtime: 'php-8.3:al2'
